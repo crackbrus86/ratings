@@ -1,6 +1,8 @@
 import * as React from "react";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
+import Table from "../../../components/table/table";
+import {ColumnModel} from "../../../components/table/column";
 import * as Models from "../models/index.models";
 import * as Actions from "../actions/index.actions";
 
@@ -24,12 +26,23 @@ export default connect<StateProps, DispatchProps>(
         this.props.actions.getCompetitions();
     }
     render(){
-        return <div>Settings layout
-            <ul>
+        return <div style={{overflowX: "auto", marginRight: 20}}>
+            <Table items={this.props.competitions} columns={[
                 {
-                    this.props.competitions.map((competition, index) => <li key={index}>{`${competition.sortOrder} ${competition.name}`}</li>)
+                    title: "№",
+                    field: "sortOrder",
+                    width: "100px"
+                },
+                {
+                    title: "Вид змагань",
+                    field: "name",
+                    width: "300px"
+                },
+                {
+                    title: "",
+                    width: "*"
                 }
-            </ul>
+                ] as ColumnModel[]} />
         </div>
     }
 })

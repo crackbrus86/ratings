@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 
 export enum RequestTypes{
     POST = "POST",
@@ -22,10 +22,15 @@ export const callApi = (props: RequestProps) => {
         case RequestTypes.GET:
             return axios.get(props.url, {
                 params: props.data
-            });
+            }).then((result) => mapToResponse(result));
         case RequestTypes.POST:
-            return axios.post(props.url, props.data);
+            return axios.post(props.url, props.data).then((result) => mapToResponse(result));
         default:
             return;
     }
+}
+
+const mapToResponse = (result: AxiosResponse<any>) => {
+    let response: ResponseModel = result.data;
+    return response;
 }

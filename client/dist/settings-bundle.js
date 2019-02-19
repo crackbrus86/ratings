@@ -86,6 +86,184 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./client/src/components/table/cell.tsx":
+/*!**********************************************!*\
+  !*** ./client/src/components/table/cell.tsx ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var column_1 = __webpack_require__(/*! ./column */ "./client/src/components/table/column.tsx");
+var Cell = /** @class */ (function (_super) {
+    __extends(Cell, _super);
+    function Cell() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.renderItem = function () {
+            switch (_this.props.column.type) {
+                case column_1.ColumnTypes.Button:
+                case column_1.ColumnTypes.Input:
+                default:
+                    return _this.props.item[_this.props.column.field];
+            }
+        };
+        return _this;
+    }
+    Cell.prototype.render = function () {
+        return React.createElement("td", { key: this.props.key }, this.renderItem());
+    };
+    return Cell;
+}(React.PureComponent));
+exports.default = Cell;
+
+
+/***/ }),
+
+/***/ "./client/src/components/table/column.tsx":
+/*!************************************************!*\
+  !*** ./client/src/components/table/column.tsx ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var ColumnTypes;
+(function (ColumnTypes) {
+    ColumnTypes["Button"] = "button";
+    ColumnTypes["Input"] = "input";
+})(ColumnTypes = exports.ColumnTypes || (exports.ColumnTypes = {}));
+var Column = /** @class */ (function (_super) {
+    __extends(Column, _super);
+    function Column() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Column.prototype.render = function () {
+        return React.createElement("th", { key: this.props.key, style: { width: this.props.column.width } }, this.props.column.title);
+    };
+    return Column;
+}(React.PureComponent));
+exports.default = Column;
+
+
+/***/ }),
+
+/***/ "./client/src/components/table/row.tsx":
+/*!*********************************************!*\
+  !*** ./client/src/components/table/row.tsx ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var cell_1 = __webpack_require__(/*! ./cell */ "./client/src/components/table/cell.tsx");
+var Row = /** @class */ (function (_super) {
+    __extends(Row, _super);
+    function Row() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Row.prototype.render = function () {
+        var _this = this;
+        return React.createElement("tr", { key: this.props.key }, this.props.columns.map(function (column, index) { return React.createElement(cell_1.default, { key: index, item: _this.props.item, column: column }); }));
+    };
+    return Row;
+}(React.PureComponent));
+exports.default = Row;
+
+
+/***/ }),
+
+/***/ "./client/src/components/table/table.tsx":
+/*!***********************************************!*\
+  !*** ./client/src/components/table/table.tsx ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var column_1 = __webpack_require__(/*! ./column */ "./client/src/components/table/column.tsx");
+var row_1 = __webpack_require__(/*! ./row */ "./client/src/components/table/row.tsx");
+var Table = /** @class */ (function (_super) {
+    __extends(Table, _super);
+    function Table(props) {
+        return _super.call(this, props) || this;
+    }
+    Table.prototype.render = function () {
+        var _this = this;
+        return React.createElement("table", { className: "rat-table" },
+            React.createElement("thead", null, this.props.columns.map(function (column, index) { return React.createElement(column_1.default, { key: index, column: column }); })),
+            React.createElement("tbody", null, this.props.items.map(function (item, index) { return React.createElement(row_1.default, { key: index, item: item, columns: _this.props.columns }); })));
+    };
+    return Table;
+}(React.PureComponent));
+exports.default = Table;
+
+
+/***/ }),
+
 /***/ "./client/src/infrastructure/call.api.ts":
 /*!***********************************************!*\
   !*** ./client/src/infrastructure/call.api.ts ***!
@@ -109,12 +287,16 @@ exports.callApi = function (props) {
         case RequestTypes.GET:
             return axios_1.default.get(props.url, {
                 params: props.data
-            });
+            }).then(function (result) { return mapToResponse(result); });
         case RequestTypes.POST:
-            return axios_1.default.post(props.url, props.data);
+            return axios_1.default.post(props.url, props.data).then(function (result) { return mapToResponse(result); });
         default:
             return;
     }
+};
+var mapToResponse = function (result) {
+    var response = result.data;
+    return response;
 };
 
 
@@ -165,8 +347,7 @@ var ActionTypes = __webpack_require__(/*! ./action.types */ "./client/src/pages/
 var ActionCreators;
 (function (ActionCreators) {
     ActionCreators.getCompetitions = function () { return function (d, gs) {
-        Services.getCompetitions().then(function (result) {
-            var response = result.data;
+        Services.getCompetitions().then(function (response) {
             if (response.status) {
                 return d({
                     type: ActionTypes.LOAD_COMPETITIONS,
@@ -375,6 +556,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+var table_1 = __webpack_require__(/*! ../../../components/table/table */ "./client/src/components/table/table.tsx");
 var Actions = __webpack_require__(/*! ../actions/index.actions */ "./client/src/pages/ratings-settings/actions/index.actions.ts");
 exports.default = react_redux_1.connect(function (state) { return ({
     competitions: state.lookup.competitions
@@ -389,9 +571,23 @@ exports.default = react_redux_1.connect(function (state) { return ({
         this.props.actions.getCompetitions();
     };
     RatingsLayout.prototype.render = function () {
-        return React.createElement("div", null,
-            "Settings layout",
-            React.createElement("ul", null, this.props.competitions.map(function (competition, index) { return React.createElement("li", { key: index }, competition.sortOrder + " " + competition.name); })));
+        return React.createElement("div", { style: { overflowX: "auto", marginRight: 20 } },
+            React.createElement(table_1.default, { items: this.props.competitions, columns: [
+                    {
+                        title: "№",
+                        field: "sortOrder",
+                        width: "100px"
+                    },
+                    {
+                        title: "Вид змагань",
+                        field: "name",
+                        width: "300px"
+                    },
+                    {
+                        title: "",
+                        width: "*"
+                    }
+                ] }));
     };
     return RatingsLayout;
 }(React.Component)));

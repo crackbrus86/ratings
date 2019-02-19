@@ -4,8 +4,7 @@ import * as ActionTypes from "./action.types";
 
 export namespace ActionCreators{
     export const getCompetitions = () => (d, gs: () => Models.StoreState) => {
-        Services.getCompetitions().then((result) => {
-            let response: Models.Response = result.data;
+        Services.getCompetitions().then((response) => {
             if(response.status){
                 return d({
                     type: ActionTypes.LOAD_COMPETITIONS,

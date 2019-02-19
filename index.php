@@ -14,6 +14,8 @@ class UPFRatings {
     public function initRating(){
         add_menu_page("UPF Ratings", "Рейтинги ФПУ", "manage_options", "ratings", array("UPFRatings", "ratingsManager"));
         add_submenu_page("ratings", "Рейтинги ФПУ (Установки)", "Установки", "manage_options", "ratings-settings", array("UPFRatings", "ratingsSettings"));
+        wp_register_style('style', plugins_url( '/client/dist/css/style.css?v=' . $appVersion, __FILE__ ));
+        wp_enqueue_style( 'style');
     }
 
     public function ratingsManager()
