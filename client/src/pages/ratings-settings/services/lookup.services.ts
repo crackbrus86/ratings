@@ -9,3 +9,10 @@ export const getCompetitions = () => {
         type: apiTypes.GET 
     });
 }
+
+export const getPoints = () => {
+    return CallApi.callApi({
+        url: lookupApiPath + 'GetAllPointsLookup.php',
+        type: apiTypes.GET
+    });
+}

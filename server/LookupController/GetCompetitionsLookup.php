@@ -1,6 +1,6 @@
 <?php
-require "../Services/CompetitionService.php";
-require "../core.php";
+require_once "../Services/CompetitionService.php";
+require_once "../core.php";
 
 $service = new CompetitionService();
 $competitions = $service->getAll();

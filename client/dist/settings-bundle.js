@@ -126,7 +126,7 @@ var Cell = /** @class */ (function (_super) {
         return _this;
     }
     Cell.prototype.render = function () {
-        return React.createElement("td", { key: this.props.key }, this.renderItem());
+        return React.createElement("td", { key: this.props.index }, this.renderItem());
     };
     return Cell;
 }(React.PureComponent));
@@ -170,7 +170,7 @@ var Column = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Column.prototype.render = function () {
-        return React.createElement("th", { key: this.props.key, style: { width: this.props.column.width } }, this.props.column.title);
+        return React.createElement("th", { key: this.props.index, style: { width: this.props.column.width } }, this.props.column.title);
     };
     return Column;
 }(React.PureComponent));
@@ -211,7 +211,7 @@ var Row = /** @class */ (function (_super) {
     }
     Row.prototype.render = function () {
         var _this = this;
-        return React.createElement("tr", { key: this.props.key }, this.props.columns.map(function (column, index) { return React.createElement(cell_1.default, { key: index, item: _this.props.item, column: column }); }));
+        return React.createElement("tr", { key: this.props.index }, this.props.columns.map(function (column, index) { return React.createElement(cell_1.default, { key: index, item: _this.props.item, column: column }); }));
     };
     return Row;
 }(React.PureComponent));
@@ -254,8 +254,10 @@ var Table = /** @class */ (function (_super) {
     Table.prototype.render = function () {
         var _this = this;
         return React.createElement("table", { className: "rat-table" },
-            React.createElement("thead", null, this.props.columns.map(function (column, index) { return React.createElement(column_1.default, { key: index, column: column }); })),
-            React.createElement("tbody", null, this.props.items.map(function (item, index) { return React.createElement(row_1.default, { key: index, item: item, columns: _this.props.columns }); })));
+            React.createElement("thead", null,
+                React.createElement("tr", null, this.props.columns.length &&
+                    this.props.columns.map(function (column, index) { return React.createElement(column_1.default, { key: index, index: index, column: column }); }))),
+            React.createElement("tbody", null, this.props.items.map(function (item, index) { return React.createElement(row_1.default, { key: index, index: index, item: item, columns: _this.props.columns }); })));
     };
     return Table;
 }(React.PureComponent));
@@ -313,6 +315,7 @@ var mapToResponse = function (result) {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LOAD_COMPETITIONS = "LOAD_COMPETITIONS";
+exports.LOAD_POINTS = "LOAD_POINTS";
 
 
 /***/ }),
@@ -353,6 +356,18 @@ var ActionCreators;
                     type: ActionTypes.LOAD_COMPETITIONS,
                     payload: {
                         competitions: response.data
+                    }
+                });
+            }
+        });
+    }; };
+    ActionCreators.getPoints = function () { return function (d, gs) {
+        Services.getPoints().then(function (response) {
+            if (response.status) {
+                return d({
+                    type: ActionTypes.LOAD_POINTS,
+                    payload: {
+                        points: response.data
                     }
                 });
             }
@@ -423,7 +438,8 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ActionTypes = __webpack_require__(/*! ../actions/action.types */ "./client/src/pages/ratings-settings/actions/action.types.ts");
 var defaultState = {
-    competitions: []
+    competitions: [],
+    points: []
 };
 exports.lookupReducer = function (state, action) {
     if (state === void 0) { state = defaultState; }
@@ -432,10 +448,50 @@ exports.lookupReducer = function (state, action) {
             var payload = action.payload;
             return __assign({}, state, { competitions: payload.competitions });
         }
+        case ActionTypes.LOAD_POINTS: {
+            var payload = action.payload;
+            return __assign({}, state, { points: payload.points });
+        }
         default:
             return state;
     }
 };
+
+
+/***/ }),
+
+/***/ "./client/src/pages/ratings-settings/selectors/selector.ts":
+/*!*****************************************************************!*\
+  !*** ./client/src/pages/ratings-settings/selectors/selector.ts ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var reselect_1 = __webpack_require__(/*! reselect */ "./node_modules/reselect/es/index.js");
+var competitions = function (state) { return state.lookup.competitions; };
+var points = function (state) { return state.lookup.points; };
+exports.getTablePoints = reselect_1.createSelector(competitions, points, function (competitions, points) {
+    if (!competitions.length || !points.length)
+        return [];
+    return competitions.map(function (competition) {
+        var compPoints = points.filter(function (point) { return point.target == competition.dbName; });
+        return __assign({}, competition, { firstPlaceValue: compPoints.filter(function (point) { return point.place == 1; })[0].value, secondPlaceValue: compPoints.filter(function (point) { return point.place == 2; })[0].value, thirdPlaceValue: compPoints.filter(function (point) { return point.place == 3; })[0].value });
+    });
+});
 
 
 /***/ }),
@@ -456,6 +512,12 @@ var apiTypes = CallApi.RequestTypes;
 exports.getCompetitions = function () {
     return CallApi.callApi({
         url: lookupApiPath + 'GetCompetitionsLookup.php',
+        type: apiTypes.GET
+    });
+};
+exports.getPoints = function () {
+    return CallApi.callApi({
+        url: lookupApiPath + 'GetAllPointsLookup.php',
         type: apiTypes.GET
     });
 };
@@ -558,8 +620,9 @@ var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react
 var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 var table_1 = __webpack_require__(/*! ../../../components/table/table */ "./client/src/components/table/table.tsx");
 var Actions = __webpack_require__(/*! ../actions/index.actions */ "./client/src/pages/ratings-settings/actions/index.actions.ts");
+var Selectors = __webpack_require__(/*! ../selectors/selector */ "./client/src/pages/ratings-settings/selectors/selector.ts");
 exports.default = react_redux_1.connect(function (state) { return ({
-    competitions: state.lookup.competitions
+    points: Selectors.getTablePoints(state)
 }); }, function (dispatch) { return ({
     actions: redux_1.bindActionCreators(Actions.LookupActions.ActionCreators, dispatch)
 }); })(/** @class */ (function (_super) {
@@ -569,10 +632,11 @@ exports.default = react_redux_1.connect(function (state) { return ({
     }
     RatingsLayout.prototype.componentDidMount = function () {
         this.props.actions.getCompetitions();
+        this.props.actions.getPoints();
     };
     RatingsLayout.prototype.render = function () {
         return React.createElement("div", { style: { overflowX: "auto", marginRight: 20 } },
-            React.createElement(table_1.default, { items: this.props.competitions, columns: [
+            React.createElement(table_1.default, { items: this.props.points, columns: [
                     {
                         title: "№",
                         field: "sortOrder",
@@ -582,6 +646,21 @@ exports.default = react_redux_1.connect(function (state) { return ({
                         title: "Вид змагань",
                         field: "name",
                         width: "300px"
+                    },
+                    {
+                        title: "1-е місце",
+                        field: "firstPlaceValue",
+                        width: "80px"
+                    },
+                    {
+                        title: "2-е місце",
+                        field: "secondPlaceValue",
+                        width: "80px"
+                    },
+                    {
+                        title: "3-е місце",
+                        field: "thirdPlaceValue",
+                        width: "80px"
                     },
                     {
                         title: "",
@@ -5533,6 +5612,142 @@ if ( true && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed
 
 
 
+
+/***/ }),
+
+/***/ "./node_modules/reselect/es/index.js":
+/*!*******************************************!*\
+  !*** ./node_modules/reselect/es/index.js ***!
+  \*******************************************/
+/*! exports provided: defaultMemoize, createSelectorCreator, createSelector, createStructuredSelector */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultMemoize", function() { return defaultMemoize; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createSelectorCreator", function() { return createSelectorCreator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createSelector", function() { return createSelector; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createStructuredSelector", function() { return createStructuredSelector; });
+function defaultEqualityCheck(a, b) {
+  return a === b;
+}
+
+function areArgumentsShallowlyEqual(equalityCheck, prev, next) {
+  if (prev === null || next === null || prev.length !== next.length) {
+    return false;
+  }
+
+  // Do this in a for loop (and not a `forEach` or an `every`) so we can determine equality as fast as possible.
+  var length = prev.length;
+  for (var i = 0; i < length; i++) {
+    if (!equalityCheck(prev[i], next[i])) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function defaultMemoize(func) {
+  var equalityCheck = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultEqualityCheck;
+
+  var lastArgs = null;
+  var lastResult = null;
+  // we reference arguments instead of spreading them for performance reasons
+  return function () {
+    if (!areArgumentsShallowlyEqual(equalityCheck, lastArgs, arguments)) {
+      // apply arguments instead of spreading for performance.
+      lastResult = func.apply(null, arguments);
+    }
+
+    lastArgs = arguments;
+    return lastResult;
+  };
+}
+
+function getDependencies(funcs) {
+  var dependencies = Array.isArray(funcs[0]) ? funcs[0] : funcs;
+
+  if (!dependencies.every(function (dep) {
+    return typeof dep === 'function';
+  })) {
+    var dependencyTypes = dependencies.map(function (dep) {
+      return typeof dep;
+    }).join(', ');
+    throw new Error('Selector creators expect all input-selectors to be functions, ' + ('instead received the following types: [' + dependencyTypes + ']'));
+  }
+
+  return dependencies;
+}
+
+function createSelectorCreator(memoize) {
+  for (var _len = arguments.length, memoizeOptions = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    memoizeOptions[_key - 1] = arguments[_key];
+  }
+
+  return function () {
+    for (var _len2 = arguments.length, funcs = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      funcs[_key2] = arguments[_key2];
+    }
+
+    var recomputations = 0;
+    var resultFunc = funcs.pop();
+    var dependencies = getDependencies(funcs);
+
+    var memoizedResultFunc = memoize.apply(undefined, [function () {
+      recomputations++;
+      // apply arguments instead of spreading for performance.
+      return resultFunc.apply(null, arguments);
+    }].concat(memoizeOptions));
+
+    // If a selector is called with the exact same arguments we don't need to traverse our dependencies again.
+    var selector = memoize(function () {
+      var params = [];
+      var length = dependencies.length;
+
+      for (var i = 0; i < length; i++) {
+        // apply arguments instead of spreading and mutate a local list of params for performance.
+        params.push(dependencies[i].apply(null, arguments));
+      }
+
+      // apply arguments instead of spreading for performance.
+      return memoizedResultFunc.apply(null, params);
+    });
+
+    selector.resultFunc = resultFunc;
+    selector.dependencies = dependencies;
+    selector.recomputations = function () {
+      return recomputations;
+    };
+    selector.resetRecomputations = function () {
+      return recomputations = 0;
+    };
+    return selector;
+  };
+}
+
+var createSelector = createSelectorCreator(defaultMemoize);
+
+function createStructuredSelector(selectors) {
+  var selectorCreator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : createSelector;
+
+  if (typeof selectors !== 'object') {
+    throw new Error('createStructuredSelector expects first argument to be an object ' + ('where each property is a selector, instead received a ' + typeof selectors));
+  }
+  var objectKeys = Object.keys(selectors);
+  return selectorCreator(objectKeys.map(function (key) {
+    return selectors[key];
+  }), function () {
+    for (var _len3 = arguments.length, values = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+      values[_key3] = arguments[_key3];
+    }
+
+    return values.reduce(function (composition, value, index) {
+      composition[objectKeys[index]] = value;
+      return composition;
+    }, {});
+  });
+}
 
 /***/ }),
 

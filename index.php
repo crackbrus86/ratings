@@ -5,7 +5,9 @@
 * Verson: 1.0
 * Author: Salivon Eugene
 */
+define('RATING_DIR', plugin_dir_path(__FILE__));
 add_action("admin_menu", array("UPFRatings", "initRating"));
+add_action("admin_init", array("UPFRatings", "initDb"));
 
 
 class UPFRatings {
@@ -45,6 +47,11 @@ _END;
         </div>
 _END;
         echo $content;
+    }
+
+    public function initDb()
+    {
+        require_once(RATING_DIR . "./server/dbInit.php");
     }
 
 }

@@ -2,7 +2,7 @@ import * as React from "react";
 import { ColumnModel, ColumnTypes } from "./column";
 
 export interface CellProps{
-    key?: number,
+    index?: number,
     item: any,
     column: ColumnModel
 }
@@ -17,7 +17,7 @@ class Cell extends React.PureComponent<CellProps>{
         }
     }
     render(){
-        return <td key={this.props.key}>
+        return <td key={this.props.index}>
         {
             this.renderItem()
         }

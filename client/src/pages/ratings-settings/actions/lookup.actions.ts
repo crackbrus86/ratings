@@ -15,4 +15,17 @@ export namespace ActionCreators{
             }
         });
     }
+
+    export const getPoints = () => (d, gs: () => Models.StoreState) => {
+        Services.getPoints().then((response) => {
+            if(response.status){
+                return d({
+                    type: ActionTypes.LOAD_POINTS,
+                    payload: <ActionTypes.LOAD_POINTS_PAYLOAD>{
+                        points: response.data
+                    }
+                })
+            }
+        });
+    }
 }

@@ -1,5 +1,5 @@
 <?php
-require "../Models/Competition.php";
+require_once "../Models/Competition.php";
 
 class CompetitionService
 {

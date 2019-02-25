@@ -13,13 +13,13 @@ export interface ColumnModel{
 }
 
 export interface ColumnProps{
-    key?: number,
+    index?: number,
     column: ColumnModel
 }
 
 class Column extends React.PureComponent<ColumnProps>{
     render(){
-        return <th key={this.props.key} style={{width: this.props.column.width}}>{this.props.column.title}</th>
+        return <th key={this.props.index} style={{width: this.props.column.width}}>{this.props.column.title}</th>
     }
 }
 export default Column;

@@ -15,13 +15,16 @@ class Table extends React.PureComponent<TableProps>{
     render() {
         return <table className="rat-table">
             <thead>
+                <tr>
                 {
-                    this.props.columns.map((column, index) => <Column key={index} column={column} />)
+                    this.props.columns.length && 
+                    this.props.columns.map((column, index) => <Column key={index} index={index} column={column} />)
                 }
+                </tr>
             </thead>
             <tbody>
                 {
-                    this.props.items.map((item, index) => <Row key={index} item={item} columns={this.props.columns} />)
+                    this.props.items.map((item, index) => <Row  key={index} index={index} item={item} columns={this.props.columns} />)
                 }
             </tbody>
         </table>

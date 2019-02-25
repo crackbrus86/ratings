@@ -5,9 +5,10 @@ import Table from "../../../components/table/table";
 import {ColumnModel} from "../../../components/table/column";
 import * as Models from "../models/index.models";
 import * as Actions from "../actions/index.actions";
+import * as Selectors from "../selectors/selector";
 
 interface StateProps{
-    competitions: Models.LookupModels.Competition[]
+    points: Models.LookupModels.TablePoint[]
 }
 
 interface DispatchProps{
@@ -16,7 +17,7 @@ interface DispatchProps{
 
 export default connect<StateProps, DispatchProps>(
     (state: Models.StoreState): StateProps => ({
-        competitions: state.lookup.competitions
+        points: Selectors.getTablePoints(state)
     }),
     (dispatch): DispatchProps => ({
         actions: bindActionCreators(Actions.LookupActions.ActionCreators, dispatch)
@@ -24,10 +25,11 @@ export default connect<StateProps, DispatchProps>(
 )(class RatingsLayout extends React.Component<StateProps & DispatchProps>{
     componentDidMount(){
         this.props.actions.getCompetitions();
+        this.props.actions.getPoints();
     }
     render(){
         return <div style={{overflowX: "auto", marginRight: 20}}>
-            <Table items={this.props.competitions} columns={[
+            <Table items={this.props.points} columns={[
                 {
                     title: "№",
                     field: "sortOrder",
@@ -38,6 +40,21 @@ export default connect<StateProps, DispatchProps>(
                     field: "name",
                     width: "300px"
                 },
+                {
+                    title: "1-е місце",
+                    field: "firstPlaceValue",
+                    width: "80px"
+                },
+                {
+                    title: "2-е місце",
+                    field: "secondPlaceValue",
+                    width: "80px"
+                },
+                {
+                    title: "3-е місце",
+                    field: "thirdPlaceValue",
+                    width: "80px"
+                },                                
                 {
                     title: "",
                     width: "*"
