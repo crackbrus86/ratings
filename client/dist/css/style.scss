@@ -22,4 +22,32 @@
     th, td{
         border-bottom: 1px solid #ddd;
     }
+    .editable-cell{
+        .editable-cell-icon{
+            float: right;
+            opacity: 0.6;
+            cursor: pointer;
+            &.edit{
+                color: #a30c0c;
+            }
+            &.close{
+                color: #b43b3b;
+            }
+            &.check{
+                color: rgb(3, 179, 3);
+                margin: 3px -2px 0 0;
+            }
+            &:hover{
+                opacity: 1;
+            }
+        }
+        .editable-cell-input{
+            float: left;
+            width: 75%;
+            border: none;
+            outline: none;
+            box-shadow: none;
+            background-color: #e8e8e8;
+        }
+    }
 }

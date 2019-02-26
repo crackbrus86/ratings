@@ -12,7 +12,7 @@ class Row extends React.PureComponent<RowProps>{
     render(){
         return <tr key={this.props.index}>
             {
-                this.props.columns.map((column, index) => <Cell key={index} item={this.props.item} column={column} />)
+                this.props.columns.map((column, index) => <Cell key={index} item={this.props.item} column={column} onChange={column.onChange} />)
             }
         </tr>
     }

@@ -9,7 +9,8 @@ export interface ColumnModel{
     type?: ColumnTypes,
     title: string,
     field?: string,
-    width?: string
+    width?: string,
+    onChange?: (item: any) => void
 }
 
 export interface ColumnProps{

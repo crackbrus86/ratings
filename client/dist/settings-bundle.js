@@ -111,14 +111,20 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var column_1 = __webpack_require__(/*! ./column */ "./client/src/components/table/column.tsx");
+var editable_cell_1 = __webpack_require__(/*! ./editable.cell */ "./client/src/components/table/editable.cell.tsx");
 var Cell = /** @class */ (function (_super) {
     __extends(Cell, _super);
     function Cell() {
         var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.onItemChange = function (value, item, column) {
+            item[column] = value;
+            _this.props.onChange(item);
+        };
         _this.renderItem = function () {
             switch (_this.props.column.type) {
                 case column_1.ColumnTypes.Button:
                 case column_1.ColumnTypes.Input:
+                    return React.createElement(editable_cell_1.default, { value: _this.props.item[_this.props.column.field], onChange: function (v) { return _this.onItemChange(v, _this.props.item, _this.props.column.field); } });
                 default:
                     return _this.props.item[_this.props.column.field];
             }
@@ -179,6 +185,77 @@ exports.default = Column;
 
 /***/ }),
 
+/***/ "./client/src/components/table/editable.cell.tsx":
+/*!*******************************************************!*\
+  !*** ./client/src/components/table/editable.cell.tsx ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var FontAwesome = __webpack_require__(/*! react-fontawesome */ "./node_modules/react-fontawesome/lib/index.js");
+var EditableCell = /** @class */ (function (_super) {
+    __extends(EditableCell, _super);
+    function EditableCell(props) {
+        var _this = _super.call(this, props) || this;
+        _this.enableEditMode = function () {
+            _this.setState({ editMode: true });
+        };
+        _this.cancelEditMode = function () {
+            _this.setState({ editMode: false, value: _this.props.value });
+        };
+        _this.onEdit = function (value) {
+            _this.setState({ value: value });
+        };
+        _this.onSave = function () {
+            _this.props.onChange(_this.state.value);
+            _this.cancelEditMode();
+        };
+        _this.state = {
+            value: null,
+            editMode: false
+        };
+        return _this;
+    }
+    EditableCell.prototype.componentDidMount = function () {
+        this.setState({ value: this.props.value });
+    };
+    EditableCell.prototype.render = function () {
+        var _this = this;
+        return React.createElement("div", { className: "editable-cell" },
+            !this.state.editMode &&
+                React.createElement("div", null,
+                    this.state.value,
+                    React.createElement(FontAwesome, { name: "pen", className: "editable-cell-icon edit", onClick: this.enableEditMode })),
+            this.state.editMode &&
+                React.createElement("div", null,
+                    React.createElement("input", { type: "text", value: this.state.value, className: "editable-cell-input", onChange: function (e) { return _this.onEdit(e.target.value); } }),
+                    React.createElement(FontAwesome, { name: "times", className: "editable-cell-icon close", onClick: this.cancelEditMode }),
+                    React.createElement(FontAwesome, { name: "check", className: "editable-cell-icon check", onClick: this.onSave })));
+    };
+    return EditableCell;
+}(React.Component));
+exports.default = EditableCell;
+
+
+/***/ }),
+
 /***/ "./client/src/components/table/row.tsx":
 /*!*********************************************!*\
   !*** ./client/src/components/table/row.tsx ***!
@@ -211,7 +288,7 @@ var Row = /** @class */ (function (_super) {
     }
     Row.prototype.render = function () {
         var _this = this;
-        return React.createElement("tr", { key: this.props.index }, this.props.columns.map(function (column, index) { return React.createElement(cell_1.default, { key: index, item: _this.props.item, column: column }); }));
+        return React.createElement("tr", { key: this.props.index }, this.props.columns.map(function (column, index) { return React.createElement(cell_1.default, { key: index, item: _this.props.item, column: column, onChange: column.onChange }); }));
     };
     return Row;
 }(React.PureComponent));
@@ -619,6 +696,7 @@ var React = __webpack_require__(/*! react */ "react");
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 var table_1 = __webpack_require__(/*! ../../../components/table/table */ "./client/src/components/table/table.tsx");
+var column_1 = __webpack_require__(/*! ../../../components/table/column */ "./client/src/components/table/column.tsx");
 var Actions = __webpack_require__(/*! ../actions/index.actions */ "./client/src/pages/ratings-settings/actions/index.actions.ts");
 var Selectors = __webpack_require__(/*! ../selectors/selector */ "./client/src/pages/ratings-settings/selectors/selector.ts");
 exports.default = react_redux_1.connect(function (state) { return ({
@@ -650,7 +728,9 @@ exports.default = react_redux_1.connect(function (state) { return ({
                     {
                         title: "1-е місце",
                         field: "firstPlaceValue",
-                        width: "80px"
+                        type: column_1.ColumnTypes.Input,
+                        width: "80px",
+                        onChange: function (item) { return alert(JSON.stringify(item)); }
                     },
                     {
                         title: "2-е місце",
@@ -3706,6 +3786,185 @@ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
 
 module.exports = ReactPropTypesSecret;
 
+
+/***/ }),
+
+/***/ "./node_modules/react-fontawesome/lib/index.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/react-fontawesome/lib/index.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(/*! react */ "react");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _screenReaderStyles = __webpack_require__(/*! ./screen-reader-styles */ "./node_modules/react-fontawesome/lib/screen-reader-styles.js");
+
+var _screenReaderStyles2 = _interopRequireDefault(_screenReaderStyles);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * A React component for the font-awesome icon library.
+ *
+ * @param {String} [ariaLabel] An extra accessibility label to put on the icon
+ * @param {Boolean} [border=false] Whether or not to show a border radius
+ * @param {String} [className] An extra set of CSS classes to add to the component
+ * @param {Object} [cssModule] Option to pass FontAwesome CSS as a module
+ * @param {Boolean} [fixedWidth=false] Make buttons fixed width
+ * @param {String} [flip=false] Flip the icon's orientation.
+ * @param {Boolean} [inverse=false]Inverse the icon's color
+ * @param {String} name Name of the icon to use
+ * @param {Boolean} [pulse=false] Rotate icon with 8 steps, rather than smoothly
+ * @param {Number} [rotate] The degress to rotate the icon by
+ * @param {String} [size] The icon scaling size
+ * @param {Boolean} [spin=false] Spin the icon
+ * @param {String} [stack] Stack an icon on top of another
+ * @param {String} [tag=span] The HTML tag to use as a string, eg 'i' or 'em'
+ * @module FontAwesome
+ * @type {ReactClass}
+ */
+var FontAwesome = function (_React$Component) {
+  _inherits(FontAwesome, _React$Component);
+
+  function FontAwesome() {
+    _classCallCheck(this, FontAwesome);
+
+    var _this = _possibleConstructorReturn(this, (FontAwesome.__proto__ || Object.getPrototypeOf(FontAwesome)).call(this));
+
+    _this.displayName = 'FontAwesome';
+    return _this;
+  }
+
+  _createClass(FontAwesome, [{
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          border = _props.border,
+          cssModule = _props.cssModule,
+          className = _props.className,
+          fixedWidth = _props.fixedWidth,
+          flip = _props.flip,
+          inverse = _props.inverse,
+          name = _props.name,
+          pulse = _props.pulse,
+          rotate = _props.rotate,
+          size = _props.size,
+          spin = _props.spin,
+          stack = _props.stack,
+          _props$tag = _props.tag,
+          tag = _props$tag === undefined ? 'span' : _props$tag,
+          ariaLabel = _props.ariaLabel,
+          props = _objectWithoutProperties(_props, ['border', 'cssModule', 'className', 'fixedWidth', 'flip', 'inverse', 'name', 'pulse', 'rotate', 'size', 'spin', 'stack', 'tag', 'ariaLabel']);
+
+      var classNames = [];
+
+      if (cssModule) {
+        classNames.push(cssModule['fa']);
+        classNames.push(cssModule['fa-' + name]);
+        size && classNames.push(cssModule['fa-' + size]);
+        spin && classNames.push(cssModule['fa-spin']);
+        pulse && classNames.push(cssModule['fa-pulse']);
+        border && classNames.push(cssModule['fa-border']);
+        fixedWidth && classNames.push(cssModule['fa-fw']);
+        inverse && classNames.push(cssModule['fa-inverse']);
+        flip && classNames.push(cssModule['fa-flip-' + flip]);
+        rotate && classNames.push(cssModule['fa-rotate-' + rotate]);
+        stack && classNames.push(cssModule['fa-stack-' + stack]);
+      } else {
+        classNames.push('fa');
+        classNames.push('fa-' + name);
+        size && classNames.push('fa-' + size);
+        spin && classNames.push('fa-spin');
+        pulse && classNames.push('fa-pulse');
+        border && classNames.push('fa-border');
+        fixedWidth && classNames.push('fa-fw');
+        inverse && classNames.push('fa-inverse');
+        flip && classNames.push('fa-flip-' + flip);
+        rotate && classNames.push('fa-rotate-' + rotate);
+        stack && classNames.push('fa-stack-' + stack);
+      }
+
+      // Add any custom class names at the end.
+      className && classNames.push(className);
+      return _react2.default.createElement(tag, _extends({}, props, { 'aria-hidden': true, className: classNames.join(' ') }), ariaLabel ? _react2.default.createElement('span', { style: _screenReaderStyles2.default }, ariaLabel) : null);
+    }
+  }]);
+
+  return FontAwesome;
+}(_react2.default.Component);
+
+FontAwesome.propTypes = {
+  ariaLabel: _propTypes2.default.string,
+  border: _propTypes2.default.bool,
+  className: _propTypes2.default.string,
+  cssModule: _propTypes2.default.object,
+  fixedWidth: _propTypes2.default.bool,
+  flip: _propTypes2.default.oneOf(['horizontal', 'vertical']),
+  inverse: _propTypes2.default.bool,
+  name: _propTypes2.default.string.isRequired,
+  pulse: _propTypes2.default.bool,
+  rotate: _propTypes2.default.oneOf([90, 180, 270]),
+  size: _propTypes2.default.oneOf(['lg', '2x', '3x', '4x', '5x']),
+  spin: _propTypes2.default.bool,
+  stack: _propTypes2.default.oneOf(['1x', '2x']),
+  tag: _propTypes2.default.string
+};
+
+exports.default = FontAwesome;
+module.exports = exports['default'];
+
+/***/ }),
+
+/***/ "./node_modules/react-fontawesome/lib/screen-reader-styles.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/react-fontawesome/lib/screen-reader-styles.js ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  position: 'absolute',
+  width: '1px',
+  height: '1px',
+  padding: '0px',
+  margin: '-1px',
+  overflow: 'hidden',
+  clip: 'rect(0px, 0px, 0px, 0px)',
+  border: '0px'
+};
+module.exports = exports['default'];
 
 /***/ }),
 

@@ -2,7 +2,7 @@ import * as React from "react";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import Table from "../../../components/table/table";
-import {ColumnModel} from "../../../components/table/column";
+import {ColumnModel, ColumnTypes} from "../../../components/table/column";
 import * as Models from "../models/index.models";
 import * as Actions from "../actions/index.actions";
 import * as Selectors from "../selectors/selector";
@@ -43,7 +43,9 @@ export default connect<StateProps, DispatchProps>(
                 {
                     title: "1-е місце",
                     field: "firstPlaceValue",
-                    width: "80px"
+                    type: ColumnTypes.Input,
+                    width: "80px",
+                    onChange: (item: Models.LookupModels.TablePoint) => alert(JSON.stringify(item))
                 },
                 {
                     title: "2-е місце",

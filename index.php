@@ -18,6 +18,8 @@ class UPFRatings {
         add_submenu_page("ratings", "Рейтинги ФПУ (Установки)", "Установки", "manage_options", "ratings-settings", array("UPFRatings", "ratingsSettings"));
         wp_register_style('style', plugins_url( '/client/dist/css/style.css?v=' . $appVersion, __FILE__ ));
         wp_enqueue_style( 'style');
+        wp_register_style('fontawesome', plugins_url( '/client/dist/css/fontawesome-free-5.7.2-web/css/all.min.css?v=' . $appVersion, __FILE__ ));
+        wp_enqueue_style( 'fontawesome');
     }
 
     public function ratingsManager()

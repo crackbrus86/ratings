@@ -21,3 +21,23 @@
     font-size: 1.1em; }
   .rat-table th, .rat-table td {
     border-bottom: 1px solid #ddd; }
+  .rat-table .editable-cell .editable-cell-icon {
+    float: right;
+    opacity: 0.6;
+    cursor: pointer; }
+    .rat-table .editable-cell .editable-cell-icon.edit {
+      color: #a30c0c; }
+    .rat-table .editable-cell .editable-cell-icon.close {
+      color: #b43b3b; }
+    .rat-table .editable-cell .editable-cell-icon.check {
+      color: #03b303;
+      margin: 3px -2px 0 0; }
+    .rat-table .editable-cell .editable-cell-icon:hover {
+      opacity: 1; }
+  .rat-table .editable-cell .editable-cell-input {
+    float: left;
+    width: 75%;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    background-color: #e8e8e8; }
