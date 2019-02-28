@@ -7,4 +7,8 @@ function createResponse($data, $status = true, $message = "")
     $response->data = $data;
     echo json_encode($response);
 }
+
+function escape($string){
+    return strip_tags(stripslashes($string));
+}
 ?>

@@ -1,5 +1,6 @@
 <?php
 require_once "../connect.php";
+require_once "../core.php";
 require_once "../Models/Point.php";
 require_once "../Models/Competition.php";
 require_once "CompetitionService.php";
@@ -27,20 +28,28 @@ class PointService
         $result = $this->db->get_results("SELECT * FROM $this->pointTableName");
         if(count($result))
         {
-            foreach ($$result as $point) {
+            foreach ($result as $point) {
                 array_push($this->points, new Point($point->PointId, $point->Target, $point->Value, $point->Place));
             }
         }
-        else
-        {
-            $counter = 1;
-            foreach ($this->competitions as $competition) {
-                for($place = 1; $place <= 3; $place++)
-                    array_push($this->points, new Point($counter, $competition->dbName, 0, $place));
-                $counter++;
-            }
-        }
         return $this->points;
+    }
+
+    public function savePoint()
+    {
+        $point = new Point(intval(escape($_POST["pointId"])), escape($_POST["target"]), escape($_POST["value"]), escape($_POST["place"]));
+        $sql = $this->db->prepare("SELECT COUNT(*) FROM $this->pointTableName WHERE PointId = %d OR (Target = %s AND Place = %d)", 
+                                    $point->pointId, $point->target, $point->place);
+        $exists = $this->db->get_var($sql);
+        if(!$exists)
+        {
+            $sql = $this->db->prepare("INSERT INTO $this->pointTableName (Target, Value, Place) 
+            VALUES (%s, %d, %d)", $point->target, $point->value, $point->place);
+            $this->db->query($sql);
+        }else{
+            $sql = $this->db->prepare("UPDATE $this->pointTableName SET Value = %d WHERE PointId = %d", $point->value, $point->pointId);
+            $this->db->query($sql);
+        }
     }
 
 }

@@ -236,6 +236,10 @@ var EditableCell = /** @class */ (function (_super) {
     EditableCell.prototype.componentDidMount = function () {
         this.setState({ value: this.props.value });
     };
+    EditableCell.prototype.componentDidUpdate = function (prevProps) {
+        if (prevProps.value != this.props.value)
+            this.setState({ value: this.props.value });
+    };
     EditableCell.prototype.render = function () {
         var _this = this;
         return React.createElement("div", { className: "editable-cell" },
@@ -368,15 +372,55 @@ exports.callApi = function (props) {
                 params: props.data
             }).then(function (result) { return mapToResponse(result); });
         case RequestTypes.POST:
-            return axios_1.default.post(props.url, props.data).then(function (result) { return mapToResponse(result); });
+            return axios_1.default({
+                method: 'post',
+                url: props.url,
+                data: convertToFormData(props.data)
+            }).then(function (result) { return mapToResponse(result); });
         default:
             return;
     }
 };
+function convertToFormData(data) {
+    var form = new FormData();
+    for (var key in data) {
+        form.append(key, data[key]);
+    }
+    return form;
+}
 var mapToResponse = function (result) {
     var response = result.data;
     return response;
 };
+axios_1.default.interceptors.request.use(function (config) {
+    addBlackOut();
+    return config;
+}, function (error) {
+    return error;
+});
+axios_1.default.interceptors.response.use(function (response) {
+    deleteBlackOut();
+    return response;
+}, function (error) {
+    return error;
+});
+function addBlackOut() {
+    if (!document.getElementsByClassName("blackout").length) {
+        var blackOut = document.createElement("div");
+        blackOut.className = "blackout";
+        blackOut.setAttribute("style", "position: absolute; top: 0; left: 0; bottom: 0; right: 0; background-color: #353535; opacity: 0.8;");
+        var spinner = document.createElement("i");
+        spinner.className = "fas fa-atom fa-7x fa-spin";
+        spinner.setAttribute("style", "position: absolute; top: 50%; left: 50%; color: #81f4c5;");
+        blackOut.appendChild(spinner);
+        document.body.appendChild(blackOut);
+    }
+}
+function deleteBlackOut() {
+    if (!!document.getElementsByClassName("blackout").length) {
+        document.getElementsByClassName("blackout")[0].remove();
+    }
+}
 
 
 /***/ }),
@@ -447,6 +491,33 @@ var ActionCreators;
                         points: response.data
                     }
                 });
+            }
+        });
+    }; };
+    ActionCreators.savePoint = function (point, place) { return function (d, gs) {
+        var value = 0;
+        switch (place) {
+            case 1:
+                value = point.firstPlaceValue;
+                break;
+            case 2:
+                value = point.secondPlaceValue;
+                break;
+            case 3:
+                value = point.thirdPlaceValue;
+                break;
+            default:
+                value = 0;
+        }
+        var currentPoint = gs().lookup.points.filter(function (x) { return x.place == place && x.target == point.dbName; })[0];
+        Services.savePoint({
+            pointId: currentPoint ? currentPoint.pointId : null,
+            place: place,
+            target: point.dbName,
+            value: value
+        }).then(function (response) {
+            if (response.status) {
+                d(ActionCreators.getPoints());
             }
         });
     }; };
@@ -562,11 +633,11 @@ var reselect_1 = __webpack_require__(/*! reselect */ "./node_modules/reselect/es
 var competitions = function (state) { return state.lookup.competitions; };
 var points = function (state) { return state.lookup.points; };
 exports.getTablePoints = reselect_1.createSelector(competitions, points, function (competitions, points) {
-    if (!competitions.length || !points.length)
+    if (!competitions.length)
         return [];
     return competitions.map(function (competition) {
         var compPoints = points.filter(function (point) { return point.target == competition.dbName; });
-        return __assign({}, competition, { firstPlaceValue: compPoints.filter(function (point) { return point.place == 1; })[0].value, secondPlaceValue: compPoints.filter(function (point) { return point.place == 2; })[0].value, thirdPlaceValue: compPoints.filter(function (point) { return point.place == 3; })[0].value });
+        return __assign({}, competition, { firstPlaceValue: compPoints.filter(function (point) { return point.place == 1; }).length ? compPoints.filter(function (point) { return point.place == 1; })[0].value : 0, secondPlaceValue: compPoints.filter(function (point) { return point.place == 2; }).length ? compPoints.filter(function (point) { return point.place == 2; })[0].value : 0, thirdPlaceValue: compPoints.filter(function (point) { return point.place == 3; }).length ? compPoints.filter(function (point) { return point.place == 3; })[0].value : 0 });
     });
 });
 
@@ -596,6 +667,13 @@ exports.getPoints = function () {
     return CallApi.callApi({
         url: lookupApiPath + 'GetAllPointsLookup.php',
         type: apiTypes.GET
+    });
+};
+exports.savePoint = function (point) {
+    return CallApi.callApi({
+        url: lookupApiPath + 'SavePoint.php',
+        type: apiTypes.POST,
+        data: point
     });
 };
 
@@ -713,6 +791,7 @@ exports.default = react_redux_1.connect(function (state) { return ({
         this.props.actions.getPoints();
     };
     RatingsLayout.prototype.render = function () {
+        var _this = this;
         return React.createElement("div", { style: { overflowX: "auto", marginRight: 20 } },
             React.createElement(table_1.default, { items: this.props.points, columns: [
                     {
@@ -730,17 +809,21 @@ exports.default = react_redux_1.connect(function (state) { return ({
                         field: "firstPlaceValue",
                         type: column_1.ColumnTypes.Input,
                         width: "80px",
-                        onChange: function (item) { return alert(JSON.stringify(item)); }
+                        onChange: function (item) { return _this.props.actions.savePoint(item, 1); }
                     },
                     {
                         title: "2-е місце",
                         field: "secondPlaceValue",
-                        width: "80px"
+                        type: column_1.ColumnTypes.Input,
+                        width: "80px",
+                        onChange: function (item) { return _this.props.actions.savePoint(item, 2); }
                     },
                     {
                         title: "3-е місце",
                         field: "thirdPlaceValue",
-                        width: "80px"
+                        type: column_1.ColumnTypes.Input,
+                        width: "80px",
+                        onChange: function (item) { return _this.props.actions.savePoint(item, 3); }
                     },
                     {
                         title: "",

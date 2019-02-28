@@ -45,17 +45,21 @@ export default connect<StateProps, DispatchProps>(
                     field: "firstPlaceValue",
                     type: ColumnTypes.Input,
                     width: "80px",
-                    onChange: (item: Models.LookupModels.TablePoint) => alert(JSON.stringify(item))
+                    onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 1)
                 },
                 {
                     title: "2-е місце",
                     field: "secondPlaceValue",
-                    width: "80px"
+                    type: ColumnTypes.Input,
+                    width: "80px",
+                    onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 2)
                 },
                 {
                     title: "3-е місце",
                     field: "thirdPlaceValue",
-                    width: "80px"
+                    type: ColumnTypes.Input,
+                    width: "80px",
+                    onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 3)
                 },                                
                 {
                     title: "",

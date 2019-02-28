@@ -42,6 +42,11 @@ class EditableCell extends React.Component<EditableCellProps, EditableCellState>
         this.setState({value: this.props.value})
     }
 
+    componentDidUpdate(prevProps: EditableCellProps){
+        if(prevProps.value != this.props.value)
+            this.setState({value: this.props.value});
+    }
+
     render(){
         return <div className="editable-cell">
         {

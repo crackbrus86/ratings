@@ -28,4 +28,34 @@ export namespace ActionCreators{
             }
         });
     }
+
+    export const savePoint = (point: Models.LookupModels.TablePoint, place: number) => (d, gs: () => Models.StoreState) => {
+        let value = 0;
+        switch(place){
+            case 1:
+            value = point.firstPlaceValue;
+            break;
+            case 2:
+            value = point.secondPlaceValue;
+            break;
+            case 3:
+            value = point.thirdPlaceValue;
+            break;
+            default:
+            value = 0;
+        }
+
+        let currentPoint = gs().lookup.points.filter(x => x.place == place && x.target == point.dbName)[0];
+
+        Services.savePoint({
+            pointId: currentPoint ? currentPoint.pointId : null,
+            place: place,
+            target: point.dbName,
+            value: value
+        }).then((response) => {
+            if(response.status){
+                d(getPoints());
+            }
+        })
+    }
 }
