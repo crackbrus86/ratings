@@ -7,24 +7,62 @@ export interface TableProps {
     columns: ColumnModel[]
 }
 
-class Table extends React.PureComponent<TableProps>{
+interface TableState{
+    sortField: string,
+    sortAsc: boolean;
+}
+
+class Table extends React.PureComponent<TableProps, TableState>{
     constructor(props) {
         super(props);
+        this.state = {
+            sortField: null,
+            sortAsc: true
+        }
+    }
+
+    componentDidMount(){
+        this.setFirstSorting();
+    }
+
+    setFirstSorting = () => {
+        let sortableColumns = this.props.columns.filter(column => column.sortable);
+        if(sortableColumns.length){
+            this.setState({sortField: sortableColumns[0].field});
+        }
+    }
+
+    sortingMethod = (itemA, itemB) => {
+        let field = this.state.sortField;
+        return this.state.sortAsc ? itemA[field] - itemB[field] : itemB[field] - itemA[field];
+    }
+
+    onChangeSorting = (field: string, asc: boolean) => {
+        this.setState({sortField: field, sortAsc: asc});
     }
 
     render() {
+        let items = !this.state.sortField ? this.props.items : this.props.items.sort((a,b) => this.sortingMethod(a,b));
         return <table className="rat-table">
             <thead>
                 <tr>
                 {
                     this.props.columns.length && 
-                    this.props.columns.map((column, index) => <Column key={index} index={index} column={column} />)
+                    this.props.columns.map((column, index) => 
+                    <Column 
+                    key={index} 
+                    index={index} 
+                    column={column} 
+                    sortAsc={this.state.sortAsc} 
+                    onSort={this.onChangeSorting} 
+                    sortField={this.state.sortField}
+                    />)
                 }
                 </tr>
             </thead>
             <tbody>
                 {
-                    this.props.items.map((item, index) => <Row  key={index} index={index} item={item} columns={this.props.columns} />)
+                    items.map((item, index) => <Row  key={index} index={index} item={item} columns={this.props.columns} />)
                 }
             </tbody>
         </table>

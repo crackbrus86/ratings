@@ -165,6 +165,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
+var FontAwesome = __webpack_require__(/*! react-fontawesome */ "./node_modules/react-fontawesome/lib/index.js");
 var ColumnTypes;
 (function (ColumnTypes) {
     ColumnTypes["Button"] = "button";
@@ -176,7 +177,13 @@ var Column = /** @class */ (function (_super) {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Column.prototype.render = function () {
-        return React.createElement("th", { key: this.props.index, style: { width: this.props.column.width } }, this.props.column.title);
+        var _this = this;
+        return React.createElement("th", { key: this.props.index, style: { width: this.props.column.width } },
+            this.props.column.title,
+            this.props.column.sortable &&
+                (this.props.sortAsc || (this.props.sortField != this.props.column.field) ?
+                    React.createElement(FontAwesome, { name: "caret-up", className: "sort-control", onClick: function () { return _this.props.onSort(_this.props.column.field, false); } })
+                    : React.createElement(FontAwesome, { name: "caret-down", className: "sort-control", onClick: function () { return _this.props.onSort(_this.props.column.field, true); } })));
     };
     return Column;
 }(React.PureComponent));
@@ -215,7 +222,10 @@ var EditableCell = /** @class */ (function (_super) {
     function EditableCell(props) {
         var _this = _super.call(this, props) || this;
         _this.enableEditMode = function () {
-            _this.setState({ editMode: true });
+            _this.setState({ editMode: true }, function () { return _this.editableCellInput.focus(); });
+        };
+        _this.handleFocus = function (event) {
+            event.target.select();
         };
         _this.cancelEditMode = function () {
             _this.setState({ editMode: false, value: _this.props.value });
@@ -249,7 +259,7 @@ var EditableCell = /** @class */ (function (_super) {
                     React.createElement(FontAwesome, { name: "pen", className: "editable-cell-icon edit", onClick: this.enableEditMode })),
             this.state.editMode &&
                 React.createElement("div", null,
-                    React.createElement("input", { type: "text", value: this.state.value, className: "editable-cell-input", onChange: function (e) { return _this.onEdit(e.target.value); } }),
+                    React.createElement("input", { type: "text", ref: function (input) { return _this.editableCellInput = input; }, value: this.state.value, className: "editable-cell-input", onChange: function (e) { return _this.onEdit(e.target.value); }, onFocus: this.handleFocus }),
                     React.createElement(FontAwesome, { name: "times", className: "editable-cell-icon close", onClick: this.cancelEditMode }),
                     React.createElement(FontAwesome, { name: "check", className: "editable-cell-icon check", onClick: this.onSave })));
     };
@@ -330,15 +340,39 @@ var row_1 = __webpack_require__(/*! ./row */ "./client/src/components/table/row.
 var Table = /** @class */ (function (_super) {
     __extends(Table, _super);
     function Table(props) {
-        return _super.call(this, props) || this;
+        var _this = _super.call(this, props) || this;
+        _this.setFirstSorting = function () {
+            var sortableColumns = _this.props.columns.filter(function (column) { return column.sortable; });
+            if (sortableColumns.length) {
+                _this.setState({ sortField: sortableColumns[0].field });
+            }
+        };
+        _this.sortingMethod = function (itemA, itemB) {
+            var field = _this.state.sortField;
+            return _this.state.sortAsc ? itemA[field] - itemB[field] : itemB[field] - itemA[field];
+        };
+        _this.onChangeSorting = function (field, asc) {
+            _this.setState({ sortField: field, sortAsc: asc });
+        };
+        _this.state = {
+            sortField: null,
+            sortAsc: true
+        };
+        return _this;
     }
+    Table.prototype.componentDidMount = function () {
+        this.setFirstSorting();
+    };
     Table.prototype.render = function () {
         var _this = this;
+        var items = !this.state.sortField ? this.props.items : this.props.items.sort(function (a, b) { return _this.sortingMethod(a, b); });
         return React.createElement("table", { className: "rat-table" },
             React.createElement("thead", null,
                 React.createElement("tr", null, this.props.columns.length &&
-                    this.props.columns.map(function (column, index) { return React.createElement(column_1.default, { key: index, index: index, column: column }); }))),
-            React.createElement("tbody", null, this.props.items.map(function (item, index) { return React.createElement(row_1.default, { key: index, index: index, item: item, columns: _this.props.columns }); })));
+                    this.props.columns.map(function (column, index) {
+                        return React.createElement(column_1.default, { key: index, index: index, column: column, sortAsc: _this.state.sortAsc, onSort: _this.onChangeSorting, sortField: _this.state.sortField });
+                    }))),
+            React.createElement("tbody", null, items.map(function (item, index) { return React.createElement(row_1.default, { key: index, index: index, item: item, columns: _this.props.columns }); })));
     };
     return Table;
 }(React.PureComponent));
@@ -797,7 +831,8 @@ exports.default = react_redux_1.connect(function (state) { return ({
                     {
                         title: "№",
                         field: "sortOrder",
-                        width: "100px"
+                        width: "100px",
+                        sortable: true
                     },
                     {
                         title: "Вид змагань",
@@ -809,6 +844,7 @@ exports.default = react_redux_1.connect(function (state) { return ({
                         field: "firstPlaceValue",
                         type: column_1.ColumnTypes.Input,
                         width: "80px",
+                        sortable: true,
                         onChange: function (item) { return _this.props.actions.savePoint(item, 1); }
                     },
                     {
@@ -816,12 +852,14 @@ exports.default = react_redux_1.connect(function (state) { return ({
                         field: "secondPlaceValue",
                         type: column_1.ColumnTypes.Input,
                         width: "80px",
+                        sortable: true,
                         onChange: function (item) { return _this.props.actions.savePoint(item, 2); }
                     },
                     {
                         title: "3-е місце",
                         field: "thirdPlaceValue",
                         type: column_1.ColumnTypes.Input,
+                        sortable: true,
                         width: "80px",
                         onChange: function (item) { return _this.props.actions.savePoint(item, 3); }
                     },

@@ -1,6 +1,5 @@
 import * as React from "react";
 import * as FontAwesome from "react-fontawesome";
-import { any } from "prop-types";
 
 interface EditableCellProps{
     value: any,
@@ -13,6 +12,8 @@ interface EditableCellState{
 }
 
 class EditableCell extends React.Component<EditableCellProps, EditableCellState>{
+    private editableCellInput;
+
     constructor(props){
         super(props);
         this.state = {
@@ -22,7 +23,11 @@ class EditableCell extends React.Component<EditableCellProps, EditableCellState>
     }
 
     enableEditMode = () => {
-        this.setState({editMode: true});
+        this.setState({editMode: true}, () => this.editableCellInput.focus());
+    }
+
+    handleFocus = (event) => { 
+        event.target.select();
     }
 
     cancelEditMode = () => {
@@ -56,7 +61,14 @@ class EditableCell extends React.Component<EditableCellProps, EditableCellState>
         {
             this.state.editMode &&
             <div>
-                <input type="text" value={this.state.value} className="editable-cell-input" onChange={(e) => this.onEdit(e.target.value)} />
+                <input 
+                    type="text" 
+                    ref={(input) => this.editableCellInput = input} 
+                    value={this.state.value} 
+                    className="editable-cell-input" 
+                    onChange={(e) => this.onEdit(e.target.value)} 
+                    onFocus={this.handleFocus}
+                />
                 <FontAwesome name="times" className="editable-cell-icon close" onClick={this.cancelEditMode} />
                 <FontAwesome name="check" className="editable-cell-icon check" onClick={this.onSave} />
             </div>

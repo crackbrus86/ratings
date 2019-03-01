@@ -33,7 +33,8 @@ export default connect<StateProps, DispatchProps>(
                 {
                     title: "№",
                     field: "sortOrder",
-                    width: "100px"
+                    width: "100px",
+                    sortable: true
                 },
                 {
                     title: "Вид змагань",
@@ -45,6 +46,7 @@ export default connect<StateProps, DispatchProps>(
                     field: "firstPlaceValue",
                     type: ColumnTypes.Input,
                     width: "80px",
+                    sortable: true,
                     onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 1)
                 },
                 {
@@ -52,12 +54,14 @@ export default connect<StateProps, DispatchProps>(
                     field: "secondPlaceValue",
                     type: ColumnTypes.Input,
                     width: "80px",
+                    sortable: true,
                     onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 2)
                 },
                 {
                     title: "3-е місце",
                     field: "thirdPlaceValue",
                     type: ColumnTypes.Input,
+                    sortable: true,
                     width: "80px",
                     onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 3)
                 },                                
