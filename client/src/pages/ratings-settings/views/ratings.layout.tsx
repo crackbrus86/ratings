@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import Table from "../../../components/table/table";
 import {ColumnModel, ColumnTypes} from "../../../components/table/column";
+import {GridRow, GridColumn, ContentWrap} from "../../../components/layout/index.layout";
 import * as Models from "../models/index.models";
 import * as Actions from "../actions/index.actions";
 import * as Selectors from "../selectors/selector";
@@ -28,48 +29,91 @@ export default connect<StateProps, DispatchProps>(
         this.props.actions.getPoints();
     }
     render(){
-        return <div style={{overflowX: "auto", marginRight: 20}}>
-            <Table items={this.props.points} columns={[
-                {
-                    title: "№",
-                    field: "sortOrder",
-                    width: "100px",
-                    sortable: true
-                },
-                {
-                    title: "Вид змагань",
-                    field: "name",
-                    width: "300px"
-                },
-                {
-                    title: "1-е місце",
-                    field: "firstPlaceValue",
-                    type: ColumnTypes.Input,
-                    width: "80px",
-                    sortable: true,
-                    onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 1)
-                },
-                {
-                    title: "2-е місце",
-                    field: "secondPlaceValue",
-                    type: ColumnTypes.Input,
-                    width: "80px",
-                    sortable: true,
-                    onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 2)
-                },
-                {
-                    title: "3-е місце",
-                    field: "thirdPlaceValue",
-                    type: ColumnTypes.Input,
-                    sortable: true,
-                    width: "80px",
-                    onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 3)
-                },                                
-                {
-                    title: "",
-                    width: "*"
-                }
-                ] as ColumnModel[]} />
-        </div>
+        return <div>
+            <ContentWrap>
+                <GridRow>
+                    <GridColumn>
+                        <h2>Таблиця нарахування очок рейтингу за призовими місцями</h2>
+                        <Table items={this.props.points} columns={[
+                        {
+                            title: "№",
+                            field: "sortOrder",
+                            width: "100px",
+                            sortable: true
+                        },
+                        {
+                            title: "Вид змагань",
+                            field: "name",
+                            width: "300px"
+                        },
+                        {
+                            title: "1-е місце",
+                            field: "firstPlaceValue",
+                            type: ColumnTypes.Input,
+                            width: "80px",
+                            sortable: true,
+                            onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 1)
+                        },
+                        {
+                            title: "2-е місце",
+                            field: "secondPlaceValue",
+                            type: ColumnTypes.Input,
+                            width: "80px",
+                            sortable: true,
+                            onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 2)
+                        },
+                        {
+                            title: "3-е місце",
+                            field: "thirdPlaceValue",
+                            type: ColumnTypes.Input,
+                            sortable: true,
+                            width: "80px",
+                            onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 3)
+                        }
+                        ] as ColumnModel[]} />
+                    </GridColumn>
+                    <GridColumn>
+                    <h2>Таблиця нарахування очок рейтингу за призовими місцями</h2>
+                        <Table items={this.props.points} columns={[
+                        {
+                            title: "№",
+                            field: "sortOrder",
+                            width: "100px",
+                            sortable: true
+                        },
+                        {
+                            title: "Вид змагань",
+                            field: "name",
+                            width: "300px"
+                        },
+                        {
+                            title: "1-е місце",
+                            field: "firstPlaceValue",
+                            type: ColumnTypes.Input,
+                            width: "80px",
+                            sortable: true,
+                            onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 1)
+                        },
+                        {
+                            title: "2-е місце",
+                            field: "secondPlaceValue",
+                            type: ColumnTypes.Input,
+                            width: "80px",
+                            sortable: true,
+                            onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 2)
+                        },
+                        {
+                            title: "3-е місце",
+                            field: "thirdPlaceValue",
+                            type: ColumnTypes.Input,
+                            sortable: true,
+                            width: "80px",
+                            onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 3)
+                        }
+                        ] as ColumnModel[]} />
+                    </GridColumn>
+                </GridRow>
+            </ContentWrap>
+            </div>
     }
 })

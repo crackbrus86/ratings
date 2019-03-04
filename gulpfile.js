@@ -5,6 +5,7 @@ var webpackConfig = require("./webpack.config.js");
 
 var sass = require("gulp-sass");
 var concat = require('gulp-concat');
+var all = require("gulp-all");
 
 sass.compiler = require("node-sass");
 
@@ -27,10 +28,12 @@ gulp.task('sass::concat', function () {
     return gulp.src('./client/src/**/*.scss')
       .pipe(concat('style.scss'))
       .pipe(gulp.dest('./client/dist/css/'));
-  });
+});
 
   gulp.task('style::build', function () {
     return gulp.src('./client/dist/css/style.scss')
       .pipe(sass().on('error', sass.logError))
       .pipe(gulp.dest('./client/dist/css/'));
-  });
+});
+
+gulp.task('css::build', gulp.series('sass::concat', 'style::build'));

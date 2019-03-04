@@ -1,3 +1,20 @@
+.grid-row{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+
+    .grid-column{
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        margin: 0 5px;
+    }
+}
+
+.content-wrap{
+    overflow-x: auto;
+    margin-right: 20px;
+}
 .rat-table{
     border-collapse: collapse;
     width: 100%;
@@ -41,7 +58,7 @@
             }
             &.check{
                 color: rgb(3, 179, 3);
-                margin: 3px -2px 0 0;
+                margin: 14px -13px 0 0;
             }
             &:hover{
                 opacity: 1;

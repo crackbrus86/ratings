@@ -23,6 +23,7 @@
     "@types/redux-logger": "^3.0.7",
     "@types/redux-thunk": "^2.1.0",
     "@types/reselect": "^2.2.0",
+    "@types/run-sequence": "0.0.30",
     "axios": "^0.18.0",
     "react": "^16.8.2",
     "react-dom": "^16.8.2",
@@ -31,11 +32,13 @@
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
-    "reselect": "^4.0.0"
+    "reselect": "^4.0.0",
+    "run-sequence": "^2.2.1"
   },
   "devDependencies": {
     "awesome-typescript-loader": "^5.2.1",
     "gulp": "^4.0.0",
+    "gulp-all": "^1.1.0",
     "gulp-concat": "^2.6.1",
     "gulp-sass": "^4.0.2",
     "node-sass": "^4.11.0",

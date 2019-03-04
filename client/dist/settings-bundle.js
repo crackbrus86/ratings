@@ -86,6 +86,80 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./client/src/components/layout/content.wrap.tsx":
+/*!*******************************************************!*\
+  !*** ./client/src/components/layout/content.wrap.tsx ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+exports.ContentWrap = function (props) {
+    return React.createElement("div", { className: "content-wrap" }, props.children);
+};
+
+
+/***/ }),
+
+/***/ "./client/src/components/layout/grid.column.tsx":
+/*!******************************************************!*\
+  !*** ./client/src/components/layout/grid.column.tsx ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+exports.GridColumn = function (props) {
+    return React.createElement("div", { className: "grid-column" }, props.children);
+};
+
+
+/***/ }),
+
+/***/ "./client/src/components/layout/grid.row.tsx":
+/*!***************************************************!*\
+  !*** ./client/src/components/layout/grid.row.tsx ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+exports.GridRow = function (props) {
+    return React.createElement("div", { className: "grid-row" }, props.children);
+};
+
+
+/***/ }),
+
+/***/ "./client/src/components/layout/index.layout.tsx":
+/*!*******************************************************!*\
+  !*** ./client/src/components/layout/index.layout.tsx ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var grid_row_1 = __webpack_require__(/*! ./grid.row */ "./client/src/components/layout/grid.row.tsx");
+exports.GridRow = grid_row_1.GridRow;
+var grid_column_1 = __webpack_require__(/*! ./grid.column */ "./client/src/components/layout/grid.column.tsx");
+exports.GridColumn = grid_column_1.GridColumn;
+var content_wrap_1 = __webpack_require__(/*! ./content.wrap */ "./client/src/components/layout/content.wrap.tsx");
+exports.ContentWrap = content_wrap_1.ContentWrap;
+
+
+/***/ }),
+
 /***/ "./client/src/components/table/cell.tsx":
 /*!**********************************************!*\
   !*** ./client/src/components/table/cell.tsx ***!
@@ -809,6 +883,7 @@ var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react
 var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 var table_1 = __webpack_require__(/*! ../../../components/table/table */ "./client/src/components/table/table.tsx");
 var column_1 = __webpack_require__(/*! ../../../components/table/column */ "./client/src/components/table/column.tsx");
+var index_layout_1 = __webpack_require__(/*! ../../../components/layout/index.layout */ "./client/src/components/layout/index.layout.tsx");
 var Actions = __webpack_require__(/*! ../actions/index.actions */ "./client/src/pages/ratings-settings/actions/index.actions.ts");
 var Selectors = __webpack_require__(/*! ../selectors/selector */ "./client/src/pages/ratings-settings/selectors/selector.ts");
 exports.default = react_redux_1.connect(function (state) { return ({
@@ -826,48 +901,87 @@ exports.default = react_redux_1.connect(function (state) { return ({
     };
     RatingsLayout.prototype.render = function () {
         var _this = this;
-        return React.createElement("div", { style: { overflowX: "auto", marginRight: 20 } },
-            React.createElement(table_1.default, { items: this.props.points, columns: [
-                    {
-                        title: "№",
-                        field: "sortOrder",
-                        width: "100px",
-                        sortable: true
-                    },
-                    {
-                        title: "Вид змагань",
-                        field: "name",
-                        width: "300px"
-                    },
-                    {
-                        title: "1-е місце",
-                        field: "firstPlaceValue",
-                        type: column_1.ColumnTypes.Input,
-                        width: "80px",
-                        sortable: true,
-                        onChange: function (item) { return _this.props.actions.savePoint(item, 1); }
-                    },
-                    {
-                        title: "2-е місце",
-                        field: "secondPlaceValue",
-                        type: column_1.ColumnTypes.Input,
-                        width: "80px",
-                        sortable: true,
-                        onChange: function (item) { return _this.props.actions.savePoint(item, 2); }
-                    },
-                    {
-                        title: "3-е місце",
-                        field: "thirdPlaceValue",
-                        type: column_1.ColumnTypes.Input,
-                        sortable: true,
-                        width: "80px",
-                        onChange: function (item) { return _this.props.actions.savePoint(item, 3); }
-                    },
-                    {
-                        title: "",
-                        width: "*"
-                    }
-                ] }));
+        return React.createElement("div", null,
+            React.createElement(index_layout_1.ContentWrap, null,
+                React.createElement(index_layout_1.GridRow, null,
+                    React.createElement(index_layout_1.GridColumn, null,
+                        React.createElement("h2", null, "\u0422\u0430\u0431\u043B\u0438\u0446\u044F \u043D\u0430\u0440\u0430\u0445\u0443\u0432\u0430\u043D\u043D\u044F \u043E\u0447\u043E\u043A \u0440\u0435\u0439\u0442\u0438\u043D\u0433\u0443 \u0437\u0430 \u043F\u0440\u0438\u0437\u043E\u0432\u0438\u043C\u0438 \u043C\u0456\u0441\u0446\u044F\u043C\u0438"),
+                        React.createElement(table_1.default, { items: this.props.points, columns: [
+                                {
+                                    title: "№",
+                                    field: "sortOrder",
+                                    width: "100px",
+                                    sortable: true
+                                },
+                                {
+                                    title: "Вид змагань",
+                                    field: "name",
+                                    width: "300px"
+                                },
+                                {
+                                    title: "1-е місце",
+                                    field: "firstPlaceValue",
+                                    type: column_1.ColumnTypes.Input,
+                                    width: "80px",
+                                    sortable: true,
+                                    onChange: function (item) { return _this.props.actions.savePoint(item, 1); }
+                                },
+                                {
+                                    title: "2-е місце",
+                                    field: "secondPlaceValue",
+                                    type: column_1.ColumnTypes.Input,
+                                    width: "80px",
+                                    sortable: true,
+                                    onChange: function (item) { return _this.props.actions.savePoint(item, 2); }
+                                },
+                                {
+                                    title: "3-е місце",
+                                    field: "thirdPlaceValue",
+                                    type: column_1.ColumnTypes.Input,
+                                    sortable: true,
+                                    width: "80px",
+                                    onChange: function (item) { return _this.props.actions.savePoint(item, 3); }
+                                }
+                            ] })),
+                    React.createElement(index_layout_1.GridColumn, null,
+                        React.createElement("h2", null, "\u0422\u0430\u0431\u043B\u0438\u0446\u044F \u043D\u0430\u0440\u0430\u0445\u0443\u0432\u0430\u043D\u043D\u044F \u043E\u0447\u043E\u043A \u0440\u0435\u0439\u0442\u0438\u043D\u0433\u0443 \u0437\u0430 \u043F\u0440\u0438\u0437\u043E\u0432\u0438\u043C\u0438 \u043C\u0456\u0441\u0446\u044F\u043C\u0438"),
+                        React.createElement(table_1.default, { items: this.props.points, columns: [
+                                {
+                                    title: "№",
+                                    field: "sortOrder",
+                                    width: "100px",
+                                    sortable: true
+                                },
+                                {
+                                    title: "Вид змагань",
+                                    field: "name",
+                                    width: "300px"
+                                },
+                                {
+                                    title: "1-е місце",
+                                    field: "firstPlaceValue",
+                                    type: column_1.ColumnTypes.Input,
+                                    width: "80px",
+                                    sortable: true,
+                                    onChange: function (item) { return _this.props.actions.savePoint(item, 1); }
+                                },
+                                {
+                                    title: "2-е місце",
+                                    field: "secondPlaceValue",
+                                    type: column_1.ColumnTypes.Input,
+                                    width: "80px",
+                                    sortable: true,
+                                    onChange: function (item) { return _this.props.actions.savePoint(item, 2); }
+                                },
+                                {
+                                    title: "3-е місце",
+                                    field: "thirdPlaceValue",
+                                    type: column_1.ColumnTypes.Input,
+                                    sortable: true,
+                                    width: "80px",
+                                    onChange: function (item) { return _this.props.actions.savePoint(item, 3); }
+                                }
+                            ] })))));
     };
     return RatingsLayout;
 }(React.Component)));
