@@ -545,6 +545,7 @@ function deleteBlackOut() {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LOAD_COMPETITIONS = "LOAD_COMPETITIONS";
 exports.LOAD_POINTS = "LOAD_POINTS";
+exports.LOAD_RECORDS = "LOAD_RECORDS";
 
 
 /***/ }),
@@ -629,6 +630,18 @@ var ActionCreators;
             }
         });
     }; };
+    ActionCreators.getRecords = function () { return function (d) {
+        Services.getRecords().then(function (response) {
+            if (response.status) {
+                return d({
+                    type: ActionTypes.LOAD_RECORDS,
+                    payload: {
+                        records: response.data
+                    }
+                });
+            }
+        });
+    }; };
 })(ActionCreators = exports.ActionCreators || (exports.ActionCreators = {}));
 
 
@@ -695,6 +708,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var ActionTypes = __webpack_require__(/*! ../actions/action.types */ "./client/src/pages/ratings-settings/actions/action.types.ts");
 var defaultState = {
     competitions: [],
+    records: [],
     points: []
 };
 exports.lookupReducer = function (state, action) {
@@ -707,6 +721,10 @@ exports.lookupReducer = function (state, action) {
         case ActionTypes.LOAD_POINTS: {
             var payload = action.payload;
             return __assign({}, state, { points: payload.points });
+        }
+        case ActionTypes.LOAD_RECORDS: {
+            var payload = action.payload;
+            return __assign({}, state, { records: payload.records });
         }
         default:
             return state;
@@ -740,12 +758,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var reselect_1 = __webpack_require__(/*! reselect */ "./node_modules/reselect/es/index.js");
 var competitions = function (state) { return state.lookup.competitions; };
 var points = function (state) { return state.lookup.points; };
-exports.getTablePoints = reselect_1.createSelector(competitions, points, function (competitions, points) {
+var records = function (state) { return state.lookup.records; };
+exports.getCompetitionsTablePoints = reselect_1.createSelector(competitions, points, function (competitions, points) {
     if (!competitions.length)
         return [];
     return competitions.map(function (competition) {
         var compPoints = points.filter(function (point) { return point.target == competition.dbName; });
         return __assign({}, competition, { firstPlaceValue: compPoints.filter(function (point) { return point.place == 1; }).length ? compPoints.filter(function (point) { return point.place == 1; })[0].value : 0, secondPlaceValue: compPoints.filter(function (point) { return point.place == 2; }).length ? compPoints.filter(function (point) { return point.place == 2; })[0].value : 0, thirdPlaceValue: compPoints.filter(function (point) { return point.place == 3; }).length ? compPoints.filter(function (point) { return point.place == 3; })[0].value : 0 });
+    });
+});
+exports.getRecordsTablepoints = reselect_1.createSelector(records, points, function (records, points) {
+    if (!records.length)
+        return [];
+    return records.map(function (record) {
+        var recordPoints = points.filter(function (point) { return point.target == record.dbName; });
+        return __assign({}, record, { firstPlaceValue: recordPoints.filter(function (point) { return point.place == 1; }).length ? recordPoints.filter(function (point) { return point.place == 1; })[0].value : 0 });
     });
 });
 
@@ -782,6 +809,12 @@ exports.savePoint = function (point) {
         url: lookupApiPath + 'SavePoint.php',
         type: apiTypes.POST,
         data: point
+    });
+};
+exports.getRecords = function () {
+    return CallApi.callApi({
+        url: lookupApiPath + 'GetRecordsLookup.php',
+        type: apiTypes.GET
     });
 };
 
@@ -855,6 +888,89 @@ exports.createSettingsStore = createSettingsStore;
 
 /***/ }),
 
+/***/ "./client/src/pages/ratings-settings/views/competition.ratings.grid.tsx":
+/*!******************************************************************************!*\
+  !*** ./client/src/pages/ratings-settings/views/competition.ratings.grid.tsx ***!
+  \******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+var table_1 = __webpack_require__(/*! ../../../components/table/table */ "./client/src/components/table/table.tsx");
+var column_1 = __webpack_require__(/*! ../../../components/table/column */ "./client/src/components/table/column.tsx");
+var Actions = __webpack_require__(/*! ../actions/index.actions */ "./client/src/pages/ratings-settings/actions/index.actions.ts");
+exports.default = react_redux_1.connect(function (state) { return ({}); }, function (dispatch) { return ({
+    actions: redux_1.bindActionCreators(Actions.LookupActions.ActionCreators, dispatch)
+}); })(/** @class */ (function (_super) {
+    __extends(CompetitionRatingsGrid, _super);
+    function CompetitionRatingsGrid() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    CompetitionRatingsGrid.prototype.render = function () {
+        var _this = this;
+        return React.createElement(React.Fragment, null,
+            React.createElement(table_1.default, { items: this.props.points, columns: [
+                    {
+                        title: "№",
+                        field: "sortOrder",
+                        width: "100px",
+                        sortable: true
+                    },
+                    {
+                        title: "Вид змагань",
+                        field: "name",
+                        width: "300px"
+                    },
+                    {
+                        title: "1-е місце",
+                        field: "firstPlaceValue",
+                        type: column_1.ColumnTypes.Input,
+                        width: "80px",
+                        sortable: true,
+                        onChange: function (item) { return _this.props.actions.savePoint(item, 1); }
+                    },
+                    {
+                        title: "2-е місце",
+                        field: "secondPlaceValue",
+                        type: column_1.ColumnTypes.Input,
+                        width: "80px",
+                        sortable: true,
+                        onChange: function (item) { return _this.props.actions.savePoint(item, 2); }
+                    },
+                    {
+                        title: "3-е місце",
+                        field: "thirdPlaceValue",
+                        type: column_1.ColumnTypes.Input,
+                        sortable: true,
+                        width: "80px",
+                        onChange: function (item) { return _this.props.actions.savePoint(item, 3); }
+                    }
+                ] }));
+    };
+    return CompetitionRatingsGrid;
+}(React.Component)));
+
+
+/***/ }),
+
 /***/ "./client/src/pages/ratings-settings/views/ratings.layout.tsx":
 /*!********************************************************************!*\
   !*** ./client/src/pages/ratings-settings/views/ratings.layout.tsx ***!
@@ -881,13 +997,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
-var table_1 = __webpack_require__(/*! ../../../components/table/table */ "./client/src/components/table/table.tsx");
-var column_1 = __webpack_require__(/*! ../../../components/table/column */ "./client/src/components/table/column.tsx");
 var index_layout_1 = __webpack_require__(/*! ../../../components/layout/index.layout */ "./client/src/components/layout/index.layout.tsx");
 var Actions = __webpack_require__(/*! ../actions/index.actions */ "./client/src/pages/ratings-settings/actions/index.actions.ts");
 var Selectors = __webpack_require__(/*! ../selectors/selector */ "./client/src/pages/ratings-settings/selectors/selector.ts");
+var competition_ratings_grid_1 = __webpack_require__(/*! ./competition.ratings.grid */ "./client/src/pages/ratings-settings/views/competition.ratings.grid.tsx");
+var records_ratings_grid_1 = __webpack_require__(/*! ./records.ratings.grid */ "./client/src/pages/ratings-settings/views/records.ratings.grid.tsx");
 exports.default = react_redux_1.connect(function (state) { return ({
-    points: Selectors.getTablePoints(state)
+    competitionPoints: Selectors.getCompetitionsTablePoints(state),
+    recordPoints: Selectors.getRecordsTablepoints(state)
 }); }, function (dispatch) { return ({
     actions: redux_1.bindActionCreators(Actions.LookupActions.ActionCreators, dispatch)
 }); })(/** @class */ (function (_super) {
@@ -898,92 +1015,87 @@ exports.default = react_redux_1.connect(function (state) { return ({
     RatingsLayout.prototype.componentDidMount = function () {
         this.props.actions.getCompetitions();
         this.props.actions.getPoints();
+        this.props.actions.getRecords();
     };
     RatingsLayout.prototype.render = function () {
-        var _this = this;
         return React.createElement("div", null,
             React.createElement(index_layout_1.ContentWrap, null,
                 React.createElement(index_layout_1.GridRow, null,
                     React.createElement(index_layout_1.GridColumn, null,
                         React.createElement("h2", null, "\u0422\u0430\u0431\u043B\u0438\u0446\u044F \u043D\u0430\u0440\u0430\u0445\u0443\u0432\u0430\u043D\u043D\u044F \u043E\u0447\u043E\u043A \u0440\u0435\u0439\u0442\u0438\u043D\u0433\u0443 \u0437\u0430 \u043F\u0440\u0438\u0437\u043E\u0432\u0438\u043C\u0438 \u043C\u0456\u0441\u0446\u044F\u043C\u0438"),
-                        React.createElement(table_1.default, { items: this.props.points, columns: [
-                                {
-                                    title: "№",
-                                    field: "sortOrder",
-                                    width: "100px",
-                                    sortable: true
-                                },
-                                {
-                                    title: "Вид змагань",
-                                    field: "name",
-                                    width: "300px"
-                                },
-                                {
-                                    title: "1-е місце",
-                                    field: "firstPlaceValue",
-                                    type: column_1.ColumnTypes.Input,
-                                    width: "80px",
-                                    sortable: true,
-                                    onChange: function (item) { return _this.props.actions.savePoint(item, 1); }
-                                },
-                                {
-                                    title: "2-е місце",
-                                    field: "secondPlaceValue",
-                                    type: column_1.ColumnTypes.Input,
-                                    width: "80px",
-                                    sortable: true,
-                                    onChange: function (item) { return _this.props.actions.savePoint(item, 2); }
-                                },
-                                {
-                                    title: "3-е місце",
-                                    field: "thirdPlaceValue",
-                                    type: column_1.ColumnTypes.Input,
-                                    sortable: true,
-                                    width: "80px",
-                                    onChange: function (item) { return _this.props.actions.savePoint(item, 3); }
-                                }
-                            ] })),
+                        React.createElement(competition_ratings_grid_1.default, { points: this.props.competitionPoints })),
                     React.createElement(index_layout_1.GridColumn, null,
                         React.createElement("h2", null, "\u0422\u0430\u0431\u043B\u0438\u0446\u044F \u043D\u0430\u0440\u0430\u0445\u0443\u0432\u0430\u043D\u043D\u044F \u043E\u0447\u043E\u043A \u0440\u0435\u0439\u0442\u0438\u043D\u0433\u0443 \u0437\u0430 \u043F\u0440\u0438\u0437\u043E\u0432\u0438\u043C\u0438 \u043C\u0456\u0441\u0446\u044F\u043C\u0438"),
-                        React.createElement(table_1.default, { items: this.props.points, columns: [
-                                {
-                                    title: "№",
-                                    field: "sortOrder",
-                                    width: "100px",
-                                    sortable: true
-                                },
-                                {
-                                    title: "Вид змагань",
-                                    field: "name",
-                                    width: "300px"
-                                },
-                                {
-                                    title: "1-е місце",
-                                    field: "firstPlaceValue",
-                                    type: column_1.ColumnTypes.Input,
-                                    width: "80px",
-                                    sortable: true,
-                                    onChange: function (item) { return _this.props.actions.savePoint(item, 1); }
-                                },
-                                {
-                                    title: "2-е місце",
-                                    field: "secondPlaceValue",
-                                    type: column_1.ColumnTypes.Input,
-                                    width: "80px",
-                                    sortable: true,
-                                    onChange: function (item) { return _this.props.actions.savePoint(item, 2); }
-                                },
-                                {
-                                    title: "3-е місце",
-                                    field: "thirdPlaceValue",
-                                    type: column_1.ColumnTypes.Input,
-                                    sortable: true,
-                                    width: "80px",
-                                    onChange: function (item) { return _this.props.actions.savePoint(item, 3); }
-                                }
-                            ] })))));
+                        React.createElement(records_ratings_grid_1.default, { points: this.props.recordPoints })))));
     };
     return RatingsLayout;
+}(React.Component)));
+
+
+/***/ }),
+
+/***/ "./client/src/pages/ratings-settings/views/records.ratings.grid.tsx":
+/*!**************************************************************************!*\
+  !*** ./client/src/pages/ratings-settings/views/records.ratings.grid.tsx ***!
+  \**************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+var table_1 = __webpack_require__(/*! ../../../components/table/table */ "./client/src/components/table/table.tsx");
+var column_1 = __webpack_require__(/*! ../../../components/table/column */ "./client/src/components/table/column.tsx");
+var Actions = __webpack_require__(/*! ../actions/index.actions */ "./client/src/pages/ratings-settings/actions/index.actions.ts");
+exports.default = react_redux_1.connect(function (state) { return ({}); }, function (dispatch) { return ({
+    actions: redux_1.bindActionCreators(Actions.LookupActions.ActionCreators, dispatch)
+}); })(/** @class */ (function (_super) {
+    __extends(RecordsRatingsGrid, _super);
+    function RecordsRatingsGrid() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    RecordsRatingsGrid.prototype.render = function () {
+        var _this = this;
+        return React.createElement(React.Fragment, null,
+            React.createElement(table_1.default, { items: this.props.points, columns: [
+                    {
+                        title: "№",
+                        field: "sortOrder",
+                        width: "100px",
+                        sortable: true
+                    },
+                    {
+                        title: "Рекорд",
+                        field: "name",
+                        width: "300px"
+                    },
+                    {
+                        title: "Бали",
+                        field: "firstPlaceValue",
+                        type: column_1.ColumnTypes.Input,
+                        width: "80px",
+                        sortable: true,
+                        onChange: function (item) { return _this.props.actions.savePoint(item, 1); }
+                    }
+                ] }));
+    };
+    return RecordsRatingsGrid;
 }(React.Component)));
 
 

@@ -10,16 +10,12 @@ class PointService
     private $db;
     private $points;
     private $pointTableName;
-    private $competitions;
-    private $competitionService;
 
     public function __construct()
     {
         global $wpdb;
         $this->db = $wpdb;
         $this->pointTableName = $this->db->get_blog_prefix() . "rat_point";
-        $this->competitionService = new CompetitionService();
-        $this->competitions = $this->competitionService->getAll();
         $this->points = array();
     }
 
@@ -37,6 +33,7 @@ class PointService
 
     public function savePoint()
     {
+        if(!current_user_can("edit_others_pages")) return FALSE;
         $point = new Point(intval(escape($_POST["pointId"])), escape($_POST["target"]), escape($_POST["value"]), escape($_POST["place"]));
         $sql = $this->db->prepare("SELECT COUNT(*) FROM $this->pointTableName WHERE PointId = %d OR (Target = %s AND Place = %d)", 
                                     $point->pointId, $point->target, $point->place);
@@ -50,6 +47,7 @@ class PointService
             $sql = $this->db->prepare("UPDATE $this->pointTableName SET Value = %d WHERE PointId = %d", $point->value, $point->pointId);
             $this->db->query($sql);
         }
+        return TRUE;
     }
 
 }

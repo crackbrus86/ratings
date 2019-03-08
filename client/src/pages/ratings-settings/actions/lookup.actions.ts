@@ -1,6 +1,7 @@
 import * as Services from "../services/lookup.services";
 import * as Models from "../models/index.models";
 import * as ActionTypes from "./action.types";
+import { callApi } from "../../../infrastructure/call.api";
 
 export namespace ActionCreators{
     export const getCompetitions = () => (d, gs: () => Models.StoreState) => {
@@ -55,6 +56,19 @@ export namespace ActionCreators{
         }).then((response) => {
             if(response.status){
                 d(getPoints());
+            }
+        })
+    }
+
+    export const getRecords = () => (d) => {
+        Services.getRecords().then((response) => {
+            if(response.status){
+                return d({
+                    type: ActionTypes.LOAD_RECORDS,
+                    payload: <ActionTypes.LOAD_RECORDS_PAYLOAD>{
+                        records: response.data
+                    }
+                })
             }
         })
     }

@@ -9,3 +9,8 @@ export const LOAD_POINTS = "LOAD_POINTS";
 export interface LOAD_POINTS_PAYLOAD {
     points: Models.LookupModels.Point[]
 }
+
+export const LOAD_RECORDS = "LOAD_RECORDS";
+export interface LOAD_RECORDS_PAYLOAD {
+    records: Models.LookupModels.Record[]
+}

@@ -5,6 +5,13 @@ export interface Competition {
     sortOrder: number
 }
 
+export interface Record {
+    id: number,
+    name: string,
+    dbName: string,
+    sortOrder: number
+}
+
 export interface Point {
     pointId: number;
     target: string;

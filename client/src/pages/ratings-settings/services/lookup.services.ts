@@ -25,3 +25,10 @@ export const savePoint = (point: Models.LookupModels.Point) => {
         data: point
     })
 }
+
+export const getRecords = () => {
+    return CallApi.callApi({
+        url: lookupApiPath + 'GetRecordsLookup.php',
+        type: apiTypes.GET
+    });
+}
