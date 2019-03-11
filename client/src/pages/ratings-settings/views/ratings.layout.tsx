@@ -40,7 +40,7 @@ export default connect<StateProps, DispatchProps>(
                         <CompetitionRatingsGrid points={this.props.competitionPoints} />
                     </GridColumn>
                     <GridColumn>
-                        <h2>Таблиця нарахування очок рейтингу за призовими місцями</h2>
+                        <h2>Таблиця нарахування очок рейтингу за встановленими рекордами</h2>
                         <RecordsRatingsGrid points={this.props.recordPoints} />
                     </GridColumn>
                 </GridRow>

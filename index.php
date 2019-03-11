@@ -22,12 +22,19 @@ class UPFRatings {
         wp_enqueue_style( 'fontawesome');
     }
 
+    public function loadManagerScript()
+    {
+        wp_register_script("ratings_entries_script", plugins_url("/client/dist/entries-bundle.js?v=" . $appVersion, __FILE__));
+        wp_enqueue_script("ratings_entries_script");
+    }    
+
     public function ratingsManager()
     {
+        UPFRatings::loadManagerScript();
         $content = <<<_END
         <div class="container-fluid">
             <h2>Рейтинги ФПУ</h2>
-            <div id="app-rat-mng"></div>
+            <div id="app-rat-entries"></div>
         </div>
 _END;
         echo $content;

@@ -2,7 +2,8 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        settings: "./client/src/pages/ratings-settings/index.tsx"
+        settings: "./client/src/pages/ratings-settings/index.tsx",
+        entries: "./client/src/pages/ratings-entries/index.tsx"
     },
     mode: "development",
     output: {
