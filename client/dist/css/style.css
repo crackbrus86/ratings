@@ -12,6 +12,29 @@
   overflow-x: auto;
   margin-right: 20px; }
 
+.tabs {
+  display: flex;
+  flex-direction: column;
+  width: 100%; }
+  .tabs .tab-list {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0px; }
+    .tabs .tab-list .tab-list-item {
+      display: flex;
+      flex-direction: column;
+      padding: 5px 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px 10px 0 0;
+      margin-bottom: 0px;
+      cursor: pointer; }
+      .tabs .tab-list .tab-list-item.tab-list-active {
+        border-bottom: none; }
+  .tabs .tab-content {
+    display: flex;
+    flex-direction: row;
+    margin-right: 20px; }
+
 .rat-table {
   border-collapse: collapse;
   width: 100%; }
