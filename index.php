@@ -20,6 +20,8 @@ class UPFRatings {
         wp_enqueue_style( 'style');
         wp_register_style('fontawesome', plugins_url( '/client/dist/css/fontawesome-free-5.7.2-web/css/all.min.css?v=' . $appVersion, __FILE__ ));
         wp_enqueue_style( 'fontawesome');
+        wp_register_style('react-datetime', plugins_url( '/client/dist/css/react-datetime.css?v=' . $appVersion, __FILE__ ));
+        wp_enqueue_style( 'react-datetime');
     }
 
     public function loadManagerScript()

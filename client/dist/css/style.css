@@ -12,6 +12,23 @@
   overflow-x: auto;
   margin-right: 20px; }
 
+.modal-black-out {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+  z-index: 10000;
+  background-color: rgba(0, 0, 0, 0.6);
+  overflow: auto; }
+  .modal-black-out .modal-content {
+    position: absolute;
+    background-color: #fff;
+    min-width: 200px;
+    min-height: 200px;
+    top: 50%;
+    left: 50%; }
+
 .tabs {
   display: flex;
   flex-direction: column;
@@ -27,13 +44,20 @@
       border: 1px solid #ccc;
       border-radius: 10px 10px 0 0;
       margin-bottom: 0px;
-      cursor: pointer; }
+      cursor: pointer;
+      background-color: #e8e8e8; }
+      .tabs .tab-list .tab-list-item:hover {
+        background-color: #f7f4f4; }
       .tabs .tab-list .tab-list-item.tab-list-active {
-        border-bottom: none; }
+        border-bottom: none;
+        background-color: #fff; }
   .tabs .tab-content {
     display: flex;
     flex-direction: row;
-    margin-right: 20px; }
+    margin-right: 20px;
+    background-color: #fff;
+    box-shadow: 1px 1px 1px 0px #ccc;
+    border-left: 1px solid #ccc; }
 
 .rat-table {
   border-collapse: collapse;

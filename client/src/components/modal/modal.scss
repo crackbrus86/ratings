@@ -1,0 +1,19 @@
+.modal-black-out{
+    position: fixed; 
+    top: 0px; 
+    left: 0px; 
+    bottom: 0px; 
+    right: 0px; 
+    z-index: 10000; 
+    background-color: rgba(0, 0, 0,0.6);
+    overflow: auto;
+
+    .modal-content{
+        position: absolute;
+        background-color: #fff;
+        min-width: 200px;
+        min-height: 200px;
+        top: 50%;
+        left: 50%;
+    }
+}
