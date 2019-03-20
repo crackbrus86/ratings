@@ -1,4 +1,4 @@
-interface RatingEntry{
+export interface RatingEntry{
     ratingEntryId: number,
     fullname: string,
     type: string,

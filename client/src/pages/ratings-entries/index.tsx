@@ -1,5 +1,5 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
-import RatingEntriesIndex from "./views/index"
+import RatingEntryIndex from "./startup"
 
-ReactDOM.render(<RatingEntriesIndex />, document.getElementById("app-rat-entries"));
+ReactDOM.render(<RatingEntryIndex />, document.getElementById("app-rat-entries"));
