@@ -15,4 +15,17 @@ export namespace ActionCreators{
             }
         })
     }
+
+    export const loadRecords = () => (d, gs: () => Models.StoreState) => {
+        Services.getRecords().then((response) => {
+            if(response.status){
+                d({
+                    type: ActionTypes.LOAD_RECORDS,
+                    payload: <ActionTypes.LOAD_RECORDS_PAYLOAD>{
+                        records: response.data
+                    }
+                })
+            }
+        })
+    }
 }

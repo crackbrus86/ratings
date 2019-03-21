@@ -86,6 +86,83 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./client/src/components/modal/modal.header.tsx":
+/*!******************************************************!*\
+  !*** ./client/src/components/modal/modal.header.tsx ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var FontAwesome = __webpack_require__(/*! react-fontawesome */ "./node_modules/react-fontawesome/lib/index.js");
+var ModalHeader = function (props) {
+    return React.createElement("div", { className: "modal-header" },
+        React.createElement("h4", null, props.title),
+        React.createElement(FontAwesome, { name: "close", className: "modal-close-icon", onClick: function () { return props.onClose(); } }));
+};
+exports.default = ModalHeader;
+
+
+/***/ }),
+
+/***/ "./client/src/components/modal/modal.tsx":
+/*!***********************************************!*\
+  !*** ./client/src/components/modal/modal.tsx ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var ReactDOM = __webpack_require__(/*! react-dom */ "react-dom");
+var modalRoot = document.body;
+var Modal = /** @class */ (function (_super) {
+    __extends(Modal, _super);
+    function Modal(props) {
+        var _this = _super.call(this, props) || this;
+        _this.modalLayout = document.createElement("div");
+        _this.modalLayout.className = "modal-black-out";
+        _this.modalContent = document.createElement("div");
+        _this.modalContent.className = "modal-content";
+        _this.modalLayout.appendChild(_this.modalContent);
+        return _this;
+    }
+    Modal.prototype.componentDidMount = function () {
+        modalRoot.appendChild(this.modalLayout);
+        this.modalContent.style.marginLeft = -this.modalContent.clientWidth / 2 + "px";
+        this.modalContent.style.marginTop = -this.modalContent.clientHeight / 2 + "px";
+    };
+    Modal.prototype.componentWillUnmount = function () {
+        modalRoot.removeChild(this.modalLayout);
+    };
+    Modal.prototype.render = function () {
+        return ReactDOM.createPortal(this.props.children, this.modalContent);
+    };
+    return Modal;
+}(React.Component));
+exports.default = Modal;
+
+
+/***/ }),
+
 /***/ "./client/src/components/tab view/tab.tsx":
 /*!************************************************!*\
   !*** ./client/src/components/tab view/tab.tsx ***!
@@ -275,6 +352,44 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.CHANGE_START_TIME = "SHELL::CHANGE_START_TIME";
 exports.LOAD_COMPETITIONS = "LOOKUP::LOAD_COMPETITIONS";
 exports.LOAD_RECORDS = "LOOKUP::LOAD_RECORDS";
+exports.OPEN_ENTRY = "ENTRIES::OPEN_ENTRY";
+exports.CLOSE_ENTRY = "ENTRIES::CLOSE_ENTRY";
+
+
+/***/ }),
+
+/***/ "./client/src/pages/ratings-entries/actions/entries.actions.ts":
+/*!*********************************************************************!*\
+  !*** ./client/src/pages/ratings-entries/actions/entries.actions.ts ***!
+  \*********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ActionTypes = __webpack_require__(/*! ./action.types */ "./client/src/pages/ratings-entries/actions/action.types.ts");
+var ActionCreators;
+(function (ActionCreators) {
+    ActionCreators.addEntry = function () { return function (d, gs) {
+        d({
+            type: ActionTypes.OPEN_ENTRY,
+            payload: {
+                ratingEntryId: null,
+                fullname: '',
+                type: null,
+                event: null,
+                place: null,
+                eventDate: new Date()
+            }
+        });
+    }; };
+    ActionCreators.closeEntry = function () { return function (d, gs) {
+        d({
+            type: ActionTypes.CLOSE_ENTRY
+        });
+    }; };
+})(ActionCreators = exports.ActionCreators || (exports.ActionCreators = {}));
 
 
 /***/ }),
@@ -291,6 +406,7 @@ exports.LOAD_RECORDS = "LOOKUP::LOAD_RECORDS";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ShellActions = __webpack_require__(/*! ./shell.actions */ "./client/src/pages/ratings-entries/actions/shell.actions.ts");
 exports.LookupActions = __webpack_require__(/*! ./lookup.actions */ "./client/src/pages/ratings-entries/actions/lookup.actions.ts");
+exports.EntriesActions = __webpack_require__(/*! ./entries.actions */ "./client/src/pages/ratings-entries/actions/entries.actions.ts");
 
 
 /***/ }),
@@ -316,6 +432,18 @@ var ActionCreators;
                     type: ActionTypes.LOAD_COMPETITIONS,
                     payload: {
                         competitions: response.data
+                    }
+                });
+            }
+        });
+    }; };
+    ActionCreators.loadRecords = function () { return function (d, gs) {
+        Services.getRecords().then(function (response) {
+            if (response.status) {
+                d({
+                    type: ActionTypes.LOAD_RECORDS,
+                    payload: {
+                        records: response.data
                     }
                 });
             }
@@ -368,6 +496,98 @@ ReactDOM.render(React.createElement(startup_1.default, null), document.getElemen
 
 /***/ }),
 
+/***/ "./client/src/pages/ratings-entries/modals/entry.modal.tsx":
+/*!*****************************************************************!*\
+  !*** ./client/src/pages/ratings-entries/modals/entry.modal.tsx ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+var Actions = __webpack_require__(/*! ../actions/index.actions */ "./client/src/pages/ratings-entries/actions/index.actions.ts");
+var modal_1 = __webpack_require__(/*! ../../../components/modal/modal */ "./client/src/components/modal/modal.tsx");
+var modal_header_1 = __webpack_require__(/*! ../../../components/modal/modal.header */ "./client/src/components/modal/modal.header.tsx");
+exports.default = react_redux_1.connect(function (state) { return ({
+    entry: state.entries.currentEntry
+}); }, function (dispatch) { return ({
+    actions: redux_1.bindActionCreators(Actions.EntriesActions.ActionCreators, dispatch)
+}); })(/** @class */ (function (_super) {
+    __extends(EntryModal, _super);
+    function EntryModal(props) {
+        return _super.call(this, props) || this;
+    }
+    EntryModal.prototype.render = function () {
+        return this.props.entry && React.createElement(modal_1.default, null,
+            React.createElement(modal_header_1.default, { title: (this.props.entry.ratingEntryId ? 'Редагувати' : 'Створити') + " \u0417\u0430\u043F\u0438\u0441", onClose: this.props.actions.closeEntry }));
+    };
+    return EntryModal;
+}(React.Component)));
+
+
+/***/ }),
+
+/***/ "./client/src/pages/ratings-entries/reducers/entries.reducer.ts":
+/*!**********************************************************************!*\
+  !*** ./client/src/pages/ratings-entries/reducers/entries.reducer.ts ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var ActionTypes = __webpack_require__(/*! ../actions/action.types */ "./client/src/pages/ratings-entries/actions/action.types.ts");
+var defaultState = {
+    entries: [],
+    currentEntry: null
+};
+exports.entriesReducer = function (state, action) {
+    if (state === void 0) { state = defaultState; }
+    switch (action.type) {
+        case ActionTypes.OPEN_ENTRY: {
+            var payload = action.payload;
+            return __assign({}, state, { currentEntry: payload });
+        }
+        case ActionTypes.CLOSE_ENTRY: {
+            return __assign({}, state, { currentEntry: null });
+        }
+        default:
+            return state;
+    }
+};
+
+
+/***/ }),
+
 /***/ "./client/src/pages/ratings-entries/reducers/index.reducer.ts":
 /*!********************************************************************!*\
   !*** ./client/src/pages/ratings-entries/reducers/index.reducer.ts ***!
@@ -381,9 +601,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 exports.Shell = __webpack_require__(/*! ./shell.reducer */ "./client/src/pages/ratings-entries/reducers/shell.reducer.ts");
 exports.Lookup = __webpack_require__(/*! ./lookup.reducer */ "./client/src/pages/ratings-entries/reducers/lookup.reducer.ts");
+exports.Entries = __webpack_require__(/*! ./entries.reducer */ "./client/src/pages/ratings-entries/reducers/entries.reducer.ts");
 exports.reducer = redux_1.combineReducers({
     shell: exports.Shell.shellReducer,
-    lookup: exports.Lookup.lookupReducer
+    lookup: exports.Lookup.lookupReducer,
+    entries: exports.Entries.entriesReducer
 });
 
 
@@ -418,9 +640,14 @@ var defaultState = {
 exports.lookupReducer = function (state, action) {
     if (state === void 0) { state = defaultState; }
     switch (action.type) {
-        case ActionTypes.LOAD_COMPETITIONS:
+        case ActionTypes.LOAD_COMPETITIONS: {
             var payload = action.payload;
             return __assign({}, state, { competitions: payload.competitions });
+        }
+        case ActionTypes.LOAD_RECORDS: {
+            var payload = action.payload;
+            return __assign({}, state, { records: payload.records });
+        }
         default:
             return state;
     }
@@ -457,9 +684,10 @@ var defaultState = {
 exports.shellReducer = function (state, action) {
     if (state === void 0) { state = defaultState; }
     switch (action.type) {
-        case ActionTypes.CHANGE_START_TIME:
+        case ActionTypes.CHANGE_START_TIME: {
             var payload = action.payload;
             return __assign({}, state, { startDate: payload });
+        }
         default:
             return state;
     }
@@ -592,6 +820,7 @@ var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react
 var tab_view_1 = __webpack_require__(/*! ../../../components/tab view/tab.view */ "./client/src/components/tab view/tab.view.tsx");
 var tab_1 = __webpack_require__(/*! ../../../components/tab view/tab */ "./client/src/components/tab view/tab.tsx");
 var layout_header_1 = __webpack_require__(/*! ./partials/layout.header */ "./client/src/pages/ratings-entries/views/partials/layout.header.tsx");
+var entries_1 = __webpack_require__(/*! ./partials/entries */ "./client/src/pages/ratings-entries/views/partials/entries.tsx");
 exports.default = react_redux_1.connect(function (state) { return ({}); }, function (dispatch) { return ({}); })(/** @class */ (function (_super) {
     __extends(Layout, _super);
     function Layout() {
@@ -601,10 +830,57 @@ exports.default = react_redux_1.connect(function (state) { return ({}); }, funct
         return React.createElement("div", { className: "rating-entry" },
             React.createElement(layout_header_1.default, null),
             React.createElement(tab_view_1.default, null,
-                React.createElement(tab_1.default, { title: "\u0417\u0430\u043F\u0438\u0441\u0438", label: "ratingEntries" }),
+                React.createElement(tab_1.default, { title: "\u0417\u0430\u043F\u0438\u0441\u0438", label: "ratingEntries" },
+                    React.createElement(entries_1.default, null)),
                 React.createElement(tab_1.default, { title: "\u0420\u0435\u0439\u0442\u0438\u043D\u0433\u0438 \u0424\u041F\u0423", label: "fpuRatings" })));
     };
     return Layout;
+}(React.Component)));
+
+
+/***/ }),
+
+/***/ "./client/src/pages/ratings-entries/views/partials/entries.tsx":
+/*!*********************************************************************!*\
+  !*** ./client/src/pages/ratings-entries/views/partials/entries.tsx ***!
+  \*********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/src/pages/ratings-entries/actions/index.actions.ts");
+var entry_modal_1 = __webpack_require__(/*! ../../modals/entry.modal */ "./client/src/pages/ratings-entries/modals/entry.modal.tsx");
+exports.default = react_redux_1.connect(function (state) { return ({}); }, function (dispatch) { return ({
+    actions: redux_1.bindActionCreators(Actions.EntriesActions.ActionCreators, dispatch)
+}); })(/** @class */ (function (_super) {
+    __extends(Entries, _super);
+    function Entries(props) {
+        return _super.call(this, props) || this;
+    }
+    Entries.prototype.render = function () {
+        return React.createElement("div", { className: "entries" },
+            React.createElement("button", { onClick: this.props.actions.addEntry }, "\u0421\u0442\u0432\u043E\u0440\u0438\u0442\u0438 \u0437\u0430\u043F\u0438\u0441"),
+            React.createElement(entry_modal_1.default, null));
+    };
+    return Entries;
 }(React.Component)));
 
 
@@ -25786,6 +26062,185 @@ var DateTimePickerYears = createClass({
 
 module.exports = DateTimePickerYears;
 
+
+/***/ }),
+
+/***/ "./node_modules/react-fontawesome/lib/index.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/react-fontawesome/lib/index.js ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(/*! react */ "react");
+
+var _react2 = _interopRequireDefault(_react);
+
+var _propTypes = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _screenReaderStyles = __webpack_require__(/*! ./screen-reader-styles */ "./node_modules/react-fontawesome/lib/screen-reader-styles.js");
+
+var _screenReaderStyles2 = _interopRequireDefault(_screenReaderStyles);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * A React component for the font-awesome icon library.
+ *
+ * @param {String} [ariaLabel] An extra accessibility label to put on the icon
+ * @param {Boolean} [border=false] Whether or not to show a border radius
+ * @param {String} [className] An extra set of CSS classes to add to the component
+ * @param {Object} [cssModule] Option to pass FontAwesome CSS as a module
+ * @param {Boolean} [fixedWidth=false] Make buttons fixed width
+ * @param {String} [flip=false] Flip the icon's orientation.
+ * @param {Boolean} [inverse=false]Inverse the icon's color
+ * @param {String} name Name of the icon to use
+ * @param {Boolean} [pulse=false] Rotate icon with 8 steps, rather than smoothly
+ * @param {Number} [rotate] The degress to rotate the icon by
+ * @param {String} [size] The icon scaling size
+ * @param {Boolean} [spin=false] Spin the icon
+ * @param {String} [stack] Stack an icon on top of another
+ * @param {String} [tag=span] The HTML tag to use as a string, eg 'i' or 'em'
+ * @module FontAwesome
+ * @type {ReactClass}
+ */
+var FontAwesome = function (_React$Component) {
+  _inherits(FontAwesome, _React$Component);
+
+  function FontAwesome() {
+    _classCallCheck(this, FontAwesome);
+
+    var _this = _possibleConstructorReturn(this, (FontAwesome.__proto__ || Object.getPrototypeOf(FontAwesome)).call(this));
+
+    _this.displayName = 'FontAwesome';
+    return _this;
+  }
+
+  _createClass(FontAwesome, [{
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          border = _props.border,
+          cssModule = _props.cssModule,
+          className = _props.className,
+          fixedWidth = _props.fixedWidth,
+          flip = _props.flip,
+          inverse = _props.inverse,
+          name = _props.name,
+          pulse = _props.pulse,
+          rotate = _props.rotate,
+          size = _props.size,
+          spin = _props.spin,
+          stack = _props.stack,
+          _props$tag = _props.tag,
+          tag = _props$tag === undefined ? 'span' : _props$tag,
+          ariaLabel = _props.ariaLabel,
+          props = _objectWithoutProperties(_props, ['border', 'cssModule', 'className', 'fixedWidth', 'flip', 'inverse', 'name', 'pulse', 'rotate', 'size', 'spin', 'stack', 'tag', 'ariaLabel']);
+
+      var classNames = [];
+
+      if (cssModule) {
+        classNames.push(cssModule['fa']);
+        classNames.push(cssModule['fa-' + name]);
+        size && classNames.push(cssModule['fa-' + size]);
+        spin && classNames.push(cssModule['fa-spin']);
+        pulse && classNames.push(cssModule['fa-pulse']);
+        border && classNames.push(cssModule['fa-border']);
+        fixedWidth && classNames.push(cssModule['fa-fw']);
+        inverse && classNames.push(cssModule['fa-inverse']);
+        flip && classNames.push(cssModule['fa-flip-' + flip]);
+        rotate && classNames.push(cssModule['fa-rotate-' + rotate]);
+        stack && classNames.push(cssModule['fa-stack-' + stack]);
+      } else {
+        classNames.push('fa');
+        classNames.push('fa-' + name);
+        size && classNames.push('fa-' + size);
+        spin && classNames.push('fa-spin');
+        pulse && classNames.push('fa-pulse');
+        border && classNames.push('fa-border');
+        fixedWidth && classNames.push('fa-fw');
+        inverse && classNames.push('fa-inverse');
+        flip && classNames.push('fa-flip-' + flip);
+        rotate && classNames.push('fa-rotate-' + rotate);
+        stack && classNames.push('fa-stack-' + stack);
+      }
+
+      // Add any custom class names at the end.
+      className && classNames.push(className);
+      return _react2.default.createElement(tag, _extends({}, props, { 'aria-hidden': true, className: classNames.join(' ') }), ariaLabel ? _react2.default.createElement('span', { style: _screenReaderStyles2.default }, ariaLabel) : null);
+    }
+  }]);
+
+  return FontAwesome;
+}(_react2.default.Component);
+
+FontAwesome.propTypes = {
+  ariaLabel: _propTypes2.default.string,
+  border: _propTypes2.default.bool,
+  className: _propTypes2.default.string,
+  cssModule: _propTypes2.default.object,
+  fixedWidth: _propTypes2.default.bool,
+  flip: _propTypes2.default.oneOf(['horizontal', 'vertical']),
+  inverse: _propTypes2.default.bool,
+  name: _propTypes2.default.string.isRequired,
+  pulse: _propTypes2.default.bool,
+  rotate: _propTypes2.default.oneOf([90, 180, 270]),
+  size: _propTypes2.default.oneOf(['lg', '2x', '3x', '4x', '5x']),
+  spin: _propTypes2.default.bool,
+  stack: _propTypes2.default.oneOf(['1x', '2x']),
+  tag: _propTypes2.default.string
+};
+
+exports.default = FontAwesome;
+module.exports = exports['default'];
+
+/***/ }),
+
+/***/ "./node_modules/react-fontawesome/lib/screen-reader-styles.js":
+/*!********************************************************************!*\
+  !*** ./node_modules/react-fontawesome/lib/screen-reader-styles.js ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = {
+  position: 'absolute',
+  width: '1px',
+  height: '1px',
+  padding: '0px',
+  margin: '-1px',
+  overflow: 'hidden',
+  clip: 'rect(0px, 0px, 0px, 0px)',
+  border: '0px'
+};
+module.exports = exports['default'];
 
 /***/ }),
 

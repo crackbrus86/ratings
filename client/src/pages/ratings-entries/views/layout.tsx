@@ -6,6 +6,7 @@ import * as Models from "../models/index.models";
 import TabView from "../../../components/tab view/tab.view";
 import Tab from "../../../components/tab view/tab";
 import LayoutHeader from "./partials/layout.header";
+import Entries from "./partials/entries";
 
 interface StateProps{
 
@@ -27,7 +28,9 @@ export default connect<StateProps, DispatchProps>(
         return <div className="rating-entry">
             <LayoutHeader/>
             <TabView>
-                <Tab title="Записи" label="ratingEntries"></Tab>
+                <Tab title="Записи" label="ratingEntries">
+                    <Entries/>
+                </Tab>
                 <Tab title="Рейтинги ФПУ" label="fpuRatings"></Tab>
             </TabView>
         </div>
