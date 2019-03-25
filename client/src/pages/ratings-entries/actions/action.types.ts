@@ -17,3 +17,9 @@ export const OPEN_ENTRY = "ENTRIES::OPEN_ENTRY";
 export type OPEN_ENTRY_PAYLOAD = Models.Entry;
 
 export const CLOSE_ENTRY = "ENTRIES::CLOSE_ENTRY";
+
+export const UPDATE_ENTRY = "ENTRIES::UPDATE_ENTRY";
+export type UPDATE_ENTRY_PAYLOAD = {
+    field: keyof Models.Entry,
+    value: any
+}

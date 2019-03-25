@@ -86,6 +86,198 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./client/src/components/form/form.tsx":
+/*!*********************************************!*\
+  !*** ./client/src/components/form/form.tsx ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var text_input_1 = __webpack_require__(/*! ./text.input */ "./client/src/components/form/text.input.tsx");
+var radio_button_1 = __webpack_require__(/*! ./radio.button */ "./client/src/components/form/radio.button.tsx");
+var Form = /** @class */ (function (_super) {
+    __extends(Form, _super);
+    function Form(props) {
+        return _super.call(this, props) || this;
+    }
+    Form.prototype.render = function () {
+        return React.createElement("div", { className: "form" }, this.props.children);
+    };
+    Form.TextInput = text_input_1.default;
+    Form.RadioButton = radio_button_1.default;
+    return Form;
+}(React.Component));
+exports.default = Form;
+
+
+/***/ }),
+
+/***/ "./client/src/components/form/radio.button.tsx":
+/*!*****************************************************!*\
+  !*** ./client/src/components/form/radio.button.tsx ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var RadioButton = /** @class */ (function (_super) {
+    __extends(RadioButton, _super);
+    function RadioButton(props) {
+        return _super.call(this, props) || this;
+    }
+    RadioButton.prototype.render = function () {
+        var _this = this;
+        return React.createElement("div", { className: "radio-button" },
+            React.createElement("label", null,
+                this.props.label,
+                this.props.buttons.map(function (button, index) { return React.createElement("span", { key: index, className: "radio-button-input" },
+                    React.createElement("input", { type: "radio", name: _this.props.name, value: button.value, checked: button.value == _this.props.value, onChange: function (e) { return _this.props.onChange(e.target.value); } }),
+                    button.label); })));
+    };
+    return RadioButton;
+}(React.Component));
+exports.default = RadioButton;
+
+
+/***/ }),
+
+/***/ "./client/src/components/form/text.input.tsx":
+/*!***************************************************!*\
+  !*** ./client/src/components/form/text.input.tsx ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var TextInput = /** @class */ (function (_super) {
+    __extends(TextInput, _super);
+    function TextInput(props) {
+        return _super.call(this, props) || this;
+    }
+    TextInput.prototype.render = function () {
+        var _this = this;
+        return React.createElement("div", { className: "text-input" },
+            React.createElement("label", null,
+                this.props.label,
+                React.createElement("input", { type: "text", value: this.props.value, onChange: function (e) { return _this.props.onChange(e.target.value); } })));
+    };
+    return TextInput;
+}(React.Component));
+exports.default = TextInput;
+
+
+/***/ }),
+
+/***/ "./client/src/components/modal/modal.body.tsx":
+/*!****************************************************!*\
+  !*** ./client/src/components/modal/modal.body.tsx ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var ModalBody = function (props) {
+    return React.createElement("div", { className: "modal-body" }, props.children);
+};
+exports.default = ModalBody;
+
+
+/***/ }),
+
+/***/ "./client/src/components/modal/modal.footer.button.tsx":
+/*!*************************************************************!*\
+  !*** ./client/src/components/modal/modal.footer.button.tsx ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var FontAwesome = __webpack_require__(/*! react-fontawesome */ "./node_modules/react-fontawesome/lib/index.js");
+var ModalFooterButton = function (props) {
+    return React.createElement(React.Fragment, null,
+        React.createElement("span", { className: "modal-footer-button", onClick: function () { return props.onClick(); } },
+            React.createElement(FontAwesome, { name: props.icon }),
+            props.label));
+};
+exports.default = ModalFooterButton;
+
+
+/***/ }),
+
+/***/ "./client/src/components/modal/modal.footer.tsx":
+/*!******************************************************!*\
+  !*** ./client/src/components/modal/modal.footer.tsx ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var ModalFooter = function (props) {
+    return React.createElement("div", { className: "modal-footer" }, props.children);
+};
+exports.default = ModalFooter;
+
+
+/***/ }),
+
 /***/ "./client/src/components/modal/modal.header.tsx":
 /*!******************************************************!*\
   !*** ./client/src/components/modal/modal.header.tsx ***!
@@ -133,6 +325,10 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var ReactDOM = __webpack_require__(/*! react-dom */ "react-dom");
+var modal_header_1 = __webpack_require__(/*! ./modal.header */ "./client/src/components/modal/modal.header.tsx");
+var modal_footer_1 = __webpack_require__(/*! ./modal.footer */ "./client/src/components/modal/modal.footer.tsx");
+var modal_body_1 = __webpack_require__(/*! ./modal.body */ "./client/src/components/modal/modal.body.tsx");
+var modal_footer_button_1 = __webpack_require__(/*! ./modal.footer.button */ "./client/src/components/modal/modal.footer.button.tsx");
 var modalRoot = document.body;
 var Modal = /** @class */ (function (_super) {
     __extends(Modal, _super);
@@ -156,6 +352,10 @@ var Modal = /** @class */ (function (_super) {
     Modal.prototype.render = function () {
         return ReactDOM.createPortal(this.props.children, this.modalContent);
     };
+    Modal.Header = modal_header_1.default;
+    Modal.Footer = modal_footer_1.default;
+    Modal.Body = modal_body_1.default;
+    Modal.FooterButton = modal_footer_button_1.default;
     return Modal;
 }(React.Component));
 exports.default = Modal;
@@ -354,6 +554,7 @@ exports.LOAD_COMPETITIONS = "LOOKUP::LOAD_COMPETITIONS";
 exports.LOAD_RECORDS = "LOOKUP::LOAD_RECORDS";
 exports.OPEN_ENTRY = "ENTRIES::OPEN_ENTRY";
 exports.CLOSE_ENTRY = "ENTRIES::CLOSE_ENTRY";
+exports.UPDATE_ENTRY = "ENTRIES::UPDATE_ENTRY";
 
 
 /***/ }),
@@ -369,6 +570,7 @@ exports.CLOSE_ENTRY = "ENTRIES::CLOSE_ENTRY";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var ActionTypes = __webpack_require__(/*! ./action.types */ "./client/src/pages/ratings-entries/actions/action.types.ts");
+var Models = __webpack_require__(/*! ../models/index.models */ "./client/src/pages/ratings-entries/models/index.models.ts");
 var ActionCreators;
 (function (ActionCreators) {
     ActionCreators.addEntry = function () { return function (d, gs) {
@@ -377,10 +579,19 @@ var ActionCreators;
             payload: {
                 ratingEntryId: null,
                 fullname: '',
-                type: null,
+                type: Models.EntryType.Place,
                 event: null,
                 place: null,
                 eventDate: new Date()
+            }
+        });
+    }; };
+    ActionCreators.updateEntry = function (field, value) { return function (d, gs) {
+        d({
+            type: ActionTypes.UPDATE_ENTRY,
+            payload: {
+                field: field,
+                value: value
             }
         });
     }; };
@@ -522,9 +733,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+var Models = __webpack_require__(/*! ../models/index.models */ "./client/src/pages/ratings-entries/models/index.models.ts");
 var Actions = __webpack_require__(/*! ../actions/index.actions */ "./client/src/pages/ratings-entries/actions/index.actions.ts");
 var modal_1 = __webpack_require__(/*! ../../../components/modal/modal */ "./client/src/components/modal/modal.tsx");
-var modal_header_1 = __webpack_require__(/*! ../../../components/modal/modal.header */ "./client/src/components/modal/modal.header.tsx");
+var form_1 = __webpack_require__(/*! ../../../components/form/form */ "./client/src/components/form/form.tsx");
 exports.default = react_redux_1.connect(function (state) { return ({
     entry: state.entries.currentEntry
 }); }, function (dispatch) { return ({
@@ -535,11 +747,68 @@ exports.default = react_redux_1.connect(function (state) { return ({
         return _super.call(this, props) || this;
     }
     EntryModal.prototype.render = function () {
+        var _this = this;
         return this.props.entry && React.createElement(modal_1.default, null,
-            React.createElement(modal_header_1.default, { title: (this.props.entry.ratingEntryId ? 'Редагувати' : 'Створити') + " \u0417\u0430\u043F\u0438\u0441", onClose: this.props.actions.closeEntry }));
+            React.createElement(modal_1.default.Header, { title: (this.props.entry.ratingEntryId ? 'Редагувати' : 'Створити') + " \u0417\u0430\u043F\u0438\u0441", onClose: this.props.actions.closeEntry }),
+            React.createElement(modal_1.default.Body, null,
+                React.createElement("div", { style: { width: '500px', height: '300px' } },
+                    React.createElement(form_1.default, null,
+                        React.createElement(form_1.default.TextInput, { label: "\u041F\u0440\u0456\u0437\u0432\u0438\u0449\u0435, \u0406\u043C'\u044F \u0441\u043F\u043E\u0440\u0442\u0441\u043C\u0435\u043D\u0430", value: this.props.entry.fullname, onChange: function (value) { return _this.props.actions.updateEntry("fullname", value); } }),
+                        React.createElement(form_1.default.RadioButton, { label: "\u0422\u0438\u043F \u0437\u0430\u043F\u0438\u0441\u0443", value: this.props.entry.type, name: "RecordType", buttons: [{ label: "Призове місце", value: Models.EntryType.Place }, { label: "Рекорд", value: Models.EntryType.Record }], onChange: function (value) { return _this.props.actions.updateEntry("type", value); } })))),
+            React.createElement(modal_1.default.Footer, null,
+                React.createElement(modal_1.default.FooterButton, { label: "\u0417\u0431\u0435\u0440\u0435\u0433\u0442\u0438", icon: "save", onClick: function () { return null; } })));
     };
     return EntryModal;
 }(React.Component)));
+
+
+/***/ }),
+
+/***/ "./client/src/pages/ratings-entries/models/entry.models.ts":
+/*!*****************************************************************!*\
+  !*** ./client/src/pages/ratings-entries/models/entry.models.ts ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+/***/ }),
+
+/***/ "./client/src/pages/ratings-entries/models/index.models.ts":
+/*!*****************************************************************!*\
+  !*** ./client/src/pages/ratings-entries/models/index.models.ts ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.EntryModels = __webpack_require__(/*! ./entry.models */ "./client/src/pages/ratings-entries/models/entry.models.ts");
+exports.LookupModels = __webpack_require__(/*! ./lookup.models */ "./client/src/pages/ratings-entries/models/lookup.models.ts");
+var EntryType;
+(function (EntryType) {
+    EntryType["Place"] = "place";
+    EntryType["Record"] = "record";
+})(EntryType = exports.EntryType || (exports.EntryType = {}));
+
+
+/***/ }),
+
+/***/ "./client/src/pages/ratings-entries/models/lookup.models.ts":
+/*!******************************************************************!*\
+  !*** ./client/src/pages/ratings-entries/models/lookup.models.ts ***!
+  \******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
 
 
 /***/ }),
@@ -572,6 +841,7 @@ var defaultState = {
 };
 exports.entriesReducer = function (state, action) {
     if (state === void 0) { state = defaultState; }
+    var _a;
     switch (action.type) {
         case ActionTypes.OPEN_ENTRY: {
             var payload = action.payload;
@@ -579,6 +849,10 @@ exports.entriesReducer = function (state, action) {
         }
         case ActionTypes.CLOSE_ENTRY: {
             return __assign({}, state, { currentEntry: null });
+        }
+        case ActionTypes.UPDATE_ENTRY: {
+            var payload = action.payload;
+            return __assign({}, state, { currentEntry: __assign({}, state.currentEntry, (_a = {}, _a[payload.field] = payload.value, _a)) });
         }
         default:
             return state;

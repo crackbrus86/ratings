@@ -28,6 +28,16 @@ export const entriesReducer = (state = defaultState, action): ReducerState => {
                 currentEntry: null
             }
         }
+        case ActionTypes.UPDATE_ENTRY: {
+            let payload = action.payload as ActionTypes.UPDATE_ENTRY_PAYLOAD;
+            return {
+                ...state,
+                currentEntry: {
+                    ...state.currentEntry,
+                    [payload.field]: payload.value
+                }
+            }
+        }
         default:
             return state
     }

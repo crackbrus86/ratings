@@ -12,28 +12,6 @@
   overflow-x: auto;
   margin-right: 20px; }
 
-.modal-header {
-  display: flex;
-  flex-direction: row;
-  border-bottom: 1px solid green; }
-  .modal-header h4 {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    width: 95%;
-    margin: 0;
-    padding: 4px;
-    text-align: center; }
-  .modal-header .modal-close-icon {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    padding: 5px;
-    color: green;
-    cursor: pointer; }
-    .modal-header .modal-close-icon:hover {
-      color: #07bd69; }
-
 .modal-black-out {
   position: fixed;
   top: 0px;
@@ -50,36 +28,61 @@
     min-height: 200px;
     top: 50%;
     left: 50%; }
-
-.tabs {
-  display: flex;
-  flex-direction: column;
-  width: 100%; }
-  .tabs .tab-list {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 0px; }
-    .tabs .tab-list .tab-list-item {
+    .modal-black-out .modal-content .modal-header {
       display: flex;
-      flex-direction: column;
-      padding: 5px 10px;
-      border: 1px solid #ccc;
-      border-radius: 10px 10px 0 0;
-      margin-bottom: 0px;
-      cursor: pointer;
-      background-color: #e8e8e8; }
-      .tabs .tab-list .tab-list-item:hover {
-        background-color: #f7f4f4; }
-      .tabs .tab-list .tab-list-item.tab-list-active {
-        border-bottom: none;
-        background-color: #fff; }
-  .tabs .tab-content {
-    display: flex;
-    flex-direction: row;
-    margin-right: 20px;
-    background-color: #fff;
-    box-shadow: 1px 1px 1px 0px #ccc;
-    border-left: 1px solid #ccc; }
+      flex-direction: row;
+      border-bottom: 1px solid green;
+      background-color: #07bd69;
+      color: #fff;
+      height: 28px; }
+      .modal-black-out .modal-content .modal-header h4 {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        width: 95%;
+        margin: 0;
+        padding: 4px;
+        text-align: center; }
+      .modal-black-out .modal-content .modal-header .modal-close-icon {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        padding: 8px;
+        cursor: pointer; }
+        .modal-black-out .modal-content .modal-header .modal-close-icon:hover {
+          text-shadow: 0 0 8px #fff; }
+    .modal-black-out .modal-content .modal-body {
+      margin-bottom: 38px;
+      padding: 4px; }
+    .modal-black-out .modal-content .modal-footer {
+      position: absolute;
+      bottom: 0px;
+      border-top: 1px solid green;
+      right: 0;
+      left: 0;
+      padding: 4px;
+      height: 28px;
+      display: flex;
+      flex-direction: row; }
+      .modal-black-out .modal-content .modal-footer .modal-footer-button {
+        display: flex;
+        flex-direction: row;
+        flex-grow: 1;
+        align-items: center;
+        justify-content: center;
+        background-color: #07bc69;
+        color: #fff;
+        padding: 5px;
+        cursor: pointer;
+        margin: 0 2px; }
+        .modal-black-out .modal-content .modal-footer .modal-footer-button:first-child {
+          margin-left: 0; }
+        .modal-black-out .modal-content .modal-footer .modal-footer-button:last-child {
+          margin-right: 0; }
+        .modal-black-out .modal-content .modal-footer .modal-footer-button:hover {
+          background-color: #2dcf85; }
+        .modal-black-out .modal-content .modal-footer .modal-footer-button .fa {
+          margin: 0 4px; }
 
 .rat-table {
   border-collapse: collapse;
@@ -128,3 +131,33 @@
     outline: none;
     box-shadow: none;
     background-color: #e8e8e8; }
+
+.tabs {
+  display: flex;
+  flex-direction: column;
+  width: 100%; }
+  .tabs .tab-list {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0px; }
+    .tabs .tab-list .tab-list-item {
+      display: flex;
+      flex-direction: column;
+      padding: 5px 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px 10px 0 0;
+      margin-bottom: 0px;
+      cursor: pointer;
+      background-color: #e8e8e8; }
+      .tabs .tab-list .tab-list-item:hover {
+        background-color: #f7f4f4; }
+      .tabs .tab-list .tab-list-item.tab-list-active {
+        border-bottom: none;
+        background-color: #fff; }
+  .tabs .tab-content {
+    display: flex;
+    flex-direction: row;
+    margin-right: 20px;
+    background-color: #fff;
+    box-shadow: 1px 1px 1px 0px #ccc;
+    border-left: 1px solid #ccc; }

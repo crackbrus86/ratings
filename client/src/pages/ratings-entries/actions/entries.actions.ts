@@ -8,10 +8,20 @@ export namespace ActionCreators{
             payload: <ActionTypes.OPEN_ENTRY_PAYLOAD>{
                 ratingEntryId: null,
                 fullname: '',
-                type: null,
+                type: Models.EntryType.Place,
                 event: null,
                 place: null,
                 eventDate: new Date()
+            }
+        })
+    }
+
+    export const updateEntry = (field: keyof Models.Entry, value: any) => (d, gs: () => Models.StoreState) => {
+        d({
+            type: ActionTypes.UPDATE_ENTRY,
+            payload: <ActionTypes.UPDATE_ENTRY_PAYLOAD>{
+                field,
+                value
             }
         })
     }
