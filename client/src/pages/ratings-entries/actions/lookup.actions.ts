@@ -3,6 +3,11 @@ import * as Models from "../models/index.models";
 import * as ActionTypes from "./action.types";
 
 export namespace ActionCreators{
+    export const initLookups = () => (d, gs: () => Models.StoreState) => {
+        d(loadCompetitions());
+        d(loadRecords());
+    }
+
     export const loadCompetitions = () => (d, gs: () => Models.StoreState) => {
         Services.getCompetitions().then((response) => {
             if(response.status){

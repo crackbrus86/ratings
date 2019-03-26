@@ -86,6 +86,58 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./client/src/components/form/datepicker.tsx":
+/*!***************************************************!*\
+  !*** ./client/src/components/form/datepicker.tsx ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var Datetime = __webpack_require__(/*! react-datetime */ "./node_modules/react-datetime/DateTime.js");
+var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+var DatePicker = /** @class */ (function (_super) {
+    __extends(DatePicker, _super);
+    function DatePicker(props) {
+        var _this = _super.call(this, props) || this;
+        _this.onChange = function (date) {
+            var nextDate = !isNaN(new Date(date).getTime()) ? new Date(date) : null;
+            _this.props.onChange(nextDate);
+        };
+        return _this;
+    }
+    DatePicker.prototype.render = function () {
+        var _this = this;
+        return React.createElement(React.Fragment, null,
+            React.createElement("div", { className: classnames('form-control', 'datepicker', { 'validation-error': this.props.validation && !this.props.validation.isValid }) },
+                this.props.label && React.createElement("label", null, this.props.label),
+                React.createElement(Datetime, { value: this.props.value, dateFormat: 'DD-MM-YYYY', timeFormat: false, closeOnSelect: true, onChange: function (date) { return _this.onChange(date.toString()); } })),
+            this.props.validation && !this.props.validation.isValid &&
+                React.createElement("span", { className: "validation-error-message" }, this.props.validation.message));
+    };
+    return DatePicker;
+}(React.Component));
+exports.default = DatePicker;
+
+
+/***/ }),
+
 /***/ "./client/src/components/form/form.tsx":
 /*!*********************************************!*\
   !*** ./client/src/components/form/form.tsx ***!
@@ -112,6 +164,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var text_input_1 = __webpack_require__(/*! ./text.input */ "./client/src/components/form/text.input.tsx");
 var radio_button_1 = __webpack_require__(/*! ./radio.button */ "./client/src/components/form/radio.button.tsx");
+var select_1 = __webpack_require__(/*! ./select */ "./client/src/components/form/select.tsx");
+var datepicker_1 = __webpack_require__(/*! ./datepicker */ "./client/src/components/form/datepicker.tsx");
 var Form = /** @class */ (function (_super) {
     __extends(Form, _super);
     function Form(props) {
@@ -122,6 +176,8 @@ var Form = /** @class */ (function (_super) {
     };
     Form.TextInput = text_input_1.default;
     Form.RadioButton = radio_button_1.default;
+    Form.Select = select_1.default;
+    Form.DatePicker = datepicker_1.default;
     return Form;
 }(React.Component));
 exports.default = Form;
@@ -153,6 +209,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
+var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
 var RadioButton = /** @class */ (function (_super) {
     __extends(RadioButton, _super);
     function RadioButton(props) {
@@ -160,16 +217,61 @@ var RadioButton = /** @class */ (function (_super) {
     }
     RadioButton.prototype.render = function () {
         var _this = this;
-        return React.createElement("div", { className: "radio-button" },
-            React.createElement("label", null,
-                this.props.label,
-                this.props.buttons.map(function (button, index) { return React.createElement("span", { key: index, className: "radio-button-input" },
-                    React.createElement("input", { type: "radio", name: _this.props.name, value: button.value, checked: button.value == _this.props.value, onChange: function (e) { return _this.props.onChange(e.target.value); } }),
-                    button.label); })));
+        return React.createElement("div", { className: classnames('form-control', 'radio-button') },
+            this.props.label && React.createElement("label", null, this.props.label),
+            React.createElement("div", { className: "wrap-radio-buttons" }, this.props.buttons.map(function (button, index) { return React.createElement("span", { key: index, className: "radio-button-input" },
+                React.createElement("input", { type: "radio", name: _this.props.name, value: button.value, checked: button.value == _this.props.value, onChange: function (e) { return _this.props.onChange(e.target.value); } }),
+                button.label); })));
     };
     return RadioButton;
 }(React.Component));
 exports.default = RadioButton;
+
+
+/***/ }),
+
+/***/ "./client/src/components/form/select.tsx":
+/*!***********************************************!*\
+  !*** ./client/src/components/form/select.tsx ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+var Select = /** @class */ (function (_super) {
+    __extends(Select, _super);
+    function Select(props) {
+        return _super.call(this, props) || this;
+    }
+    Select.prototype.render = function () {
+        var _this = this;
+        return React.createElement(React.Fragment, null,
+            React.createElement("div", { className: classnames('form-control', 'select', { 'validation-error': this.props.validation && !this.props.validation.isValid }) },
+                this.props.label && React.createElement("label", null, this.props.label),
+                React.createElement("select", { value: this.props.value || "", onChange: function (e) { return _this.props.onChange(e.target.value); } }, this.props.options.map(function (option, index) { return React.createElement("option", { key: index, value: option.value }, option.text); }))),
+            this.props.validation && !this.props.validation.isValid &&
+                React.createElement("span", { className: "validation-error-message" }, this.props.validation.message));
+    };
+    return Select;
+}(React.Component));
+exports.default = Select;
 
 
 /***/ }),
@@ -198,6 +300,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
+var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
 var TextInput = /** @class */ (function (_super) {
     __extends(TextInput, _super);
     function TextInput(props) {
@@ -205,10 +308,12 @@ var TextInput = /** @class */ (function (_super) {
     }
     TextInput.prototype.render = function () {
         var _this = this;
-        return React.createElement("div", { className: "text-input" },
-            React.createElement("label", null,
-                this.props.label,
-                React.createElement("input", { type: "text", value: this.props.value, onChange: function (e) { return _this.props.onChange(e.target.value); } })));
+        return React.createElement(React.Fragment, null,
+            React.createElement("div", { className: classnames('form-control', 'text-input', { 'validation-error': this.props.validation && !this.props.validation.isValid }) },
+                this.props.label && React.createElement("label", null, this.props.label),
+                React.createElement("input", { type: "text", value: this.props.value, onChange: function (e) { return _this.props.onChange(e.target.value); } })),
+            this.props.validation && !this.props.validation.isValid &&
+                React.createElement("span", { className: "validation-error-message" }, this.props.validation.message));
     };
     return TextInput;
 }(React.Component));
@@ -248,9 +353,10 @@ exports.default = ModalBody;
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var FontAwesome = __webpack_require__(/*! react-fontawesome */ "./node_modules/react-fontawesome/lib/index.js");
+var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
 var ModalFooterButton = function (props) {
     return React.createElement(React.Fragment, null,
-        React.createElement("span", { className: "modal-footer-button", onClick: function () { return props.onClick(); } },
+        React.createElement("span", { className: classnames('modal-footer-button', { 'disabled': props.disabled }), onClick: function () { return !props.disabled && props.onClick(); } },
             React.createElement(FontAwesome, { name: props.icon }),
             props.label));
 };
@@ -594,6 +700,29 @@ var ActionCreators;
                 value: value
             }
         });
+        if (field == "type") {
+            d(ActionCreators.resetEvent());
+            d(ActionCreators.resetPlace());
+        }
+    }; };
+    ActionCreators.resetPlace = function () { return function (d, gs) {
+        var place = gs().entries.currentEntry.type == Models.EntryType.Record ? 1 : null;
+        d({
+            type: ActionTypes.UPDATE_ENTRY,
+            payload: {
+                field: "place",
+                value: place
+            }
+        });
+    }; };
+    ActionCreators.resetEvent = function () { return function (d, gs) {
+        d({
+            type: ActionTypes.UPDATE_ENTRY,
+            payload: {
+                field: "event",
+                value: null
+            }
+        });
     }; };
     ActionCreators.closeEntry = function () { return function (d, gs) {
         d({
@@ -636,6 +765,10 @@ var Services = __webpack_require__(/*! ../services/lookup.services */ "./client/
 var ActionTypes = __webpack_require__(/*! ./action.types */ "./client/src/pages/ratings-entries/actions/action.types.ts");
 var ActionCreators;
 (function (ActionCreators) {
+    ActionCreators.initLookups = function () { return function (d, gs) {
+        d(ActionCreators.loadCompetitions());
+        d(ActionCreators.loadRecords());
+    }; };
     ActionCreators.loadCompetitions = function () { return function (d, gs) {
         Services.getCompetitions().then(function (response) {
             if (response.status) {
@@ -735,28 +868,43 @@ var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react
 var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 var Models = __webpack_require__(/*! ../models/index.models */ "./client/src/pages/ratings-entries/models/index.models.ts");
 var Actions = __webpack_require__(/*! ../actions/index.actions */ "./client/src/pages/ratings-entries/actions/index.actions.ts");
+var Selectors = __webpack_require__(/*! ../selectors/index.selector */ "./client/src/pages/ratings-entries/selectors/index.selector.ts");
 var modal_1 = __webpack_require__(/*! ../../../components/modal/modal */ "./client/src/components/modal/modal.tsx");
 var form_1 = __webpack_require__(/*! ../../../components/form/form */ "./client/src/components/form/form.tsx");
 exports.default = react_redux_1.connect(function (state) { return ({
-    entry: state.entries.currentEntry
+    entry: state.entries.currentEntry,
+    events: Selectors.EntrySelector.eventList(state),
+    validation: Selectors.EntrySelector.validation(state)
 }); }, function (dispatch) { return ({
     actions: redux_1.bindActionCreators(Actions.EntriesActions.ActionCreators, dispatch)
 }); })(/** @class */ (function (_super) {
     __extends(EntryModal, _super);
     function EntryModal(props) {
-        return _super.call(this, props) || this;
+        var _this = _super.call(this, props) || this;
+        _this.getPlaces = function () {
+            var placeOptions = [];
+            for (var i = 0; i < 4; i++) {
+                placeOptions.push({ text: !i ? '' : i.toString(), value: !i ? null : i });
+            }
+            return placeOptions;
+        };
+        return _this;
     }
     EntryModal.prototype.render = function () {
         var _this = this;
         return this.props.entry && React.createElement(modal_1.default, null,
             React.createElement(modal_1.default.Header, { title: (this.props.entry.ratingEntryId ? 'Редагувати' : 'Створити') + " \u0417\u0430\u043F\u0438\u0441", onClose: this.props.actions.closeEntry }),
             React.createElement(modal_1.default.Body, null,
-                React.createElement("div", { style: { width: '500px', height: '300px' } },
+                React.createElement("div", { style: { width: '395px' } },
                     React.createElement(form_1.default, null,
-                        React.createElement(form_1.default.TextInput, { label: "\u041F\u0440\u0456\u0437\u0432\u0438\u0449\u0435, \u0406\u043C'\u044F \u0441\u043F\u043E\u0440\u0442\u0441\u043C\u0435\u043D\u0430", value: this.props.entry.fullname, onChange: function (value) { return _this.props.actions.updateEntry("fullname", value); } }),
-                        React.createElement(form_1.default.RadioButton, { label: "\u0422\u0438\u043F \u0437\u0430\u043F\u0438\u0441\u0443", value: this.props.entry.type, name: "RecordType", buttons: [{ label: "Призове місце", value: Models.EntryType.Place }, { label: "Рекорд", value: Models.EntryType.Record }], onChange: function (value) { return _this.props.actions.updateEntry("type", value); } })))),
+                        React.createElement(form_1.default.TextInput, { label: "\u041F\u0440\u0456\u0437\u0432\u0438\u0449\u0435, \u0406\u043C'\u044F \u0441\u043F\u043E\u0440\u0442\u0441\u043C\u0435\u043D\u0430", value: this.props.entry.fullname, validation: this.props.validation.isFullNameValid, onChange: function (value) { return _this.props.actions.updateEntry("fullname", value); } }),
+                        React.createElement(form_1.default.RadioButton, { label: "\u0422\u0438\u043F \u0437\u0430\u043F\u0438\u0441\u0443", value: this.props.entry.type, name: "RecordType", buttons: [{ label: "Призове місце", value: Models.EntryType.Place }, { label: "Рекорд", value: Models.EntryType.Record }], onChange: function (value) { return _this.props.actions.updateEntry("type", value); } }),
+                        React.createElement(form_1.default.Select, { label: this.props.entry.type == Models.EntryType.Place ? "Змагання" : "Рекорд", options: this.props.events, validation: this.props.validation.isEventValid, value: this.props.entry.event, onChange: function (value) { return _this.props.actions.updateEntry("event", value); } }),
+                        this.props.entry.type == Models.EntryType.Place &&
+                            React.createElement(form_1.default.Select, { label: "\u041C\u0456\u0441\u0446\u0435", options: this.getPlaces(), validation: this.props.validation.isPlaceValid, value: this.props.entry.place, onChange: function (value) { return _this.props.actions.updateEntry("place", value); } }),
+                        React.createElement(form_1.default.DatePicker, { label: "\u0414\u0430\u0442\u0430", value: this.props.entry.eventDate, validation: this.props.validation.isEventDateValid, onChange: function (value) { return _this.props.actions.updateEntry("eventDate", value); } })))),
             React.createElement(modal_1.default.Footer, null,
-                React.createElement(modal_1.default.FooterButton, { label: "\u0417\u0431\u0435\u0440\u0435\u0433\u0442\u0438", icon: "save", onClick: function () { return null; } })));
+                React.createElement(modal_1.default.FooterButton, { label: "\u0417\u0431\u0435\u0440\u0435\u0433\u0442\u0438", icon: "save", disabled: !this.props.validation.isValid, onClick: function () { return null; } })));
     };
     return EntryModal;
 }(React.Component)));
@@ -966,6 +1114,78 @@ exports.shellReducer = function (state, action) {
             return state;
     }
 };
+
+
+/***/ }),
+
+/***/ "./client/src/pages/ratings-entries/selectors/entry.selectors.ts":
+/*!***********************************************************************!*\
+  !*** ./client/src/pages/ratings-entries/selectors/entry.selectors.ts ***!
+  \***********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var reselect_1 = __webpack_require__(/*! reselect */ "./node_modules/reselect/es/index.js");
+var Models = __webpack_require__(/*! ../models/index.models */ "./client/src/pages/ratings-entries/models/index.models.ts");
+var competitions = function (state) { return state.lookup.competitions; };
+var records = function (state) { return state.lookup.records; };
+var currentEntry = function (state) { return state.entries.currentEntry; };
+exports.eventList = reselect_1.createSelector(competitions, records, currentEntry, function (competitions, records, entry) {
+    var list = entry && entry.type == Models.EntryType.Place ? competitions : records;
+    var options = [{ text: '', value: null }];
+    options = options.concat(list.map(function (item) { return ({ text: item.name, value: item.dbName }); }));
+    return options;
+});
+exports.validation = reselect_1.createSelector(currentEntry, function (entry) {
+    var result = {
+        isValid: true,
+        isFullNameValid: { isValid: true, message: null },
+        isEventValid: { isValid: true, message: null },
+        isPlaceValid: { isValid: true, message: null },
+        isEventDateValid: { isValid: true, message: null }
+    };
+    if (entry && !entry.fullname.length) {
+        result.isFullNameValid = { isValid: false, message: "Прізвище та ім'я спортсмена є обов'язковими!" };
+    }
+    if (entry && !entry.event) {
+        result.isEventValid = { isValid: false, message: "\u041D\u0430\u0437\u0432\u0430 " + (entry.type == Models.EntryType.Place ? 'змагань' : 'рекорду') + " \u0454 \u043E\u0431\u043E\u0432'\u044F\u0437\u043A\u043E\u0432\u043E\u044E!" };
+    }
+    if (entry && entry.type == Models.EntryType.Place && !entry.place) {
+        result.isPlaceValid = { isValid: false, message: "Не вказано зайняте місце!" };
+    }
+    if (entry && (!entry.eventDate || isNaN(entry.eventDate.getTime()))) {
+        result.isEventDateValid = { isValid: false, message: "Не вірно вказано дату!" };
+    }
+    result = validate(result);
+    return result;
+});
+function validate(result) {
+    for (var field in result) {
+        if (field != 'isValid' && !result[field].isValid) {
+            result.isValid = false;
+            break;
+        }
+    }
+    return result;
+}
+
+
+/***/ }),
+
+/***/ "./client/src/pages/ratings-entries/selectors/index.selector.ts":
+/*!**********************************************************************!*\
+  !*** ./client/src/pages/ratings-entries/selectors/index.selector.ts ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.EntrySelector = __webpack_require__(/*! ./entry.selectors */ "./client/src/pages/ratings-entries/selectors/entry.selectors.ts");
 
 
 /***/ }),
@@ -1250,7 +1470,7 @@ exports.default = react_redux_1.connect(function (state) { return ({}); }, funct
         return _super.call(this, props) || this;
     }
     RatingEntryRoot.prototype.componentDidMount = function () {
-        this.props.lookupActions.loadCompetitions();
+        this.props.lookupActions.initLookups();
     };
     RatingEntryRoot.prototype.render = function () {
         return React.createElement(React.Fragment, null,
@@ -28788,6 +29008,142 @@ if ( true && typeof isCrushed.name === 'string' && isCrushed.name !== 'isCrushed
 
 
 
+
+/***/ }),
+
+/***/ "./node_modules/reselect/es/index.js":
+/*!*******************************************!*\
+  !*** ./node_modules/reselect/es/index.js ***!
+  \*******************************************/
+/*! exports provided: defaultMemoize, createSelectorCreator, createSelector, createStructuredSelector */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "defaultMemoize", function() { return defaultMemoize; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createSelectorCreator", function() { return createSelectorCreator; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createSelector", function() { return createSelector; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "createStructuredSelector", function() { return createStructuredSelector; });
+function defaultEqualityCheck(a, b) {
+  return a === b;
+}
+
+function areArgumentsShallowlyEqual(equalityCheck, prev, next) {
+  if (prev === null || next === null || prev.length !== next.length) {
+    return false;
+  }
+
+  // Do this in a for loop (and not a `forEach` or an `every`) so we can determine equality as fast as possible.
+  var length = prev.length;
+  for (var i = 0; i < length; i++) {
+    if (!equalityCheck(prev[i], next[i])) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+function defaultMemoize(func) {
+  var equalityCheck = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : defaultEqualityCheck;
+
+  var lastArgs = null;
+  var lastResult = null;
+  // we reference arguments instead of spreading them for performance reasons
+  return function () {
+    if (!areArgumentsShallowlyEqual(equalityCheck, lastArgs, arguments)) {
+      // apply arguments instead of spreading for performance.
+      lastResult = func.apply(null, arguments);
+    }
+
+    lastArgs = arguments;
+    return lastResult;
+  };
+}
+
+function getDependencies(funcs) {
+  var dependencies = Array.isArray(funcs[0]) ? funcs[0] : funcs;
+
+  if (!dependencies.every(function (dep) {
+    return typeof dep === 'function';
+  })) {
+    var dependencyTypes = dependencies.map(function (dep) {
+      return typeof dep;
+    }).join(', ');
+    throw new Error('Selector creators expect all input-selectors to be functions, ' + ('instead received the following types: [' + dependencyTypes + ']'));
+  }
+
+  return dependencies;
+}
+
+function createSelectorCreator(memoize) {
+  for (var _len = arguments.length, memoizeOptions = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    memoizeOptions[_key - 1] = arguments[_key];
+  }
+
+  return function () {
+    for (var _len2 = arguments.length, funcs = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+      funcs[_key2] = arguments[_key2];
+    }
+
+    var recomputations = 0;
+    var resultFunc = funcs.pop();
+    var dependencies = getDependencies(funcs);
+
+    var memoizedResultFunc = memoize.apply(undefined, [function () {
+      recomputations++;
+      // apply arguments instead of spreading for performance.
+      return resultFunc.apply(null, arguments);
+    }].concat(memoizeOptions));
+
+    // If a selector is called with the exact same arguments we don't need to traverse our dependencies again.
+    var selector = memoize(function () {
+      var params = [];
+      var length = dependencies.length;
+
+      for (var i = 0; i < length; i++) {
+        // apply arguments instead of spreading and mutate a local list of params for performance.
+        params.push(dependencies[i].apply(null, arguments));
+      }
+
+      // apply arguments instead of spreading for performance.
+      return memoizedResultFunc.apply(null, params);
+    });
+
+    selector.resultFunc = resultFunc;
+    selector.dependencies = dependencies;
+    selector.recomputations = function () {
+      return recomputations;
+    };
+    selector.resetRecomputations = function () {
+      return recomputations = 0;
+    };
+    return selector;
+  };
+}
+
+var createSelector = createSelectorCreator(defaultMemoize);
+
+function createStructuredSelector(selectors) {
+  var selectorCreator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : createSelector;
+
+  if (typeof selectors !== 'object') {
+    throw new Error('createStructuredSelector expects first argument to be an object ' + ('where each property is a selector, instead received a ' + typeof selectors));
+  }
+  var objectKeys = Object.keys(selectors);
+  return selectorCreator(objectKeys.map(function (key) {
+    return selectors[key];
+  }), function () {
+    for (var _len3 = arguments.length, values = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+      values[_key3] = arguments[_key3];
+    }
+
+    return values.reduce(function (composition, value, index) {
+      composition[objectKeys[index]] = value;
+      return composition;
+    }, {});
+  });
+}
 
 /***/ }),
 

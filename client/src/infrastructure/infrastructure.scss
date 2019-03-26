@@ -1,0 +1,15 @@
+.validation-error{
+    input[type=text], select,
+    .rdt input{
+        border-color: red;
+    }
+    &.form-control{
+        margin-bottom: 0px!important;
+    }
+}
+.validation-error-message{
+    display: block;
+    margin-bottom: 8px;
+    color: red;
+    font-style: italic;
+}

@@ -4,3 +4,8 @@ declare module 'redux' {
     <R, S, E>(asyncAction: ThunkAction<R, S, E>): R;
   }
 }
+
+export interface ValidationResult {
+  isValid: boolean,
+  message: string
+}

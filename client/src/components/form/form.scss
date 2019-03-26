@@ -1,0 +1,21 @@
+.form{
+    .form-control{
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 8px;
+
+        label, & > input, 
+        .wrap-radio-buttons, select, .rdt{
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            width: 50%;
+        }
+
+        &.radio-button{
+            .radio-button-input{
+                height: 32px;
+            }
+        }
+    }
+}

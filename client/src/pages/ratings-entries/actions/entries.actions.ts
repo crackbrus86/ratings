@@ -24,6 +24,31 @@ export namespace ActionCreators{
                 value
             }
         })
+        if(field == "type") { 
+            d(resetEvent());
+            d(resetPlace());
+        }
+    }
+
+    export const resetPlace = () => (d, gs: () => Models.StoreState) => {
+        let place = gs().entries.currentEntry.type == Models.EntryType.Record ? 1 : null;
+        d({
+            type: ActionTypes.UPDATE_ENTRY,
+            payload: <ActionTypes.UPDATE_ENTRY_PAYLOAD>{
+                field: "place",
+                value: place
+            }
+        })
+    }
+
+    export const resetEvent = () => (d, gs: () => Models.StoreState) => {
+        d({
+            type: ActionTypes.UPDATE_ENTRY,
+            payload: <ActionTypes.UPDATE_ENTRY_PAYLOAD>{
+                field: "event",
+                value: null
+            }
+        })
     }
 
     export const closeEntry = () => (d, gs: () => Models.StoreState) => {

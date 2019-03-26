@@ -1,4 +1,5 @@
 import * as React from "react";
+import * as classnames from "classnames";
 
 export interface RadioButtonOption{
     label: string,
@@ -18,18 +19,21 @@ class RadioButton extends React.Component<RadioButtonProps>{
     }
 
     render(){
-        return <div className="radio-button">
-            <label>{this.props.label}{
-                this.props.buttons.map((button, index) => <span key={index} className="radio-button-input">
-                    <input 
-                        type="radio" 
-                        name={this.props.name} 
-                        value={button.value} 
-                        checked={button.value == this.props.value} 
-                        onChange={(e) => this.props.onChange(e.target.value)} 
-                    />{button.label}
-                </span>)
-            }</label>
+        return <div className={classnames('form-control', 'radio-button')}>
+            { this.props.label && <label>{this.props.label}</label> }
+            <div className="wrap-radio-buttons">
+                {
+                    this.props.buttons.map((button, index) => <span key={index} className="radio-button-input">
+                        <input 
+                            type="radio" 
+                            name={this.props.name} 
+                            value={button.value} 
+                            checked={button.value == this.props.value} 
+                            onChange={(e) => this.props.onChange(e.target.value)} 
+                        />{button.label}
+                    </span>)
+                }
+            </div>
         </div>
     }
 }

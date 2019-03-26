@@ -72,6 +72,10 @@
                 padding: 5px;
                 cursor: pointer;
                 margin: 0 2px;
+                &.disabled{
+                    opacity: 0.5;
+                    cursor: not-allowed;
+                }
                 &:first-child{
                     margin-left: 0;
                 }

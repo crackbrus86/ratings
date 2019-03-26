@@ -1,3 +1,29 @@
+.validation-error input[type=text], .validation-error select,
+.validation-error .rdt input {
+  border-color: red; }
+
+.validation-error.form-control {
+  margin-bottom: 0px !important; }
+
+.validation-error-message {
+  display: block;
+  margin-bottom: 8px;
+  color: red;
+  font-style: italic; }
+
+.form .form-control {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 8px; }
+  .form .form-control label, .form .form-control > input,
+  .form .form-control .wrap-radio-buttons, .form .form-control select, .form .form-control .rdt {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    width: 50%; }
+  .form .form-control.radio-button .radio-button-input {
+    height: 32px; }
+
 .grid-row {
   display: flex;
   flex-direction: row;
@@ -75,6 +101,9 @@
         padding: 5px;
         cursor: pointer;
         margin: 0 2px; }
+        .modal-black-out .modal-content .modal-footer .modal-footer-button.disabled {
+          opacity: 0.5;
+          cursor: not-allowed; }
         .modal-black-out .modal-content .modal-footer .modal-footer-button:first-child {
           margin-left: 0; }
         .modal-black-out .modal-content .modal-footer .modal-footer-button:last-child {
@@ -83,6 +112,36 @@
           background-color: #2dcf85; }
         .modal-black-out .modal-content .modal-footer .modal-footer-button .fa {
           margin: 0 4px; }
+
+.tabs {
+  display: flex;
+  flex-direction: column;
+  width: 100%; }
+  .tabs .tab-list {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0px; }
+    .tabs .tab-list .tab-list-item {
+      display: flex;
+      flex-direction: column;
+      padding: 5px 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px 10px 0 0;
+      margin-bottom: 0px;
+      cursor: pointer;
+      background-color: #e8e8e8; }
+      .tabs .tab-list .tab-list-item:hover {
+        background-color: #f7f4f4; }
+      .tabs .tab-list .tab-list-item.tab-list-active {
+        border-bottom: none;
+        background-color: #fff; }
+  .tabs .tab-content {
+    display: flex;
+    flex-direction: row;
+    margin-right: 20px;
+    background-color: #fff;
+    box-shadow: 1px 1px 1px 0px #ccc;
+    border-left: 1px solid #ccc; }
 
 .rat-table {
   border-collapse: collapse;
@@ -131,33 +190,3 @@
     outline: none;
     box-shadow: none;
     background-color: #e8e8e8; }
-
-.tabs {
-  display: flex;
-  flex-direction: column;
-  width: 100%; }
-  .tabs .tab-list {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 0px; }
-    .tabs .tab-list .tab-list-item {
-      display: flex;
-      flex-direction: column;
-      padding: 5px 10px;
-      border: 1px solid #ccc;
-      border-radius: 10px 10px 0 0;
-      margin-bottom: 0px;
-      cursor: pointer;
-      background-color: #e8e8e8; }
-      .tabs .tab-list .tab-list-item:hover {
-        background-color: #f7f4f4; }
-      .tabs .tab-list .tab-list-item.tab-list-active {
-        border-bottom: none;
-        background-color: #fff; }
-  .tabs .tab-content {
-    display: flex;
-    flex-direction: row;
-    margin-right: 20px;
-    background-color: #fff;
-    box-shadow: 1px 1px 1px 0px #ccc;
-    border-left: 1px solid #ccc; }

@@ -26,7 +26,7 @@ export default connect<StateProps, DispatchProps>(
     }
 
     componentDidMount(){
-        this.props.lookupActions.loadCompetitions();
+        this.props.lookupActions.initLookups();
     }
 
     render(){
