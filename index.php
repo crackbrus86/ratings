@@ -22,6 +22,8 @@ class UPFRatings {
         wp_enqueue_style( 'fontawesome');
         wp_register_style('react-datetime', plugins_url( '/client/dist/css/react-datetime.css?v=' . UPFRatings::$appVersion, __FILE__ ));
         wp_enqueue_style( 'react-datetime');
+        wp_register_style('toastr', plugins_url( '/client/dist/css/toastr.min.css?v=' . UPFRatings::$appVersion, __FILE__ ));
+        wp_enqueue_style( 'toastr');
     }
 
     public function loadManagerScript()

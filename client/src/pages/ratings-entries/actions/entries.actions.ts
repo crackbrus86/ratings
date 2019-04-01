@@ -1,5 +1,8 @@
 import * as ActionTypes from "./action.types";
 import * as Models from "../models/index.models";
+import * as Services from "../services/entry.services";
+import * as toastr from "toastr";
+toastr.options.timeOut = 5000;
 
 export namespace ActionCreators{
     export const addEntry = () => (d, gs: () => Models.StoreState) => {
@@ -55,5 +58,28 @@ export namespace ActionCreators{
         d({
             type: ActionTypes.CLOSE_ENTRY
         })
+    }
+
+    export const saveEntry = () => (d, gs: () => Models.StoreState) => {
+        let entry: Models.Entry = gs().entries.currentEntry;
+        if(entry.ratingEntryId){
+
+        }else{
+            Services.createEntry({
+                ratingEntryId: null,
+                fullname: entry.fullname,
+                type: entry.type,
+                event: entry.event,
+                place: entry.place,
+                eventDate: entry.eventDate
+            }).then((response) => {
+                if(response.status){
+                    toastr.success(response.message);
+                    d(closeEntry());
+                }else{
+                    toastr.error(response.message);
+                }
+            })
+        }
     }
 }

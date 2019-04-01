@@ -40,6 +40,10 @@ export default connect<StateProps, DispatchProps>(
         return placeOptions;
     }
 
+    onSave = () => {
+        this.props.actions.saveEntry();
+    }
+
     render(){
         return this.props.entry && <Modal>
             <Modal.Header title={`${this.props.entry.ratingEntryId ? 'Редагувати' : 'Створити'} Запис`} onClose={this.props.actions.closeEntry} />
@@ -84,7 +88,7 @@ export default connect<StateProps, DispatchProps>(
                 </Form>
             </div></Modal.Body>
             <Modal.Footer>
-                <Modal.FooterButton label="Зберегти" icon="save" disabled={!this.props.validation.isValid} onClick={() => null} />
+                <Modal.FooterButton label="Зберегти" icon="save" disabled={!this.props.validation.isValid} onClick={this.onSave} />
             </Modal.Footer>
         </Modal>
     }
