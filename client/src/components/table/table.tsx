@@ -34,7 +34,10 @@ class Table extends React.PureComponent<TableProps, TableState>{
 
     sortingMethod = (itemA, itemB) => {
         let field = this.state.sortField;
-        return this.state.sortAsc ? itemA[field] - itemB[field] : itemB[field] - itemA[field];
+        if(itemA[field] instanceof Number && itemB[field] instanceof Number)
+            return this.state.sortAsc ? itemA[field] - itemB[field] : itemB[field] - itemA[field];
+        else
+            return this.state.sortAsc ? (itemA[field] < itemB[field] ? -1 : itemA[field] > itemB[field] ? 1 : 0 ) : (itemA[field] > itemB[field] ? -1 : itemA[field] < itemB[field] ? 1 : 0 )
     }
 
     onChangeSorting = (field: string, asc: boolean) => {

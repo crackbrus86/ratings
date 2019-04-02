@@ -45,7 +45,7 @@
   bottom: 0px;
   right: 0px;
   z-index: 10000;
-  background-color: rgba(0, 0, 0, 0.6);
+  background-color: rgba(0, 0, 0, 0.8);
   overflow: auto; }
   .modal-black-out .modal-content {
     position: absolute;
@@ -170,6 +170,12 @@
     font-size: 1.1em; }
   .rat-table th, .rat-table td {
     border-bottom: 1px solid #ddd; }
+  .rat-table .table-button {
+    color: green;
+    cursor: pointer;
+    font-size: 1.2em; }
+    .rat-table .table-button:hover {
+      color: #07bc69; }
   .rat-table .editable-cell .editable-cell-icon {
     float: right;
     opacity: 0.6;
@@ -190,3 +196,16 @@
     outline: none;
     box-shadow: none;
     background-color: #e8e8e8; }
+
+.entries .create-button {
+  margin: 8px;
+  border: none;
+  background-color: #07bc69;
+  padding: 16px;
+  color: #fff;
+  font-size: 1.2em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 0 0px 1px 0px #000; }
+  .entries .create-button:hover {
+    background-color: #19d37e; }

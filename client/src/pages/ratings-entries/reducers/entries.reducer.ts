@@ -38,6 +38,13 @@ export const entriesReducer = (state = defaultState, action): ReducerState => {
                 }
             }
         }
+        case ActionTypes.LOAD_ENTRIES: {
+            let payload = action.payload as ActionTypes.LOAD_ENTRIES_PAYLOAD;
+            return {
+                ...state,
+                entries: payload.entries
+            }
+        }
         default:
             return state
     }

@@ -28,6 +28,14 @@
     th, td{
         border-bottom: 1px solid #ddd;
     }
+    .table-button{
+        color: green;
+        cursor: pointer;
+        font-size: 1.2em;
+        &:hover{
+            color: #07bc69;
+        }
+    }
     .editable-cell{
         .editable-cell-icon{
             float: right;

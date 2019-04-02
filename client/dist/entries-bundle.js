@@ -567,6 +567,333 @@ exports.default = TabView;
 
 /***/ }),
 
+/***/ "./client/src/components/table/cell.tsx":
+/*!**********************************************!*\
+  !*** ./client/src/components/table/cell.tsx ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var column_1 = __webpack_require__(/*! ./column */ "./client/src/components/table/column.tsx");
+var editable_cell_1 = __webpack_require__(/*! ./editable.cell */ "./client/src/components/table/editable.cell.tsx");
+var table_button_1 = __webpack_require__(/*! ./table.button */ "./client/src/components/table/table.button.tsx");
+var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+var Cell = /** @class */ (function (_super) {
+    __extends(Cell, _super);
+    function Cell() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.onItemChange = function (value, item, column) {
+            item[column] = value;
+            _this.props.onChange(item);
+        };
+        _this.renderItem = function () {
+            switch (_this.props.column.type) {
+                case column_1.ColumnTypes.Button:
+                    return React.createElement(table_button_1.default, { icon: _this.props.column.icon, onClick: function () { return _this.props.column.onClick(_this.props.item); } });
+                case column_1.ColumnTypes.Input:
+                    return React.createElement(editable_cell_1.default, { value: _this.props.item[_this.props.column.field], onChange: function (v) { return _this.onItemChange(v, _this.props.item, _this.props.column.field); } });
+                case column_1.ColumnTypes.Date:
+                    return moment(_this.props.item[_this.props.column.field]).format("DD/MM/YYYY");
+                default:
+                    return _this.props.item[_this.props.column.field];
+            }
+        };
+        return _this;
+    }
+    Cell.prototype.render = function () {
+        return React.createElement("td", { key: this.props.index }, this.renderItem());
+    };
+    return Cell;
+}(React.PureComponent));
+exports.default = Cell;
+
+
+/***/ }),
+
+/***/ "./client/src/components/table/column.tsx":
+/*!************************************************!*\
+  !*** ./client/src/components/table/column.tsx ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var FontAwesome = __webpack_require__(/*! react-fontawesome */ "./node_modules/react-fontawesome/lib/index.js");
+var ColumnTypes;
+(function (ColumnTypes) {
+    ColumnTypes["Button"] = "button";
+    ColumnTypes["Input"] = "input";
+    ColumnTypes["Date"] = "date";
+})(ColumnTypes = exports.ColumnTypes || (exports.ColumnTypes = {}));
+var Column = /** @class */ (function (_super) {
+    __extends(Column, _super);
+    function Column() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Column.prototype.render = function () {
+        var _this = this;
+        return React.createElement("th", { key: this.props.index, style: { width: this.props.column.width } },
+            this.props.column.title,
+            this.props.column.sortable &&
+                (this.props.sortAsc || (this.props.sortField != this.props.column.field) ?
+                    React.createElement(FontAwesome, { name: "caret-up", className: "sort-control", onClick: function () { return _this.props.onSort(_this.props.column.field, false); } })
+                    : React.createElement(FontAwesome, { name: "caret-down", className: "sort-control", onClick: function () { return _this.props.onSort(_this.props.column.field, true); } })));
+    };
+    return Column;
+}(React.PureComponent));
+exports.default = Column;
+
+
+/***/ }),
+
+/***/ "./client/src/components/table/editable.cell.tsx":
+/*!*******************************************************!*\
+  !*** ./client/src/components/table/editable.cell.tsx ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var FontAwesome = __webpack_require__(/*! react-fontawesome */ "./node_modules/react-fontawesome/lib/index.js");
+var EditableCell = /** @class */ (function (_super) {
+    __extends(EditableCell, _super);
+    function EditableCell(props) {
+        var _this = _super.call(this, props) || this;
+        _this.enableEditMode = function () {
+            _this.setState({ editMode: true }, function () { return _this.editableCellInput.focus(); });
+        };
+        _this.handleFocus = function (event) {
+            event.target.select();
+        };
+        _this.cancelEditMode = function () {
+            _this.setState({ editMode: false, value: _this.props.value });
+        };
+        _this.onEdit = function (value) {
+            _this.setState({ value: value });
+        };
+        _this.onSave = function () {
+            _this.props.onChange(_this.state.value);
+            _this.cancelEditMode();
+        };
+        _this.state = {
+            value: null,
+            editMode: false
+        };
+        return _this;
+    }
+    EditableCell.prototype.componentDidMount = function () {
+        this.setState({ value: this.props.value });
+    };
+    EditableCell.prototype.componentDidUpdate = function (prevProps) {
+        if (prevProps.value != this.props.value)
+            this.setState({ value: this.props.value });
+    };
+    EditableCell.prototype.render = function () {
+        var _this = this;
+        return React.createElement("div", { className: "editable-cell" },
+            !this.state.editMode &&
+                React.createElement("div", null,
+                    this.state.value,
+                    React.createElement(FontAwesome, { name: "pen", className: "editable-cell-icon edit", onClick: this.enableEditMode })),
+            this.state.editMode &&
+                React.createElement("div", null,
+                    React.createElement("input", { type: "text", ref: function (input) { return _this.editableCellInput = input; }, value: this.state.value, className: "editable-cell-input", onChange: function (e) { return _this.onEdit(e.target.value); }, onFocus: this.handleFocus }),
+                    React.createElement(FontAwesome, { name: "times", className: "editable-cell-icon close", onClick: this.cancelEditMode }),
+                    React.createElement(FontAwesome, { name: "check", className: "editable-cell-icon check", onClick: this.onSave })));
+    };
+    return EditableCell;
+}(React.Component));
+exports.default = EditableCell;
+
+
+/***/ }),
+
+/***/ "./client/src/components/table/row.tsx":
+/*!*********************************************!*\
+  !*** ./client/src/components/table/row.tsx ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var cell_1 = __webpack_require__(/*! ./cell */ "./client/src/components/table/cell.tsx");
+var Row = /** @class */ (function (_super) {
+    __extends(Row, _super);
+    function Row() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Row.prototype.render = function () {
+        var _this = this;
+        return React.createElement("tr", { key: this.props.index }, this.props.columns.map(function (column, index) { return React.createElement(cell_1.default, { key: index, item: _this.props.item, column: column, onChange: column.onChange }); }));
+    };
+    return Row;
+}(React.PureComponent));
+exports.default = Row;
+
+
+/***/ }),
+
+/***/ "./client/src/components/table/table.button.tsx":
+/*!******************************************************!*\
+  !*** ./client/src/components/table/table.button.tsx ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var FontAwesome = __webpack_require__(/*! react-fontawesome */ "./node_modules/react-fontawesome/lib/index.js");
+var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+var TableButton = function (props) {
+    return React.createElement(React.Fragment, null,
+        React.createElement("span", { className: classnames('table-button', { 'disabled': props.disabled }), onClick: function () { return !props.disabled && props.onClick(); } },
+            React.createElement(FontAwesome, { name: props.icon })));
+};
+exports.default = TableButton;
+
+
+/***/ }),
+
+/***/ "./client/src/components/table/table.tsx":
+/*!***********************************************!*\
+  !*** ./client/src/components/table/table.tsx ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var column_1 = __webpack_require__(/*! ./column */ "./client/src/components/table/column.tsx");
+var row_1 = __webpack_require__(/*! ./row */ "./client/src/components/table/row.tsx");
+var Table = /** @class */ (function (_super) {
+    __extends(Table, _super);
+    function Table(props) {
+        var _this = _super.call(this, props) || this;
+        _this.setFirstSorting = function () {
+            var sortableColumns = _this.props.columns.filter(function (column) { return column.sortable; });
+            if (sortableColumns.length) {
+                _this.setState({ sortField: sortableColumns[0].field });
+            }
+        };
+        _this.sortingMethod = function (itemA, itemB) {
+            var field = _this.state.sortField;
+            if (itemA[field] instanceof Number && itemB[field] instanceof Number)
+                return _this.state.sortAsc ? itemA[field] - itemB[field] : itemB[field] - itemA[field];
+            else
+                return _this.state.sortAsc ? (itemA[field] < itemB[field] ? -1 : itemA[field] > itemB[field] ? 1 : 0) : (itemA[field] > itemB[field] ? -1 : itemA[field] < itemB[field] ? 1 : 0);
+        };
+        _this.onChangeSorting = function (field, asc) {
+            _this.setState({ sortField: field, sortAsc: asc });
+        };
+        _this.state = {
+            sortField: null,
+            sortAsc: true
+        };
+        return _this;
+    }
+    Table.prototype.componentDidMount = function () {
+        this.setFirstSorting();
+    };
+    Table.prototype.render = function () {
+        var _this = this;
+        var items = !this.state.sortField ? this.props.items : this.props.items.sort(function (a, b) { return _this.sortingMethod(a, b); });
+        return React.createElement("table", { className: "rat-table" },
+            React.createElement("thead", null,
+                React.createElement("tr", null, this.props.columns.length &&
+                    this.props.columns.map(function (column, index) {
+                        return React.createElement(column_1.default, { key: index, index: index, column: column, sortAsc: _this.state.sortAsc, onSort: _this.onChangeSorting, sortField: _this.state.sortField });
+                    }))),
+            React.createElement("tbody", null, items.map(function (item, index) { return React.createElement(row_1.default, { key: index, index: index, item: item, columns: _this.props.columns }); })));
+    };
+    return Table;
+}(React.PureComponent));
+exports.default = Table;
+
+
+/***/ }),
+
 /***/ "./client/src/infrastructure/call.api.ts":
 /*!***********************************************!*\
   !*** ./client/src/infrastructure/call.api.ts ***!
@@ -661,6 +988,7 @@ exports.LOAD_RECORDS = "LOOKUP::LOAD_RECORDS";
 exports.OPEN_ENTRY = "ENTRIES::OPEN_ENTRY";
 exports.CLOSE_ENTRY = "ENTRIES::CLOSE_ENTRY";
 exports.UPDATE_ENTRY = "ENTRIES::UPDATE_ENTRY";
+exports.LOAD_ENTRIES = "ENTRIES::LOAD_ENTRIES";
 
 
 /***/ }),
@@ -674,6 +1002,17 @@ exports.UPDATE_ENTRY = "ENTRIES::UPDATE_ENTRY";
 
 "use strict";
 
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var ActionTypes = __webpack_require__(/*! ./action.types */ "./client/src/pages/ratings-entries/actions/action.types.ts");
 var Models = __webpack_require__(/*! ../models/index.models */ "./client/src/pages/ratings-entries/models/index.models.ts");
@@ -693,6 +1032,13 @@ var ActionCreators;
                 place: null,
                 eventDate: new Date()
             }
+        });
+    }; };
+    ActionCreators.editEntry = function (entry) { return function (d, gs) {
+        var entryData = gs().entries.entries.find(function (x) { return x.ratingEntryId == entry.ratingEntryId; });
+        d({
+            type: ActionTypes.OPEN_ENTRY,
+            payload: __assign({}, entryData, { eventDate: new Date(entryData.eventDate) })
         });
     }; };
     ActionCreators.updateEntry = function (field, value) { return function (d, gs) {
@@ -737,14 +1083,7 @@ var ActionCreators;
         if (entry.ratingEntryId) {
         }
         else {
-            Services.createEntry({
-                ratingEntryId: null,
-                fullname: entry.fullname,
-                type: entry.type,
-                event: entry.event,
-                place: entry.place,
-                eventDate: entry.eventDate
-            }).then(function (response) {
+            Services.createEntry(__assign({}, entry, { ratingEntryId: null })).then(function (response) {
                 if (response.status) {
                     toastr.success(response.message);
                     d(ActionCreators.closeEntry());
@@ -754,6 +1093,21 @@ var ActionCreators;
                 }
             });
         }
+    }; };
+    ActionCreators.getEntries = function () { return function (d, gs) {
+        Services.getEntries({
+            year: gs().shell.startDate.getFullYear()
+        }).then(function (response) {
+            if (response.status) {
+                d({
+                    type: ActionTypes.LOAD_ENTRIES,
+                    payload: { entries: response.data }
+                });
+            }
+            else {
+                toastr.error(response.message);
+            }
+        });
     }; };
 })(ActionCreators = exports.ActionCreators || (exports.ActionCreators = {}));
 
@@ -835,13 +1189,15 @@ var ActionCreators;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var ActionTypes = __webpack_require__(/*! ./action.types */ "./client/src/pages/ratings-entries/actions/action.types.ts");
+var Actions = __webpack_require__(/*! ./index.actions */ "./client/src/pages/ratings-entries/actions/index.actions.ts");
 var ActionCreators;
 (function (ActionCreators) {
-    ActionCreators.changeStartDate = function (date) { return function (d) {
+    ActionCreators.changeStartDate = function (date) { return function (d, gs) {
         d({
             type: ActionTypes.CHANGE_START_TIME,
             payload: date
         });
+        d(Actions.EntriesActions.ActionCreators.getEntries());
     }; };
 })(ActionCreators = exports.ActionCreators || (exports.ActionCreators = {}));
 
@@ -1030,6 +1386,10 @@ exports.entriesReducer = function (state, action) {
         case ActionTypes.UPDATE_ENTRY: {
             var payload = action.payload;
             return __assign({}, state, { currentEntry: __assign({}, state.currentEntry, (_a = {}, _a[payload.field] = payload.value, _a)) });
+        }
+        case ActionTypes.LOAD_ENTRIES: {
+            var payload = action.payload;
+            return __assign({}, state, { entries: payload.entries });
         }
         default:
             return state;
@@ -1230,13 +1590,20 @@ exports.EntrySelector = __webpack_require__(/*! ./entry.selectors */ "./client/s
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var CallApi = __webpack_require__(/*! ../../../infrastructure/call.api */ "./client/src/infrastructure/call.api.ts");
-var lookupApiPath = "../wp-content/plugins/ratings/server/EntryController/";
+var entryApiPath = "../wp-content/plugins/ratings/server/EntryController/";
 var apiTypes = CallApi.RequestTypes;
 exports.createEntry = function (entry) {
     return CallApi.callApi({
-        url: lookupApiPath + 'CreateEntry.php',
+        url: entryApiPath + 'CreateEntry.php',
         type: apiTypes.POST,
         data: entry
+    });
+};
+exports.getEntries = function (contract) {
+    return CallApi.callApi({
+        url: entryApiPath + 'GetEntries.php',
+        type: apiTypes.GET,
+        data: contract
     });
 };
 
@@ -1409,22 +1776,81 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+var table_1 = __webpack_require__(/*! ../../../../components/table/table */ "./client/src/components/table/table.tsx");
+var column_1 = __webpack_require__(/*! ../../../../components/table/column */ "./client/src/components/table/column.tsx");
 var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/src/pages/ratings-entries/actions/index.actions.ts");
 var entry_modal_1 = __webpack_require__(/*! ../../modals/entry.modal */ "./client/src/pages/ratings-entries/modals/entry.modal.tsx");
-exports.default = react_redux_1.connect(function (state) { return ({}); }, function (dispatch) { return ({
+exports.default = react_redux_1.connect(function (state) { return ({
+    entries: state.entries.entries,
+    competitions: state.lookup.competitions,
+    records: state.lookup.records
+}); }, function (dispatch) { return ({
     actions: redux_1.bindActionCreators(Actions.EntriesActions.ActionCreators, dispatch)
 }); })(/** @class */ (function (_super) {
     __extends(Entries, _super);
     function Entries(props) {
         return _super.call(this, props) || this;
     }
+    Entries.prototype.componentDidMount = function () {
+        this.props.actions.getEntries();
+    };
     Entries.prototype.render = function () {
+        var _this = this;
+        var entries = this.props.entries.map(function (entry) {
+            var events = _this.props.competitions.concat(_this.props.records);
+            var eventName = events.find(function (event) { return event.dbName == entry.event; }).name;
+            return __assign({}, entry, { event: eventName });
+        });
         return React.createElement("div", { className: "entries" },
-            React.createElement("button", { onClick: this.props.actions.addEntry }, "\u0421\u0442\u0432\u043E\u0440\u0438\u0442\u0438 \u0437\u0430\u043F\u0438\u0441"),
+            React.createElement("button", { className: "create-button", onClick: this.props.actions.addEntry }, "\u0421\u0442\u0432\u043E\u0440\u0438\u0442\u0438 \u0437\u0430\u043F\u0438\u0441"),
+            React.createElement(table_1.default, { items: entries, columns: [
+                    {
+                        title: "",
+                        type: column_1.ColumnTypes.Button,
+                        icon: "edit",
+                        onClick: function (item) { return _this.props.actions.editEntry(item); }
+                    },
+                    {
+                        title: "П.І.П",
+                        field: "fullname",
+                        width: "300px",
+                        sortable: true
+                    },
+                    {
+                        title: "Подія",
+                        field: "event",
+                        width: "350px",
+                        sortable: true
+                    },
+                    {
+                        title: "Місце",
+                        field: "place",
+                        width: "80px",
+                        sortable: true
+                    },
+                    {
+                        title: "Дата",
+                        type: column_1.ColumnTypes.Date,
+                        field: "eventDate",
+                        width: "100px",
+                        sortable: true
+                    }
+                ] }),
             React.createElement(entry_modal_1.default, null));
     };
     return Entries;

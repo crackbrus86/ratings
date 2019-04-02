@@ -19,6 +19,17 @@ export namespace ActionCreators{
         })
     }
 
+    export const editEntry = (entry: Models.Entry) => (d, gs: () => Models.StoreState) => {
+        let entryData = gs().entries.entries.find(x => x.ratingEntryId == entry.ratingEntryId);
+        d({
+            type: ActionTypes.OPEN_ENTRY,
+            payload: <ActionTypes.OPEN_ENTRY_PAYLOAD>{
+                ...entryData,
+                eventDate: new Date(entryData.eventDate)
+            }
+        })
+    }
+
     export const updateEntry = (field: keyof Models.Entry, value: any) => (d, gs: () => Models.StoreState) => {
         d({
             type: ActionTypes.UPDATE_ENTRY,
@@ -66,12 +77,8 @@ export namespace ActionCreators{
 
         }else{
             Services.createEntry({
-                ratingEntryId: null,
-                fullname: entry.fullname,
-                type: entry.type,
-                event: entry.event,
-                place: entry.place,
-                eventDate: entry.eventDate
+                ...entry,
+                ratingEntryId: null
             }).then((response) => {
                 if(response.status){
                     toastr.success(response.message);
@@ -81,5 +88,20 @@ export namespace ActionCreators{
                 }
             })
         }
+    }
+
+    export const getEntries = () => (d, gs: () => Models.StoreState) => {
+        Services.getEntries({
+            year: gs().shell.startDate.getFullYear()
+        }).then((response) => {
+            if(response.status){
+                d({
+                    type: ActionTypes.LOAD_ENTRIES,
+                    payload: <ActionTypes.LOAD_ENTRIES_PAYLOAD>{ entries: response.data }
+                });
+            }else{
+                toastr.error(response.message);
+            }
+        });
     }
 }

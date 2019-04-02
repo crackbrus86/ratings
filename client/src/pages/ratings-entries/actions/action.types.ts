@@ -23,3 +23,8 @@ export type UPDATE_ENTRY_PAYLOAD = {
     field: keyof Models.Entry,
     value: any
 }
+
+export const LOAD_ENTRIES = "ENTRIES::LOAD_ENTRIES";
+export type LOAD_ENTRIES_PAYLOAD = {
+    entries: Models.Entry[]
+}

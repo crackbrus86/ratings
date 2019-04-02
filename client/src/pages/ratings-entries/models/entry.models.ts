@@ -6,3 +6,7 @@ export interface RatingEntry{
     place: number,
     eventDate: Date
 }
+
+export interface GetEntries_Contract{
+    year: number
+}

@@ -58,7 +58,7 @@
     bottom: 0px; 
     right: 0px; 
     z-index: 10000; 
-    background-color: rgba(0, 0, 0,0.6);
+    background-color: rgba(0, 0, 0,0.8);
     overflow: auto;
 
     .modal-content{
@@ -210,6 +210,14 @@
     th, td{
         border-bottom: 1px solid #ddd;
     }
+    .table-button{
+        color: green;
+        cursor: pointer;
+        font-size: 1.2em;
+        &:hover{
+            color: #07bc69;
+        }
+    }
     .editable-cell{
         .editable-cell-icon{
             float: right;
@@ -236,6 +244,22 @@
             outline: none;
             box-shadow: none;
             background-color: #e8e8e8;
+        }
+    }
+}
+.entries{
+    .create-button{
+        margin: 8px;
+        border: none;
+        background-color: #07bc69;
+        padding: 16px;
+        color: #fff;
+        font-size: 1.2em;
+        text-transform: uppercase;
+        cursor: pointer;
+        box-shadow: 0 0px 1px 0px #000;
+        &:hover{
+            background-color: #19d37e;
         }
     }
 }

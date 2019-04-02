@@ -3,7 +3,8 @@ import * as FontAwesome from "react-fontawesome";
 
 export enum ColumnTypes{
     Button = "button",
-    Input = "input"
+    Input = "input",
+    Date = "date"
 }
 
 export interface ColumnModel{
@@ -12,7 +13,9 @@ export interface ColumnModel{
     field?: string,
     width?: string,
     onChange?: (item: any) => void,
-    sortable?: boolean
+    sortable?: boolean,
+    icon?: string,
+    onClick?: (item: any) => void
 }
 
 export interface ColumnProps{

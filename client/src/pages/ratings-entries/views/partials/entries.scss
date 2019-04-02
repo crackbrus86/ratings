@@ -1,0 +1,16 @@
+.entries{
+    .create-button{
+        margin: 8px;
+        border: none;
+        background-color: #07bc69;
+        padding: 16px;
+        color: #fff;
+        font-size: 1.2em;
+        text-transform: uppercase;
+        cursor: pointer;
+        box-shadow: 0 0px 1px 0px #000;
+        &:hover{
+            background-color: #19d37e;
+        }
+    }
+}
