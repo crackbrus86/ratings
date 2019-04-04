@@ -86,6 +86,52 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./client/src/components/confirm/confirm.tsx":
+/*!***************************************************!*\
+  !*** ./client/src/components/confirm/confirm.tsx ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var modal_1 = __webpack_require__(/*! ../modal/modal */ "./client/src/components/modal/modal.tsx");
+var Confirm = /** @class */ (function (_super) {
+    __extends(Confirm, _super);
+    function Confirm(props) {
+        return _super.call(this, props) || this;
+    }
+    Confirm.prototype.render = function () {
+        return this.props.show && React.createElement(modal_1.default, null,
+            React.createElement(modal_1.default.Header, { title: this.props.title, onClose: this.props.onClose }),
+            React.createElement(modal_1.default.Body, null,
+                React.createElement("p", { className: "confirm-body-text" }, this.props.text)),
+            React.createElement(modal_1.default.Footer, null,
+                React.createElement(modal_1.default.FooterButton, { icon: "check", label: "Ok", onClick: this.props.onConfirm }),
+                React.createElement(modal_1.default.FooterButton, { icon: "times", label: "Cancel", onClick: this.props.onClose })));
+    };
+    return Confirm;
+}(React.Component));
+exports.default = Confirm;
+
+
+/***/ }),
+
 /***/ "./client/src/components/form/datepicker.tsx":
 /*!***************************************************!*\
   !*** ./client/src/components/form/datepicker.tsx ***!
@@ -322,6 +368,80 @@ exports.default = TextInput;
 
 /***/ }),
 
+/***/ "./client/src/components/layout/content.wrap.tsx":
+/*!*******************************************************!*\
+  !*** ./client/src/components/layout/content.wrap.tsx ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+exports.ContentWrap = function (props) {
+    return React.createElement("div", { className: "content-wrap" }, props.children);
+};
+
+
+/***/ }),
+
+/***/ "./client/src/components/layout/grid.column.tsx":
+/*!******************************************************!*\
+  !*** ./client/src/components/layout/grid.column.tsx ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+exports.GridColumn = function (props) {
+    return React.createElement("div", { className: "grid-column" }, props.children);
+};
+
+
+/***/ }),
+
+/***/ "./client/src/components/layout/grid.row.tsx":
+/*!***************************************************!*\
+  !*** ./client/src/components/layout/grid.row.tsx ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+exports.GridRow = function (props) {
+    return React.createElement("div", { className: "grid-row" }, props.children);
+};
+
+
+/***/ }),
+
+/***/ "./client/src/components/layout/index.layout.tsx":
+/*!*******************************************************!*\
+  !*** ./client/src/components/layout/index.layout.tsx ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var grid_row_1 = __webpack_require__(/*! ./grid.row */ "./client/src/components/layout/grid.row.tsx");
+exports.GridRow = grid_row_1.GridRow;
+var grid_column_1 = __webpack_require__(/*! ./grid.column */ "./client/src/components/layout/grid.column.tsx");
+exports.GridColumn = grid_column_1.GridColumn;
+var content_wrap_1 = __webpack_require__(/*! ./content.wrap */ "./client/src/components/layout/content.wrap.tsx");
+exports.ContentWrap = content_wrap_1.ContentWrap;
+
+
+/***/ }),
+
 /***/ "./client/src/components/modal/modal.body.tsx":
 /*!****************************************************!*\
   !*** ./client/src/components/modal/modal.body.tsx ***!
@@ -503,7 +623,7 @@ var Tab = /** @class */ (function (_super) {
         return _this;
     }
     Tab.prototype.render = function () {
-        return React.createElement("div", null, this.props.children);
+        return React.createElement(React.Fragment, null, this.props.children);
     };
     return Tab;
 }(React.Component));
@@ -955,10 +1075,10 @@ function addBlackOut() {
     if (!document.getElementsByClassName("blackout").length) {
         var blackOut = document.createElement("div");
         blackOut.className = "blackout";
-        blackOut.setAttribute("style", "position: absolute; top: 0; left: 0; bottom: 0; right: 0; background-color: #353535; opacity: 0.8;");
+        blackOut.setAttribute("style", "position: absolute; top: 0; left: 0; bottom: 0; right: 0; background-color: #353535; opacity: 0.8; z-index: 10001;");
         var spinner = document.createElement("i");
         spinner.className = "fas fa-atom fa-7x fa-spin";
-        spinner.setAttribute("style", "position: absolute; top: 50%; left: 50%; color: #81f4c5;");
+        spinner.setAttribute("style", "position: absolute; top: 50%; left: 50%; color: #81f4c5; z-index: 10002;");
         blackOut.appendChild(spinner);
         document.body.appendChild(blackOut);
     }
@@ -989,6 +1109,8 @@ exports.OPEN_ENTRY = "ENTRIES::OPEN_ENTRY";
 exports.CLOSE_ENTRY = "ENTRIES::CLOSE_ENTRY";
 exports.UPDATE_ENTRY = "ENTRIES::UPDATE_ENTRY";
 exports.LOAD_ENTRIES = "ENTRIES::LOAD_ENTRIES";
+exports.SELECT_TO_REMOVE = "ENTRIES::SELECT_TO_REMOVE";
+exports.CANCEL_REMOVE = "ENTRIES::CANCEL_REMOVE";
 
 
 /***/ }),
@@ -1081,12 +1203,23 @@ var ActionCreators;
     ActionCreators.saveEntry = function () { return function (d, gs) {
         var entry = gs().entries.currentEntry;
         if (entry.ratingEntryId) {
+            Services.updateEntry(__assign({}, entry)).then(function (response) {
+                if (response.status) {
+                    toastr.success(response.message);
+                    d(ActionCreators.closeEntry());
+                    d(ActionCreators.getEntries());
+                }
+                else {
+                    toastr.error(response.message);
+                }
+            });
         }
         else {
             Services.createEntry(__assign({}, entry, { ratingEntryId: null })).then(function (response) {
                 if (response.status) {
                     toastr.success(response.message);
                     d(ActionCreators.closeEntry());
+                    d(ActionCreators.getEntries());
                 }
                 else {
                     toastr.error(response.message);
@@ -1108,6 +1241,29 @@ var ActionCreators;
                 toastr.error(response.message);
             }
         });
+    }; };
+    ActionCreators.deleteEntry = function () { return function (d, gs) {
+        Services.deleteEntry({
+            ratingEntryId: gs().entries.deleteById
+        }).then(function (response) {
+            if (response.status) {
+                toastr.success(response.message);
+                d(ActionCreators.cancelRemove());
+                d(ActionCreators.getEntries());
+            }
+            else {
+                toastr.error(response.message);
+            }
+        });
+    }; };
+    ActionCreators.selectToRemove = function (id) { return function (d) {
+        d({
+            type: ActionTypes.SELECT_TO_REMOVE,
+            payload: { id: id }
+        });
+    }; };
+    ActionCreators.cancelRemove = function () { return function (d) {
+        d({ type: ActionTypes.CANCEL_REMOVE });
     }; };
 })(ActionCreators = exports.ActionCreators || (exports.ActionCreators = {}));
 
@@ -1370,7 +1526,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var ActionTypes = __webpack_require__(/*! ../actions/action.types */ "./client/src/pages/ratings-entries/actions/action.types.ts");
 var defaultState = {
     entries: [],
-    currentEntry: null
+    currentEntry: null,
+    deleteById: null
 };
 exports.entriesReducer = function (state, action) {
     if (state === void 0) { state = defaultState; }
@@ -1390,6 +1547,13 @@ exports.entriesReducer = function (state, action) {
         case ActionTypes.LOAD_ENTRIES: {
             var payload = action.payload;
             return __assign({}, state, { entries: payload.entries });
+        }
+        case ActionTypes.SELECT_TO_REMOVE: {
+            var payload = action.payload;
+            return __assign({}, state, { deleteById: payload.id });
+        }
+        case ActionTypes.CANCEL_REMOVE: {
+            return __assign({}, state, { deleteById: null });
         }
         default:
             return state;
@@ -1490,7 +1654,8 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ActionTypes = __webpack_require__(/*! ../actions/action.types */ "./client/src/pages/ratings-entries/actions/action.types.ts");
 var defaultState = {
-    startDate: new Date(new Date().getFullYear(), 0, 1)
+    startDate: new Date(new Date().getFullYear(), 0, 1),
+    showConfirmDelete: false
 };
 exports.shellReducer = function (state, action) {
     if (state === void 0) { state = defaultState; }
@@ -1599,10 +1764,24 @@ exports.createEntry = function (entry) {
         data: entry
     });
 };
+exports.updateEntry = function (entry) {
+    return CallApi.callApi({
+        url: entryApiPath + 'UpdateEntry.php',
+        type: apiTypes.POST,
+        data: entry
+    });
+};
 exports.getEntries = function (contract) {
     return CallApi.callApi({
         url: entryApiPath + 'GetEntries.php',
         type: apiTypes.GET,
+        data: contract
+    });
+};
+exports.deleteEntry = function (contract) {
+    return CallApi.callApi({
+        url: entryApiPath + "DeleteEntry.php",
+        type: apiTypes.POST,
         data: contract
     });
 };
@@ -1735,13 +1914,14 @@ var tab_view_1 = __webpack_require__(/*! ../../../components/tab view/tab.view *
 var tab_1 = __webpack_require__(/*! ../../../components/tab view/tab */ "./client/src/components/tab view/tab.tsx");
 var layout_header_1 = __webpack_require__(/*! ./partials/layout.header */ "./client/src/pages/ratings-entries/views/partials/layout.header.tsx");
 var entries_1 = __webpack_require__(/*! ./partials/entries */ "./client/src/pages/ratings-entries/views/partials/entries.tsx");
+var index_layout_1 = __webpack_require__(/*! ../../../components/layout/index.layout */ "./client/src/components/layout/index.layout.tsx");
 exports.default = react_redux_1.connect(function (state) { return ({}); }, function (dispatch) { return ({}); })(/** @class */ (function (_super) {
     __extends(Layout, _super);
     function Layout() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Layout.prototype.render = function () {
-        return React.createElement("div", { className: "rating-entry" },
+        return React.createElement(index_layout_1.ContentWrap, null,
             React.createElement(layout_header_1.default, null),
             React.createElement(tab_view_1.default, null,
                 React.createElement(tab_1.default, { title: "\u0417\u0430\u043F\u0438\u0441\u0438", label: "ratingEntries" },
@@ -1795,10 +1975,12 @@ var table_1 = __webpack_require__(/*! ../../../../components/table/table */ "./c
 var column_1 = __webpack_require__(/*! ../../../../components/table/column */ "./client/src/components/table/column.tsx");
 var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/src/pages/ratings-entries/actions/index.actions.ts");
 var entry_modal_1 = __webpack_require__(/*! ../../modals/entry.modal */ "./client/src/pages/ratings-entries/modals/entry.modal.tsx");
+var confirm_1 = __webpack_require__(/*! ../../../../components/confirm/confirm */ "./client/src/components/confirm/confirm.tsx");
 exports.default = react_redux_1.connect(function (state) { return ({
     entries: state.entries.entries,
     competitions: state.lookup.competitions,
-    records: state.lookup.records
+    records: state.lookup.records,
+    deleteEntryId: state.entries.deleteById
 }); }, function (dispatch) { return ({
     actions: redux_1.bindActionCreators(Actions.EntriesActions.ActionCreators, dispatch)
 }); })(/** @class */ (function (_super) {
@@ -1823,7 +2005,15 @@ exports.default = react_redux_1.connect(function (state) { return ({
                         title: "",
                         type: column_1.ColumnTypes.Button,
                         icon: "edit",
+                        width: "20px",
                         onClick: function (item) { return _this.props.actions.editEntry(item); }
+                    },
+                    {
+                        title: "",
+                        type: column_1.ColumnTypes.Button,
+                        icon: "trash-alt",
+                        width: "20px",
+                        onClick: function (item) { return _this.props.actions.selectToRemove(item.ratingEntryId); }
                     },
                     {
                         title: "П.І.П",
@@ -1849,9 +2039,14 @@ exports.default = react_redux_1.connect(function (state) { return ({
                         field: "eventDate",
                         width: "100px",
                         sortable: true
+                    },
+                    {
+                        title: "",
+                        width: "*"
                     }
                 ] }),
-            React.createElement(entry_modal_1.default, null));
+            React.createElement(entry_modal_1.default, null),
+            React.createElement(confirm_1.default, { title: "\u041F\u0456\u0434\u0442\u0432\u0435\u0440\u0434\u0456\u0442\u044C \u0432\u0438\u0434\u0430\u043B\u0435\u043D\u043D\u044F", text: "\u0412\u0438 \u0432\u043F\u0435\u0432\u043D\u0435\u043D\u0456 \u0449\u043E \u0445\u043E\u0447\u0435\u0442\u0435 \u0432\u0438\u0434\u0430\u043B\u0438\u0442\u0438 \u0446\u0435\u0439 \u0437\u0430\u043F\u0438\u0441?", show: !!this.props.deleteEntryId, onClose: function () { return _this.props.actions.cancelRemove(); }, onConfirm: function () { return _this.props.actions.deleteEntry(); } }));
     };
     return Entries;
 }(React.Component)));

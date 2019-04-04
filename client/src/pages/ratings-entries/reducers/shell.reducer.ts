@@ -5,7 +5,8 @@ export interface ShellState{
 }
 
 const defaultState = {
-    startDate: new Date(new Date().getFullYear(), 0, 1)
+    startDate: new Date(new Date().getFullYear(), 0, 1),
+    showConfirmDelete: false
 } as ShellState
 
 export type ReducerState = typeof defaultState;

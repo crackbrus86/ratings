@@ -19,6 +19,8 @@ class RecordService
 
     public function getAll()
     {
-        return $this->records;
+        $response = new ResponseModel();
+        $response->setResponseModel((object)["data" => $this->records, "status" => TRUE, "message" => NULL]);
+        return $response;
     }
 }

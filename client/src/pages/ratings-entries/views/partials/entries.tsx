@@ -6,11 +6,13 @@ import { ColumnModel, ColumnTypes } from "../../../../components/table/column";
 import * as Models from "../../models/index.models";
 import * as Actions from "../../actions/index.actions";
 import EntryModal from "../../modals/entry.modal";
+import Confirm from "../../../../components/confirm/confirm";
 
 interface StateProps{
     entries: Models.Entry[],
     competitions: Models.Competition[],
-    records: Models.Record[]
+    records: Models.Record[],
+    deleteEntryId?: number
 }
 
 interface DispatchProps{
@@ -21,7 +23,8 @@ export default connect<StateProps, DispatchProps>(
     (state: Models.StoreState): StateProps => ({
         entries: state.entries.entries,
         competitions: state.lookup.competitions,
-        records: state.lookup.records
+        records: state.lookup.records,
+        deleteEntryId: state.entries.deleteById
     }),
     (dispatch): DispatchProps => ({
         actions: bindActionCreators(Actions.EntriesActions.ActionCreators, dispatch)
@@ -52,7 +55,15 @@ export default connect<StateProps, DispatchProps>(
                         title: "",
                         type: ColumnTypes.Button,
                         icon: "edit",
+                        width: "20px",
                         onClick: (item: Models.Entry) => this.props.actions.editEntry(item)
+                    },
+                    {
+                        title: "",
+                        type: ColumnTypes.Button,
+                        icon: "trash-alt",
+                        width: "20px",
+                        onClick: (item: Models.Entry) => this.props.actions.selectToRemove(item.ratingEntryId)
                     },
                     {
                         title: "П.І.П",
@@ -78,10 +89,21 @@ export default connect<StateProps, DispatchProps>(
                         field: "eventDate",
                         width: "100px",
                         sortable: true
+                    },
+                    {
+                        title: "",
+                        width: "*"
                     }
                 ] as ColumnModel[]}
             />
             <EntryModal/>
+            <Confirm 
+                title="Підтвердіть видалення" 
+                text="Ви впевнені що хочете видалити цей запис?" 
+                show={!!this.props.deleteEntryId}
+                onClose={() => this.props.actions.cancelRemove()}
+                onConfirm={() => this.props.actions.deleteEntry()}
+            />  
         </div>
     }
 })

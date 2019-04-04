@@ -66,10 +66,10 @@ function addBlackOut() {
     if (!document.getElementsByClassName("blackout").length) {
         var blackOut = document.createElement("div");
         blackOut.className = "blackout";
-        blackOut.setAttribute("style", "position: absolute; top: 0; left: 0; bottom: 0; right: 0; background-color: #353535; opacity: 0.8;");
+        blackOut.setAttribute("style", "position: absolute; top: 0; left: 0; bottom: 0; right: 0; background-color: #353535; opacity: 0.8; z-index: 10001;");
         var spinner = document.createElement("i");
         spinner.className = "fas fa-atom fa-7x fa-spin";
-        spinner.setAttribute("style", "position: absolute; top: 50%; left: 50%; color: #81f4c5;");
+        spinner.setAttribute("style", "position: absolute; top: 50%; left: 50%; color: #81f4c5; z-index: 10002;");
         blackOut.appendChild(spinner);
         document.body.appendChild(blackOut);
     }

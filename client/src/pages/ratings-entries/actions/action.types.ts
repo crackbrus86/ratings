@@ -28,3 +28,10 @@ export const LOAD_ENTRIES = "ENTRIES::LOAD_ENTRIES";
 export type LOAD_ENTRIES_PAYLOAD = {
     entries: Models.Entry[]
 }
+
+export const SELECT_TO_REMOVE = "ENTRIES::SELECT_TO_REMOVE";
+export type SELECT_TO_REMOVE_PAYLOAD = {
+    id: number
+}
+
+export const CANCEL_REMOVE = "ENTRIES::CANCEL_REMOVE";

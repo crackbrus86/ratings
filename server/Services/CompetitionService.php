@@ -1,5 +1,6 @@
 <?php
 require_once "../Models/Competition.php";
+require_once "../core.php";
 
 class CompetitionService
 {
@@ -26,6 +27,8 @@ class CompetitionService
 
     function getAll()
     {
-        return $this->competitions;
+        $response = new ResponseModel();
+        $response->setResponseModel((object)["data" => $this->competitions, "status" => TRUE, "message" => NULL]);
+        return $response;
     }
 }

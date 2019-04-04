@@ -10,3 +10,7 @@ export interface RatingEntry{
 export interface GetEntries_Contract{
     year: number
 }
+
+export interface DeleteEntry_Contract{
+    ratingEntryId: number
+}

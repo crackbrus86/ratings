@@ -21,6 +21,7 @@ class PointService
 
     public function getAll()
     {
+        $response = new ResponseModel();
         $result = $this->db->get_results("SELECT * FROM $this->pointTableName");
         if(count($result))
         {
@@ -28,12 +29,17 @@ class PointService
                 array_push($this->points, new Point($point->PointId, $point->Target, $point->Value, $point->Place));
             }
         }
-        return $this->points;
+        $response->setResponseModel((object)["data" => $this->points, "status" => TRUE, "message" => NULL]);
+        return $response;
     }
 
     public function savePoint()
     {
-        if(!current_user_can("edit_others_pages")) return FALSE;
+        $response = new ResponseModel();
+        if(!current_user_can("edit_others_pages")) {
+            $response->setResponseModel((object)['status' => FALSE, 'message' => "У Вас недостатньо прав для створення записів!"]);
+            return $response;
+        }
         $point = new Point(intval(escape($_POST["pointId"])), escape($_POST["target"]), escape($_POST["value"]), escape($_POST["place"]));
         $sql = $this->db->prepare("SELECT COUNT(*) FROM $this->pointTableName WHERE PointId = %d OR (Target = %s AND Place = %d)", 
                                     $point->pointId, $point->target, $point->place);
@@ -47,7 +53,8 @@ class PointService
             $sql = $this->db->prepare("UPDATE $this->pointTableName SET Value = %d WHERE PointId = %d", $point->value, $point->pointId);
             $this->db->query($sql);
         }
-        return TRUE;
+        $response->setResponseModel((object)['status' => TRUE, 'message' => "Значення збережено!"]);
+        return $response;
     }
 
 }

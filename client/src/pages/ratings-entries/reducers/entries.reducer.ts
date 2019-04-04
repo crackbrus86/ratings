@@ -3,12 +3,14 @@ import * as Models from "../models/index.models";
 
 export interface EntriesState {
     entries: Models.Entry[],
-    currentEntry: Models.Entry
+    currentEntry: Models.Entry,
+    deleteById: number
 }
 
 const defaultState = {
     entries: [],
-    currentEntry: null
+    currentEntry: null,
+    deleteById: null
 } as EntriesState
 
 export type ReducerState = typeof defaultState;
@@ -43,6 +45,19 @@ export const entriesReducer = (state = defaultState, action): ReducerState => {
             return {
                 ...state,
                 entries: payload.entries
+            }
+        }
+        case ActionTypes.SELECT_TO_REMOVE: {
+            let payload = action.payload as ActionTypes.SELECT_TO_REMOVE_PAYLOAD;
+            return {
+                ...state,
+                deleteById: payload.id
+            }
+        }
+        case ActionTypes.CANCEL_REMOVE: {
+            return {
+                ...state,
+                deleteById: null
             }
         }
         default:

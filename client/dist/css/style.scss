@@ -13,6 +13,12 @@
     color: red;
     font-style: italic;
 }
+.confirm-body-text{
+    color: #d51515;
+    font-weight: 600;
+    padding: 4px;
+    font-size: 1em;
+}
 .form{
     .form-control{
         display: flex;
@@ -65,7 +71,7 @@
         position: absolute;
         background-color: #fff;
         min-width: 200px;
-        min-height: 200px;
+        min-height: 128px;
         top: 50%;
         left: 50%;
 
@@ -174,7 +180,6 @@
     .tab-content{
         display: flex;
         flex-direction: row;
-        margin-right: 20px;
         background-color: #fff;
         box-shadow: 1px 1px 1px 0px #ccc;
         border-left: 1px solid #ccc;
@@ -248,6 +253,8 @@
     }
 }
 .entries{
+    width: 100%;
+    
     .create-button{
         margin: 8px;
         border: none;
@@ -262,4 +269,19 @@
             background-color: #19d37e;
         }
     }
+}
+.layout-header{
+    background-color: #009688;
+    padding: 4px;
+    display: flex;
+    flex-direction: row;
+
+    label{
+        display: flex;
+        flex-direction: column;
+        color: #fff;
+        margin: 4px 8px 4px 0px;
+        font-weight: bold;
+    }
+
 }

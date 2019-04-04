@@ -74,7 +74,17 @@ export namespace ActionCreators{
     export const saveEntry = () => (d, gs: () => Models.StoreState) => {
         let entry: Models.Entry = gs().entries.currentEntry;
         if(entry.ratingEntryId){
-
+            Services.updateEntry({
+                ...entry
+            }).then((response) => {
+                if(response.status){
+                    toastr.success(response.message);
+                    d(closeEntry());
+                    d(getEntries());
+                }else{
+                    toastr.error(response.message);
+                }
+            })
         }else{
             Services.createEntry({
                 ...entry,
@@ -83,6 +93,7 @@ export namespace ActionCreators{
                 if(response.status){
                     toastr.success(response.message);
                     d(closeEntry());
+                    d(getEntries());
                 }else{
                     toastr.error(response.message);
                 }
@@ -103,5 +114,30 @@ export namespace ActionCreators{
                 toastr.error(response.message);
             }
         });
+    }
+
+    export const deleteEntry = () => (d, gs: () => Models.StoreState) => {
+        Services.deleteEntry({
+            ratingEntryId: gs().entries.deleteById
+        }).then((response) => {
+            if(response.status){
+                toastr.success(response.message);
+                d(cancelRemove());
+                d(getEntries());
+            }else{
+                toastr.error(response.message);
+            }
+        })
+    }
+
+    export const selectToRemove = (id: number) => (d) => {
+        d({
+            type: ActionTypes.SELECT_TO_REMOVE,
+            payload: <ActionTypes.SELECT_TO_REMOVE_PAYLOAD>{id}
+        })
+    }
+
+    export const cancelRemove = () => (d) => {
+        d({type: ActionTypes.CANCEL_REMOVE});
     }
 }

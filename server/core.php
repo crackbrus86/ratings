@@ -1,38 +1,91 @@
 <?php
-function createResponse($data, $status = true, $message = "")
+function createResponse(ResponseModel $response)
 {
-    $response = getResponseModel();
-    $response->status = $status;
-    $response->message = $message;
-    $response->data = $data;
     echo json_encode($response);
 }
 
-function escape($string){
+function escape($string)
+{
     return strip_tags(stripslashes($string));
 }
 
-function dispatchDate($dateString){
-    return substr($_POST["eventDate"], 0, strpos($_POST["eventDate"], '('));
+function dispatchDate($dateString)
+{
+    return substr($dateString, 0, strpos($dateString, '00:00:00') + 8);
 }
 
-function convertToDate($dateString){
+function convertToDate($dateString)
+{
     return date('Y-m-d', strtotime(dispatchDate($dateString)));
 }
 
-function reverseDate($date){
+function reverseDate($date)
+{
     return date('m-d-Y', strtotime($date));
 }
 
-function convertToDateYear($dateString){
+function convertToDateYear($dateString)
+{
     return date('Y', strtotime(dispatchDate($dateString)));
 }
 
-function getResponseModel(){
-    $response = new stdClass();
-    $response->status = TRUE;
-    $response->message = NULL;
-    $response->data = NULL;
-    return $response;
+class ResponseModel
+{
+
+    public $status;
+
+    public $message;
+
+    public $data;
+
+    public function __construct()
+    {
+        $this->status = FALSE;
+
+        $this->data = NULL;
+
+        $this->message = NULL;
+    }
+
+    public function setResponseModel(stdClass $response)
+    {
+        $this->status = $response->status;
+
+        $this->data = $response->data;
+
+        $this->message = $response->message;
+    }
+}
+
+function mapPostToObject($object = NULL)
+{
+    if(!is_object($object))
+    {
+        $object = new stdClass();
+    }
+
+    foreach ($_POST as $key => $value) 
+    {
+        $object->{$key} = escape($value);
+    }
+
+    return $object;
+}
+
+function mapMySQLResultToObject($result, $object)
+{
+    if(!is_object($result)) return;
+
+    if(!is_object($object))
+    {
+        $object = new stdClass();
+    }
+
+    foreach ($result as $key => $value) 
+    {
+        $object->{lcfirst($key)} = $value;
+    }
+
+    return $object;
 }
 ?>
