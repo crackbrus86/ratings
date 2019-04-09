@@ -37,7 +37,7 @@ class PointService
     {
         $response = new ResponseModel();
         if(!current_user_can("edit_others_pages")) {
-            $response->setResponseModel((object)['status' => FALSE, 'message' => "У Вас недостатньо прав для створення записів!"]);
+            $response->setResponseModel((object)['status' => FALSE, 'message' => "У Вас недостатньо прав для збереження даних!"]);
             return $response;
         }
         $point = new Point(intval(escape($_POST["pointId"])), escape($_POST["target"]), escape($_POST["value"]), escape($_POST["place"]));

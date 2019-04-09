@@ -3,12 +3,14 @@ import * as Models from "../models/index.models";
 
 export interface LookupState{
     competitions: Models.Competition[],
-    records: Models.Record[]
+    records: Models.Record[],
+    names: string[]
 }
 
 const defaultState = {
     competitions: [],
-    records: []
+    records: [],
+    names: []
 } as LookupState
 
 export type ReducerState = typeof defaultState;
@@ -27,6 +29,13 @@ export const lookupReducer = (state = defaultState, action): ReducerState => {
             return {
                 ...state,
                 records: payload.records
+            }
+        }
+        case ActionTypes.LOAD_NAMES: {
+            let payload = action.payload as ActionTypes.LOAD_NAMES_PAYLOAD;
+            return {
+                ...state,
+                names: payload
             }
         }
         default:

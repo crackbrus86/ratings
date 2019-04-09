@@ -34,10 +34,12 @@ class Table extends React.PureComponent<TableProps, TableState>{
 
     sortingMethod = (itemA, itemB) => {
         let field = this.state.sortField;
-        if(itemA[field] instanceof Number && itemB[field] instanceof Number)
+        var collator = new Intl.Collator('ua');
+
+        if(!(itemA[field].indexOf('-') > -1) && !(itemA[field].indexOf('-') > -1) && !isNaN(parseFloat(itemA[field])) && !isNaN(parseFloat(itemB[field])))
             return this.state.sortAsc ? itemA[field] - itemB[field] : itemB[field] - itemA[field];
         else
-            return this.state.sortAsc ? (itemA[field] < itemB[field] ? -1 : itemA[field] > itemB[field] ? 1 : 0 ) : (itemA[field] > itemB[field] ? -1 : itemA[field] < itemB[field] ? 1 : 0 )
+            return this.state.sortAsc ? collator.compare(itemA[field], itemB[field]) : collator.compare(itemB[field], itemA[field]);
     }
 
     onChangeSorting = (field: string, asc: boolean) => {

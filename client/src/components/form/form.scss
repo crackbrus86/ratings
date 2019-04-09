@@ -19,3 +19,19 @@
         }
     }
 }
+.autocomplete{
+    position: absolute;
+    background-color: #fff;
+    z-index: 10002;
+    box-shadow: 0 0 4px 0px #ddd;
+    padding: 4px;
+    margin: 28px 0;
+    max-height: 200px;
+    overflow-y: auto;
+
+    ul{
+        li{
+            cursor: pointer;
+        }
+    }
+}

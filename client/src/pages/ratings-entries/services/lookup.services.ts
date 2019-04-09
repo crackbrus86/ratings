@@ -17,3 +17,10 @@ export const getRecords = () => {
         type: apiTypes.GET
     });
 }
+
+export const getNames = () => {
+    return CallApi.callApi({
+        url: lookupApiPath + 'GetAllNames.php',
+        type: apiTypes.GET
+    });
+}

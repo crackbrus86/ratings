@@ -132,6 +132,61 @@ exports.default = Confirm;
 
 /***/ }),
 
+/***/ "./client/src/components/form/autocomplete.tsx":
+/*!*****************************************************!*\
+  !*** ./client/src/components/form/autocomplete.tsx ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var ReactDOM = __webpack_require__(/*! react-dom */ "react-dom");
+var root = document.body;
+var Autocomplete = /** @class */ (function (_super) {
+    __extends(Autocomplete, _super);
+    function Autocomplete(props) {
+        var _this = _super.call(this, props) || this;
+        _this.getItemsList = function () {
+            return React.createElement("ul", null, _this.props.items.map(function (item, index) { return React.createElement("li", { key: index, onClick: function (e) { return _this.props.chooseItem(item); } }, item); }));
+        };
+        _this.window = document.createElement("div");
+        _this.window.className = "autocomplete";
+        _this.window.style.top = _this.props.top + "px";
+        _this.window.style.left = _this.props.left + "px";
+        return _this;
+    }
+    Autocomplete.prototype.componentDidMount = function () {
+        root.appendChild(this.window);
+    };
+    Autocomplete.prototype.componentWillUnmount = function () {
+        root.removeChild(this.window);
+    };
+    Autocomplete.prototype.render = function () {
+        return ReactDOM.createPortal(this.getItemsList(), this.window);
+    };
+    return Autocomplete;
+}(React.Component));
+exports.default = Autocomplete;
+
+
+/***/ }),
+
 /***/ "./client/src/components/form/datepicker.tsx":
 /*!***************************************************!*\
   !*** ./client/src/components/form/datepicker.tsx ***!
@@ -347,17 +402,53 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+var autocomplete_1 = __webpack_require__(/*! ./autocomplete */ "./client/src/components/form/autocomplete.tsx");
+var doc = document;
 var TextInput = /** @class */ (function (_super) {
     __extends(TextInput, _super);
     function TextInput(props) {
-        return _super.call(this, props) || this;
+        var _this = _super.call(this, props) || this;
+        _this.unsetAsFocused = function (e) {
+            if (!e.defaultPrevented)
+                _this.setState({ isFocused: false });
+        };
+        _this.setAsFocused = function (e) {
+            e.preventDefault();
+            _this.setState({ isFocused: true });
+        };
+        _this.getAutocompleteOffset = function () {
+            if (!_this.inputObject)
+                return { top: 0, left: 0 };
+            var rect = _this.inputObject.getBoundingClientRect();
+            var scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+            var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+            return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
+        };
+        _this.sortLargeStringArray = function (array, locale) {
+            var collator = new Intl.Collator(locale);
+            return array.sort(collator.compare);
+        };
+        _this.state = {
+            isFocused: false
+        };
+        doc.addEventListener("click", function (e) { return _this.unsetAsFocused(e); });
+        return _this;
     }
+    TextInput.prototype.componentWillUnmount = function () {
+        var _this = this;
+        doc.removeEventListener('click', function (e) { return _this.unsetAsFocused(e); });
+    };
     TextInput.prototype.render = function () {
         var _this = this;
+        var autocompleteItems = !this.props.autocomplete ? [] : this.props.autocompleteItems.filter(function (x) { return x.toLowerCase().includes(_this.props.value.toLowerCase()); });
+        autocompleteItems = this.sortLargeStringArray(autocompleteItems, 'ua');
+        var offset = this.getAutocompleteOffset();
         return React.createElement(React.Fragment, null,
             React.createElement("div", { className: classnames('form-control', 'text-input', { 'validation-error': this.props.validation && !this.props.validation.isValid }) },
                 this.props.label && React.createElement("label", null, this.props.label),
-                React.createElement("input", { type: "text", value: this.props.value, onChange: function (e) { return _this.props.onChange(e.target.value); } })),
+                React.createElement("input", { type: "text", value: this.props.value, ref: function (c) { return _this.inputObject = c; }, onKeyUp: function (e) { return _this.setAsFocused(e); }, onChange: function (e) { return _this.props.onChange(e.target.value); } }),
+                !!autocompleteItems.length &&
+                    this.state.isFocused && React.createElement(autocomplete_1.default, { items: autocompleteItems, top: offset.top, left: offset.left, chooseItem: this.props.onChange })),
             this.props.validation && !this.props.validation.isValid &&
                 React.createElement("span", { className: "validation-error-message" }, this.props.validation.message));
     };
@@ -979,10 +1070,11 @@ var Table = /** @class */ (function (_super) {
         };
         _this.sortingMethod = function (itemA, itemB) {
             var field = _this.state.sortField;
-            if (itemA[field] instanceof Number && itemB[field] instanceof Number)
+            var collator = new Intl.Collator('ua');
+            if (!(itemA[field].indexOf('-') > -1) && !(itemA[field].indexOf('-') > -1) && !isNaN(parseFloat(itemA[field])) && !isNaN(parseFloat(itemB[field])))
                 return _this.state.sortAsc ? itemA[field] - itemB[field] : itemB[field] - itemA[field];
             else
-                return _this.state.sortAsc ? (itemA[field] < itemB[field] ? -1 : itemA[field] > itemB[field] ? 1 : 0) : (itemA[field] > itemB[field] ? -1 : itemA[field] < itemB[field] ? 1 : 0);
+                return _this.state.sortAsc ? collator.compare(itemA[field], itemB[field]) : collator.compare(itemB[field], itemA[field]);
         };
         _this.onChangeSorting = function (field, asc) {
             _this.setState({ sortField: field, sortAsc: asc });
@@ -1111,6 +1203,7 @@ exports.UPDATE_ENTRY = "ENTRIES::UPDATE_ENTRY";
 exports.LOAD_ENTRIES = "ENTRIES::LOAD_ENTRIES";
 exports.SELECT_TO_REMOVE = "ENTRIES::SELECT_TO_REMOVE";
 exports.CANCEL_REMOVE = "ENTRIES::CANCEL_REMOVE";
+exports.LOAD_NAMES = "ENTRIES::LOAD_NAMES";
 
 
 /***/ }),
@@ -1139,6 +1232,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var ActionTypes = __webpack_require__(/*! ./action.types */ "./client/src/pages/ratings-entries/actions/action.types.ts");
 var Models = __webpack_require__(/*! ../models/index.models */ "./client/src/pages/ratings-entries/models/index.models.ts");
 var Services = __webpack_require__(/*! ../services/entry.services */ "./client/src/pages/ratings-entries/services/entry.services.ts");
+var Actions = __webpack_require__(/*! ./index.actions */ "./client/src/pages/ratings-entries/actions/index.actions.ts");
 var toastr = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
 toastr.options.timeOut = 5000;
 var ActionCreators;
@@ -1236,6 +1330,7 @@ var ActionCreators;
                     type: ActionTypes.LOAD_ENTRIES,
                     payload: { entries: response.data }
                 });
+                d(Actions.LookupActions.ActionCreators.loadNames());
             }
             else {
                 toastr.error(response.message);
@@ -1329,6 +1424,16 @@ var ActionCreators;
             }
         });
     }; };
+    ActionCreators.loadNames = function () { return function (d, gs) {
+        Services.getNames().then(function (response) {
+            if (response.status) {
+                d({
+                    type: ActionTypes.LOAD_NAMES,
+                    payload: response.data
+                });
+            }
+        });
+    }; };
 })(ActionCreators = exports.ActionCreators || (exports.ActionCreators = {}));
 
 
@@ -1412,7 +1517,8 @@ var form_1 = __webpack_require__(/*! ../../../components/form/form */ "./client/
 exports.default = react_redux_1.connect(function (state) { return ({
     entry: state.entries.currentEntry,
     events: Selectors.EntrySelector.eventList(state),
-    validation: Selectors.EntrySelector.validation(state)
+    validation: Selectors.EntrySelector.validation(state),
+    names: state.lookup.names
 }); }, function (dispatch) { return ({
     actions: redux_1.bindActionCreators(Actions.EntriesActions.ActionCreators, dispatch)
 }); })(/** @class */ (function (_super) {
@@ -1438,7 +1544,7 @@ exports.default = react_redux_1.connect(function (state) { return ({
             React.createElement(modal_1.default.Body, null,
                 React.createElement("div", { style: { width: '395px' } },
                     React.createElement(form_1.default, null,
-                        React.createElement(form_1.default.TextInput, { label: "\u041F\u0440\u0456\u0437\u0432\u0438\u0449\u0435, \u0406\u043C'\u044F \u0441\u043F\u043E\u0440\u0442\u0441\u043C\u0435\u043D\u0430", value: this.props.entry.fullname, validation: this.props.validation.isFullNameValid, onChange: function (value) { return _this.props.actions.updateEntry("fullname", value); } }),
+                        React.createElement(form_1.default.TextInput, { label: "\u041F\u0440\u0456\u0437\u0432\u0438\u0449\u0435, \u0406\u043C'\u044F \u0441\u043F\u043E\u0440\u0442\u0441\u043C\u0435\u043D\u0430", value: this.props.entry.fullname, validation: this.props.validation.isFullNameValid, autocomplete: true, autocompleteItems: this.props.names, onChange: function (value) { return _this.props.actions.updateEntry("fullname", value); } }),
                         React.createElement(form_1.default.RadioButton, { label: "\u0422\u0438\u043F \u0437\u0430\u043F\u0438\u0441\u0443", value: this.props.entry.type, name: "RecordType", buttons: [{ label: "Призове місце", value: Models.EntryType.Place }, { label: "Рекорд", value: Models.EntryType.Record }], onChange: function (value) { return _this.props.actions.updateEntry("type", value); } }),
                         React.createElement(form_1.default.Select, { label: this.props.entry.type == Models.EntryType.Place ? "Змагання" : "Рекорд", options: this.props.events, validation: this.props.validation.isEventValid, value: this.props.entry.event, onChange: function (value) { return _this.props.actions.updateEntry("event", value); } }),
                         this.props.entry.type == Models.EntryType.Place &&
@@ -1610,7 +1716,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var ActionTypes = __webpack_require__(/*! ../actions/action.types */ "./client/src/pages/ratings-entries/actions/action.types.ts");
 var defaultState = {
     competitions: [],
-    records: []
+    records: [],
+    names: []
 };
 exports.lookupReducer = function (state, action) {
     if (state === void 0) { state = defaultState; }
@@ -1622,6 +1729,10 @@ exports.lookupReducer = function (state, action) {
         case ActionTypes.LOAD_RECORDS: {
             var payload = action.payload;
             return __assign({}, state, { records: payload.records });
+        }
+        case ActionTypes.LOAD_NAMES: {
+            var payload = action.payload;
+            return __assign({}, state, { names: payload });
         }
         default:
             return state;
@@ -1811,6 +1922,12 @@ exports.getCompetitions = function () {
 exports.getRecords = function () {
     return CallApi.callApi({
         url: lookupApiPath + 'GetRecordsLookup.php',
+        type: apiTypes.GET
+    });
+};
+exports.getNames = function () {
+    return CallApi.callApi({
+        url: lookupApiPath + 'GetAllNames.php',
         type: apiTypes.GET
     });
 };

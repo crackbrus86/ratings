@@ -452,10 +452,11 @@ var Table = /** @class */ (function (_super) {
         };
         _this.sortingMethod = function (itemA, itemB) {
             var field = _this.state.sortField;
-            if (itemA[field] instanceof Number && itemB[field] instanceof Number)
+            var collator = new Intl.Collator('ua');
+            if (!(itemA[field].indexOf('-') > -1) && !(itemA[field].indexOf('-') > -1) && !isNaN(parseFloat(itemA[field])) && !isNaN(parseFloat(itemB[field])))
                 return _this.state.sortAsc ? itemA[field] - itemB[field] : itemB[field] - itemA[field];
             else
-                return _this.state.sortAsc ? (itemA[field] < itemB[field] ? -1 : itemA[field] > itemB[field] ? 1 : 0) : (itemA[field] > itemB[field] ? -1 : itemA[field] < itemB[field] ? 1 : 0);
+                return _this.state.sortAsc ? collator.compare(itemA[field], itemB[field]) : collator.compare(itemB[field], itemA[field]);
         };
         _this.onChangeSorting = function (field, asc) {
             _this.setState({ sortField: field, sortAsc: asc });

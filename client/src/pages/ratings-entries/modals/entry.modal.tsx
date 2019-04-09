@@ -11,7 +11,8 @@ import {SelectOption} from "../../../components/form/select"
 interface StateProps{
     entry: Models.Entry,
     events: SelectOption[],
-    validation: Selectors.EntrySelector.EntryValidationResult
+    validation: Selectors.EntrySelector.EntryValidationResult,
+    names: string[]
 }
 
 interface DispatchProps{
@@ -22,7 +23,8 @@ export default connect<StateProps, DispatchProps>(
     (state: Models.StoreState): StateProps => ({
         entry: state.entries.currentEntry,
         events: Selectors.EntrySelector.eventList(state),
-        validation: Selectors.EntrySelector.validation(state)
+        validation: Selectors.EntrySelector.validation(state),
+        names: state.lookup.names
     }),
     (dispatch): DispatchProps => ({
         actions: bindActionCreators(Actions.EntriesActions.ActionCreators, dispatch)
@@ -53,6 +55,8 @@ export default connect<StateProps, DispatchProps>(
                         label="Прізвище, Ім'я спортсмена" 
                         value={this.props.entry.fullname} 
                         validation={this.props.validation.isFullNameValid}
+                        autocomplete={true}
+                        autocompleteItems={this.props.names}
                         onChange={(value) => this.props.actions.updateEntry("fullname", value)} 
                     />
                     <Form.RadioButton 

@@ -60,7 +60,7 @@ class EntryService
 
         if(!current_user_can("edit_others_pages"))
         {
-            $response->setResponseModel((object)['status' => FALSE, 'message' => "У Вас недостатньо прав для створення записів!"]);
+            $response->setResponseModel((object)['status' => FALSE, 'message' => "У Вас недостатньо прав для редагуваня записів!"]);
 
             return $response;
         } 
@@ -92,7 +92,7 @@ class EntryService
 
         if(!current_user_can("edit_others_pages")) 
         {
-            $response->setResponseModel((object)['status' => FALSE, 'message' => "У Вас недостатньо прав для створення записів!"]);
+            $response->setResponseModel((object)['status' => FALSE, 'message' => "У Вас недостатньо прав для отримання записів!"]);
 
             return $response;
         }
@@ -124,7 +124,7 @@ class EntryService
 
         if(!current_user_can("edit_others_pages")) 
         {
-            $response->setResponseModel((object)['status' => FALSE, 'message' => "У Вас недостатньо прав для створення записів!"]);
+            $response->setResponseModel((object)['status' => FALSE, 'message' => "У Вас недостатньо прав для видалення записів!"]);
 
             return $response;
         }

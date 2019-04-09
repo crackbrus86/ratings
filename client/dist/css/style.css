@@ -30,6 +30,18 @@
   .form .form-control.radio-button .radio-button-input {
     height: 32px; }
 
+.autocomplete {
+  position: absolute;
+  background-color: #fff;
+  z-index: 10002;
+  box-shadow: 0 0 4px 0px #ddd;
+  padding: 4px;
+  margin: 28px 0;
+  max-height: 200px;
+  overflow-y: auto; }
+  .autocomplete ul li {
+    cursor: pointer; }
+
 .grid-row {
   display: flex;
   flex-direction: row;

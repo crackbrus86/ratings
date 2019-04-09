@@ -33,4 +33,15 @@ export namespace ActionCreators{
             }
         })
     }
+
+    export const loadNames = () => (d, gs: () => Models.StoreState) => {
+        Services.getNames().then((response) => {
+            if(response.status){
+                d({
+                    type: ActionTypes.LOAD_NAMES,
+                    payload: <ActionTypes.LOAD_NAMES_PAYLOAD> response.data
+                })
+            }
+        })
+    }
 }

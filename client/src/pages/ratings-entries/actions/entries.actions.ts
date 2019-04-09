@@ -1,6 +1,7 @@
 import * as ActionTypes from "./action.types";
 import * as Models from "../models/index.models";
 import * as Services from "../services/entry.services";
+import * as Actions from "./index.actions"
 import * as toastr from "toastr";
 toastr.options.timeOut = 5000;
 
@@ -110,6 +111,7 @@ export namespace ActionCreators{
                     type: ActionTypes.LOAD_ENTRIES,
                     payload: <ActionTypes.LOAD_ENTRIES_PAYLOAD>{ entries: response.data }
                 });
+                d(Actions.LookupActions.ActionCreators.loadNames())
             }else{
                 toastr.error(response.message);
             }

@@ -35,3 +35,6 @@ export type SELECT_TO_REMOVE_PAYLOAD = {
 }
 
 export const CANCEL_REMOVE = "ENTRIES::CANCEL_REMOVE";
+
+export const LOAD_NAMES = "ENTRIES::LOAD_NAMES";
+export type LOAD_NAMES_PAYLOAD = string[]
