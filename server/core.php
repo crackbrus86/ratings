@@ -6,7 +6,7 @@ function createResponse(ResponseModel $response)
 
 function escape($string)
 {
-    return strip_tags(stripslashes($string));
+    return trim(strip_tags(stripslashes($string)));
 }
 
 function dispatchDate($dateString)

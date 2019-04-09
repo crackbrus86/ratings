@@ -452,8 +452,8 @@ var Table = /** @class */ (function (_super) {
         };
         _this.sortingMethod = function (itemA, itemB) {
             var field = _this.state.sortField;
-            var collator = new Intl.Collator('ua');
-            if (!(itemA[field].indexOf('-') > -1) && !(itemA[field].indexOf('-') > -1) && !isNaN(parseFloat(itemA[field])) && !isNaN(parseFloat(itemB[field])))
+            var collator = new Intl.Collator();
+            if (!(itemA[field] instanceof String && itemA[field].indexOf('-') > -1) && !(itemB[field] instanceof String && itemA[field].indexOf('-') > -1) && !isNaN(parseFloat(itemA[field])) && !isNaN(parseFloat(itemB[field])))
                 return _this.state.sortAsc ? itemA[field] - itemB[field] : itemB[field] - itemA[field];
             else
                 return _this.state.sortAsc ? collator.compare(itemA[field], itemB[field]) : collator.compare(itemB[field], itemA[field]);
@@ -549,7 +549,7 @@ function addBlackOut() {
     if (!document.getElementsByClassName("blackout").length) {
         var blackOut = document.createElement("div");
         blackOut.className = "blackout";
-        blackOut.setAttribute("style", "position: absolute; top: 0; left: 0; bottom: 0; right: 0; background-color: #353535; opacity: 0.8; z-index: 10001;");
+        blackOut.setAttribute("style", "position: fixed; top: 0; left: 0; bottom: 0; right: 0; background-color: #353535; opacity: 0.8; z-index: 10001;");
         var spinner = document.createElement("i");
         spinner.className = "fas fa-atom fa-7x fa-spin";
         spinner.setAttribute("style", "position: absolute; top: 50%; left: 50%; color: #81f4c5; z-index: 10002;");

@@ -57,14 +57,14 @@ class TextInput extends React.Component<TextInputProps, TextInputState>{
         return { top: rect.top + scrollTop, left: rect.left + scrollLeft }
     }
 
-    sortLargeStringArray = (array, locale) => {
-        var collator = new Intl.Collator(locale);
+    sortLargeStringArray = (array) => {
+        var collator = new Intl.Collator();
         return array.sort(collator.compare);
     }
 
     render(){
         let autocompleteItems = !this.props.autocomplete ? [] : this.props.autocompleteItems.filter(x => x.toLowerCase().includes(this.props.value.toLowerCase()));
-        autocompleteItems = this.sortLargeStringArray(autocompleteItems, 'ua');
+        autocompleteItems = this.sortLargeStringArray(autocompleteItems);
         var offset = this.getAutocompleteOffset();
         return <>
             <div className={classnames('form-control', 'text-input', {'validation-error': this.props.validation && !this.props.validation.isValid})}>

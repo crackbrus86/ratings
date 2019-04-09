@@ -32,7 +32,7 @@ class NameService
             return $response;
         }
 
-        $results = $this->db->get_results("SELECT Fullname FROM $this->tableName");
+        $results = $this->db->get_results("SELECT DISTINCT Fullname FROM $this->tableName");
 
         if(count($results))
         {
