@@ -1204,6 +1204,7 @@ exports.LOAD_ENTRIES = "ENTRIES::LOAD_ENTRIES";
 exports.SELECT_TO_REMOVE = "ENTRIES::SELECT_TO_REMOVE";
 exports.CANCEL_REMOVE = "ENTRIES::CANCEL_REMOVE";
 exports.LOAD_NAMES = "ENTRIES::LOAD_NAMES";
+exports.LOAD_UPF_RATINGS = "RATINGS::LOAD_UPF_RATINGS";
 
 
 /***/ }),
@@ -1378,6 +1379,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ShellActions = __webpack_require__(/*! ./shell.actions */ "./client/src/pages/ratings-entries/actions/shell.actions.ts");
 exports.LookupActions = __webpack_require__(/*! ./lookup.actions */ "./client/src/pages/ratings-entries/actions/lookup.actions.ts");
 exports.EntriesActions = __webpack_require__(/*! ./entries.actions */ "./client/src/pages/ratings-entries/actions/entries.actions.ts");
+exports.RatingsActions = __webpack_require__(/*! ./ratings.actions */ "./client/src/pages/ratings-entries/actions/ratings.actions.ts");
 
 
 /***/ }),
@@ -1439,6 +1441,42 @@ var ActionCreators;
 
 /***/ }),
 
+/***/ "./client/src/pages/ratings-entries/actions/ratings.actions.ts":
+/*!*********************************************************************!*\
+  !*** ./client/src/pages/ratings-entries/actions/ratings.actions.ts ***!
+  \*********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ActionTypes = __webpack_require__(/*! ./action.types */ "./client/src/pages/ratings-entries/actions/action.types.ts");
+var Services = __webpack_require__(/*! ../services/ratings.services */ "./client/src/pages/ratings-entries/services/ratings.services.ts");
+var toastr = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
+toastr.options.timeOut = 5000;
+var ActionCreators;
+(function (ActionCreators) {
+    ActionCreators.loadUPFRatings = function () { return function (d, gs) {
+        Services.getUPFRatings({
+            year: gs().shell.startDate.getFullYear()
+        }).then(function (response) {
+            if (response.status) {
+                d({
+                    type: ActionTypes.LOAD_UPF_RATINGS,
+                    payload: response.data
+                });
+            }
+            else {
+                toastr.error(response.message);
+            }
+        });
+    }; };
+})(ActionCreators = exports.ActionCreators || (exports.ActionCreators = {}));
+
+
+/***/ }),
+
 /***/ "./client/src/pages/ratings-entries/actions/shell.actions.ts":
 /*!*******************************************************************!*\
   !*** ./client/src/pages/ratings-entries/actions/shell.actions.ts ***!
@@ -1459,6 +1497,7 @@ var ActionCreators;
             payload: date
         });
         d(Actions.EntriesActions.ActionCreators.getEntries());
+        d(Actions.RatingsActions.ActionCreators.loadUPFRatings());
     }; };
 })(ActionCreators = exports.ActionCreators || (exports.ActionCreators = {}));
 
@@ -1585,6 +1624,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EntryModels = __webpack_require__(/*! ./entry.models */ "./client/src/pages/ratings-entries/models/entry.models.ts");
 exports.LookupModels = __webpack_require__(/*! ./lookup.models */ "./client/src/pages/ratings-entries/models/lookup.models.ts");
+exports.RatingModels = __webpack_require__(/*! ./rating.models */ "./client/src/pages/ratings-entries/models/rating.models.ts");
 var EntryType;
 (function (EntryType) {
     EntryType["Place"] = "place";
@@ -1597,6 +1637,20 @@ var EntryType;
 /***/ "./client/src/pages/ratings-entries/models/lookup.models.ts":
 /*!******************************************************************!*\
   !*** ./client/src/pages/ratings-entries/models/lookup.models.ts ***!
+  \******************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+/***/ }),
+
+/***/ "./client/src/pages/ratings-entries/models/rating.models.ts":
+/*!******************************************************************!*\
+  !*** ./client/src/pages/ratings-entries/models/rating.models.ts ***!
   \******************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -1683,10 +1737,12 @@ var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js
 exports.Shell = __webpack_require__(/*! ./shell.reducer */ "./client/src/pages/ratings-entries/reducers/shell.reducer.ts");
 exports.Lookup = __webpack_require__(/*! ./lookup.reducer */ "./client/src/pages/ratings-entries/reducers/lookup.reducer.ts");
 exports.Entries = __webpack_require__(/*! ./entries.reducer */ "./client/src/pages/ratings-entries/reducers/entries.reducer.ts");
+exports.Ratings = __webpack_require__(/*! ./ratings.reducer */ "./client/src/pages/ratings-entries/reducers/ratings.reducer.ts");
 exports.reducer = redux_1.combineReducers({
     shell: exports.Shell.shellReducer,
     lookup: exports.Lookup.lookupReducer,
-    entries: exports.Entries.entriesReducer
+    entries: exports.Entries.entriesReducer,
+    ratings: exports.Ratings.ratingsReducer
 });
 
 
@@ -1733,6 +1789,46 @@ exports.lookupReducer = function (state, action) {
         case ActionTypes.LOAD_NAMES: {
             var payload = action.payload;
             return __assign({}, state, { names: payload });
+        }
+        default:
+            return state;
+    }
+};
+
+
+/***/ }),
+
+/***/ "./client/src/pages/ratings-entries/reducers/ratings.reducer.ts":
+/*!**********************************************************************!*\
+  !*** ./client/src/pages/ratings-entries/reducers/ratings.reducer.ts ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var ActionTypes = __webpack_require__(/*! ../actions/action.types */ "./client/src/pages/ratings-entries/actions/action.types.ts");
+var defaultState = {
+    upfRatings: []
+};
+exports.ratingsReducer = function (state, action) {
+    if (state === void 0) { state = defaultState; }
+    switch (action.type) {
+        case ActionTypes.LOAD_UPF_RATINGS: {
+            var payload = action.payload;
+            return __assign({}, state, { upfRatings: payload });
         }
         default:
             return state;
@@ -1935,6 +2031,30 @@ exports.getNames = function () {
 
 /***/ }),
 
+/***/ "./client/src/pages/ratings-entries/services/ratings.services.ts":
+/*!***********************************************************************!*\
+  !*** ./client/src/pages/ratings-entries/services/ratings.services.ts ***!
+  \***********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var CallApi = __webpack_require__(/*! ../../../infrastructure/call.api */ "./client/src/infrastructure/call.api.ts");
+var ratingsApiPath = "../wp-content/plugins/ratings/server/RatingController/";
+var apiTypes = CallApi.RequestTypes;
+exports.getUPFRatings = function (contract) {
+    return CallApi.callApi({
+        url: ratingsApiPath + 'GetUPFRatings.php',
+        type: apiTypes.GET,
+        data: contract
+    });
+};
+
+
+/***/ }),
+
 /***/ "./client/src/pages/ratings-entries/startup.tsx":
 /*!******************************************************!*\
   !*** ./client/src/pages/ratings-entries/startup.tsx ***!
@@ -2031,6 +2151,7 @@ var tab_view_1 = __webpack_require__(/*! ../../../components/tab view/tab.view *
 var tab_1 = __webpack_require__(/*! ../../../components/tab view/tab */ "./client/src/components/tab view/tab.tsx");
 var layout_header_1 = __webpack_require__(/*! ./partials/layout.header */ "./client/src/pages/ratings-entries/views/partials/layout.header.tsx");
 var entries_1 = __webpack_require__(/*! ./partials/entries */ "./client/src/pages/ratings-entries/views/partials/entries.tsx");
+var ratings_1 = __webpack_require__(/*! ./partials/ratings */ "./client/src/pages/ratings-entries/views/partials/ratings.tsx");
 var index_layout_1 = __webpack_require__(/*! ../../../components/layout/index.layout */ "./client/src/components/layout/index.layout.tsx");
 exports.default = react_redux_1.connect(function (state) { return ({}); }, function (dispatch) { return ({}); })(/** @class */ (function (_super) {
     __extends(Layout, _super);
@@ -2043,7 +2164,8 @@ exports.default = react_redux_1.connect(function (state) { return ({}); }, funct
             React.createElement(tab_view_1.default, null,
                 React.createElement(tab_1.default, { title: "\u0417\u0430\u043F\u0438\u0441\u0438", label: "ratingEntries" },
                     React.createElement(entries_1.default, null)),
-                React.createElement(tab_1.default, { title: "\u0420\u0435\u0439\u0442\u0438\u043D\u0433\u0438 \u0424\u041F\u0423", label: "fpuRatings" })));
+                React.createElement(tab_1.default, { title: "\u0420\u0435\u0439\u0442\u0438\u043D\u0433\u0438 \u0424\u041F\u0423", label: "fpuRatings" },
+                    React.createElement(ratings_1.default, null))));
     };
     return Layout;
 }(React.Component)));
@@ -2217,9 +2339,74 @@ exports.default = react_redux_1.connect(function (state) { return ({
         var _this = this;
         return React.createElement("div", { className: "layout-header" },
             React.createElement("label", null, "\u0421\u0442\u0430\u043D\u043E\u043C \u043D\u0430: "),
-            React.createElement(Datetime, { value: this.props.startDate, dateFormat: 'DD-MM-YYYY', timeFormat: false, closeOnSelect: true, onChange: function (date) { return _this.changeStartDate(date.toString()); } }));
+            React.createElement(Datetime, { value: this.props.startDate, dateFormat: 'YYYY', timeFormat: false, closeOnSelect: true, onChange: function (date) { return _this.changeStartDate(date.toString()); } }));
     };
     return LayoutHeader;
+}(React.Component)));
+
+
+/***/ }),
+
+/***/ "./client/src/pages/ratings-entries/views/partials/ratings.tsx":
+/*!*********************************************************************!*\
+  !*** ./client/src/pages/ratings-entries/views/partials/ratings.tsx ***!
+  \*********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/src/pages/ratings-entries/actions/index.actions.ts");
+var table_1 = __webpack_require__(/*! ../../../../components/table/table */ "./client/src/components/table/table.tsx");
+exports.default = react_redux_1.connect(function (state) { return ({
+    ratings: state.ratings.upfRatings
+}); }, function (dispatch) { return ({
+    actions: redux_1.bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch)
+}); })(/** @class */ (function (_super) {
+    __extends(UPFRatings, _super);
+    function UPFRatings(props) {
+        return _super.call(this, props) || this;
+    }
+    UPFRatings.prototype.componentDidMount = function () {
+        this.props.actions.loadUPFRatings();
+    };
+    UPFRatings.prototype.render = function () {
+        return React.createElement("div", { className: "ratings" },
+            React.createElement(table_1.default, { items: this.props.ratings, columns: [
+                    {
+                        title: "П.І.П",
+                        field: "fullname",
+                        width: "300px",
+                    },
+                    {
+                        title: "К-ть очок",
+                        field: "rating",
+                        width: "100px"
+                    },
+                    {
+                        title: "",
+                        width: "*"
+                    }
+                ] }));
+    };
+    return UPFRatings;
 }(React.Component)));
 
 

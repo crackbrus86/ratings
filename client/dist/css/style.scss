@@ -72,6 +72,7 @@
 .content-wrap{
     overflow-x: auto;
     margin-right: 20px;
+    min-height: 400px;
 }
 .modal-black-out{
     position: fixed; 
@@ -300,4 +301,8 @@
         font-weight: bold;
     }
 
+}
+.ratings{
+    width: 100%;
+    padding-top: 16px;
 }

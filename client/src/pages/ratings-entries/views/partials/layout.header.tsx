@@ -32,7 +32,7 @@ export default connect<StateProps, DispatchProps>(
             <label>Станом на: </label>
             <Datetime 
                 value={this.props.startDate} 
-                dateFormat={'DD-MM-YYYY'} 
+                dateFormat={'YYYY'} 
                 timeFormat={false} 
                 closeOnSelect={true} 
                 onChange={(date) => this.changeStartDate(date.toString())} />

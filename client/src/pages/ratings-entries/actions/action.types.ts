@@ -38,3 +38,6 @@ export const CANCEL_REMOVE = "ENTRIES::CANCEL_REMOVE";
 
 export const LOAD_NAMES = "ENTRIES::LOAD_NAMES";
 export type LOAD_NAMES_PAYLOAD = string[]
+
+export const LOAD_UPF_RATINGS = "RATINGS::LOAD_UPF_RATINGS";
+export type LOAD_UPF_RATINGS_PAYLOAD = Models.Rating[]

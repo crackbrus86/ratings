@@ -54,7 +54,8 @@
 
 .content-wrap {
   overflow-x: auto;
-  margin-right: 20px; }
+  margin-right: 20px;
+  min-height: 400px; }
 
 .modal-black-out {
   position: fixed;
@@ -240,3 +241,7 @@
     color: #fff;
     margin: 4px 8px 4px 0px;
     font-weight: bold; }
+
+.ratings {
+  width: 100%;
+  padding-top: 16px; }

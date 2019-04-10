@@ -7,6 +7,7 @@ import TabView from "../../../components/tab view/tab.view";
 import Tab from "../../../components/tab view/tab";
 import LayoutHeader from "./partials/layout.header";
 import Entries from "./partials/entries";
+import Ratings from "./partials/ratings";
 import {ContentWrap} from "../../../components/layout/index.layout";
 
 interface StateProps{
@@ -32,7 +33,9 @@ export default connect<StateProps, DispatchProps>(
                     <Tab title="Записи" label="ratingEntries">
                         <Entries/>
                     </Tab>
-                    <Tab title="Рейтинги ФПУ" label="fpuRatings"></Tab>
+                    <Tab title="Рейтинги ФПУ" label="fpuRatings">
+                        <Ratings />
+                    </Tab>
                 </TabView>
             </ContentWrap>
     }

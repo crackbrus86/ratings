@@ -99,7 +99,7 @@ class EntryService
 
         $year = $_GET["year"];
 
-        $sql = $this->db->prepare("SELECT * FROM {$this->tableName} WHERE YEAR(EventDate) >= %s", $year);
+        $sql = $this->db->prepare("SELECT * FROM {$this->tableName} WHERE YEAR(EventDate) = %s", $year);
 
         $results = $this->db->get_results($sql);
 
