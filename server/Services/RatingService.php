@@ -26,15 +26,16 @@ class RatingService
         $this->ratings = array();
     }
 
-    public function getUpfRatings()
+    public function getMinistryRatings()
     {
         $year = $_GET["year"];
 
-        $sql = $this->db->prepare("SELECT a.Fullname, SUM(b.Value) AS Rating
+        $sql = $this->db->prepare("SELECT a.Fullname, SUM(b.Value) AS Rating, a.Gender, 
+                                        GROUP_CONCAT(CONCAT(a.Event, ' (', a.Place, ' місце - ', b.Value, ' балів)') separator ', ') AS Details
                                         FROM $this->entryTable a
                                         JOIN $this->pointTable b ON b.Target = a.Event AND b.Place = a.Place
                                         WHERE YEAR(a.EventDate) = %s
-                                    GROUP BY a.Fullname
+                                    GROUP BY a.Fullname, a.Gender
                                     ORDER BY Rating DESC", $year);
 
         $results = $this->db->get_results($sql);
@@ -43,7 +44,7 @@ class RatingService
         {
             foreach ($results as $result) 
             {
-                array_push($this->ratings, new Rating($result->Fullname, $result->Rating));
+                array_push($this->ratings, new Rating($result->Fullname, $result->Rating, $result->Gender, $result->Details));
             }
         }
 

@@ -13,7 +13,12 @@ export const getCompetitionsTablePoints = createSelector(competitions, points, (
         ...competition,
         firstPlaceValue: compPoints.filter(point => point.place == 1).length ? compPoints.filter(point => point.place == 1)[0].value : 0,
         secondPlaceValue: compPoints.filter(point => point.place == 2).length ? compPoints.filter(point => point.place == 2)[0].value : 0,
-        thirdPlaceValue: compPoints.filter(point => point.place == 3).length ? compPoints.filter(point => point.place == 3)[0].value : 0
+        thirdPlaceValue: compPoints.filter(point => point.place == 3).length ? compPoints.filter(point => point.place == 3)[0].value : 0,
+        fourthPlaceValue: compPoints.filter(point => point.place == 4).length ? compPoints.filter(point => point.place == 4)[0].value : 0,
+        fivethPlaceValue: compPoints.filter(point => point.place == 5).length ? compPoints.filter(point => point.place == 5)[0].value : 0,
+        sixthPlaceValue: compPoints.filter(point => point.place == 6).length ? compPoints.filter(point => point.place == 6)[0].value : 0,
+        seventhPlaceValue: compPoints.filter(point => point.place == 7).length ? compPoints.filter(point => point.place == 7)[0].value : 0,
+        eighthPlaceValue: compPoints.filter(point => point.place == 8).length ? compPoints.filter(point => point.place == 8)[0].value : 0,
     } as Models.LookupModels.TablePoint});
 });
 

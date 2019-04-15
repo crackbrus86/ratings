@@ -44,6 +44,10 @@ export default connect<StateProps, DispatchProps>(
                     width: "80px",
                     sortable: true,
                     onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 1)
+                },
+                {
+                    title: "",
+                    width: "*"
                 }
             ] as ColumnModel[]} />
         </>

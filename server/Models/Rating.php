@@ -5,11 +5,19 @@ class Rating
 
     public $rating;
 
-    function __construct(string $fullname, int $rating)
+    public $gender;
+
+    public $details;
+
+    function __construct(string $fullname, int $rating, string $gender, string $details)
     {
         $this->fullname = $fullname;
         
         $this->rating = $rating;
+
+        $this->gender = $gender;
+
+        $this->details = $details;
     }
 }
 ?>

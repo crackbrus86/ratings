@@ -4,7 +4,8 @@ export interface RatingEntry{
     type: string,
     event: string,
     place: number,
-    eventDate: Date
+    eventDate: Date,
+    gender: string
 }
 
 export interface GetEntries_Contract{

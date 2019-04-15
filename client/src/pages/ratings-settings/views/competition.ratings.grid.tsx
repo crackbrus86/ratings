@@ -60,6 +60,50 @@ export default connect<StateProps, DispatchProps>(
                     sortable: true,
                     width: "80px",
                     onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 3)
+                },
+                {
+                    title: "4-е місце",
+                    field: "fourthPlaceValue",
+                    type: ColumnTypes.Input,
+                    sortable: true,
+                    width: "80px",
+                    onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 4)
+                },
+                {
+                    title: "5-е місце",
+                    field: "fivethPlaceValue",
+                    type: ColumnTypes.Input,
+                    sortable: true,
+                    width: "80px",
+                    onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 5)
+                },
+                {
+                    title: "6-е місце",
+                    field: "sixthPlaceValue",
+                    type: ColumnTypes.Input,
+                    sortable: true,
+                    width: "80px",
+                    onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 6)
+                },
+                {
+                    title: "7-е місце",
+                    field: "seventhPlaceValue",
+                    type: ColumnTypes.Input,
+                    sortable: true,
+                    width: "80px",
+                    onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 7)
+                },
+                {
+                    title: "8-е місце",
+                    field: "eighthPlaceValue",
+                    type: ColumnTypes.Input,
+                    sortable: true,
+                    width: "80px",
+                    onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 8)
+                },                                                                
+                {
+                    title: "",
+                    width: "*"
                 }
             ] as ColumnModel[]} />
         </>

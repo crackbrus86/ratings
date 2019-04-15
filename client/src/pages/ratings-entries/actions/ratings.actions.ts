@@ -5,14 +5,14 @@ import * as toastr from "toastr";
 toastr.options.timeOut = 5000;
 
 export namespace ActionCreators{
-    export const loadUPFRatings = () => (d, gs: () => Models.StoreState) => {
-        Services.getUPFRatings({
+    export const loadMinistryRatings = () => (d, gs: () => Models.StoreState) => {
+        Services.getMinistryRatings({
             year: gs().shell.startDate.getFullYear()
         }).then((response) => {
             if(response.status){
                 d({
-                    type: ActionTypes.LOAD_UPF_RATINGS,
-                    payload: <ActionTypes.LOAD_UPF_RATINGS_PAYLOAD> response.data
+                    type: ActionTypes.LOAD_MINISTRY_RATINGS,
+                    payload: <ActionTypes.LOAD_MINISTRY_RATINGS_PAYLOAD> response.data
                 })
             }else{
                 toastr.error(response.message)

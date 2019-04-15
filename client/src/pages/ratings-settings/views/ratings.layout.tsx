@@ -2,6 +2,8 @@ import * as React from "react";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import {GridRow, GridColumn, ContentWrap} from "../../../components/layout/index.layout";
+import TabView from "../../../components/tab view/tab.view";
+import Tab from "../../../components/tab view/tab";
 import * as Models from "../models/index.models";
 import * as Actions from "../actions/index.actions";
 import * as Selectors from "../selectors/selector";
@@ -34,16 +36,14 @@ export default connect<StateProps, DispatchProps>(
     render(){
         return <div>
             <ContentWrap>
-                <GridRow>
-                    <GridColumn>
-                        <h2>Таблиця нарахування очок рейтингу за призовими місцями</h2>
+                <TabView>
+                    <Tab title="Таблиця нарахування очок рейтингу за місцями" label="byPlace">
                         <CompetitionRatingsGrid points={this.props.competitionPoints} />
-                    </GridColumn>
-                    <GridColumn>
-                        <h2>Таблиця нарахування очок рейтингу за встановленими рекордами</h2>
+                    </Tab>
+                    <Tab title="Таблиця нарахування очок рейтингу за встановленими рекордами" label="byRecord">
                         <RecordsRatingsGrid points={this.props.recordPoints} />
-                    </GridColumn>
-                </GridRow>
+                    </Tab>
+                </TabView>
             </ContentWrap>
             </div>
     }

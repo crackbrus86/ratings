@@ -36,7 +36,7 @@ export default connect<StateProps, DispatchProps>(
 
     getPlaces = () => {
         let placeOptions = [];
-        for(let i = 0; i < 4; i++){
+        for(let i = 0; i < 9; i++){
             placeOptions.push({text: !i ? '' : i.toString(), value: !i ? null : i} as SelectOption)
         }
         return placeOptions;
@@ -58,6 +58,13 @@ export default connect<StateProps, DispatchProps>(
                         autocomplete={true}
                         autocompleteItems={this.props.names}
                         onChange={(value) => this.props.actions.updateEntry("fullname", value)} 
+                    />
+                    <Form.Select
+                        label="Стать"
+                        options={[{text: "", value: null}, {text: "Чоловіки", value: "M"}, {text: "Жінки", value: "F"}]}
+                        value={this.props.entry.gender}
+                        validation={this.props.validation.isGenderValid}
+                        onChange={(value) => this.props.actions.updateEntry("gender", value)}
                     />
                     <Form.RadioButton 
                         label="Тип запису"

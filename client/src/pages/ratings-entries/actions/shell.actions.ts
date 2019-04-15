@@ -9,6 +9,6 @@ export namespace ActionCreators{
             payload: <ActionTypes.CHANGE_START_TIME_PAYLOAD> date
         })
         d(Actions.EntriesActions.ActionCreators.getEntries());
-        d(Actions.RatingsActions.ActionCreators.loadUPFRatings());
+        d(Actions.RatingsActions.ActionCreators.loadMinistryRatings());
     }
 }

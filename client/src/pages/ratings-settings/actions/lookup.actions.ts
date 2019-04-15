@@ -2,6 +2,7 @@ import * as Services from "../services/lookup.services";
 import * as Models from "../models/index.models";
 import * as ActionTypes from "./action.types";
 import { callApi } from "../../../infrastructure/call.api";
+import * as toastr from "toastr";
 
 export namespace ActionCreators{
     export const getCompetitions = () => (d, gs: () => Models.StoreState) => {
@@ -42,6 +43,21 @@ export namespace ActionCreators{
             case 3:
             value = point.thirdPlaceValue;
             break;
+            case 4:
+            value = point.fourthPlaceValue;
+            break;
+            case 5:
+            value = point.fivethPlaceValue;
+            break;
+            case 6:
+            value = point.sixthPlaceValue;
+            break;
+            case 7:
+            value = point.seventhPlaceValue;
+            break;
+            case 8:
+            value = point.eighthPlaceValue;
+            break;
             default:
             value = 0;
         }
@@ -55,6 +71,7 @@ export namespace ActionCreators{
             value: value
         }).then((response) => {
             if(response.status){
+                toastr.success(response.message);
                 d(getPoints());
             }
         })

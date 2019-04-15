@@ -7,6 +7,7 @@ class Entry
     public $event;
     public $place;
     public $eventDate;
+    public $gender;
 
     public function __construct()
     {
@@ -16,6 +17,7 @@ class Entry
         $this->event = "";
         $this->place = NULL;
         $this->eventDate = NULL;
+        $this->gender = NULL;
     }
 
     public function validate(bool $isEdit = FALSE)
@@ -65,6 +67,13 @@ class Entry
             $validation->message = "Event Date is required!";
             return $validation;
         }  
+
+        if(!$this->gender)
+        {
+            $validation->isValid = FALSE;
+            $validation->message = "Gender is required!";
+            return $validation;
+        }
          
         return $validation; 
     }

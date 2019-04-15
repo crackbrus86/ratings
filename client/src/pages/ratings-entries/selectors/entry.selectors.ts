@@ -18,7 +18,8 @@ export interface EntryValidationResult{
     isFullNameValid: Models.ValidationResult,
     isEventValid: Models.ValidationResult,
     isPlaceValid: Models.ValidationResult,
-    isEventDateValid: Models.ValidationResult
+    isEventDateValid: Models.ValidationResult,
+    isGenderValid: Models.ValidationResult
 }
 
 export const validation = createSelector(currentEntry, (entry) => {
@@ -27,7 +28,8 @@ export const validation = createSelector(currentEntry, (entry) => {
         isFullNameValid: {isValid: true, message: null},
         isEventValid: {isValid: true, message: null},
         isPlaceValid: {isValid: true, message: null},
-        isEventDateValid: {isValid: true, message: null}
+        isEventDateValid: {isValid: true, message: null},
+        isGenderValid: {isValid: true, message: null}
     }
 
     if(entry && !entry.fullname.length){
@@ -41,6 +43,9 @@ export const validation = createSelector(currentEntry, (entry) => {
     }
     if(entry && (!entry.eventDate || isNaN(entry.eventDate.getTime()))){
         result.isEventDateValid = {isValid: false, message: "Не вірно вказано дату!"}
+    }
+    if(entry && !entry.gender){
+        result.isGenderValid = {isValid: false, message: "Не вказано стать!"}
     }
     result = validate(result);
     return result;

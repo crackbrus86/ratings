@@ -4,9 +4,9 @@ import * as Models from "../models/index.models";
 const ratingsApiPath = "../wp-content/plugins/ratings/server/RatingController/";
 const apiTypes = CallApi.RequestTypes;
 
-export const getUPFRatings = (contract: Models.RatingModels.GetUPFRatings_Contract) => {
+export const getMinistryRatings = (contract: Models.RatingModels.GetMinistryRatings_Contract) => {
     return CallApi.callApi({
-        url: ratingsApiPath + 'GetUPFRatings.php',
+        url: ratingsApiPath + 'GetMinistryRatings.php',
         type: apiTypes.GET,
         data: contract
     });

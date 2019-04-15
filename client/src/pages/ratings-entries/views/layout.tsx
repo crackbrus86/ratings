@@ -33,8 +33,11 @@ export default connect<StateProps, DispatchProps>(
                     <Tab title="Записи" label="ratingEntries">
                         <Entries/>
                     </Tab>
-                    <Tab title="Рейтинги ФПУ" label="fpuRatings">
-                        <Ratings />
+                    <Tab title="Міністерський Рейтинг (Чоловіки)" label="ministryRatingMale">
+                        <Ratings ratingFilter="Male" />
+                    </Tab>
+                    <Tab title="Міністерський Рейтинг (Жінки)" label="ministryRatingFemale">
+                        <Ratings ratingFilter="Female" />
                     </Tab>
                 </TabView>
             </ContentWrap>

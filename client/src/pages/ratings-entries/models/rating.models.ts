@@ -1,8 +1,10 @@
 export interface Rating{
     fullname: string,
-    rating: string
+    rating: string,
+    gender: string,
+    details: string
 }
 
-export interface GetUPFRatings_Contract{
+export interface GetMinistryRatings_Contract{
     year: number
 }
