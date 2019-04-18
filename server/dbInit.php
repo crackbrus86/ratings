@@ -24,6 +24,8 @@ $sql = "CREATE TABLE IF NOT EXISTS {$entryTableName} (
     Place INT NOT NULL,
     EventDate DATETIME NOT NULL,
     Gender NVARCHAR(1) NOT NULL,
+    Division NVARCHAR(10) NULL,
+    CompType NVARCHAR(50) NULL
     PRIMARY KEY (RatingEntryId)
 ) {$charset_collate}";
 dbDelta($sql);

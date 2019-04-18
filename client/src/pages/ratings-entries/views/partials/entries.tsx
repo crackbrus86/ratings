@@ -12,7 +12,8 @@ interface StateProps{
     entries: Models.Entry[],
     competitions: Models.Competition[],
     records: Models.Record[],
-    deleteEntryId?: number
+    deleteEntryId?: number,
+    compTypes: Models.CompetitionType[]
 }
 
 interface DispatchProps{
@@ -24,7 +25,8 @@ export default connect<StateProps, DispatchProps>(
         entries: state.entries.entries,
         competitions: state.lookup.competitions,
         records: state.lookup.records,
-        deleteEntryId: state.entries.deleteById
+        deleteEntryId: state.entries.deleteById,
+        compTypes: state.lookup.compTypes
     }),
     (dispatch): DispatchProps => ({
         actions: bindActionCreators(Actions.EntriesActions.ActionCreators, dispatch)
@@ -42,9 +44,11 @@ export default connect<StateProps, DispatchProps>(
         let entries = this.props.entries.map(entry => {
             let events = this.props.competitions.concat(this.props.records);
             let eventName = events.find(event => event.dbName == entry.event).name;
+            var compType = this.props.compTypes.find(type => type.name == entry.compType);
+            var compTypeName = !!compType ? ` - ${compType.displayName}` : '';
             return {
                 ...entry,
-                event: eventName
+                event: `${eventName}${compTypeName}`
             }            
         });
         return <div className="entries">

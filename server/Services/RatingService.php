@@ -30,8 +30,8 @@ class RatingService
     {
         $year = $_GET["year"];
 
-        $sql = $this->db->prepare("SELECT a.Fullname, SUM(b.Value) AS Rating, a.Gender, 
-                                        GROUP_CONCAT(CONCAT(a.Event, ' (', a.Place, ' місце - ', b.Value, ' балів)') separator ', ') AS Details
+        $sql = $this->db->prepare("SELECT a.Fullname, SUM(b.Value) AS Rating, a.Gender,
+                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів)') separator ', ') AS Details
                                         FROM $this->entryTable a
                                         JOIN $this->pointTable b ON b.Target = a.Event AND b.Place = a.Place
                                         WHERE YEAR(a.EventDate) = %s

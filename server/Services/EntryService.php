@@ -43,8 +43,9 @@ class EntryService
 
             return $response;
         }else{
-            $sql = $this->db->prepare("INSERT INTO {$this->tableName} (Fullname, Type, Event, Place, EventDate, Gender) 
-                VALUES (%s, %s, %s, %d, %s, %s)", $entry->fullname, $entry->type, $entry->event, $entry->place, $entry->eventDate, $entry->gender);
+            $sql = $this->db->prepare("INSERT INTO {$this->tableName} (Fullname, Type, Event, Place, EventDate, Gender, Division, CompType) 
+                VALUES (%s, %s, %s, %d, %s, %s, %s, %s)", 
+                $entry->fullname, $entry->type, $entry->event, $entry->place, $entry->eventDate, $entry->gender, $entry->division, $entry->compType);
 
             $this->db->query($sql);
         }
@@ -75,8 +76,11 @@ class EntryService
 
             return $response;
         }else{
-            $sql = $this->db->prepare("UPDATE {$this->tableName} SET Fullname = %s, Type = %s, Event = %s, Place = %d, EventDate = %s, Gender = %s 
-                WHERE RatingEntryId = %d", $entry->fullname, $entry->type, $entry->event, $entry->place, $entry->eventDate, $entry->gender, $entry->ratingEntryId);
+            $sql = $this->db->prepare("UPDATE {$this->tableName} 
+                                        SET Fullname = %s, Type = %s, Event = %s, Place = %d, EventDate = %s, Gender = %s, Division = %s, CompType = %s
+                                        WHERE RatingEntryId = %d", 
+                                        $entry->fullname, $entry->type, $entry->event, $entry->place, $entry->eventDate, 
+                                        $entry->gender, $entry->division, $entry->compType, $entry->ratingEntryId);
 
             $this->db->query($sql);
         }

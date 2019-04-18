@@ -1244,6 +1244,7 @@ var ActionCreators;
             payload: {
                 ratingEntryId: null,
                 fullname: '',
+                division: null,
                 type: Models.EntryType.Place,
                 event: null,
                 place: null,
@@ -1266,7 +1267,7 @@ var ActionCreators;
                 value: value
             }
         });
-        if (field == "type") {
+        if (field == "type" || field == "division") {
             d(ActionCreators.resetEvent());
             d(ActionCreators.resetPlace());
         }
@@ -1557,7 +1558,9 @@ exports.default = react_redux_1.connect(function (state) { return ({
     entry: state.entries.currentEntry,
     events: Selectors.EntrySelector.eventList(state),
     validation: Selectors.EntrySelector.validation(state),
-    names: state.lookup.names
+    names: state.lookup.names,
+    divisions: Selectors.EntrySelector.divisionList(state),
+    compTypes: Selectors.EntrySelector.compTypesList(state)
 }); }, function (dispatch) { return ({
     actions: redux_1.bindActionCreators(Actions.EntriesActions.ActionCreators, dispatch)
 }); })(/** @class */ (function (_super) {
@@ -1585,8 +1588,10 @@ exports.default = react_redux_1.connect(function (state) { return ({
                     React.createElement(form_1.default, null,
                         React.createElement(form_1.default.TextInput, { label: "\u041F\u0440\u0456\u0437\u0432\u0438\u0449\u0435, \u0406\u043C'\u044F \u0441\u043F\u043E\u0440\u0442\u0441\u043C\u0435\u043D\u0430", value: this.props.entry.fullname, validation: this.props.validation.isFullNameValid, autocomplete: true, autocompleteItems: this.props.names, onChange: function (value) { return _this.props.actions.updateEntry("fullname", value); } }),
                         React.createElement(form_1.default.Select, { label: "\u0421\u0442\u0430\u0442\u044C", options: [{ text: "", value: null }, { text: "Чоловіки", value: "M" }, { text: "Жінки", value: "F" }], value: this.props.entry.gender, validation: this.props.validation.isGenderValid, onChange: function (value) { return _this.props.actions.updateEntry("gender", value); } }),
+                        React.createElement(form_1.default.Select, { label: "\u0414\u0438\u0432\u0456\u0437\u0456\u043E\u043D", options: this.props.divisions, value: this.props.entry.division, validation: this.props.validation.isDivisionValid, onChange: function (value) { return _this.props.actions.updateEntry("division", value); } }),
                         React.createElement(form_1.default.RadioButton, { label: "\u0422\u0438\u043F \u0437\u0430\u043F\u0438\u0441\u0443", value: this.props.entry.type, name: "RecordType", buttons: [{ label: "Призове місце", value: Models.EntryType.Place }, { label: "Рекорд", value: Models.EntryType.Record }], onChange: function (value) { return _this.props.actions.updateEntry("type", value); } }),
                         React.createElement(form_1.default.Select, { label: this.props.entry.type == Models.EntryType.Place ? "Змагання" : "Рекорд", options: this.props.events, validation: this.props.validation.isEventValid, value: this.props.entry.event, onChange: function (value) { return _this.props.actions.updateEntry("event", value); } }),
+                        React.createElement(form_1.default.Select, { label: "\u0414\u0438\u0441\u0446\u0438\u043F\u043B\u0456\u043D\u0430", options: this.props.compTypes, value: this.props.entry.compType, validation: this.props.validation.isComTypeValid, onChange: function (value) { return _this.props.actions.updateEntry("compType", value); } }),
                         this.props.entry.type == Models.EntryType.Place &&
                             React.createElement(form_1.default.Select, { label: "\u041C\u0456\u0441\u0446\u0435", options: this.getPlaces(), validation: this.props.validation.isPlaceValid, value: this.props.entry.place, onChange: function (value) { return _this.props.actions.updateEntry("place", value); } }),
                         React.createElement(form_1.default.DatePicker, { label: "\u0414\u0430\u0442\u0430", value: this.props.entry.eventDate, validation: this.props.validation.isEventDateValid, onChange: function (value) { return _this.props.actions.updateEntry("eventDate", value); } })))),
@@ -1631,6 +1636,12 @@ var EntryType;
     EntryType["Place"] = "place";
     EntryType["Record"] = "record";
 })(EntryType = exports.EntryType || (exports.EntryType = {}));
+var DivisionName;
+(function (DivisionName) {
+    DivisionName["Open"] = "Open";
+    DivisionName["Junior"] = "Junior";
+    DivisionName["SubJunior"] = "SubJunior";
+})(DivisionName = exports.DivisionName || (exports.DivisionName = {}));
 
 
 /***/ }),
@@ -1774,7 +1785,9 @@ var ActionTypes = __webpack_require__(/*! ../actions/action.types */ "./client/s
 var defaultState = {
     competitions: [],
     records: [],
-    names: []
+    names: [],
+    divisions: [{ name: "Open", displayName: "Відкритий" }, { name: "Junior", displayName: "Юніори" }, { name: "SubJunior", displayName: "Юнаки" }],
+    compTypes: [{ name: "PL", displayName: "Пауерліфтинг" }, { name: "CPL", displayName: "Класичний Пауерліфтинг" }, { name: "BP", displayName: "Жим" }, { name: "CBP", displayName: "Класичний Жим" }]
 };
 exports.lookupReducer = function (state, action) {
     if (state === void 0) { state = defaultState; }
@@ -1895,23 +1908,54 @@ var Models = __webpack_require__(/*! ../models/index.models */ "./client/src/pag
 var competitions = function (state) { return state.lookup.competitions; };
 var records = function (state) { return state.lookup.records; };
 var currentEntry = function (state) { return state.entries.currentEntry; };
+var divisions = function (state) { return state.lookup.divisions; };
+var compTypes = function (state) { return state.lookup.compTypes; };
 exports.eventList = reselect_1.createSelector(competitions, records, currentEntry, function (competitions, records, entry) {
     var list = entry && entry.type == Models.EntryType.Place ? competitions : records;
     var options = [{ text: '', value: null }];
     options = options.concat(list.map(function (item) { return ({ text: item.name, value: item.dbName }); }));
+    if (!!entry)
+        options = filteByDivision(entry.division, options);
     return options;
+});
+function filteByDivision(division, options) {
+    switch (division) {
+        case Models.DivisionName.Open:
+            return options.filter(function (opt) { return !opt.value || opt.value.indexOf(Models.DivisionName.Junior) == -1 && opt.value.indexOf(Models.DivisionName.SubJunior); });
+        case Models.DivisionName.Junior:
+            return options.filter(function (opt) { return !opt.value || opt.value.indexOf(Models.DivisionName.Junior) != -1 && opt.value.indexOf(Models.DivisionName.SubJunior) == -1; });
+        case Models.DivisionName.SubJunior:
+            return options.filter(function (opt) { return !opt.value || opt.value.indexOf(Models.DivisionName.SubJunior) != -1; });
+        default:
+            return options;
+    }
+}
+exports.divisionList = reselect_1.createSelector(divisions, function (divisions) {
+    var list = [{ text: "", value: null }];
+    list = list.concat(divisions.map(function (d) { return ({ text: d.displayName, value: d.name }); }));
+    return list;
+});
+exports.compTypesList = reselect_1.createSelector(compTypes, function (types) {
+    var list = [{ text: "", value: null }];
+    list = list.concat(types.map(function (t) { return ({ text: t.displayName, value: t.name }); }));
+    return list;
 });
 exports.validation = reselect_1.createSelector(currentEntry, function (entry) {
     var result = {
         isValid: true,
         isFullNameValid: { isValid: true, message: null },
+        isDivisionValid: { isValid: true, message: null },
         isEventValid: { isValid: true, message: null },
         isPlaceValid: { isValid: true, message: null },
         isEventDateValid: { isValid: true, message: null },
-        isGenderValid: { isValid: true, message: null }
+        isGenderValid: { isValid: true, message: null },
+        isComTypeValid: { isValid: true, message: null }
     };
     if (entry && !entry.fullname.length) {
         result.isFullNameValid = { isValid: false, message: "Прізвище та ім'я спортсмена є обов'язковими!" };
+    }
+    if (entry && !entry.division) {
+        result.isDivisionValid = { isValid: false, message: "Дивізіон є обов'язковим!" };
     }
     if (entry && !entry.event) {
         result.isEventValid = { isValid: false, message: "\u041D\u0430\u0437\u0432\u0430 " + (entry.type == Models.EntryType.Place ? 'змагань' : 'рекорду') + " \u0454 \u043E\u0431\u043E\u0432'\u044F\u0437\u043A\u043E\u0432\u043E\u044E!" };
@@ -1924,6 +1968,9 @@ exports.validation = reselect_1.createSelector(currentEntry, function (entry) {
     }
     if (entry && !entry.gender) {
         result.isGenderValid = { isValid: false, message: "Не вказано стать!" };
+    }
+    if (entry && !entry.compType) {
+        result.isComTypeValid = { isValid: false, message: "Не вказано дисципліну!" };
     }
     result = validate(result);
     return result;
@@ -1981,11 +2028,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var reselect_1 = __webpack_require__(/*! reselect */ "./node_modules/reselect/es/index.js");
 var ratings = function (state) { return state.ratings.ministryRatings; };
 var competitions = function (state) { return state.lookup.competitions; };
-exports.modifiedRatings = reselect_1.createSelector(ratings, competitions, function (ratings, competitions) {
+var compTypes = function (state) { return state.lookup.compTypes; };
+exports.modifiedRatings = reselect_1.createSelector(ratings, competitions, compTypes, function (ratings, competitions, types) {
     return ratings.map(function (r) {
         var details = r.details;
         for (var i = 0; i < competitions.length; i++) {
-            details = details.replace(new RegExp(competitions[i].dbName, 'g'), competitions[i].name);
+            details = details.replace(new RegExp(" " + competitions[i].dbName, 'g'), competitions[i].name);
+        }
+        for (var i = 0; i < types.length; i++) {
+            details = details.replace(new RegExp(" " + types[i].name, 'g'), " - " + types[i].displayName);
         }
         return __assign({}, r, { details: details });
     });
@@ -2270,7 +2321,8 @@ exports.default = react_redux_1.connect(function (state) { return ({
     entries: state.entries.entries,
     competitions: state.lookup.competitions,
     records: state.lookup.records,
-    deleteEntryId: state.entries.deleteById
+    deleteEntryId: state.entries.deleteById,
+    compTypes: state.lookup.compTypes
 }); }, function (dispatch) { return ({
     actions: redux_1.bindActionCreators(Actions.EntriesActions.ActionCreators, dispatch)
 }); })(/** @class */ (function (_super) {
@@ -2286,7 +2338,9 @@ exports.default = react_redux_1.connect(function (state) { return ({
         var entries = this.props.entries.map(function (entry) {
             var events = _this.props.competitions.concat(_this.props.records);
             var eventName = events.find(function (event) { return event.dbName == entry.event; }).name;
-            return __assign({}, entry, { event: eventName });
+            var compType = _this.props.compTypes.find(function (type) { return type.name == entry.compType; });
+            var compTypeName = !!compType ? " - " + compType.displayName : '';
+            return __assign({}, entry, { event: "" + eventName + compTypeName });
         });
         return React.createElement("div", { className: "entries" },
             React.createElement("button", { className: "create-button", onClick: this.props.actions.addEntry }, "\u0421\u0442\u0432\u043E\u0440\u0438\u0442\u0438 \u0437\u0430\u043F\u0438\u0441"),

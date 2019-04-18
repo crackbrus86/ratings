@@ -12,8 +12,16 @@ export type Record = LookupModels.Record;
 export type Entry = EntryModels.RatingEntry;
 export type ValidationResult = ValidationResult;
 export type Rating = RatingModels.Rating;
+export type Division = LookupModels.Division;
+export type CompetitionType = LookupModels.CompetitionType;
 
 export enum EntryType{
     Place = "place",
     Record = "record"
+}
+
+export enum DivisionName{
+    Open = "Open",
+    Junior = "Junior",
+    SubJunior = "SubJunior"
 }

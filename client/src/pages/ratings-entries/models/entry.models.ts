@@ -1,11 +1,13 @@
 export interface RatingEntry{
     ratingEntryId: number,
     fullname: string,
+    division: string,
     type: string,
     event: string,
     place: number,
     eventDate: Date,
-    gender: string
+    gender: string,
+    compType: string
 }
 
 export interface GetEntries_Contract{

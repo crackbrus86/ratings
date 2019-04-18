@@ -8,6 +8,8 @@ class Entry
     public $place;
     public $eventDate;
     public $gender;
+    public $division;
+    public $compType;
 
     public function __construct()
     {
@@ -18,6 +20,8 @@ class Entry
         $this->place = NULL;
         $this->eventDate = NULL;
         $this->gender = NULL;
+        $this->division = NULL;
+        $this->compType = NULL;
     }
 
     public function validate(bool $isEdit = FALSE)
@@ -72,6 +76,24 @@ class Entry
         {
             $validation->isValid = FALSE;
             $validation->message = "Gender is required!";
+            return $validation;
+        }
+
+        if(!$this->division)
+        {
+            $validation->isValid = FALSE;
+
+            $validation->message = "Division is required!";
+
+            return $validation;
+        }
+
+        if(!$this->compType)
+        {
+            $validation->isValid = FALSE;
+
+            $validation->message = "Competition Type is required!";
+
             return $validation;
         }
          

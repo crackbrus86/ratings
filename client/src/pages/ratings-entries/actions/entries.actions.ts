@@ -12,6 +12,7 @@ export namespace ActionCreators{
             payload: <ActionTypes.OPEN_ENTRY_PAYLOAD>{
                 ratingEntryId: null,
                 fullname: '',
+                division: null,
                 type: Models.EntryType.Place,
                 event: null,
                 place: null,
@@ -39,7 +40,7 @@ export namespace ActionCreators{
                 value
             }
         })
-        if(field == "type") { 
+        if(field == "type" || field == "division") { 
             d(resetEvent());
             d(resetPlace());
         }

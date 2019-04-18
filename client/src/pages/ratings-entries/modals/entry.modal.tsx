@@ -12,7 +12,9 @@ interface StateProps{
     entry: Models.Entry,
     events: SelectOption[],
     validation: Selectors.EntrySelector.EntryValidationResult,
-    names: string[]
+    names: string[],
+    divisions: SelectOption[],
+    compTypes: SelectOption[]
 }
 
 interface DispatchProps{
@@ -24,7 +26,9 @@ export default connect<StateProps, DispatchProps>(
         entry: state.entries.currentEntry,
         events: Selectors.EntrySelector.eventList(state),
         validation: Selectors.EntrySelector.validation(state),
-        names: state.lookup.names
+        names: state.lookup.names,
+        divisions: Selectors.EntrySelector.divisionList(state),
+        compTypes: Selectors.EntrySelector.compTypesList(state)
     }),
     (dispatch): DispatchProps => ({
         actions: bindActionCreators(Actions.EntriesActions.ActionCreators, dispatch)
@@ -66,6 +70,13 @@ export default connect<StateProps, DispatchProps>(
                         validation={this.props.validation.isGenderValid}
                         onChange={(value) => this.props.actions.updateEntry("gender", value)}
                     />
+                    <Form.Select 
+                        label="Дивізіон"
+                        options={this.props.divisions}
+                        value={this.props.entry.division}
+                        validation={this.props.validation.isDivisionValid}
+                        onChange={(value) => this.props.actions.updateEntry("division", value)}
+                    />
                     <Form.RadioButton 
                         label="Тип запису"
                         value={this.props.entry.type}
@@ -79,6 +90,13 @@ export default connect<StateProps, DispatchProps>(
                         validation={this.props.validation.isEventValid}
                         value={this.props.entry.event}
                         onChange={(value) => this.props.actions.updateEntry("event", value)}
+                    />
+                    <Form.Select 
+                        label="Дисципліна"
+                        options={this.props.compTypes}
+                        value={this.props.entry.compType}
+                        validation={this.props.validation.isComTypeValid}
+                        onChange={(value) => this.props.actions.updateEntry("compType", value)}
                     />
                     {
                         this.props.entry.type == Models.EntryType.Place &&

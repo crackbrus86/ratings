@@ -4,13 +4,17 @@ import * as Models from "../models/index.models";
 export interface LookupState{
     competitions: Models.Competition[],
     records: Models.Record[],
-    names: string[]
+    names: string[],
+    divisions: Models.Division[],
+    compTypes: Models.CompetitionType[]
 }
 
 const defaultState = {
     competitions: [],
     records: [],
-    names: []
+    names: [],
+    divisions: [{name: "Open", displayName: "Відкритий"}, {name: "Junior", displayName: "Юніори"}, {name: "SubJunior", displayName: "Юнаки"}],
+    compTypes: [{name: "PL", displayName: "Пауерліфтинг"}, {name: "CPL", displayName: "Класичний Пауерліфтинг"}, {name: "BP", displayName: "Жим"}, {name: "CBP", displayName: "Класичний Жим"}]
 } as LookupState
 
 export type ReducerState = typeof defaultState;
