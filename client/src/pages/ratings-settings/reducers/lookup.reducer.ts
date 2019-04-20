@@ -5,13 +5,15 @@ import * as ActionTypes from "../actions/action.types";
 export interface LookupState{
     competitions: Models.LookupModels.Competition[],
     records: Models.LookupModels.Record[],
-    points: Models.LookupModels.Point[]
+    points: Models.LookupModels.Point[],
+    compTypes: Models.CompType[]
 }
 
 const defaultState = {
     competitions: [],
     records: [],
-    points: []
+    points: [],
+    compTypes: []
 } as LookupState;
 
 export type ReducerState = typeof defaultState;
@@ -37,6 +39,13 @@ export const lookupReducer = (state = defaultState, action): ReducerState => {
             return {
                 ...state,
                 records: payload.records
+            }
+        }
+        case ActionTypes.LOAD_COMP_TYPES: {
+            let payload = action.payload as ActionTypes.LOAD_COMP_TYPES_PAYLOAD;
+            return {
+                ...state,
+                compTypes: payload
             }
         }
         default:

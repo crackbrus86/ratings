@@ -89,4 +89,15 @@ export namespace ActionCreators{
             }
         })
     }
+
+    export const loadCompTypes = () => (d, gs: () => Models.StoreState) => {
+        Services.getCompTypes().then((response) => {
+            if(response.status){
+                return d({
+                    type: ActionTypes.LOAD_COMP_TYPES,
+                    payload: <ActionTypes.LOAD_COMP_TYPES_PAYLOAD> response.data
+                })
+            }
+        });
+    }
 }

@@ -2,14 +2,16 @@ export interface Competition {
     id: number,
     name: string,
     dbName: string,
-    sortOrder: number
+    sortOrder: number,
+    ratingUPF: boolean
 }
 
 export interface Record {
     id: number,
     name: string,
     dbName: string,
-    sortOrder: number
+    sortOrder: number,
+    ratingUPF: boolean
 }
 
 export interface Point {
@@ -17,6 +19,11 @@ export interface Point {
     target: string;
     value: number;
     place: number;
+}
+
+export interface CompType{
+    name: string,
+    displayName: string
 }
 
 export interface TablePoint extends Competition{

@@ -2,14 +2,16 @@ export interface Competition {
     id: number,
     name: string,
     dbName: string,
-    sortOrder: number
+    sortOrder: number,
+    ratingUPF: boolean
 }
 
 export interface Record {
     id: number,
     name: string,
     dbName: string,
-    sortOrder: number
+    sortOrder: number,
+    ratingUPF: boolean
 }
 
 export interface Division {

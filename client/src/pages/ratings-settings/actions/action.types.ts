@@ -14,3 +14,6 @@ export const LOAD_RECORDS = "LOAD_RECORDS";
 export interface LOAD_RECORDS_PAYLOAD {
     records: Models.LookupModels.Record[]
 }
+
+export const LOAD_COMP_TYPES = "LOAD_COMP_TYPES";
+export type LOAD_COMP_TYPES_PAYLOAD = Models.CompType[];

@@ -14,7 +14,7 @@ const defaultState = {
     records: [],
     names: [],
     divisions: [{name: "Open", displayName: "Відкритий"}, {name: "Junior", displayName: "Юніори"}, {name: "SubJunior", displayName: "Юнаки"}],
-    compTypes: [{name: "PL", displayName: "Пауерліфтинг"}, {name: "CPL", displayName: "Класичний Пауерліфтинг"}, {name: "BP", displayName: "Жим"}, {name: "CBP", displayName: "Класичний Жим"}]
+    compTypes: []
 } as LookupState
 
 export type ReducerState = typeof defaultState;
@@ -40,6 +40,13 @@ export const lookupReducer = (state = defaultState, action): ReducerState => {
             return {
                 ...state,
                 names: payload
+            }
+        }
+        case ActionTypes.LOAD_COMP_TYPES: {
+            let payload = action.payload as ActionTypes.LOAD_COMP_TYPES_PAYLOAD;
+            return {
+                ...state,
+                compTypes: payload
             }
         }
         default:

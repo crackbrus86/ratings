@@ -677,6 +677,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.LOAD_COMPETITIONS = "LOAD_COMPETITIONS";
 exports.LOAD_POINTS = "LOAD_POINTS";
 exports.LOAD_RECORDS = "LOAD_RECORDS";
+exports.LOAD_COMP_TYPES = "LOAD_COMP_TYPES";
 
 
 /***/ }),
@@ -790,6 +791,16 @@ var ActionCreators;
             }
         });
     }; };
+    ActionCreators.loadCompTypes = function () { return function (d, gs) {
+        Services.getCompTypes().then(function (response) {
+            if (response.status) {
+                return d({
+                    type: ActionTypes.LOAD_COMP_TYPES,
+                    payload: response.data
+                });
+            }
+        });
+    }; };
 })(ActionCreators = exports.ActionCreators || (exports.ActionCreators = {}));
 
 
@@ -857,7 +868,8 @@ var ActionTypes = __webpack_require__(/*! ../actions/action.types */ "./client/s
 var defaultState = {
     competitions: [],
     records: [],
-    points: []
+    points: [],
+    compTypes: []
 };
 exports.lookupReducer = function (state, action) {
     if (state === void 0) { state = defaultState; }
@@ -873,6 +885,10 @@ exports.lookupReducer = function (state, action) {
         case ActionTypes.LOAD_RECORDS: {
             var payload = action.payload;
             return __assign({}, state, { records: payload.records });
+        }
+        case ActionTypes.LOAD_COMP_TYPES: {
+            var payload = action.payload;
+            return __assign({}, state, { compTypes: payload });
         }
         default:
             return state;
@@ -907,6 +923,7 @@ var reselect_1 = __webpack_require__(/*! reselect */ "./node_modules/reselect/es
 var competitions = function (state) { return state.lookup.competitions; };
 var points = function (state) { return state.lookup.points; };
 var records = function (state) { return state.lookup.records; };
+var compTypes = function (state) { return state.lookup.compTypes; };
 exports.getCompetitionsTablePoints = reselect_1.createSelector(competitions, points, function (competitions, points) {
     if (!competitions.length)
         return [];
@@ -922,6 +939,34 @@ exports.getRecordsTablepoints = reselect_1.createSelector(records, points, funct
         var recordPoints = points.filter(function (point) { return point.target == record.dbName; });
         return __assign({}, record, { firstPlaceValue: recordPoints.filter(function (point) { return point.place == 1; }).length ? recordPoints.filter(function (point) { return point.place == 1; })[0].value : 0 });
     });
+});
+exports.upfRanges = reselect_1.createSelector(competitions, compTypes, function (comp, types) {
+    var ranges = [];
+    var counter = 1;
+    comp.filter(function (c) { return !!c.ratingUPF; }).map(function (c) {
+        for (var i = 1; i < 4; i++) {
+            var range = {
+                comp: c.dbName,
+                name: c.name,
+                place: i,
+                compType: null,
+                compTypeName: null
+            };
+            if (range.comp != "WorldGames" && range.comp != "EuropeanCup") {
+                for (var j = 0; j < types.length; j++) {
+                    range = __assign({}, range, { compType: types[j].name, compTypeName: types[j].displayName, sortOrder: counter });
+                    ranges = ranges.concat(range);
+                    counter++;
+                }
+            }
+            else {
+                range = __assign({}, range, { sortOrder: counter });
+                ranges = ranges.concat(range);
+                counter++;
+            }
+        }
+    });
+    return ranges;
 });
 
 
@@ -962,6 +1007,12 @@ exports.savePoint = function (point) {
 exports.getRecords = function () {
     return CallApi.callApi({
         url: lookupApiPath + 'GetRecordsLookup.php',
+        type: apiTypes.GET
+    });
+};
+exports.getCompTypes = function () {
+    return CallApi.callApi({
+        url: lookupApiPath + 'GetCompetitionTypesLookup.php',
         type: apiTypes.GET
     });
 };
@@ -1196,6 +1247,7 @@ var Actions = __webpack_require__(/*! ../actions/index.actions */ "./client/src/
 var Selectors = __webpack_require__(/*! ../selectors/selector */ "./client/src/pages/ratings-settings/selectors/selector.ts");
 var competition_ratings_grid_1 = __webpack_require__(/*! ./competition.ratings.grid */ "./client/src/pages/ratings-settings/views/competition.ratings.grid.tsx");
 var records_ratings_grid_1 = __webpack_require__(/*! ./records.ratings.grid */ "./client/src/pages/ratings-settings/views/records.ratings.grid.tsx");
+var upf_range_grid_1 = __webpack_require__(/*! ./upf.range.grid */ "./client/src/pages/ratings-settings/views/upf.range.grid.tsx");
 exports.default = react_redux_1.connect(function (state) { return ({
     competitionPoints: Selectors.getCompetitionsTablePoints(state),
     recordPoints: Selectors.getRecordsTablepoints(state)
@@ -1210,6 +1262,7 @@ exports.default = react_redux_1.connect(function (state) { return ({
         this.props.actions.getCompetitions();
         this.props.actions.getPoints();
         this.props.actions.getRecords();
+        this.props.actions.loadCompTypes();
     };
     RatingsLayout.prototype.render = function () {
         return React.createElement("div", null,
@@ -1218,7 +1271,9 @@ exports.default = react_redux_1.connect(function (state) { return ({
                     React.createElement(tab_1.default, { title: "\u0422\u0430\u0431\u043B\u0438\u0446\u044F \u043D\u0430\u0440\u0430\u0445\u0443\u0432\u0430\u043D\u043D\u044F \u043E\u0447\u043E\u043A \u0440\u0435\u0439\u0442\u0438\u043D\u0433\u0443 \u0437\u0430 \u043C\u0456\u0441\u0446\u044F\u043C\u0438", label: "byPlace" },
                         React.createElement(competition_ratings_grid_1.default, { points: this.props.competitionPoints })),
                     React.createElement(tab_1.default, { title: "\u0422\u0430\u0431\u043B\u0438\u0446\u044F \u043D\u0430\u0440\u0430\u0445\u0443\u0432\u0430\u043D\u043D\u044F \u043E\u0447\u043E\u043A \u0440\u0435\u0439\u0442\u0438\u043D\u0433\u0443 \u0437\u0430 \u0432\u0441\u0442\u0430\u043D\u043E\u0432\u043B\u0435\u043D\u0438\u043C\u0438 \u0440\u0435\u043A\u043E\u0440\u0434\u0430\u043C\u0438", label: "byRecord" },
-                        React.createElement(records_ratings_grid_1.default, { points: this.props.recordPoints })))));
+                        React.createElement(records_ratings_grid_1.default, { points: this.props.recordPoints })),
+                    React.createElement(tab_1.default, { title: "\u0422\u0430\u0431\u043B\u0438\u0446\u044F \u0440\u0430\u043D\u0436\u0443\u0432\u0430\u043D\u043D\u044F \u043E\u0447\u043E\u043A \u0440\u0435\u0439\u0442\u0438\u043D\u0433\u0443 \u0424\u041F\u0423", label: "byRange" },
+                        React.createElement(upf_range_grid_1.default, null)))));
     };
     return RatingsLayout;
 }(React.Component)));
@@ -1292,6 +1347,75 @@ exports.default = react_redux_1.connect(function (state) { return ({}); }, funct
                 ] }));
     };
     return RecordsRatingsGrid;
+}(React.Component)));
+
+
+/***/ }),
+
+/***/ "./client/src/pages/ratings-settings/views/upf.range.grid.tsx":
+/*!********************************************************************!*\
+  !*** ./client/src/pages/ratings-settings/views/upf.range.grid.tsx ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+var table_1 = __webpack_require__(/*! ../../../components/table/table */ "./client/src/components/table/table.tsx");
+var Selectors = __webpack_require__(/*! ../selectors/selector */ "./client/src/pages/ratings-settings/selectors/selector.ts");
+exports.default = react_redux_1.connect(function (state) { return ({
+    ranges: Selectors.upfRanges(state)
+}); }, function (dispatch) { return ({}); })(/** @class */ (function (_super) {
+    __extends(UPFRangeGrid, _super);
+    function UPFRangeGrid() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    UPFRangeGrid.prototype.render = function () {
+        return React.createElement(React.Fragment, null,
+            React.createElement(table_1.default, { items: this.props.ranges, columns: [
+                    {
+                        title: "№",
+                        field: "sortOrder",
+                        width: "100px"
+                    },
+                    {
+                        title: "Змагання",
+                        field: 'name',
+                        width: "200px"
+                    },
+                    {
+                        title: "Місце",
+                        field: "place",
+                        width: "50px"
+                    },
+                    {
+                        title: "Дисципліна",
+                        field: "compTypeName",
+                        width: "200px"
+                    },
+                    {
+                        title: "",
+                        width: "*"
+                    }
+                ] }));
+    };
+    return UPFRangeGrid;
 }(React.Component)));
 
 

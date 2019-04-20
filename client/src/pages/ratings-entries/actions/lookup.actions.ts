@@ -6,6 +6,7 @@ export namespace ActionCreators{
     export const initLookups = () => (d, gs: () => Models.StoreState) => {
         d(loadCompetitions());
         d(loadRecords());
+        d(loadCompTypes());
     }
 
     export const loadCompetitions = () => (d, gs: () => Models.StoreState) => {
@@ -40,6 +41,17 @@ export namespace ActionCreators{
                 d({
                     type: ActionTypes.LOAD_NAMES,
                     payload: <ActionTypes.LOAD_NAMES_PAYLOAD> response.data
+                })
+            }
+        })
+    }
+
+    export const loadCompTypes = () => (d, gs: () => Models.StoreState) => {
+        Services.getCompTypes().then((response) => {
+            if(response.status){
+                d({
+                    type: ActionTypes.LOAD_COMP_TYPES,
+                    payload: <ActionTypes.LOAD_COMP_TYPES_PAYLOAD> response.data
                 })
             }
         })

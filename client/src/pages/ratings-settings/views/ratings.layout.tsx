@@ -9,6 +9,7 @@ import * as Actions from "../actions/index.actions";
 import * as Selectors from "../selectors/selector";
 import CompetitionRatingsGrid from "./competition.ratings.grid";
 import RecordsRatingsGrid from "./records.ratings.grid";
+import UPFRangeGrid from "./upf.range.grid";
 
 interface StateProps{
     competitionPoints: Models.LookupModels.TablePoint[]
@@ -32,6 +33,7 @@ export default connect<StateProps, DispatchProps>(
         this.props.actions.getCompetitions();
         this.props.actions.getPoints();
         this.props.actions.getRecords();
+        this.props.actions.loadCompTypes();
     }
     render(){
         return <div>
@@ -42,6 +44,9 @@ export default connect<StateProps, DispatchProps>(
                     </Tab>
                     <Tab title="Таблиця нарахування очок рейтингу за встановленими рекордами" label="byRecord">
                         <RecordsRatingsGrid points={this.props.recordPoints} />
+                    </Tab>
+                    <Tab title="Таблиця ранжування очок рейтингу ФПУ" label="byRange">
+                        <UPFRangeGrid />
                     </Tab>
                 </TabView>
             </ContentWrap>

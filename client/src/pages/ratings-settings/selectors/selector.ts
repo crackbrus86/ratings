@@ -4,6 +4,7 @@ import * as Models from "../models/index.models";
 const competitions = (state: Models.StoreState) => state.lookup.competitions;
 const points = (state: Models.StoreState) => state.lookup.points;
 const records = (state: Models.StoreState) => state.lookup.records;
+const compTypes = (state: Models.StoreState) => state.lookup.compTypes;
 
 export const getCompetitionsTablePoints = createSelector(competitions, points, (competitions, points) => {
     if(!competitions.length) return [];
@@ -32,4 +33,41 @@ export const getRecordsTablepoints = createSelector(records, points, (records, p
             firstPlaceValue: recordPoints.filter(point => point.place == 1).length ? recordPoints.filter(point => point.place == 1)[0].value : 0
         } as Models.LookupModels.TablePoint
     });
+});
+
+export const upfRanges = createSelector(competitions, compTypes, (comp, types) => {
+    let ranges: Models.Range[] = [];
+    let counter = 1;
+    comp.filter(c => !!c.ratingUPF).map(c => {
+        for(var i = 1; i < 4; i++){
+            let range: Models.Range = {
+                comp: c.dbName,
+                name: c.name,
+                place: i,
+                compType: null,
+                compTypeName: null
+            }
+            if(range.comp != "WorldGames" && range.comp != "EuropeanCup"){
+                for(var j = 0; j < types.length; j++){
+                    range = {
+                        ...range,
+                        compType: types[j].name,
+                        compTypeName: types[j].displayName,
+                        sortOrder: counter
+                    }
+                    ranges = ranges.concat(range);
+                    counter++;
+                }
+            }else{
+                range = {
+                    ...range,
+                    sortOrder: counter
+                }
+                ranges = ranges.concat(range);
+                counter++;
+            }
+        }
+
+    })
+    return ranges;
 });

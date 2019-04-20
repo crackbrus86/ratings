@@ -41,3 +41,6 @@ export type LOAD_NAMES_PAYLOAD = string[]
 
 export const LOAD_MINISTRY_RATINGS = "RATINGS::LOAD_MINISTRY_RATINGS";
 export type LOAD_MINISTRY_RATINGS_PAYLOAD = Models.Rating[]
+
+export const LOAD_COMP_TYPES = "LOOKUP::LOAD_COMP_TYPES";
+export type LOAD_COMP_TYPES_PAYLOAD = Models.CompetitionType[]

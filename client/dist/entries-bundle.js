@@ -1205,6 +1205,7 @@ exports.SELECT_TO_REMOVE = "ENTRIES::SELECT_TO_REMOVE";
 exports.CANCEL_REMOVE = "ENTRIES::CANCEL_REMOVE";
 exports.LOAD_NAMES = "ENTRIES::LOAD_NAMES";
 exports.LOAD_MINISTRY_RATINGS = "RATINGS::LOAD_MINISTRY_RATINGS";
+exports.LOAD_COMP_TYPES = "LOOKUP::LOAD_COMP_TYPES";
 
 
 /***/ }),
@@ -1402,6 +1403,7 @@ var ActionCreators;
     ActionCreators.initLookups = function () { return function (d, gs) {
         d(ActionCreators.loadCompetitions());
         d(ActionCreators.loadRecords());
+        d(ActionCreators.loadCompTypes());
     }; };
     ActionCreators.loadCompetitions = function () { return function (d, gs) {
         Services.getCompetitions().then(function (response) {
@@ -1432,6 +1434,16 @@ var ActionCreators;
             if (response.status) {
                 d({
                     type: ActionTypes.LOAD_NAMES,
+                    payload: response.data
+                });
+            }
+        });
+    }; };
+    ActionCreators.loadCompTypes = function () { return function (d, gs) {
+        Services.getCompTypes().then(function (response) {
+            if (response.status) {
+                d({
+                    type: ActionTypes.LOAD_COMP_TYPES,
                     payload: response.data
                 });
             }
@@ -1787,7 +1799,7 @@ var defaultState = {
     records: [],
     names: [],
     divisions: [{ name: "Open", displayName: "Відкритий" }, { name: "Junior", displayName: "Юніори" }, { name: "SubJunior", displayName: "Юнаки" }],
-    compTypes: [{ name: "PL", displayName: "Пауерліфтинг" }, { name: "CPL", displayName: "Класичний Пауерліфтинг" }, { name: "BP", displayName: "Жим" }, { name: "CBP", displayName: "Класичний Жим" }]
+    compTypes: []
 };
 exports.lookupReducer = function (state, action) {
     if (state === void 0) { state = defaultState; }
@@ -1803,6 +1815,10 @@ exports.lookupReducer = function (state, action) {
         case ActionTypes.LOAD_NAMES: {
             var payload = action.payload;
             return __assign({}, state, { names: payload });
+        }
+        case ActionTypes.LOAD_COMP_TYPES: {
+            var payload = action.payload;
+            return __assign({}, state, { compTypes: payload });
         }
         default:
             return state;
@@ -2124,6 +2140,12 @@ exports.getRecords = function () {
 exports.getNames = function () {
     return CallApi.callApi({
         url: lookupApiPath + 'GetAllNames.php',
+        type: apiTypes.GET
+    });
+};
+exports.getCompTypes = function () {
+    return CallApi.callApi({
+        url: lookupApiPath + 'GetCompetitionTypesLookup.php',
         type: apiTypes.GET
     });
 };

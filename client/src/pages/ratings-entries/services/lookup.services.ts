@@ -24,3 +24,10 @@ export const getNames = () => {
         type: apiTypes.GET
     });
 }
+
+export const getCompTypes = () => {
+    return CallApi.callApi({
+        url: lookupApiPath + 'GetCompetitionTypesLookup.php',
+        type: apiTypes.GET
+    });
+}
