@@ -2,11 +2,13 @@ import * as ActionTypes from "../actions/action.types";
 import * as Models from "../models/index.models";
 
 export interface RatingsState{
-    ministryRatings: Models.Rating[]
+    ministryRatings: Models.Rating[],
+    upfRatings: Models.Rating[]
 }
 
 const defaultState = {
-    ministryRatings: []
+    ministryRatings: [],
+    upfRatings: []
 } as RatingsState
 
 export type ReducerState = typeof defaultState;
@@ -18,6 +20,13 @@ export const ratingsReducer = (state = defaultState, action): ReducerState => {
             return {
                 ...state,
                 ministryRatings: payload
+            }
+        }
+        case ActionTypes.LOAD_UPF_RATINGS: {
+            let payload = action.payload as ActionTypes.LOAD_UPF_RATINGS_PAYLOAD;
+            return {
+                ...state,
+                upfRatings: payload
             }
         }
         default:

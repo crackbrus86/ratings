@@ -7,7 +7,8 @@ export interface RatingEntry{
     place: number,
     eventDate: Date,
     gender: string,
-    compType: string
+    compType: string,
+    wilks: number
 }
 
 export interface GetEntries_Contract{

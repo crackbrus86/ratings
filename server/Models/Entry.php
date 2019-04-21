@@ -10,6 +10,7 @@ class Entry
     public $gender;
     public $division;
     public $compType;
+    public $wilks;
 
     public function __construct()
     {
@@ -22,6 +23,7 @@ class Entry
         $this->gender = NULL;
         $this->division = NULL;
         $this->compType = NULL;
+        $this->wilks = NULL;
     }
 
     public function validate(bool $isEdit = FALSE)

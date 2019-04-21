@@ -43,9 +43,9 @@ class EntryService
 
             return $response;
         }else{
-            $sql = $this->db->prepare("INSERT INTO {$this->tableName} (Fullname, Type, Event, Place, EventDate, Gender, Division, CompType) 
-                VALUES (%s, %s, %s, %d, %s, %s, %s, %s)", 
-                $entry->fullname, $entry->type, $entry->event, $entry->place, $entry->eventDate, $entry->gender, $entry->division, $entry->compType);
+            $sql = $this->db->prepare("INSERT INTO {$this->tableName} (Fullname, Type, Event, Place, EventDate, Gender, Division, CompType, Wilks) 
+                VALUES (%s, %s, %s, %d, %s, %s, %s, %s, %s)", 
+                $entry->fullname, $entry->type, $entry->event, $entry->place, $entry->eventDate, $entry->gender, $entry->division, $entry->compType, $entry->wilks);
 
             $this->db->query($sql);
         }
@@ -76,11 +76,12 @@ class EntryService
 
             return $response;
         }else{
+
             $sql = $this->db->prepare("UPDATE {$this->tableName} 
-                                        SET Fullname = %s, Type = %s, Event = %s, Place = %d, EventDate = %s, Gender = %s, Division = %s, CompType = %s
+                                        SET Fullname = %s, Type = %s, Event = %s, Place = %d, EventDate = %s, Gender = %s, Division = %s, CompType = %s, Wilks = %s
                                         WHERE RatingEntryId = %d", 
                                         $entry->fullname, $entry->type, $entry->event, $entry->place, $entry->eventDate, 
-                                        $entry->gender, $entry->division, $entry->compType, $entry->ratingEntryId);
+                                        $entry->gender, $entry->division, $entry->compType, $entry->wilks, $entry->ratingEntryId);
 
             $this->db->query($sql);
         }
@@ -164,6 +165,8 @@ class EntryService
         $entry->place = intval($entry->place);
 
         $entry->eventDate = convertToDate($entry->eventDate);
+
+        $entry->wilks = floatval($entry->wilks);
 
         return $entry;
     }

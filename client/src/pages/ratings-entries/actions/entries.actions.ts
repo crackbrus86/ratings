@@ -16,7 +16,8 @@ export namespace ActionCreators{
                 type: Models.EntryType.Place,
                 event: null,
                 place: null,
-                eventDate: new Date()
+                eventDate: new Date(),
+                wilks: null
             }
         })
     }

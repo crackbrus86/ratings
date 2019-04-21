@@ -17,3 +17,6 @@ export interface LOAD_RECORDS_PAYLOAD {
 
 export const LOAD_COMP_TYPES = "LOAD_COMP_TYPES";
 export type LOAD_COMP_TYPES_PAYLOAD = Models.CompType[];
+
+export const LOAD_RANGES = "LOAD_RANGES";
+export type LOAD_RANGES_PAYLOAD = Models.UPFRange[];

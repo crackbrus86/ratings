@@ -294,6 +294,9 @@ var Cell = /** @class */ (function (_super) {
             item[column] = value;
             _this.props.onChange(item);
         };
+        _this.createMarkup = function (value) {
+            return { __html: value };
+        };
         _this.renderItem = function () {
             switch (_this.props.column.type) {
                 case column_1.ColumnTypes.Button:
@@ -302,6 +305,8 @@ var Cell = /** @class */ (function (_super) {
                     return React.createElement(editable_cell_1.default, { value: _this.props.item[_this.props.column.field], onChange: function (v) { return _this.onItemChange(v, _this.props.item, _this.props.column.field); } });
                 case column_1.ColumnTypes.Date:
                     return moment(_this.props.item[_this.props.column.field]).format("DD/MM/YYYY");
+                case column_1.ColumnTypes.Html:
+                    return React.createElement("div", { dangerouslySetInnerHTML: _this.createMarkup(_this.props.item[_this.props.column.field]) });
                 default:
                     return _this.props.item[_this.props.column.field];
             }
@@ -348,6 +353,7 @@ var ColumnTypes;
     ColumnTypes["Button"] = "button";
     ColumnTypes["Input"] = "input";
     ColumnTypes["Date"] = "date";
+    ColumnTypes["Html"] = "html";
 })(ColumnTypes = exports.ColumnTypes || (exports.ColumnTypes = {}));
 var Column = /** @class */ (function (_super) {
     __extends(Column, _super);
@@ -678,6 +684,7 @@ exports.LOAD_COMPETITIONS = "LOAD_COMPETITIONS";
 exports.LOAD_POINTS = "LOAD_POINTS";
 exports.LOAD_RECORDS = "LOAD_RECORDS";
 exports.LOAD_COMP_TYPES = "LOAD_COMP_TYPES";
+exports.LOAD_RANGES = "LOAD_RANGES";
 
 
 /***/ }),
@@ -693,6 +700,7 @@ exports.LOAD_COMP_TYPES = "LOAD_COMP_TYPES";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LookupActions = __webpack_require__(/*! ./lookup.actions */ "./client/src/pages/ratings-settings/actions/lookup.actions.ts");
+exports.RangesActions = __webpack_require__(/*! ./ranges.actions */ "./client/src/pages/ratings-settings/actions/ranges.actions.ts");
 
 
 /***/ }),
@@ -806,6 +814,53 @@ var ActionCreators;
 
 /***/ }),
 
+/***/ "./client/src/pages/ratings-settings/actions/ranges.actions.ts":
+/*!*********************************************************************!*\
+  !*** ./client/src/pages/ratings-settings/actions/ranges.actions.ts ***!
+  \*********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var Services = __webpack_require__(/*! ../services/range.services */ "./client/src/pages/ratings-settings/services/range.services.ts");
+var ActionTypes = __webpack_require__(/*! ./action.types */ "./client/src/pages/ratings-settings/actions/action.types.ts");
+var toastr = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
+var ActionCreators;
+(function (ActionCreators) {
+    ActionCreators.loadRanges = function () { return function (d, gs) {
+        Services.getRanges().then(function (response) {
+            if (response.status) {
+                d({
+                    type: ActionTypes.LOAD_RANGES,
+                    payload: response.data
+                });
+            }
+        });
+    }; };
+    ActionCreators.saveRange = function (range) { return function (d, gs) {
+        Services.saveRange({
+            id: range.sortOrder,
+            competition: range.comp,
+            place: range.place,
+            compType: range.compType,
+            range: range.rangeValue
+        }).then(function (response) {
+            if (response.status) {
+                toastr.success(response.message);
+                d(ActionCreators.loadRanges());
+            }
+            else {
+                toastr.error(response.message);
+            }
+        });
+    }; };
+})(ActionCreators = exports.ActionCreators || (exports.ActionCreators = {}));
+
+
+/***/ }),
+
 /***/ "./client/src/pages/ratings-settings/index.tsx":
 /*!*****************************************************!*\
   !*** ./client/src/pages/ratings-settings/index.tsx ***!
@@ -836,8 +891,10 @@ ReactDOM.render(React.createElement(startup_1.default, null), document.getElemen
 Object.defineProperty(exports, "__esModule", { value: true });
 var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 exports.Lookup = __webpack_require__(/*! ./lookup.reducer */ "./client/src/pages/ratings-settings/reducers/lookup.reducer.ts");
+exports.Ranges = __webpack_require__(/*! ./range.reducer */ "./client/src/pages/ratings-settings/reducers/range.reducer.ts");
 exports.reducer = redux_1.combineReducers({
-    lookup: exports.Lookup.lookupReducer
+    lookup: exports.Lookup.lookupReducer,
+    ranges: exports.Ranges.rangesReducer
 });
 
 
@@ -898,6 +955,46 @@ exports.lookupReducer = function (state, action) {
 
 /***/ }),
 
+/***/ "./client/src/pages/ratings-settings/reducers/range.reducer.ts":
+/*!*********************************************************************!*\
+  !*** ./client/src/pages/ratings-settings/reducers/range.reducer.ts ***!
+  \*********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var ActionTypes = __webpack_require__(/*! ../actions/action.types */ "./client/src/pages/ratings-settings/actions/action.types.ts");
+var defaultState = {
+    ranges: []
+};
+exports.rangesReducer = function (state, action) {
+    if (state === void 0) { state = defaultState; }
+    switch (action.type) {
+        case ActionTypes.LOAD_RANGES: {
+            var payload = action.payload;
+            return __assign({}, state, { ranges: payload });
+        }
+        default:
+            return state;
+    }
+};
+
+
+/***/ }),
+
 /***/ "./client/src/pages/ratings-settings/selectors/selector.ts":
 /*!*****************************************************************!*\
   !*** ./client/src/pages/ratings-settings/selectors/selector.ts ***!
@@ -924,6 +1021,7 @@ var competitions = function (state) { return state.lookup.competitions; };
 var points = function (state) { return state.lookup.points; };
 var records = function (state) { return state.lookup.records; };
 var compTypes = function (state) { return state.lookup.compTypes; };
+var uRanges = function (state) { return state.ranges.ranges; };
 exports.getCompetitionsTablePoints = reselect_1.createSelector(competitions, points, function (competitions, points) {
     if (!competitions.length)
         return [];
@@ -940,7 +1038,7 @@ exports.getRecordsTablepoints = reselect_1.createSelector(records, points, funct
         return __assign({}, record, { firstPlaceValue: recordPoints.filter(function (point) { return point.place == 1; }).length ? recordPoints.filter(function (point) { return point.place == 1; })[0].value : 0 });
     });
 });
-exports.upfRanges = reselect_1.createSelector(competitions, compTypes, function (comp, types) {
+exports.upfRanges = reselect_1.createSelector(competitions, compTypes, uRanges, records, function (comp, types, uRanges, records) {
     var ranges = [];
     var counter = 1;
     comp.filter(function (c) { return !!c.ratingUPF; }).map(function (c) {
@@ -949,8 +1047,9 @@ exports.upfRanges = reselect_1.createSelector(competitions, compTypes, function 
                 comp: c.dbName,
                 name: c.name,
                 place: i,
-                compType: null,
-                compTypeName: null
+                compType: (c.dbName != "WorldGames" && c.dbName != "EuropeanCup") ? "PL" : null,
+                compTypeName: null,
+                rangeValue: null
             };
             if (range.comp != "WorldGames" && range.comp != "EuropeanCup") {
                 for (var j = 0; j < types.length; j++) {
@@ -966,8 +1065,26 @@ exports.upfRanges = reselect_1.createSelector(competitions, compTypes, function 
             }
         }
     });
-    return ranges;
+    records.map(function (r) {
+        var range = {
+            comp: r.dbName,
+            name: r.name,
+            place: 1,
+            rangeValue: null
+        };
+        for (var i = 0; i < types.length; i++) {
+            range = __assign({}, range, { compType: types[i].name, compTypeName: types[i].displayName, sortOrder: counter });
+            ranges = ranges.concat(range);
+            counter++;
+        }
+    });
+    return ranges.map(function (r) { return getRangeValue(r, uRanges); });
 });
+function getRangeValue(range, ranges) {
+    var upfRange = ranges.find(function (r) { return r.id == range.sortOrder || (r.competition == range.comp && r.compType == range.compType && r.place == range.place); });
+    range.rangeValue = !!upfRange ? upfRange.range : 0;
+    return range;
+}
 
 
 /***/ }),
@@ -1014,6 +1131,36 @@ exports.getCompTypes = function () {
     return CallApi.callApi({
         url: lookupApiPath + 'GetCompetitionTypesLookup.php',
         type: apiTypes.GET
+    });
+};
+
+
+/***/ }),
+
+/***/ "./client/src/pages/ratings-settings/services/range.services.ts":
+/*!**********************************************************************!*\
+  !*** ./client/src/pages/ratings-settings/services/range.services.ts ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var CallApi = __webpack_require__(/*! ../../../infrastructure/call.api */ "./client/src/infrastructure/call.api.ts");
+var rangesApiPath = "../wp-content/plugins/ratings/server/RangesController/";
+var apiTypes = CallApi.RequestTypes;
+exports.getRanges = function () {
+    return CallApi.callApi({
+        url: rangesApiPath + 'GetAllRanges.php',
+        type: apiTypes.GET
+    });
+};
+exports.saveRange = function (point) {
+    return CallApi.callApi({
+        url: rangesApiPath + 'SaveRange.php',
+        type: apiTypes.POST,
+        data: point
     });
 };
 
@@ -1252,17 +1399,19 @@ exports.default = react_redux_1.connect(function (state) { return ({
     competitionPoints: Selectors.getCompetitionsTablePoints(state),
     recordPoints: Selectors.getRecordsTablepoints(state)
 }); }, function (dispatch) { return ({
-    actions: redux_1.bindActionCreators(Actions.LookupActions.ActionCreators, dispatch)
+    lookupActions: redux_1.bindActionCreators(Actions.LookupActions.ActionCreators, dispatch),
+    rangesActions: redux_1.bindActionCreators(Actions.RangesActions.ActionCreators, dispatch)
 }); })(/** @class */ (function (_super) {
     __extends(RatingsLayout, _super);
     function RatingsLayout() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     RatingsLayout.prototype.componentDidMount = function () {
-        this.props.actions.getCompetitions();
-        this.props.actions.getPoints();
-        this.props.actions.getRecords();
-        this.props.actions.loadCompTypes();
+        this.props.lookupActions.getCompetitions();
+        this.props.lookupActions.getPoints();
+        this.props.lookupActions.getRecords();
+        this.props.lookupActions.loadCompTypes();
+        this.props.rangesActions.loadRanges();
     };
     RatingsLayout.prototype.render = function () {
         return React.createElement("div", null,
@@ -1377,23 +1526,24 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 var table_1 = __webpack_require__(/*! ../../../components/table/table */ "./client/src/components/table/table.tsx");
+var column_1 = __webpack_require__(/*! ../../../components/table/column */ "./client/src/components/table/column.tsx");
+var Actions = __webpack_require__(/*! ../actions/index.actions */ "./client/src/pages/ratings-settings/actions/index.actions.ts");
 var Selectors = __webpack_require__(/*! ../selectors/selector */ "./client/src/pages/ratings-settings/selectors/selector.ts");
 exports.default = react_redux_1.connect(function (state) { return ({
     ranges: Selectors.upfRanges(state)
-}); }, function (dispatch) { return ({}); })(/** @class */ (function (_super) {
+}); }, function (dispatch) { return ({
+    rangesActions: redux_1.bindActionCreators(Actions.RangesActions.ActionCreators, dispatch)
+}); })(/** @class */ (function (_super) {
     __extends(UPFRangeGrid, _super);
     function UPFRangeGrid() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     UPFRangeGrid.prototype.render = function () {
+        var _this = this;
         return React.createElement(React.Fragment, null,
             React.createElement(table_1.default, { items: this.props.ranges, columns: [
-                    {
-                        title: "№",
-                        field: "sortOrder",
-                        width: "100px"
-                    },
                     {
                         title: "Змагання",
                         field: 'name',
@@ -1408,6 +1558,14 @@ exports.default = react_redux_1.connect(function (state) { return ({
                         title: "Дисципліна",
                         field: "compTypeName",
                         width: "200px"
+                    },
+                    {
+                        title: "Ранг",
+                        field: "rangeValue",
+                        type: column_1.ColumnTypes.Input,
+                        sortable: true,
+                        width: "80px",
+                        onChange: function (range) { return _this.props.rangesActions.saveRange(range); }
                     },
                     {
                         title: "",

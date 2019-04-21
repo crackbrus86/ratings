@@ -5,6 +5,7 @@ const competitions = (state: Models.StoreState) => state.lookup.competitions;
 const points = (state: Models.StoreState) => state.lookup.points;
 const records = (state: Models.StoreState) => state.lookup.records;
 const compTypes = (state: Models.StoreState) => state.lookup.compTypes;
+const uRanges = (state: Models.StoreState) => state.ranges.ranges;
 
 export const getCompetitionsTablePoints = createSelector(competitions, points, (competitions, points) => {
     if(!competitions.length) return [];
@@ -35,7 +36,7 @@ export const getRecordsTablepoints = createSelector(records, points, (records, p
     });
 });
 
-export const upfRanges = createSelector(competitions, compTypes, (comp, types) => {
+export const upfRanges = createSelector(competitions, compTypes, uRanges, records,  (comp, types, uRanges, records) => {
     let ranges: Models.Range[] = [];
     let counter = 1;
     comp.filter(c => !!c.ratingUPF).map(c => {
@@ -44,8 +45,9 @@ export const upfRanges = createSelector(competitions, compTypes, (comp, types) =
                 comp: c.dbName,
                 name: c.name,
                 place: i,
-                compType: null,
-                compTypeName: null
+                compType: (c.dbName != "WorldGames" && c.dbName != "EuropeanCup") ? "PL" : null,
+                compTypeName: null,
+                rangeValue: null
             }
             if(range.comp != "WorldGames" && range.comp != "EuropeanCup"){
                 for(var j = 0; j < types.length; j++){
@@ -69,5 +71,30 @@ export const upfRanges = createSelector(competitions, compTypes, (comp, types) =
         }
 
     })
-    return ranges;
+    records.map(r => {
+        let range: Models.Range = {
+            comp: r.dbName,
+            name: r.name,
+            place: 1,
+            rangeValue: null
+        }
+        for(var i = 0; i < types.length; i++){
+            range = {
+                ...range,
+                compType: types[i].name,
+                compTypeName: types[i].displayName,
+                sortOrder: counter
+            }
+            ranges = ranges.concat(range);
+            counter++;
+        }
+    })
+
+    return ranges.map(r => getRangeValue(r, uRanges));
 });
+
+function getRangeValue(range: Models.Range, ranges: Models.UPFRange[]){
+    var upfRange = ranges.find(r => r.id == range.sortOrder || (r.competition == range.comp && r.compType == range.compType && r.place == range.place));
+    range.rangeValue = !!upfRange ? upfRange.range : 0;
+    return range;
+}

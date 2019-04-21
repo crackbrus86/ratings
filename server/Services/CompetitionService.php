@@ -20,7 +20,7 @@ class CompetitionService
             new Copmetition(9, "Чемпіонат Європи серед юнаків", 9, "SubJuniorEuropeanChampionship", TRUE),
             new Copmetition(10, "Чемпіонат України серед юнаків", 10, "SubJuniorUkraineChampionship", FALSE),
             new Copmetition(11, "Кубок світу", 11, "WorldCup", FALSE),
-            new Copmetition(12, "Кубок Європи", 12, "EuropeanCup", TRUE),
+            new Copmetition(12, "Кубок Європи/Дунаю", 12, "EuropeanCup", TRUE),
             new Copmetition(13, "Кубок України", 13, "UkraineCup", FALSE)
         );
     }

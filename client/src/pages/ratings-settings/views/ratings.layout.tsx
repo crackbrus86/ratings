@@ -17,7 +17,8 @@ interface StateProps{
 }
 
 interface DispatchProps{
-    actions: typeof Actions.LookupActions.ActionCreators
+    lookupActions: typeof Actions.LookupActions.ActionCreators,
+    rangesActions: typeof Actions.RangesActions.ActionCreators
 }
 
 export default connect<StateProps, DispatchProps>(
@@ -26,14 +27,16 @@ export default connect<StateProps, DispatchProps>(
         recordPoints: Selectors.getRecordsTablepoints(state)
     }),
     (dispatch): DispatchProps => ({
-        actions: bindActionCreators(Actions.LookupActions.ActionCreators, dispatch)
+        lookupActions: bindActionCreators(Actions.LookupActions.ActionCreators, dispatch),
+        rangesActions: bindActionCreators(Actions.RangesActions.ActionCreators, dispatch)
     })
 )(class RatingsLayout extends React.Component<StateProps & DispatchProps>{
     componentDidMount(){
-        this.props.actions.getCompetitions();
-        this.props.actions.getPoints();
-        this.props.actions.getRecords();
-        this.props.actions.loadCompTypes();
+        this.props.lookupActions.getCompetitions();
+        this.props.lookupActions.getPoints();
+        this.props.lookupActions.getRecords();
+        this.props.lookupActions.loadCompTypes();
+        this.props.rangesActions.loadRanges();
     }
     render(){
         return <div>

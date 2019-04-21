@@ -51,6 +51,7 @@ export default connect<StateProps, DispatchProps>(
     }
 
     render(){
+        var wilks = !!this.props.entry && this.props.entry.wilks ? this.props.entry.wilks.toString() : '';
         return this.props.entry && <Modal>
             <Modal.Header title={`${this.props.entry.ratingEntryId ? 'Редагувати' : 'Створити'} Запис`} onClose={this.props.actions.closeEntry} />
             <Modal.Body><div style={{width: '395px'}}>
@@ -113,6 +114,11 @@ export default connect<StateProps, DispatchProps>(
                         value={this.props.entry.eventDate}
                         validation={this.props.validation.isEventDateValid}
                         onChange={(value) => this.props.actions.updateEntry("eventDate", value)}
+                    />
+                    <Form.TextInput
+                        label="Показник за формулою Вілкса"
+                        value={wilks}
+                        onChange={(value) => this.props.actions.updateEntry("wilks", value)}
                     />
                 </Form>
             </div></Modal.Body>

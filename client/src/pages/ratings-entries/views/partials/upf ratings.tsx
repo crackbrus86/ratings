@@ -21,20 +21,20 @@ interface DispatchProps{
 
 export default connect<StateProps, DispatchProps, OwnProps>(
     (state: Models.StoreState):StateProps => ({
-        ratingsMale: Selectors.RatingSelector.ministryRatingsMale(state),
-        ratingsFemale: Selectors.RatingSelector.ministryRatingsFemale(state)
+        ratingsMale: Selectors.RatingSelector.upfRatingsMale(state),
+        ratingsFemale: Selectors.RatingSelector.upfRatingsFemale(state)
     }),
     (dispatch): DispatchProps => ({
         actions: bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch)
     })
-)(class MinistryRatings extends React.Component<StateProps & DispatchProps & OwnProps>{
+)(class UPFRatings extends React.Component<StateProps & DispatchProps & OwnProps>{
 
     constructor(props){
         super(props);
     }
 
     componentDidMount(){
-        this.props.actions.loadMinistryRatings();
+        this.props.actions.loadUPFRatings();
     }
 
     getRatings = () => {
@@ -59,13 +59,14 @@ export default connect<StateProps, DispatchProps, OwnProps>(
                         width: "300px",
                     },
                     {
-                        title: "К-ть очок",
+                        title: "Ранг",
                         field: "rating",
                         width: "100px"
                     },
                     {
                         title: "Деталі",
                         field: "details",
+                        type: ColumnTypes.Html,
                         width: "*"
                     }
                 ] as ColumnModel[]}

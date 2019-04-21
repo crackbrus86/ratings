@@ -18,6 +18,10 @@ class Cell extends React.PureComponent<CellProps>{
         this.props.onChange(item);
     }
 
+    createMarkup = (value) => {
+        return {__html: value};
+      }
+
     renderItem = () => {
         switch(this.props.column.type){
             case ColumnTypes.Button:
@@ -26,6 +30,8 @@ class Cell extends React.PureComponent<CellProps>{
                 return <EditableCell value={this.props.item[this.props.column.field]} onChange={(v) => this.onItemChange(v, this.props.item, this.props.column.field)} />
             case ColumnTypes.Date:
                 return moment(this.props.item[this.props.column.field]).format("DD/MM/YYYY")
+            case ColumnTypes.Html:
+                return <div dangerouslySetInnerHTML={this.createMarkup(this.props.item[this.props.column.field])}></div>
             default:
                 return this.props.item[this.props.column.field];
         }

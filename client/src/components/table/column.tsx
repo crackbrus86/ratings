@@ -4,7 +4,8 @@ import * as FontAwesome from "react-fontawesome";
 export enum ColumnTypes{
     Button = "button",
     Input = "input",
-    Date = "date"
+    Date = "date",
+    Html = "html"
 }
 
 export interface ColumnModel{

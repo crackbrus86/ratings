@@ -12,7 +12,7 @@ interface StateProps {
 }
 
 interface DispatchProps {
-
+    rangesActions: typeof Actions.RangesActions.ActionCreators
 }
 
 export default connect<StateProps, DispatchProps>(
@@ -20,16 +20,12 @@ export default connect<StateProps, DispatchProps>(
         ranges: Selectors.upfRanges(state)
     }),
     (dispatch): DispatchProps => ({
+        rangesActions: bindActionCreators(Actions.RangesActions.ActionCreators, dispatch)
     })
 )(class UPFRangeGrid extends React.Component<StateProps & DispatchProps>{
     render() {
         return <>
             <Table items={this.props.ranges} columns={[
-                {
-                    title: "№",
-                    field: "sortOrder",
-                    width: "100px"
-                },
                 {
                     title: "Змагання",
                     field: 'name',
@@ -44,6 +40,14 @@ export default connect<StateProps, DispatchProps>(
                     title: "Дисципліна",
                     field: "compTypeName",
                     width: "200px"
+                },
+                {
+                    title: "Ранг",
+                    field: "rangeValue",
+                    type: ColumnTypes.Input,
+                    sortable: true,
+                    width: "80px",
+                    onChange: (range: Models.Range) => this.props.rangesActions.saveRange(range)
                 },
                 {
                     title: "",
