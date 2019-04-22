@@ -3,7 +3,8 @@ export interface Rating{
     rating: string,
     gender: string,
     details: string,
-    detailsData?: string[]
+    detailsData?: string[],
+    wilks: string
 }
 
 export interface GetRatings_Contract{

@@ -11,4 +11,11 @@ export namespace ActionCreators{
         d(Actions.EntriesActions.ActionCreators.getEntries());
         d(Actions.RatingsActions.ActionCreators.loadMinistryRatings());
     }
+
+    export const changeSearchValue = (value: string) => (d, gs: () => Models.StoreState) => {
+        d({
+            type: ActionTypes.CHANGE_SEARCH_VALUE,
+            payload: <ActionTypes.CHANGE_SEARCH_VALUE_PAYLOAD> value
+        })
+    }
 }

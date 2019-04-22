@@ -7,6 +7,8 @@ const records = (state: Models.StoreState) => state.lookup.records;
 const currentEntry = (state: Models.StoreState) => state.entries.currentEntry;
 const divisions = (state: Models.StoreState) => state.lookup.divisions;
 const compTypes = (state: Models.StoreState) => state.lookup.compTypes;
+const entries = (state: Models.StoreState) => state.entries.entries;
+const searchValue = (state: Models.StoreState) => state.shell.searchValue;
 
 export const eventList = createSelector(competitions, records, currentEntry, (competitions, records, entry) => {
     let list: Models.Competition[] | Models.Record[] = entry && entry.type == Models.EntryType.Place ? competitions : records;
@@ -97,4 +99,28 @@ function validate(result: EntryValidationResult){
         }
     }
     return result;
+}
+
+export const entriesList = createSelector(entries, searchValue, competitions, records, compTypes, (entries, searchValue, comp, records, types) => {
+    let events = comp.concat(records);
+    entries = entries.map(entry => {
+        let eventName = events.find(event => event.dbName == entry.event).name;
+        var compType = types.find(type => type.name == entry.compType);
+        var compTypeName = !!compType ? ` - ${compType.displayName}` : '';
+        return {
+            ...entry,
+            event: `${eventName}${compTypeName}`
+        }            
+    });
+    return entries.filter(entry => !searchValue 
+                                    || isMatchingSearchString(searchValue, entry.fullname) 
+                                    || isMatchingSearchString(searchValue, entry.event) 
+                                    || isMatchingSearchString(searchValue, entry.eventDate) 
+                                    || isMatchingSearchString(searchValue, entry.place) 
+                                    || isMatchingSearchString(searchValue, entry.wilks))
+})
+
+function isMatchingSearchString(search: string, field: any){
+    if(!field) field = '';
+    return field.toString().toLowerCase().indexOf(search.toLowerCase()) != -1;
 }

@@ -11,7 +11,9 @@ class Rating
 
     public $detailsData;
 
-    function __construct(string $fullname, int $rating, string $gender, string $details, array $detailsData = array())
+    public $wilks;
+
+    function __construct(string $fullname, int $rating, string $gender, string $details, array $detailsData = array(), float $wilks = NULL)
     {
         $this->fullname = $fullname;
         
@@ -22,6 +24,8 @@ class Rating
         $this->details = $details;
 
         $this->detailsData = $detailsData;
+
+        $this->wilks = $wilks;
     }
 }
 ?>

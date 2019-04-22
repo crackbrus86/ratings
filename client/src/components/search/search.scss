@@ -1,0 +1,27 @@
+.search-box{
+    padding: 4px;
+    overflow: hidden;
+    display: inline-block;
+
+    input{
+        border-radius: 4px;
+    }
+
+    .fa{
+        font-size: 1.2em;
+        margin: 2px 4px;
+
+        &.search-icon{
+            color: #07bd69;
+        }
+        &.close-icon{
+            color: #b40413;
+            cursor: pointer;
+
+            &:hover{
+                color: #eb0e21;
+            }
+        }
+    }
+
+}

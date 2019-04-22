@@ -5,8 +5,10 @@ import Table from "../../../../components/table/table";
 import { ColumnModel, ColumnTypes } from "../../../../components/table/column";
 import * as Models from "../../models/index.models";
 import * as Actions from "../../actions/index.actions";
+import * as Selectors from "../../selectors/index.selector";
 import EntryModal from "../../modals/entry.modal";
 import Confirm from "../../../../components/confirm/confirm";
+import Search from "../../../../components/search/search";
 
 interface StateProps{
     entries: Models.Entry[],
@@ -17,19 +19,21 @@ interface StateProps{
 }
 
 interface DispatchProps{
-    actions: typeof Actions.EntriesActions.ActionCreators
+    entryActions: typeof Actions.EntriesActions.ActionCreators,
+    shellActions: typeof Actions.ShellActions.ActionCreators
 }
 
 export default connect<StateProps, DispatchProps>(
     (state: Models.StoreState): StateProps => ({
-        entries: state.entries.entries,
+        entries: Selectors.EntrySelector.entriesList(state),
         competitions: state.lookup.competitions,
         records: state.lookup.records,
         deleteEntryId: state.entries.deleteById,
         compTypes: state.lookup.compTypes
     }),
     (dispatch): DispatchProps => ({
-        actions: bindActionCreators(Actions.EntriesActions.ActionCreators, dispatch)
+        entryActions: bindActionCreators(Actions.EntriesActions.ActionCreators, dispatch),
+        shellActions: bindActionCreators(Actions.ShellActions.ActionCreators, dispatch)
     })
 )(class Entries extends React.Component<StateProps & DispatchProps>{
     constructor(props){
@@ -37,37 +41,28 @@ export default connect<StateProps, DispatchProps>(
     }
 
     componentDidMount(){
-        this.props.actions.getEntries();
+        this.props.entryActions.getEntries();
     }
 
     render(){
-        let entries = this.props.entries.map(entry => {
-            let events = this.props.competitions.concat(this.props.records);
-            let eventName = events.find(event => event.dbName == entry.event).name;
-            var compType = this.props.compTypes.find(type => type.name == entry.compType);
-            var compTypeName = !!compType ? ` - ${compType.displayName}` : '';
-            return {
-                ...entry,
-                event: `${eventName}${compTypeName}`
-            }            
-        });
         return <div className="entries">
-            <button className="create-button" onClick={this.props.actions.addEntry}>Створити запис</button>
-            <Table items={entries}
+            <button className="create-button" onClick={this.props.entryActions.addEntry}>Створити запис</button>
+            <Search onChange={this.props.shellActions.changeSearchValue} />
+            <Table items={this.props.entries}
                 columns={[
                     {
                         title: "",
                         type: ColumnTypes.Button,
                         icon: "edit",
                         width: "20px",
-                        onClick: (item: Models.Entry) => this.props.actions.editEntry(item)
+                        onClick: (item: Models.Entry) => this.props.entryActions.editEntry(item)
                     },
                     {
                         title: "",
                         type: ColumnTypes.Button,
                         icon: "trash-alt",
                         width: "20px",
-                        onClick: (item: Models.Entry) => this.props.actions.selectToRemove(item.ratingEntryId)
+                        onClick: (item: Models.Entry) => this.props.entryActions.selectToRemove(item.ratingEntryId)
                     },
                     {
                         title: "П.І.П",
@@ -95,6 +90,12 @@ export default connect<StateProps, DispatchProps>(
                         sortable: true
                     },
                     {
+                        title: "Показник по ф-лі Вілкса",
+                        field: "wilks",
+                        width: "100px",
+                        sortable: true
+                    },
+                    {
                         title: "",
                         width: "*"
                     }
@@ -105,8 +106,8 @@ export default connect<StateProps, DispatchProps>(
                 title="Підтвердіть видалення" 
                 text="Ви впевнені що хочете видалити цей запис?" 
                 show={!!this.props.deleteEntryId}
-                onClose={() => this.props.actions.cancelRemove()}
-                onConfirm={() => this.props.actions.deleteEntry()}
+                onClose={() => this.props.entryActions.cancelRemove()}
+                onConfirm={() => this.props.entryActions.deleteEntry()}
             />  
         </div>
     }

@@ -17,21 +17,6 @@
   padding: 4px;
   font-size: 1em; }
 
-.grid-row {
-  display: flex;
-  flex-direction: row;
-  width: 100%; }
-  .grid-row .grid-column {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    margin: 0 5px; }
-
-.content-wrap {
-  overflow-x: auto;
-  margin-right: 20px;
-  min-height: 400px; }
-
 .form .form-control {
   display: flex;
   flex-direction: row;
@@ -57,91 +42,20 @@
   .autocomplete ul li {
     cursor: pointer; }
 
-.rat-table {
-  border-collapse: collapse;
-  width: 100%; }
-  .rat-table th {
-    height: 30px;
-    text-align: center;
-    padding: 10px;
-    background-color: #07bd69;
-    color: white; }
-    .rat-table th .sort-control {
-      font-size: 1.4em;
-      margin-left: 8px;
-      cursor: pointer; }
-  .rat-table tr:hover {
-    background-color: #f5f5f5; }
-    .rat-table tr:hover td {
-      background-color: #85ffc7; }
-  .rat-table tr:nth-child(even) {
-    background-color: #f2f2f2; }
-  .rat-table tr:nth-child(odd) {
-    background-color: #ffffff; }
-  .rat-table td {
-    height: 20px;
-    text-align: left;
-    padding: 10px;
-    vertical-align: middle;
-    font-size: 1.1em; }
-  .rat-table th, .rat-table td {
-    border-bottom: 1px solid #ddd; }
-  .rat-table .table-button {
-    color: green;
-    cursor: pointer;
-    font-size: 1.2em; }
-    .rat-table .table-button:hover {
-      color: #07bc69; }
-  .rat-table .editable-cell .editable-cell-icon {
-    float: right;
-    opacity: 0.6;
-    cursor: pointer; }
-    .rat-table .editable-cell .editable-cell-icon.edit {
-      color: #a30c0c; }
-    .rat-table .editable-cell .editable-cell-icon.close {
-      color: #b43b3b; }
-    .rat-table .editable-cell .editable-cell-icon.check {
-      color: #03b303;
-      margin: 14px -13px 0 0; }
-    .rat-table .editable-cell .editable-cell-icon:hover {
-      opacity: 1; }
-  .rat-table .editable-cell .editable-cell-input {
-    float: left;
-    width: 75%;
-    border: none;
-    outline: none;
-    box-shadow: none;
-    background-color: #e8e8e8; }
-
-.tabs {
+.grid-row {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   width: 100%; }
-  .tabs .tab-list {
+  .grid-row .grid-column {
     display: flex;
-    flex-direction: row;
-    margin-bottom: 0px; }
-    .tabs .tab-list .tab-list-item {
-      display: flex;
-      flex-direction: column;
-      padding: 5px 10px;
-      border: 1px solid #ccc;
-      border-radius: 10px 10px 0 0;
-      margin-bottom: 0px;
-      cursor: pointer;
-      background-color: #e8e8e8; }
-      .tabs .tab-list .tab-list-item:hover {
-        background-color: #f7f4f4; }
-      .tabs .tab-list .tab-list-item.tab-list-active {
-        border-bottom: none;
-        background-color: #fff; }
-  .tabs .tab-content {
-    display: flex;
-    flex-direction: row;
-    background-color: #fff;
-    box-shadow: 1px 1px 1px 0px #ccc;
-    border-left: 1px solid #ccc;
-    overflow: hidden; }
+    flex-direction: column;
+    flex-grow: 1;
+    margin: 0 5px; }
+
+.content-wrap {
+  overflow-x: auto;
+  margin-right: 20px;
+  min-height: 400px; }
 
 .modal-black-out {
   position: fixed;
@@ -217,6 +131,109 @@
           background-color: #2dcf85; }
         .modal-black-out .modal-content .modal-footer .modal-footer-button .fa {
           margin: 0 4px; }
+
+.search-box {
+  padding: 4px;
+  overflow: hidden;
+  display: inline-block; }
+  .search-box input {
+    border-radius: 4px; }
+  .search-box .fa {
+    font-size: 1.2em;
+    margin: 2px 4px; }
+    .search-box .fa.search-icon {
+      color: #07bd69; }
+    .search-box .fa.close-icon {
+      color: #b40413;
+      cursor: pointer; }
+      .search-box .fa.close-icon:hover {
+        color: #eb0e21; }
+
+.tabs {
+  display: flex;
+  flex-direction: column;
+  width: 100%; }
+  .tabs .tab-list {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0px; }
+    .tabs .tab-list .tab-list-item {
+      display: flex;
+      flex-direction: column;
+      padding: 5px 10px;
+      border: 1px solid #ccc;
+      border-radius: 10px 10px 0 0;
+      margin-bottom: 0px;
+      cursor: pointer;
+      background-color: #e8e8e8; }
+      .tabs .tab-list .tab-list-item:hover {
+        background-color: #f7f4f4; }
+      .tabs .tab-list .tab-list-item.tab-list-active {
+        border-bottom: none;
+        background-color: #fff; }
+  .tabs .tab-content {
+    display: flex;
+    flex-direction: row;
+    background-color: #fff;
+    box-shadow: 1px 1px 1px 0px #ccc;
+    border-left: 1px solid #ccc;
+    overflow: hidden; }
+
+.rat-table {
+  border-collapse: collapse;
+  width: 100%; }
+  .rat-table th {
+    height: 30px;
+    text-align: center;
+    padding: 10px;
+    background-color: #07bd69;
+    color: white; }
+    .rat-table th .sort-control {
+      font-size: 1.4em;
+      margin-left: 8px;
+      cursor: pointer; }
+  .rat-table tr:hover {
+    background-color: #f5f5f5; }
+    .rat-table tr:hover td {
+      background-color: #85ffc7; }
+  .rat-table tr:nth-child(even) {
+    background-color: #f2f2f2; }
+  .rat-table tr:nth-child(odd) {
+    background-color: #ffffff; }
+  .rat-table td {
+    height: 20px;
+    text-align: left;
+    padding: 10px;
+    vertical-align: middle;
+    font-size: 1.1em; }
+  .rat-table th, .rat-table td {
+    border-bottom: 1px solid #ddd; }
+  .rat-table .table-button {
+    color: green;
+    cursor: pointer;
+    font-size: 1.2em; }
+    .rat-table .table-button:hover {
+      color: #07bc69; }
+  .rat-table .editable-cell .editable-cell-icon {
+    float: right;
+    opacity: 0.6;
+    cursor: pointer; }
+    .rat-table .editable-cell .editable-cell-icon.edit {
+      color: #a30c0c; }
+    .rat-table .editable-cell .editable-cell-icon.close {
+      color: #b43b3b; }
+    .rat-table .editable-cell .editable-cell-icon.check {
+      color: #03b303;
+      margin: 14px -13px 0 0; }
+    .rat-table .editable-cell .editable-cell-icon:hover {
+      opacity: 1; }
+  .rat-table .editable-cell .editable-cell-input {
+    float: left;
+    width: 75%;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    background-color: #e8e8e8; }
 
 .entries {
   width: 100%; }

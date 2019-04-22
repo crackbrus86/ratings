@@ -680,6 +680,65 @@ exports.default = Modal;
 
 /***/ }),
 
+/***/ "./client/src/components/search/search.tsx":
+/*!*************************************************!*\
+  !*** ./client/src/components/search/search.tsx ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var FontAwesome = __webpack_require__(/*! react-fontawesome */ "./node_modules/react-fontawesome/lib/index.js");
+var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+var Search = /** @class */ (function (_super) {
+    __extends(Search, _super);
+    function Search(props) {
+        var _this = _super.call(this, props) || this;
+        _this.onUpdate = function (e) {
+            var value = e.target.value;
+            _this.setState({ searchValue: value });
+            _this.props.onChange(value);
+        };
+        _this.onReset = function () {
+            _this.setState({ searchValue: '' });
+            _this.props.onChange('');
+        };
+        _this.state = {
+            searchValue: ''
+        };
+        return _this;
+    }
+    Search.prototype.render = function () {
+        var _this = this;
+        var value = this.state.searchValue;
+        return React.createElement("div", { className: classnames("search-box", this.props.className) },
+            React.createElement(FontAwesome, { name: "search", className: "search-icon" }),
+            React.createElement("input", { type: "text", value: value, onChange: function (e) { return _this.onUpdate(e); } }),
+            this.state.searchValue && React.createElement(FontAwesome, { name: "times", className: "close-icon", onClick: this.onReset }));
+    };
+    return Search;
+}(React.Component));
+exports.default = Search;
+
+
+/***/ }),
+
 /***/ "./client/src/components/tab view/tab.tsx":
 /*!************************************************!*\
   !*** ./client/src/components/tab view/tab.tsx ***!
@@ -1213,6 +1272,7 @@ exports.LOAD_NAMES = "ENTRIES::LOAD_NAMES";
 exports.LOAD_MINISTRY_RATINGS = "RATINGS::LOAD_MINISTRY_RATINGS";
 exports.LOAD_COMP_TYPES = "LOOKUP::LOAD_COMP_TYPES";
 exports.LOAD_UPF_RATINGS = "RATINGS::LOAD_UPF_RATINGS";
+exports.CHANGE_SEARCH_VALUE = "ENTRIES::CHANGE_SEARCH_VALUE";
 
 
 /***/ }),
@@ -1534,6 +1594,12 @@ var ActionCreators;
         });
         d(Actions.EntriesActions.ActionCreators.getEntries());
         d(Actions.RatingsActions.ActionCreators.loadMinistryRatings());
+    }; };
+    ActionCreators.changeSearchValue = function (value) { return function (d, gs) {
+        d({
+            type: ActionTypes.CHANGE_SEARCH_VALUE,
+            payload: value
+        });
     }; };
 })(ActionCreators = exports.ActionCreators || (exports.ActionCreators = {}));
 
@@ -1922,7 +1988,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var ActionTypes = __webpack_require__(/*! ../actions/action.types */ "./client/src/pages/ratings-entries/actions/action.types.ts");
 var defaultState = {
     startDate: new Date(new Date().getFullYear(), 0, 1),
-    showConfirmDelete: false
+    searchValue: ''
 };
 exports.shellReducer = function (state, action) {
     if (state === void 0) { state = defaultState; }
@@ -1930,6 +1996,10 @@ exports.shellReducer = function (state, action) {
         case ActionTypes.CHANGE_START_TIME: {
             var payload = action.payload;
             return __assign({}, state, { startDate: payload });
+        }
+        case ActionTypes.CHANGE_SEARCH_VALUE: {
+            var payload = action.payload;
+            return __assign({}, state, { searchValue: payload });
         }
         default:
             return state;
@@ -1948,6 +2018,17 @@ exports.shellReducer = function (state, action) {
 
 "use strict";
 
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var reselect_1 = __webpack_require__(/*! reselect */ "./node_modules/reselect/es/index.js");
 var Models = __webpack_require__(/*! ../models/index.models */ "./client/src/pages/ratings-entries/models/index.models.ts");
@@ -1956,6 +2037,8 @@ var records = function (state) { return state.lookup.records; };
 var currentEntry = function (state) { return state.entries.currentEntry; };
 var divisions = function (state) { return state.lookup.divisions; };
 var compTypes = function (state) { return state.lookup.compTypes; };
+var entries = function (state) { return state.entries.entries; };
+var searchValue = function (state) { return state.shell.searchValue; };
 exports.eventList = reselect_1.createSelector(competitions, records, currentEntry, function (competitions, records, entry) {
     var list = entry && entry.type == Models.EntryType.Place ? competitions : records;
     var options = [{ text: '', value: null }];
@@ -2029,6 +2112,26 @@ function validate(result) {
         }
     }
     return result;
+}
+exports.entriesList = reselect_1.createSelector(entries, searchValue, competitions, records, compTypes, function (entries, searchValue, comp, records, types) {
+    var events = comp.concat(records);
+    entries = entries.map(function (entry) {
+        var eventName = events.find(function (event) { return event.dbName == entry.event; }).name;
+        var compType = types.find(function (type) { return type.name == entry.compType; });
+        var compTypeName = !!compType ? " - " + compType.displayName : '';
+        return __assign({}, entry, { event: "" + eventName + compTypeName });
+    });
+    return entries.filter(function (entry) { return !searchValue
+        || isMatchingSearchString(searchValue, entry.fullname)
+        || isMatchingSearchString(searchValue, entry.event)
+        || isMatchingSearchString(searchValue, entry.eventDate)
+        || isMatchingSearchString(searchValue, entry.place)
+        || isMatchingSearchString(searchValue, entry.wilks); });
+});
+function isMatchingSearchString(search, field) {
+    if (!field)
+        field = '';
+    return field.toString().toLowerCase().indexOf(search.toLowerCase()) != -1;
 }
 
 
@@ -2402,17 +2505,6 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
@@ -2420,49 +2512,46 @@ var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js
 var table_1 = __webpack_require__(/*! ../../../../components/table/table */ "./client/src/components/table/table.tsx");
 var column_1 = __webpack_require__(/*! ../../../../components/table/column */ "./client/src/components/table/column.tsx");
 var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/src/pages/ratings-entries/actions/index.actions.ts");
+var Selectors = __webpack_require__(/*! ../../selectors/index.selector */ "./client/src/pages/ratings-entries/selectors/index.selector.ts");
 var entry_modal_1 = __webpack_require__(/*! ../../modals/entry.modal */ "./client/src/pages/ratings-entries/modals/entry.modal.tsx");
 var confirm_1 = __webpack_require__(/*! ../../../../components/confirm/confirm */ "./client/src/components/confirm/confirm.tsx");
+var search_1 = __webpack_require__(/*! ../../../../components/search/search */ "./client/src/components/search/search.tsx");
 exports.default = react_redux_1.connect(function (state) { return ({
-    entries: state.entries.entries,
+    entries: Selectors.EntrySelector.entriesList(state),
     competitions: state.lookup.competitions,
     records: state.lookup.records,
     deleteEntryId: state.entries.deleteById,
     compTypes: state.lookup.compTypes
 }); }, function (dispatch) { return ({
-    actions: redux_1.bindActionCreators(Actions.EntriesActions.ActionCreators, dispatch)
+    entryActions: redux_1.bindActionCreators(Actions.EntriesActions.ActionCreators, dispatch),
+    shellActions: redux_1.bindActionCreators(Actions.ShellActions.ActionCreators, dispatch)
 }); })(/** @class */ (function (_super) {
     __extends(Entries, _super);
     function Entries(props) {
         return _super.call(this, props) || this;
     }
     Entries.prototype.componentDidMount = function () {
-        this.props.actions.getEntries();
+        this.props.entryActions.getEntries();
     };
     Entries.prototype.render = function () {
         var _this = this;
-        var entries = this.props.entries.map(function (entry) {
-            var events = _this.props.competitions.concat(_this.props.records);
-            var eventName = events.find(function (event) { return event.dbName == entry.event; }).name;
-            var compType = _this.props.compTypes.find(function (type) { return type.name == entry.compType; });
-            var compTypeName = !!compType ? " - " + compType.displayName : '';
-            return __assign({}, entry, { event: "" + eventName + compTypeName });
-        });
         return React.createElement("div", { className: "entries" },
-            React.createElement("button", { className: "create-button", onClick: this.props.actions.addEntry }, "\u0421\u0442\u0432\u043E\u0440\u0438\u0442\u0438 \u0437\u0430\u043F\u0438\u0441"),
-            React.createElement(table_1.default, { items: entries, columns: [
+            React.createElement("button", { className: "create-button", onClick: this.props.entryActions.addEntry }, "\u0421\u0442\u0432\u043E\u0440\u0438\u0442\u0438 \u0437\u0430\u043F\u0438\u0441"),
+            React.createElement(search_1.default, { onChange: this.props.shellActions.changeSearchValue }),
+            React.createElement(table_1.default, { items: this.props.entries, columns: [
                     {
                         title: "",
                         type: column_1.ColumnTypes.Button,
                         icon: "edit",
                         width: "20px",
-                        onClick: function (item) { return _this.props.actions.editEntry(item); }
+                        onClick: function (item) { return _this.props.entryActions.editEntry(item); }
                     },
                     {
                         title: "",
                         type: column_1.ColumnTypes.Button,
                         icon: "trash-alt",
                         width: "20px",
-                        onClick: function (item) { return _this.props.actions.selectToRemove(item.ratingEntryId); }
+                        onClick: function (item) { return _this.props.entryActions.selectToRemove(item.ratingEntryId); }
                     },
                     {
                         title: "П.І.П",
@@ -2490,12 +2579,18 @@ exports.default = react_redux_1.connect(function (state) { return ({
                         sortable: true
                     },
                     {
+                        title: "Показник по ф-лі Вілкса",
+                        field: "wilks",
+                        width: "100px",
+                        sortable: true
+                    },
+                    {
                         title: "",
                         width: "*"
                     }
                 ] }),
             React.createElement(entry_modal_1.default, null),
-            React.createElement(confirm_1.default, { title: "\u041F\u0456\u0434\u0442\u0432\u0435\u0440\u0434\u0456\u0442\u044C \u0432\u0438\u0434\u0430\u043B\u0435\u043D\u043D\u044F", text: "\u0412\u0438 \u0432\u043F\u0435\u0432\u043D\u0435\u043D\u0456 \u0449\u043E \u0445\u043E\u0447\u0435\u0442\u0435 \u0432\u0438\u0434\u0430\u043B\u0438\u0442\u0438 \u0446\u0435\u0439 \u0437\u0430\u043F\u0438\u0441?", show: !!this.props.deleteEntryId, onClose: function () { return _this.props.actions.cancelRemove(); }, onConfirm: function () { return _this.props.actions.deleteEntry(); } }));
+            React.createElement(confirm_1.default, { title: "\u041F\u0456\u0434\u0442\u0432\u0435\u0440\u0434\u0456\u0442\u044C \u0432\u0438\u0434\u0430\u043B\u0435\u043D\u043D\u044F", text: "\u0412\u0438 \u0432\u043F\u0435\u0432\u043D\u0435\u043D\u0456 \u0449\u043E \u0445\u043E\u0447\u0435\u0442\u0435 \u0432\u0438\u0434\u0430\u043B\u0438\u0442\u0438 \u0446\u0435\u0439 \u0437\u0430\u043F\u0438\u0441?", show: !!this.props.deleteEntryId, onClose: function () { return _this.props.entryActions.cancelRemove(); }, onConfirm: function () { return _this.props.entryActions.deleteEntry(); } }));
     };
     return Entries;
 }(React.Component)));
@@ -2709,6 +2804,15 @@ exports.default = react_redux_1.connect(function (state) { return ({
                         title: "Деталі",
                         field: "details",
                         type: column_1.ColumnTypes.Html,
+                        width: "300px"
+                    },
+                    {
+                        title: "Показник по ф-лі Вілкса",
+                        field: "wilks",
+                        width: "150px"
+                    },
+                    {
+                        title: "",
                         width: "*"
                     }
                 ] }));

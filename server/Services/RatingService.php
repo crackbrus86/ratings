@@ -66,12 +66,13 @@ class RatingService
         $sql = $this->db->prepare("SELECT a.Fullname, a.Gender, MIN(b.Range) AS Rating,
                                         GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Range, ' ранг)') separator ', ') AS Details,
                                         COUNT(a.Event) AS EventCount,
-                                        GROUP_CONCAT(CONCAT(' ', b.Range) separator ', ') AS AllRanks
+                                        GROUP_CONCAT(CONCAT(' ', b.Range) separator ', ') AS AllRanks,
+                                        MAX(a.Wilks) AS Wilks
                                         FROM $this->entryTable a 
                                         JOIN $this->rangeTale b ON b.Competition = a.Event AND b.Place = a.Place AND b.CompType = a.CompType
                                     WHERE YEAR(a.EventDate) = %s
                                     GROUP BY a.Fullname, a.Gender
-                                    ORDER BY Rating ASC, EventCount DESC", $year);
+                                    ORDER BY Rating ASC, EventCount DESC, Wilks DESC", $year);
 
         $results = $this->db->get_results($sql);
 
@@ -79,7 +80,12 @@ class RatingService
         {
             foreach ($results as $result) 
             {
-                array_push($this->ratings, new Rating($result->Fullname, $result->Rating, $result->Gender, $result->Details, explode(",", $result->AllRanks)));
+                array_push($this->ratings, new Rating($result->Fullname, 
+                                                      $result->Rating, 
+                                                      $result->Gender, 
+                                                      $result->Details, 
+                                                      explode(",", $result->AllRanks), 
+                                                      $result->Wilks));
             }
         }
 

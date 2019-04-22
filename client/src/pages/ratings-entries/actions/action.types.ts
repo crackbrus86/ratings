@@ -47,3 +47,6 @@ export type LOAD_COMP_TYPES_PAYLOAD = Models.CompetitionType[]
 
 export const LOAD_UPF_RATINGS = "RATINGS::LOAD_UPF_RATINGS";
 export type LOAD_UPF_RATINGS_PAYLOAD = Models.Rating[]
+
+export const CHANGE_SEARCH_VALUE = "ENTRIES::CHANGE_SEARCH_VALUE";
+export type CHANGE_SEARCH_VALUE_PAYLOAD = string;
