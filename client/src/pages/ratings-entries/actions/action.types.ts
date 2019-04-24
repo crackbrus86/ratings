@@ -50,3 +50,7 @@ export type LOAD_UPF_RATINGS_PAYLOAD = Models.Rating[]
 
 export const CHANGE_SEARCH_VALUE = "ENTRIES::CHANGE_SEARCH_VALUE";
 export type CHANGE_SEARCH_VALUE_PAYLOAD = string;
+
+
+export const LOAD_REGIONS = "LOOKUP::LOAD_REGIONS";
+export type LOAD_REGIONS_PAYLOAD = Models.Region[];

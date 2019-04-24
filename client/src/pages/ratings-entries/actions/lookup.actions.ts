@@ -7,6 +7,7 @@ export namespace ActionCreators{
         d(loadCompetitions());
         d(loadRecords());
         d(loadCompTypes());
+        d(loadRegions());
     }
 
     export const loadCompetitions = () => (d, gs: () => Models.StoreState) => {
@@ -55,5 +56,16 @@ export namespace ActionCreators{
                 })
             }
         })
+    }
+
+    export const loadRegions = () => (d, gs: () => Models.StoreState) => {
+        Services.getRegions().then(response => {
+            if(response.status){
+                d({
+                    type: ActionTypes.LOAD_REGIONS,
+                    payload: <ActionTypes.LOAD_REGIONS_PAYLOAD> response.data
+                });
+            }
+        });
     }
 }

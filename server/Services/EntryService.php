@@ -45,7 +45,7 @@ class EntryService
         }else{
             $sql = $this->db->prepare("INSERT INTO {$this->tableName} (Fullname, Type, Event, Place, EventDate, Gender, Division, CompType, Wilks) 
                 VALUES (%s, %s, %s, %d, %s, %s, %s, %s, %s)", 
-                $entry->fullname, $entry->type, $entry->event, $entry->place, $entry->eventDate, $entry->gender, $entry->division, $entry->compType, $entry->wilks);
+                $entry->fullname, $entry->type, $entry->event, $entry->place, $entry->eventDate, $entry->gender, $entry->division, $entry->compType, (float)$entry->wilks);
 
             $this->db->query($sql);
         }

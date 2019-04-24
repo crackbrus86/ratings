@@ -23,3 +23,8 @@ export interface CompetitionType {
     name: string,
     displayName: string
 }
+
+export interface Region {
+    id: number,
+    title: string
+}

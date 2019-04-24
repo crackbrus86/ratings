@@ -1273,6 +1273,7 @@ exports.LOAD_MINISTRY_RATINGS = "RATINGS::LOAD_MINISTRY_RATINGS";
 exports.LOAD_COMP_TYPES = "LOOKUP::LOAD_COMP_TYPES";
 exports.LOAD_UPF_RATINGS = "RATINGS::LOAD_UPF_RATINGS";
 exports.CHANGE_SEARCH_VALUE = "ENTRIES::CHANGE_SEARCH_VALUE";
+exports.LOAD_REGIONS = "LOOKUP::LOAD_REGIONS";
 
 
 /***/ }),
@@ -1472,6 +1473,7 @@ var ActionCreators;
         d(ActionCreators.loadCompetitions());
         d(ActionCreators.loadRecords());
         d(ActionCreators.loadCompTypes());
+        d(ActionCreators.loadRegions());
     }; };
     ActionCreators.loadCompetitions = function () { return function (d, gs) {
         Services.getCompetitions().then(function (response) {
@@ -1512,6 +1514,16 @@ var ActionCreators;
             if (response.status) {
                 d({
                     type: ActionTypes.LOAD_COMP_TYPES,
+                    payload: response.data
+                });
+            }
+        });
+    }; };
+    ActionCreators.loadRegions = function () { return function (d, gs) {
+        Services.getRegions().then(function (response) {
+            if (response.status) {
+                d({
+                    type: ActionTypes.LOAD_REGIONS,
                     payload: response.data
                 });
             }
@@ -1655,13 +1667,15 @@ var Actions = __webpack_require__(/*! ../actions/index.actions */ "./client/src/
 var Selectors = __webpack_require__(/*! ../selectors/index.selector */ "./client/src/pages/ratings-entries/selectors/index.selector.ts");
 var modal_1 = __webpack_require__(/*! ../../../components/modal/modal */ "./client/src/components/modal/modal.tsx");
 var form_1 = __webpack_require__(/*! ../../../components/form/form */ "./client/src/components/form/form.tsx");
+var Layout = __webpack_require__(/*! ../../../components/layout/index.layout */ "./client/src/components/layout/index.layout.tsx");
 exports.default = react_redux_1.connect(function (state) { return ({
     entry: state.entries.currentEntry,
     events: Selectors.EntrySelector.eventList(state),
     validation: Selectors.EntrySelector.validation(state),
     names: state.lookup.names,
     divisions: Selectors.EntrySelector.divisionList(state),
-    compTypes: Selectors.EntrySelector.compTypesList(state)
+    compTypes: Selectors.EntrySelector.compTypesList(state),
+    regions: Selectors.LookupSelector.regionsList(state)
 }); }, function (dispatch) { return ({
     actions: redux_1.bindActionCreators(Actions.EntriesActions.ActionCreators, dispatch)
 }); })(/** @class */ (function (_super) {
@@ -1686,18 +1700,23 @@ exports.default = react_redux_1.connect(function (state) { return ({
         return this.props.entry && React.createElement(modal_1.default, null,
             React.createElement(modal_1.default.Header, { title: (this.props.entry.ratingEntryId ? 'Редагувати' : 'Створити') + " \u0417\u0430\u043F\u0438\u0441", onClose: this.props.actions.closeEntry }),
             React.createElement(modal_1.default.Body, null,
-                React.createElement("div", { style: { width: '395px' } },
-                    React.createElement(form_1.default, null,
-                        React.createElement(form_1.default.TextInput, { label: "\u041F\u0440\u0456\u0437\u0432\u0438\u0449\u0435, \u0406\u043C'\u044F \u0441\u043F\u043E\u0440\u0442\u0441\u043C\u0435\u043D\u0430", value: this.props.entry.fullname, validation: this.props.validation.isFullNameValid, autocomplete: true, autocompleteItems: this.props.names, onChange: function (value) { return _this.props.actions.updateEntry("fullname", value); } }),
-                        React.createElement(form_1.default.Select, { label: "\u0421\u0442\u0430\u0442\u044C", options: [{ text: "", value: null }, { text: "Чоловіки", value: "M" }, { text: "Жінки", value: "F" }], value: this.props.entry.gender, validation: this.props.validation.isGenderValid, onChange: function (value) { return _this.props.actions.updateEntry("gender", value); } }),
-                        React.createElement(form_1.default.Select, { label: "\u0414\u0438\u0432\u0456\u0437\u0456\u043E\u043D", options: this.props.divisions, value: this.props.entry.division, validation: this.props.validation.isDivisionValid, onChange: function (value) { return _this.props.actions.updateEntry("division", value); } }),
-                        React.createElement(form_1.default.RadioButton, { label: "\u0422\u0438\u043F \u0437\u0430\u043F\u0438\u0441\u0443", value: this.props.entry.type, name: "RecordType", buttons: [{ label: "Призове місце", value: Models.EntryType.Place }, { label: "Рекорд", value: Models.EntryType.Record }], onChange: function (value) { return _this.props.actions.updateEntry("type", value); } }),
-                        React.createElement(form_1.default.Select, { label: this.props.entry.type == Models.EntryType.Place ? "Змагання" : "Рекорд", options: this.props.events, validation: this.props.validation.isEventValid, value: this.props.entry.event, onChange: function (value) { return _this.props.actions.updateEntry("event", value); } }),
-                        React.createElement(form_1.default.Select, { label: "\u0414\u0438\u0441\u0446\u0438\u043F\u043B\u0456\u043D\u0430", options: this.props.compTypes, value: this.props.entry.compType, validation: this.props.validation.isComTypeValid, onChange: function (value) { return _this.props.actions.updateEntry("compType", value); } }),
-                        this.props.entry.type == Models.EntryType.Place &&
-                            React.createElement(form_1.default.Select, { label: "\u041C\u0456\u0441\u0446\u0435", options: this.getPlaces(), validation: this.props.validation.isPlaceValid, value: this.props.entry.place, onChange: function (value) { return _this.props.actions.updateEntry("place", value); } }),
-                        React.createElement(form_1.default.DatePicker, { label: "\u0414\u0430\u0442\u0430", value: this.props.entry.eventDate, validation: this.props.validation.isEventDateValid, onChange: function (value) { return _this.props.actions.updateEntry("eventDate", value); } }),
-                        React.createElement(form_1.default.TextInput, { label: "\u041F\u043E\u043A\u0430\u0437\u043D\u0438\u043A \u0437\u0430 \u0444\u043E\u0440\u043C\u0443\u043B\u043E\u044E \u0412\u0456\u043B\u043A\u0441\u0430", value: wilks, onChange: function (value) { return _this.props.actions.updateEntry("wilks", value); } })))),
+                React.createElement("div", { style: { width: '946px' } },
+                    React.createElement(Layout.GridRow, null,
+                        React.createElement(Layout.GridColumn, null,
+                            React.createElement(form_1.default, null,
+                                React.createElement(form_1.default.TextInput, { label: "\u041F\u0440\u0456\u0437\u0432\u0438\u0449\u0435, \u0406\u043C'\u044F \u0441\u043F\u043E\u0440\u0442\u0441\u043C\u0435\u043D\u0430", value: this.props.entry.fullname, validation: this.props.validation.isFullNameValid, autocomplete: true, autocompleteItems: this.props.names, onChange: function (value) { return _this.props.actions.updateEntry("fullname", value); } }),
+                                React.createElement(form_1.default.Select, { label: "\u0421\u0442\u0430\u0442\u044C", options: [{ text: "", value: null }, { text: "Чоловіки", value: "M" }, { text: "Жінки", value: "F" }], value: this.props.entry.gender, validation: this.props.validation.isGenderValid, onChange: function (value) { return _this.props.actions.updateEntry("gender", value); } }),
+                                React.createElement(form_1.default.Select, { label: "\u0414\u0438\u0432\u0456\u0437\u0456\u043E\u043D", options: this.props.divisions, value: this.props.entry.division, validation: this.props.validation.isDivisionValid, onChange: function (value) { return _this.props.actions.updateEntry("division", value); } }),
+                                React.createElement(form_1.default.Select, { label: "\u041E\u0431\u043B\u0430\u0441\u0442\u044C", options: this.props.regions, value: null, onChange: function (value) { return null; } }))),
+                        React.createElement(Layout.GridColumn, null,
+                            React.createElement(form_1.default, null,
+                                React.createElement(form_1.default.RadioButton, { label: "\u0422\u0438\u043F \u0437\u0430\u043F\u0438\u0441\u0443", value: this.props.entry.type, name: "RecordType", buttons: [{ label: "Призове місце", value: Models.EntryType.Place }, { label: "Рекорд", value: Models.EntryType.Record }], onChange: function (value) { return _this.props.actions.updateEntry("type", value); } }),
+                                React.createElement(form_1.default.Select, { label: this.props.entry.type == Models.EntryType.Place ? "Змагання" : "Рекорд", options: this.props.events, validation: this.props.validation.isEventValid, value: this.props.entry.event, onChange: function (value) { return _this.props.actions.updateEntry("event", value); } }),
+                                React.createElement(form_1.default.Select, { label: "\u0414\u0438\u0441\u0446\u0438\u043F\u043B\u0456\u043D\u0430", options: this.props.compTypes, value: this.props.entry.compType, validation: this.props.validation.isComTypeValid, onChange: function (value) { return _this.props.actions.updateEntry("compType", value); } }),
+                                this.props.entry.type == Models.EntryType.Place &&
+                                    React.createElement(form_1.default.Select, { label: "\u041C\u0456\u0441\u0446\u0435", options: this.getPlaces(), validation: this.props.validation.isPlaceValid, value: this.props.entry.place, onChange: function (value) { return _this.props.actions.updateEntry("place", value); } }),
+                                React.createElement(form_1.default.DatePicker, { label: "\u0414\u0430\u0442\u0430", value: this.props.entry.eventDate, validation: this.props.validation.isEventDateValid, onChange: function (value) { return _this.props.actions.updateEntry("eventDate", value); } }),
+                                React.createElement(form_1.default.TextInput, { label: "\u041F\u043E\u043A\u0430\u0437\u043D\u0438\u043A \u0437\u0430 \u0444\u043E\u0440\u043C\u0443\u043B\u043E\u044E \u0412\u0456\u043B\u043A\u0441\u0430", value: wilks, onChange: function (value) { return _this.props.actions.updateEntry("wilks", value); } })))))),
             React.createElement(modal_1.default.Footer, null,
                 React.createElement(modal_1.default.FooterButton, { label: "\u0417\u0431\u0435\u0440\u0435\u0433\u0442\u0438", icon: "save", disabled: !this.props.validation.isValid, onClick: this.onSave })));
     };
@@ -1890,7 +1909,8 @@ var defaultState = {
     records: [],
     names: [],
     divisions: [{ name: "Open", displayName: "Відкритий" }, { name: "Junior", displayName: "Юніори" }, { name: "SubJunior", displayName: "Юнаки" }],
-    compTypes: []
+    compTypes: [],
+    regions: []
 };
 exports.lookupReducer = function (state, action) {
     if (state === void 0) { state = defaultState; }
@@ -1910,6 +1930,10 @@ exports.lookupReducer = function (state, action) {
         case ActionTypes.LOAD_COMP_TYPES: {
             var payload = action.payload;
             return __assign({}, state, { compTypes: payload });
+        }
+        case ActionTypes.LOAD_REGIONS: {
+            var payload = action.payload;
+            return __assign({}, state, { regions: payload });
         }
         default:
             return state;
@@ -2149,6 +2173,28 @@ function isMatchingSearchString(search, field) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.EntrySelector = __webpack_require__(/*! ./entry.selectors */ "./client/src/pages/ratings-entries/selectors/entry.selectors.ts");
 exports.RatingSelector = __webpack_require__(/*! ./rating.selector */ "./client/src/pages/ratings-entries/selectors/rating.selector.ts");
+exports.LookupSelector = __webpack_require__(/*! ./lookup.selector */ "./client/src/pages/ratings-entries/selectors/lookup.selector.ts");
+
+
+/***/ }),
+
+/***/ "./client/src/pages/ratings-entries/selectors/lookup.selector.ts":
+/*!***********************************************************************!*\
+  !*** ./client/src/pages/ratings-entries/selectors/lookup.selector.ts ***!
+  \***********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var reselect_1 = __webpack_require__(/*! reselect */ "./node_modules/reselect/es/index.js");
+var regions = function (state) { return state.lookup.regions; };
+exports.regionsList = reselect_1.createSelector(regions, function (regions) {
+    var regionsList = [{ text: '', value: null }];
+    regionsList = regionsList.concat(regions.map(function (region) { return ({ text: region.title, value: region.title }); }));
+    return regionsList;
+});
 
 
 /***/ }),
@@ -2320,6 +2366,12 @@ exports.getNames = function () {
 exports.getCompTypes = function () {
     return CallApi.callApi({
         url: lookupApiPath + 'GetCompetitionTypesLookup.php',
+        type: apiTypes.GET
+    });
+};
+exports.getRegions = function () {
+    return CallApi.callApi({
+        url: lookupApiPath + 'GetAllRegionsLookup.php',
         type: apiTypes.GET
     });
 };

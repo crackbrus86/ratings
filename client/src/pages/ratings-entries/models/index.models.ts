@@ -14,6 +14,7 @@ export type ValidationResult = ValidationResult;
 export type Rating = RatingModels.Rating;
 export type Division = LookupModels.Division;
 export type CompetitionType = LookupModels.CompetitionType;
+export type Region = LookupModels.Region;
 
 export enum EntryType{
     Place = "place",

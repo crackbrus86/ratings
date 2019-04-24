@@ -31,3 +31,10 @@ export const getCompTypes = () => {
         type: apiTypes.GET
     });
 }
+
+export const getRegions = () => {
+    return CallApi.callApi({
+        url: lookupApiPath + 'GetAllRegionsLookup.php',
+        type: apiTypes.GET
+    });
+}
