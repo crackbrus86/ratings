@@ -1707,7 +1707,10 @@ exports.default = react_redux_1.connect(function (state) { return ({
                                 React.createElement(form_1.default.TextInput, { label: "\u041F\u0440\u0456\u0437\u0432\u0438\u0449\u0435, \u0406\u043C'\u044F \u0441\u043F\u043E\u0440\u0442\u0441\u043C\u0435\u043D\u0430", value: this.props.entry.fullname, validation: this.props.validation.isFullNameValid, autocomplete: true, autocompleteItems: this.props.names, onChange: function (value) { return _this.props.actions.updateEntry("fullname", value); } }),
                                 React.createElement(form_1.default.Select, { label: "\u0421\u0442\u0430\u0442\u044C", options: [{ text: "", value: null }, { text: "Чоловіки", value: "M" }, { text: "Жінки", value: "F" }], value: this.props.entry.gender, validation: this.props.validation.isGenderValid, onChange: function (value) { return _this.props.actions.updateEntry("gender", value); } }),
                                 React.createElement(form_1.default.Select, { label: "\u0414\u0438\u0432\u0456\u0437\u0456\u043E\u043D", options: this.props.divisions, value: this.props.entry.division, validation: this.props.validation.isDivisionValid, onChange: function (value) { return _this.props.actions.updateEntry("division", value); } }),
-                                React.createElement(form_1.default.Select, { label: "\u041E\u0431\u043B\u0430\u0441\u0442\u044C", options: this.props.regions, value: null, onChange: function (value) { return null; } }))),
+                                React.createElement(form_1.default.Select, { label: "\u041E\u0431\u043B\u0430\u0441\u0442\u044C", options: this.props.regions, value: this.props.entry.region, validation: this.props.validation.isRegionValid, onChange: function (value) { return _this.props.actions.updateEntry("region", value); } }),
+                                React.createElement(form_1.default.TextInput, { label: "\u0422\u0440\u0435\u043D\u0435\u0440", value: this.props.entry.coach, onChange: function (value) { return _this.props.actions.updateEntry("coach", value); } }),
+                                React.createElement(form_1.default.TextInput, { label: "\u0424\u0421\u0422", value: this.props.entry.fst, onChange: function (value) { return _this.props.actions.updateEntry("fst", value); } }),
+                                React.createElement(form_1.default.TextInput, { label: "\u0414\u042E\u0421\u0428", value: this.props.entry.school, onChange: function (value) { return _this.props.actions.updateEntry("school", value); } }))),
                         React.createElement(Layout.GridColumn, null,
                             React.createElement(form_1.default, null,
                                 React.createElement(form_1.default.RadioButton, { label: "\u0422\u0438\u043F \u0437\u0430\u043F\u0438\u0441\u0443", value: this.props.entry.type, name: "RecordType", buttons: [{ label: "Призове місце", value: Models.EntryType.Place }, { label: "Рекорд", value: Models.EntryType.Record }], onChange: function (value) { return _this.props.actions.updateEntry("type", value); } }),
@@ -2102,7 +2105,8 @@ exports.validation = reselect_1.createSelector(currentEntry, function (entry) {
         isPlaceValid: { isValid: true, message: null },
         isEventDateValid: { isValid: true, message: null },
         isGenderValid: { isValid: true, message: null },
-        isComTypeValid: { isValid: true, message: null }
+        isComTypeValid: { isValid: true, message: null },
+        isRegionValid: { isValid: true, message: null }
     };
     if (entry && !entry.fullname.length) {
         result.isFullNameValid = { isValid: false, message: "Прізвище та ім'я спортсмена є обов'язковими!" };
@@ -2124,6 +2128,9 @@ exports.validation = reselect_1.createSelector(currentEntry, function (entry) {
     }
     if (entry && !entry.compType) {
         result.isComTypeValid = { isValid: false, message: "Не вказано дисципліну!" };
+    }
+    if (entry && !entry.region) {
+        result.isRegionValid = { isValid: false, message: "Не вказано область!" };
     }
     result = validate(result);
     return result;

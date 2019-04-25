@@ -51,7 +51,8 @@ export interface EntryValidationResult{
     isPlaceValid: Models.ValidationResult,
     isEventDateValid: Models.ValidationResult,
     isGenderValid: Models.ValidationResult,
-    isComTypeValid: Models.ValidationResult
+    isComTypeValid: Models.ValidationResult,
+    isRegionValid: Models.ValidationResult
 }
 
 export const validation = createSelector(currentEntry, (entry) => {
@@ -63,7 +64,8 @@ export const validation = createSelector(currentEntry, (entry) => {
         isPlaceValid: {isValid: true, message: null},
         isEventDateValid: {isValid: true, message: null},
         isGenderValid: {isValid: true, message: null},
-        isComTypeValid: {isValid: true, message: null}
+        isComTypeValid: {isValid: true, message: null},
+        isRegionValid: {isValid: true, message: null}
     }
 
     if(entry && !entry.fullname.length){
@@ -86,6 +88,9 @@ export const validation = createSelector(currentEntry, (entry) => {
     }
     if(entry && !entry.compType){
         result.isComTypeValid = {isValid: false, message: "Не вказано дисципліну!"}
+    }
+    if(entry && !entry.region){
+        result.isRegionValid = {isValid: false, message: "Не вказано область!"}
     }
     result = validate(result);
     return result;

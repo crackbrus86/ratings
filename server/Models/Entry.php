@@ -11,6 +11,10 @@ class Entry
     public $division;
     public $compType;
     public $wilks;
+    public $region;
+    public $coach;
+    public $fst;
+    public $school;
 
     public function __construct()
     {
@@ -24,6 +28,10 @@ class Entry
         $this->division = NULL;
         $this->compType = NULL;
         $this->wilks = NULL;
+        $this->region = NULL;
+        $this->coach = "";
+        $this->fst = "";
+        $this->school = "";
     }
 
     public function validate(bool $isEdit = FALSE)
@@ -95,6 +103,15 @@ class Entry
             $validation->isValid = FALSE;
 
             $validation->message = "Competition Type is required!";
+
+            return $validation;
+        }
+
+        if(!$this->region)
+        {
+            $validation->isValid = FALSE;
+
+            $validation->message = "Region is required!";
 
             return $validation;
         }

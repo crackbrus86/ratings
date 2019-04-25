@@ -87,8 +87,24 @@ export default connect<StateProps, DispatchProps>(
                                 <Form.Select 
                                     label="Область"
                                     options={this.props.regions}
-                                    value={null}
-                                    onChange={(value) => null}
+                                    value={this.props.entry.region}
+                                    validation={this.props.validation.isRegionValid}
+                                    onChange={(value) => this.props.actions.updateEntry("region", value)}
+                                />
+                                <Form.TextInput 
+                                    label="Тренер"
+                                    value={this.props.entry.coach}
+                                    onChange={(value) => this.props.actions.updateEntry("coach", value)}
+                                />
+                                <Form.TextInput 
+                                    label="ФСТ"
+                                    value={this.props.entry.fst}
+                                    onChange={(value) => this.props.actions.updateEntry("fst", value)}
+                                />
+                                <Form.TextInput 
+                                    label="ДЮСШ"
+                                    value={this.props.entry.school}
+                                    onChange={(value) => this.props.actions.updateEntry("school", value)}
                                 />
                             </Form>
                         </Layout.GridColumn>

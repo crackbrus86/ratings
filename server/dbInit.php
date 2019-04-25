@@ -26,7 +26,11 @@ $sql = "CREATE TABLE IF NOT EXISTS {$entryTableName} (
     Gender VARCHAR(1) NOT NULL,
     Division VARCHAR(10) NULL,
     CompType VARCHAR(50) NULL,
-    Wilks FLOAT(10, 2) NULL
+    Wilks FLOAT(10, 2) NULL,
+    Region VARCHAR(50) NULL,
+    Coach VARCHAR(300) NULL,
+    Fst VARCHAR(300) NULL,
+    School VARCHAR(300) NULL
     PRIMARY KEY (RatingEntryId)
 ) {$charset_collate}";
 dbDelta($sql);

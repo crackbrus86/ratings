@@ -8,7 +8,11 @@ export interface RatingEntry{
     eventDate: Date,
     gender: string,
     compType: string,
-    wilks: number
+    wilks: number,
+    region: string,
+    coach?: string,
+    fst?: string,
+    school?: string
 }
 
 export interface GetEntries_Contract{
