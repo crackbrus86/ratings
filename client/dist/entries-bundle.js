@@ -440,7 +440,7 @@ var TextInput = /** @class */ (function (_super) {
     };
     TextInput.prototype.render = function () {
         var _this = this;
-        var autocompleteItems = !this.props.autocomplete ? [] : this.props.autocompleteItems.filter(function (x) { return x.toLowerCase().includes(_this.props.value.toLowerCase()); });
+        var autocompleteItems = !this.props.autocomplete || !this.props.value ? [] : this.props.autocompleteItems.filter(function (x) { return x.toLowerCase().includes(_this.props.value.toLowerCase()); });
         autocompleteItems = this.sortLargeStringArray(autocompleteItems);
         var offset = this.getAutocompleteOffset();
         return React.createElement(React.Fragment, null,
@@ -1279,6 +1279,8 @@ exports.LOAD_FST = "LOOKUP::LOAD_FST";
 exports.LOAD_SCHOOLS = "LOOKUP::LOAD_SCHOOLS";
 exports.LOAD_MINISTRY_COACH_RATINGS = "RATINGS::LOAD_MINISTRY_COACH_RATINGS";
 exports.LOAD_UPF_COACH_RATINGS = "RATINGS::LOAD_UPF_COACH_RATINGS";
+exports.LOAD_MINISTRY_REGION_RATINGS = "RATINGS::LOAD_MINISTRY_REGION_RATINGS";
+exports.LOAD_MINISTRY_FST_RATINGS = "RATINGS::LOAD_MINISTRY_FST_RATINGS";
 
 
 /***/ }),
@@ -1643,6 +1645,36 @@ var ActionCreators;
             if (response.status) {
                 d({
                     type: ActionTypes.LOAD_UPF_COACH_RATINGS,
+                    payload: response.data
+                });
+            }
+            else {
+                toastr.error(response.message);
+            }
+        });
+    }; };
+    ActionCreators.loadMinistryRegionRatings = function () { return function (d, gs) {
+        Services.getMinistryRegionRatings({
+            year: gs().shell.startDate.getFullYear()
+        }).then(function (response) {
+            if (response.status) {
+                d({
+                    type: ActionTypes.LOAD_MINISTRY_REGION_RATINGS,
+                    payload: response.data
+                });
+            }
+            else {
+                toastr.error(response.message);
+            }
+        });
+    }; };
+    ActionCreators.loadMinistryFstRatings = function () { return function (d, gs) {
+        Services.getMinistryFstRatings({
+            year: gs().shell.startDate.getFullYear()
+        }).then(function (response) {
+            if (response.status) {
+                d({
+                    type: ActionTypes.LOAD_MINISTRY_FST_RATINGS,
                     payload: response.data
                 });
             }
@@ -2061,7 +2093,9 @@ var defaultState = {
     ministryRatings: [],
     upfRatings: [],
     ministryCoachRatings: [],
-    upfCoachRatings: []
+    upfCoachRatings: [],
+    ministryRegionRatings: [],
+    ministryFstRatings: []
 };
 exports.ratingsReducer = function (state, action) {
     if (state === void 0) { state = defaultState; }
@@ -2081,6 +2115,14 @@ exports.ratingsReducer = function (state, action) {
         case ActionTypes.LOAD_UPF_COACH_RATINGS: {
             var payload = action.payload;
             return __assign({}, state, { upfCoachRatings: payload });
+        }
+        case ActionTypes.LOAD_MINISTRY_REGION_RATINGS: {
+            var payload = action.payload;
+            return __assign({}, state, { ministryRegionRatings: payload });
+        }
+        case ActionTypes.LOAD_MINISTRY_FST_RATINGS: {
+            var payload = action.payload;
+            return __assign({}, state, { ministryFstRatings: payload });
         }
         default:
             return state;
@@ -2335,6 +2377,8 @@ var compTypes = function (state) { return state.lookup.compTypes; };
 var upfRatings = function (state) { return state.ratings.upfRatings; };
 var ministryCoachRatings = function (state) { return state.ratings.ministryCoachRatings; };
 var upfCoachRatings = function (state) { return state.ratings.upfCoachRatings; };
+var ministryRegionRatings = function (state) { return state.ratings.ministryRegionRatings; };
+var ministryFstRatings = function (state) { return state.ratings.ministryFstRatings; };
 exports.modifiedRatings = reselect_1.createSelector(ratings, competitions, compTypes, records, function (ratings, competitions, types, records) {
     return ratings.map(function (r) { return (__assign({}, r, { details: getDetails(r.details, types, competitions, records) })); });
 });
@@ -2358,6 +2402,12 @@ exports.modifiedMinistryCoachRatings = reselect_1.createSelector(ministryCoachRa
 });
 exports.modifiedUPFCoachRatings = reselect_1.createSelector(upfCoachRatings, competitions, compTypes, records, function (ratings, competitions, types, records) {
     return ratings.map(function (r) { return (__assign({}, r, { details: getDetails(r.details, types, competitions, records) })); }).sort(sortUPFRating);
+});
+exports.modifiedMinistryRegionRatings = reselect_1.createSelector(ministryRegionRatings, competitions, compTypes, records, function (ratings, competitions, types, records) {
+    return ratings.map(function (r) { return (__assign({}, r, { details: getDetails(r.details, types, competitions, records) })); });
+});
+exports.modifiedMinistryFstRatings = reselect_1.createSelector(ministryFstRatings, competitions, compTypes, records, function (ratings, competitions, types, records) {
+    return ratings.map(function (r) { return (__assign({}, r, { details: getDetails(r.details, types, competitions, records) })); });
 });
 function getDetails(originalDetails, types, competitions, records) {
     var details = originalDetails;
@@ -2553,6 +2603,20 @@ exports.getUPFCoachRatings = function (contract) {
         data: contract
     });
 };
+exports.getMinistryRegionRatings = function (contract) {
+    return CallApi.callApi({
+        url: ratingsApiPath + 'GetRegionMinistryRatings.php',
+        type: apiTypes.GET,
+        data: contract
+    });
+};
+exports.getMinistryFstRatings = function (contract) {
+    return CallApi.callApi({
+        url: ratingsApiPath + 'GetFstMinistryRatings.php',
+        type: apiTypes.GET,
+        data: contract
+    });
+};
 
 
 /***/ }),
@@ -2657,6 +2721,8 @@ var ministry_ratings_1 = __webpack_require__(/*! ./partials/ministry ratings */ 
 var upf_ratings_1 = __webpack_require__(/*! ./partials/upf ratings */ "./client/src/pages/ratings-entries/views/partials/upf ratings.tsx");
 var ministry_coach_ratings_1 = __webpack_require__(/*! ./partials/ministry coach ratings */ "./client/src/pages/ratings-entries/views/partials/ministry coach ratings.tsx");
 var upf_coach_ratings_1 = __webpack_require__(/*! ./partials/upf coach ratings */ "./client/src/pages/ratings-entries/views/partials/upf coach ratings.tsx");
+var ministry_region_ratings_1 = __webpack_require__(/*! ./partials/ministry region ratings */ "./client/src/pages/ratings-entries/views/partials/ministry region ratings.tsx");
+var ministry_fst_ratings_1 = __webpack_require__(/*! ./partials/ministry fst ratings */ "./client/src/pages/ratings-entries/views/partials/ministry fst ratings.tsx");
 var index_layout_1 = __webpack_require__(/*! ../../../components/layout/index.layout */ "./client/src/components/layout/index.layout.tsx");
 exports.default = react_redux_1.connect(function (state) { return ({}); }, function (dispatch) { return ({}); })(/** @class */ (function (_super) {
     __extends(Layout, _super);
@@ -2680,7 +2746,11 @@ exports.default = react_redux_1.connect(function (state) { return ({}); }, funct
                 React.createElement(tab_1.default, { title: "\u041C\u0456\u043D\u0456\u0441\u0442\u0435\u0440\u0441\u044C\u043A\u0438\u0439 \u0420\u0435\u0439\u0442\u0438\u043D\u0433 (\u0421\u0443\u0434\u0434\u0456)", label: "ministryCoachRating" },
                     React.createElement(ministry_coach_ratings_1.default, null)),
                 React.createElement(tab_1.default, { title: "\u0420\u0435\u0439\u0442\u0438\u043D\u0433 \u0424\u041F\u0423 (\u0421\u0443\u0434\u0434\u0456)", label: "upfCoachRating" },
-                    React.createElement(upf_coach_ratings_1.default, null))));
+                    React.createElement(upf_coach_ratings_1.default, null)),
+                React.createElement(tab_1.default, { title: "\u041C\u0456\u043D\u0456\u0441\u0442\u0435\u0440\u0441\u044C\u043A\u0438\u0439 \u0440\u0435\u0439\u0442\u0438\u043D\u0433 (\u041E\u0431\u043B\u0430\u0441\u0442\u0456)", label: "ministryRegionRatings" },
+                    React.createElement(ministry_region_ratings_1.default, null)),
+                React.createElement(tab_1.default, { title: "\u041C\u0456\u043D\u0456\u0441\u0442\u0435\u0440\u0441\u044C\u043A\u0438\u0439 \u0440\u0435\u0439\u0442\u0438\u043D\u0433 (\u0424\u0421\u0422)", label: "ministryFstRatings" },
+                    React.createElement(ministry_fst_ratings_1.default, null))));
     };
     return Layout;
 }(React.Component)));
@@ -2793,6 +2863,18 @@ exports.default = react_redux_1.connect(function (state) { return ({
                     {
                         title: "Тренер",
                         field: "coach",
+                        width: "200px",
+                        sortable: true
+                    },
+                    {
+                        title: "ФСТ",
+                        field: "fst",
+                        width: "200px",
+                        sortable: true
+                    },
+                    {
+                        title: "ДЮСШ",
+                        field: "school",
                         width: "200px",
                         sortable: true
                     },
@@ -2933,6 +3015,75 @@ exports.default = react_redux_1.connect(function (state) { return ({
 
 /***/ }),
 
+/***/ "./client/src/pages/ratings-entries/views/partials/ministry fst ratings.tsx":
+/*!**********************************************************************************!*\
+  !*** ./client/src/pages/ratings-entries/views/partials/ministry fst ratings.tsx ***!
+  \**********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/src/pages/ratings-entries/actions/index.actions.ts");
+var Selectors = __webpack_require__(/*! ../../selectors/index.selector */ "./client/src/pages/ratings-entries/selectors/index.selector.ts");
+var table_1 = __webpack_require__(/*! ../../../../components/table/table */ "./client/src/components/table/table.tsx");
+var column_1 = __webpack_require__(/*! ../../../../components/table/column */ "./client/src/components/table/column.tsx");
+exports.default = react_redux_1.connect(function (state) { return ({
+    ratings: Selectors.RatingSelector.modifiedMinistryFstRatings(state)
+}); }, function (dispatch) { return ({
+    actions: redux_1.bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch)
+}); })(/** @class */ (function (_super) {
+    __extends(MinistryFstRatings, _super);
+    function MinistryFstRatings(props) {
+        return _super.call(this, props) || this;
+    }
+    MinistryFstRatings.prototype.componentDidMount = function () {
+        this.props.actions.loadMinistryFstRatings();
+    };
+    MinistryFstRatings.prototype.render = function () {
+        return React.createElement("div", { className: "ratings" },
+            React.createElement(table_1.default, { items: this.props.ratings, columns: [
+                    {
+                        title: "ФСТ",
+                        field: "fullname",
+                        width: "250px"
+                    },
+                    {
+                        title: "К-ть очок",
+                        field: "rating",
+                        width: "100px"
+                    },
+                    {
+                        title: "Деталі",
+                        field: "details",
+                        type: column_1.ColumnTypes.Html,
+                        width: "*"
+                    }
+                ] }));
+    };
+    return MinistryFstRatings;
+}(React.Component)));
+
+
+/***/ }),
+
 /***/ "./client/src/pages/ratings-entries/views/partials/ministry ratings.tsx":
 /*!******************************************************************************!*\
   !*** ./client/src/pages/ratings-entries/views/partials/ministry ratings.tsx ***!
@@ -3009,6 +3160,75 @@ exports.default = react_redux_1.connect(function (state) { return ({
                 ] }));
     };
     return MinistryRatings;
+}(React.Component)));
+
+
+/***/ }),
+
+/***/ "./client/src/pages/ratings-entries/views/partials/ministry region ratings.tsx":
+/*!*************************************************************************************!*\
+  !*** ./client/src/pages/ratings-entries/views/partials/ministry region ratings.tsx ***!
+  \*************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/src/pages/ratings-entries/actions/index.actions.ts");
+var Selectors = __webpack_require__(/*! ../../selectors/index.selector */ "./client/src/pages/ratings-entries/selectors/index.selector.ts");
+var table_1 = __webpack_require__(/*! ../../../../components/table/table */ "./client/src/components/table/table.tsx");
+var column_1 = __webpack_require__(/*! ../../../../components/table/column */ "./client/src/components/table/column.tsx");
+exports.default = react_redux_1.connect(function (state) { return ({
+    ratings: Selectors.RatingSelector.modifiedMinistryRegionRatings(state)
+}); }, function (dispatch) { return ({
+    actions: redux_1.bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch)
+}); })(/** @class */ (function (_super) {
+    __extends(MinistryRegionRatings, _super);
+    function MinistryRegionRatings(props) {
+        return _super.call(this, props) || this;
+    }
+    MinistryRegionRatings.prototype.componentDidMount = function () {
+        this.props.actions.loadMinistryRegionRatings();
+    };
+    MinistryRegionRatings.prototype.render = function () {
+        return React.createElement("div", { className: "ratings" },
+            React.createElement(table_1.default, { items: this.props.ratings, columns: [
+                    {
+                        title: "Область",
+                        field: "fullname",
+                        width: "250px"
+                    },
+                    {
+                        title: "К-ть очок",
+                        field: "rating",
+                        width: "100px"
+                    },
+                    {
+                        title: "Деталі",
+                        field: "details",
+                        type: column_1.ColumnTypes.Html,
+                        width: "*"
+                    }
+                ] }));
+    };
+    return MinistryRegionRatings;
 }(React.Component)));
 
 

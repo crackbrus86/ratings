@@ -161,4 +161,62 @@ class RatingService
 
         return $response;
     }
+
+    public function getRegionMinistryRatings()
+    {
+        $year = $_GET["year"];
+
+        $sql = $this->db->prepare("SELECT a.Region, SUM(b.Value) AS Rating,
+                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів)') separator ', ') AS Details
+                                        FROM $this->entryTable a
+                                        JOIN $this->pointTable b ON b.Target = a.Event AND b.Place = a.Place
+                                        WHERE YEAR(a.EventDate) = %s AND a.Region != '' AND a.Region IS NOT NULL
+                                    GROUP BY a.Region
+                                    ORDER BY Rating DESC", $year);
+
+        $results = $this->db->get_results($sql);
+
+        if(count($results))
+        {
+            foreach ($results as $result) 
+            {
+                array_push($this->ratings, new Rating($result->Region, $result->Rating, '', $result->Details));
+            }
+        }
+
+        $response = new ResponseModel();
+
+        $response->setResponseModel((object)["status" => TRUE, "data" => $this->ratings]);
+
+        return $response; 
+    }
+
+    public function getFstMinistryRatings()
+    {
+        $year = $_GET["year"];
+
+        $sql = $this->db->prepare("SELECT a.Fst, SUM(b.Value) AS Rating,
+                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів)') separator ', ') AS Details
+                                        FROM $this->entryTable a
+                                        JOIN $this->pointTable b ON b.Target = a.Event AND b.Place = a.Place
+                                        WHERE YEAR(a.EventDate) = %s AND a.Fst != '' AND a.Fst IS NOT NULL
+                                    GROUP BY a.Fst
+                                    ORDER BY Rating DESC", $year);
+
+        $results = $this->db->get_results($sql);
+
+        if(count($results))
+        {
+            foreach ($results as $result) 
+            {
+                array_push($this->ratings, new Rating($result->Fst, $result->Rating, '', $result->Details));
+            }
+        }
+
+        $response = new ResponseModel();
+
+        $response->setResponseModel((object)["status" => TRUE, "data" => $this->ratings]);
+
+        return $response; 
+    }
 }

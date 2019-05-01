@@ -63,7 +63,7 @@ class TextInput extends React.Component<TextInputProps, TextInputState>{
     }
 
     render(){
-        let autocompleteItems = !this.props.autocomplete ? [] : this.props.autocompleteItems.filter(x => x.toLowerCase().includes(this.props.value.toLowerCase()));
+        let autocompleteItems = !this.props.autocomplete || !this.props.value ? [] : this.props.autocompleteItems.filter(x => x.toLowerCase().includes(this.props.value.toLowerCase()));
         autocompleteItems = this.sortLargeStringArray(autocompleteItems);
         var offset = this.getAutocompleteOffset();
         return <>

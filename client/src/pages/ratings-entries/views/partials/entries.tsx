@@ -104,6 +104,18 @@ export default connect<StateProps, DispatchProps>(
                         sortable: true
                     },
                     {
+                        title: "ФСТ",
+                        field: "fst",
+                        width: "200px",
+                        sortable: true
+                    },
+                    {
+                        title: "ДЮСШ",
+                        field: "school",
+                        width: "200px",
+                        sortable: true
+                    },
+                    {
                         title: "",
                         width: "*"
                     }

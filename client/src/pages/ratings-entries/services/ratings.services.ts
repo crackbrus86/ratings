@@ -35,3 +35,19 @@ export const getUPFCoachRatings = (contract: Models.RatingModels.GetRatings_Cont
         data: contract
     })
 }
+
+export const getMinistryRegionRatings = (contract: Models.RatingModels.GetRatings_Contract) => {
+    return CallApi.callApi({
+        url: ratingsApiPath + 'GetRegionMinistryRatings.php',
+        type: apiTypes.GET,
+        data: contract
+    })
+}
+
+export const getMinistryFstRatings = (contract: Models.RatingModels.GetRatings_Contract) => {
+    return CallApi.callApi({
+        url: ratingsApiPath + 'GetFstMinistryRatings.php',
+        type: apiTypes.GET,
+        data: contract
+    })
+}

@@ -8,6 +8,8 @@ const compTypes = (state: Models.StoreState) => state.lookup.compTypes;
 const upfRatings = (state: Models.StoreState) => state.ratings.upfRatings;
 const ministryCoachRatings = (state: Models.StoreState) => state.ratings.ministryCoachRatings;
 const upfCoachRatings = (state: Models.StoreState) => state.ratings.upfCoachRatings;
+const ministryRegionRatings = (state: Models.StoreState) => state.ratings.ministryRegionRatings;
+const ministryFstRatings = (state: Models.StoreState) => state.ratings.ministryFstRatings;
 
 export const modifiedRatings = createSelector(ratings, competitions, compTypes, records, (ratings, competitions, types, records) => {
     return ratings.map(r => ({ ...r, details: getDetails(r.details, types, competitions, records) }));
@@ -39,6 +41,14 @@ export const modifiedMinistryCoachRatings = createSelector(ministryCoachRatings,
 
 export const modifiedUPFCoachRatings = createSelector(upfCoachRatings, competitions, compTypes, records, (ratings, competitions, types, records) => {
     return ratings.map(r => ({...r, details: getDetails(r.details, types, competitions, records)})).sort(sortUPFRating);
+});
+
+export const modifiedMinistryRegionRatings = createSelector(ministryRegionRatings, competitions, compTypes, records, (ratings, competitions, types, records) => {
+    return ratings.map(r => ({...r, details: getDetails(r.details, types, competitions, records)}));
+});
+
+export const modifiedMinistryFstRatings = createSelector(ministryFstRatings, competitions, compTypes, records, (ratings, competitions, types, records) => {
+    return ratings.map(r => ({...r, details: getDetails(r.details, types, competitions, records)}));
 });
 
 function getDetails(originalDetails: string, types: Models.CompetitionType[], competitions: Models.Competition[], records: Models.Record[]){

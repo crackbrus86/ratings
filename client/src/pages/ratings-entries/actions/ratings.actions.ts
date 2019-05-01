@@ -64,4 +64,34 @@ export namespace ActionCreators{
             }
         })
     }
+
+    export const loadMinistryRegionRatings = () => (d, gs: () => Models.StoreState) => {
+        Services.getMinistryRegionRatings({
+            year: gs().shell.startDate.getFullYear()
+        }).then(response => {
+            if(response.status){
+                d({
+                    type: ActionTypes.LOAD_MINISTRY_REGION_RATINGS,
+                    payload: <ActionTypes.LOAD_MINISTRY_REGION_RATINGS_PAYLOAD> response.data
+                })
+            }else{
+                toastr.error(response.message)
+            }
+        })
+    }
+
+    export const loadMinistryFstRatings = () => (d, gs: () => Models.StoreState) => {
+        Services.getMinistryFstRatings({
+            year: gs().shell.startDate.getFullYear()
+        }).then(response => {
+            if(response.status){
+                d({
+                    type: ActionTypes.LOAD_MINISTRY_FST_RATINGS,
+                    payload: <ActionTypes.LOAD_MINISTRY_FST_RATINGS_PAYLOAD> response.data
+                })
+            }else{
+                toastr.error(response.message)
+            }
+        })
+    }
 }
