@@ -17,7 +17,10 @@ export namespace ActionCreators{
                 event: null,
                 place: null,
                 eventDate: new Date(),
-                wilks: null
+                wilks: null,
+                coach: '',
+                fst: '',
+                school: ''
             }
         })
     }

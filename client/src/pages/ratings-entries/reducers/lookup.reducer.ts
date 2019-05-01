@@ -7,7 +7,10 @@ export interface LookupState{
     names: string[],
     divisions: Models.Division[],
     compTypes: Models.CompetitionType[],
-    regions: Models.Region[]
+    regions: Models.Region[],
+    coaches: string[],
+    fstList: string[],
+    schools: string[]
 }
 
 const defaultState = {
@@ -16,7 +19,10 @@ const defaultState = {
     names: [],
     divisions: [{name: "Open", displayName: "Відкритий"}, {name: "Junior", displayName: "Юніори"}, {name: "SubJunior", displayName: "Юнаки"}],
     compTypes: [],
-    regions: []
+    regions: [],
+    coaches: [],
+    fstList: [],
+    schools: []
 } as LookupState
 
 export type ReducerState = typeof defaultState;
@@ -56,6 +62,27 @@ export const lookupReducer = (state = defaultState, action): ReducerState => {
             return {
                 ...state,
                 regions: payload
+            }
+        }
+        case ActionTypes.LOAD_COACHES: {
+            let payload = action.payload as ActionTypes.LOAD_COACHES_PAYLOAD;
+            return {
+                ...state,
+                coaches: payload
+            }
+        }
+        case ActionTypes.LOAD_FST: {
+            let payload = action.payload as ActionTypes.LOAD_FST_PAYLOAD;
+            return {
+                ...state,
+                fstList: payload
+            }
+        }
+        case ActionTypes.LOAD_SCHOOLS: {
+            let payload = action.payload as ActionTypes.LOAD_SCHOOLS_PAYLOAD;
+            return {
+                ...state,
+                schools: payload
             }
         }
         default:

@@ -4,6 +4,7 @@ import * as classnames from "classnames" ;
 
 export interface SearchProps{
     className?: string,
+    searchValue?: string,
     onChange: (v: string) => void
 }
 
@@ -15,7 +16,7 @@ class Search extends React.Component<SearchProps, SearchState>{
     constructor(props){
         super(props);
         this.state = {
-            searchValue: ''
+            searchValue: this.props.searchValue || ''
         }
     }
 

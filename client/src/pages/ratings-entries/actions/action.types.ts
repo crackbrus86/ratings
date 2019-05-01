@@ -54,3 +54,18 @@ export type CHANGE_SEARCH_VALUE_PAYLOAD = string;
 
 export const LOAD_REGIONS = "LOOKUP::LOAD_REGIONS";
 export type LOAD_REGIONS_PAYLOAD = Models.Region[];
+
+export const LOAD_COACHES = "LOOKUP::LOAD_COACHES";
+export type LOAD_COACHES_PAYLOAD = string[];
+
+export const LOAD_FST = "LOOKUP::LOAD_FST";
+export type LOAD_FST_PAYLOAD = string[];
+
+export const LOAD_SCHOOLS = "LOOKUP::LOAD_SCHOOLS";
+export type LOAD_SCHOOLS_PAYLOAD = string[];
+
+export const LOAD_MINISTRY_COACH_RATINGS = "RATINGS::LOAD_MINISTRY_COACH_RATINGS";
+export type LOAD_MINISTRY_COACH_RATINGS_PAYLOAD = Models.Rating[];
+
+export const LOAD_UPF_COACH_RATINGS = "RATINGS::LOAD_UPF_COACH_RATINGS";
+export type LOAD_UPF_COACH_RATINGS_PAYLOAD = Models.Rating[];

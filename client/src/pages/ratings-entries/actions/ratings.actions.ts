@@ -34,4 +34,34 @@ export namespace ActionCreators{
             }
         })
     }
+
+    export const loadMinistryCoachRatings = () => (d, gs: () => Models.StoreState) => {
+        Services.getMinistryCoachRatings({
+            year: gs().shell.startDate.getFullYear()
+        }).then(response => {
+            if(response.status){
+                d({
+                    type: ActionTypes.LOAD_MINISTRY_COACH_RATINGS,
+                    payload: <ActionTypes.LOAD_MINISTRY_COACH_RATINGS_PAYLOAD> response.data
+                })
+            }else{
+                toastr.error(response.message)
+            }
+        })
+    }
+
+    export const loadUPFCoachRatings = () => (d, gs: () => Models.StoreState) => {
+        Services.getUPFCoachRatings({
+            year: gs().shell.startDate.getFullYear()
+        }).then(response => {
+            if(response.status){
+                d({
+                    type: ActionTypes.LOAD_UPF_COACH_RATINGS,
+                    payload: <ActionTypes.LOAD_UPF_COACH_RATINGS_PAYLOAD> response.data
+                })
+            }else{
+                toastr.error(response.message)
+            }
+        })
+    }
 }

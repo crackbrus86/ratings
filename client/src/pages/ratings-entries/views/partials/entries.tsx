@@ -15,7 +15,8 @@ interface StateProps{
     competitions: Models.Competition[],
     records: Models.Record[],
     deleteEntryId?: number,
-    compTypes: Models.CompetitionType[]
+    compTypes: Models.CompetitionType[],
+    saerchValue?: string
 }
 
 interface DispatchProps{
@@ -29,7 +30,8 @@ export default connect<StateProps, DispatchProps>(
         competitions: state.lookup.competitions,
         records: state.lookup.records,
         deleteEntryId: state.entries.deleteById,
-        compTypes: state.lookup.compTypes
+        compTypes: state.lookup.compTypes,
+        saerchValue: state.shell.searchValue
     }),
     (dispatch): DispatchProps => ({
         entryActions: bindActionCreators(Actions.EntriesActions.ActionCreators, dispatch),
@@ -47,7 +49,7 @@ export default connect<StateProps, DispatchProps>(
     render(){
         return <div className="entries">
             <button className="create-button" onClick={this.props.entryActions.addEntry}>Створити запис</button>
-            <Search onChange={this.props.shellActions.changeSearchValue} />
+            <Search searchValue={this.props.saerchValue} onChange={this.props.shellActions.changeSearchValue} />
             <Table items={this.props.entries}
                 columns={[
                     {
@@ -67,13 +69,13 @@ export default connect<StateProps, DispatchProps>(
                     {
                         title: "П.І.П",
                         field: "fullname",
-                        width: "300px",
+                        width: "200px",
                         sortable: true
                     },
                     {
                         title: "Подія",
                         field: "event",
-                        width: "350px",
+                        width: "250px",
                         sortable: true
                     },
                     {
@@ -93,6 +95,12 @@ export default connect<StateProps, DispatchProps>(
                         title: "Показник по ф-лі Вілкса",
                         field: "wilks",
                         width: "100px",
+                        sortable: true
+                    },
+                    {
+                        title: "Тренер",
+                        field: "coach",
+                        width: "200px",
                         sortable: true
                     },
                     {

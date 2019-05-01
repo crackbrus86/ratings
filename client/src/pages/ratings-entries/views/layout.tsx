@@ -9,6 +9,8 @@ import LayoutHeader from "./partials/layout.header";
 import Entries from "./partials/entries";
 import MinistryRatings from "./partials/ministry ratings";
 import UPFRatings from "./partials/upf ratings";
+import MinistryCoachRatings from "./partials/ministry coach ratings";
+import UPFCoachRatings from "./partials/upf coach ratings";
 import {ContentWrap} from "../../../components/layout/index.layout";
 
 interface StateProps{
@@ -45,6 +47,12 @@ export default connect<StateProps, DispatchProps>(
                     </Tab>                    
                     <Tab title="Рейтинг ФПУ (Жінки)" label="upfRatingFemale">
                         <UPFRatings ratingFilter="Female" />
+                    </Tab>
+                    <Tab title="Міністерський Рейтинг (Судді)" label="ministryCoachRating">
+                        <MinistryCoachRatings />
+                    </Tab>
+                    <Tab title="Рейтинг ФПУ (Судді)" label="upfCoachRating">
+                        <UPFCoachRatings />
                     </Tab>
                 </TabView>
             </ContentWrap>

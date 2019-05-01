@@ -6,6 +6,8 @@ const competitions = (state: Models.StoreState) => state.lookup.competitions;
 const records = (state: Models.StoreState) => state.lookup.records;
 const compTypes = (state: Models.StoreState) => state.lookup.compTypes;
 const upfRatings = (state: Models.StoreState) => state.ratings.upfRatings;
+const ministryCoachRatings = (state: Models.StoreState) => state.ratings.ministryCoachRatings;
+const upfCoachRatings = (state: Models.StoreState) => state.ratings.upfCoachRatings;
 
 export const modifiedRatings = createSelector(ratings, competitions, compTypes, records, (ratings, competitions, types, records) => {
     return ratings.map(r => ({ ...r, details: getDetails(r.details, types, competitions, records) }));
@@ -29,6 +31,14 @@ export const upfRatingsMale = createSelector(modifiedRatingsUPF, (ratings) => {
 
 export const upfRatingsFemale = createSelector(modifiedRatingsUPF, (ratings) => {
     return ratings.filter(r => r.gender == "F").sort(sortUPFRating);
+});
+
+export const modifiedMinistryCoachRatings = createSelector(ministryCoachRatings, competitions, compTypes, records, (ratings, competitions, types, records) => {
+    return ratings.map(r => ({...r, details: getDetails(r.details, types, competitions, records)}));
+});
+
+export const modifiedUPFCoachRatings = createSelector(upfCoachRatings, competitions, compTypes, records, (ratings, competitions, types, records) => {
+    return ratings.map(r => ({...r, details: getDetails(r.details, types, competitions, records)})).sort(sortUPFRating);
 });
 
 function getDetails(originalDetails: string, types: Models.CompetitionType[], competitions: Models.Competition[], records: Models.Record[]){

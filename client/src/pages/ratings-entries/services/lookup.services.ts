@@ -38,3 +38,24 @@ export const getRegions = () => {
         type: apiTypes.GET
     });
 }
+
+export const getCoaches = () => {
+    return CallApi.callApi({
+        url: lookupApiPath + 'GetAllCoaches.php',
+        type: apiTypes.GET
+    });
+}
+
+export const getFst = () => {
+    return CallApi.callApi({
+        url: lookupApiPath + 'GetAllFst.php',
+        type: apiTypes.GET
+    });
+}
+
+export const getSchools = () => {
+    return CallApi.callApi({
+        url: lookupApiPath + 'GetAllSchools.php',
+        type: apiTypes.GET
+    });
+}

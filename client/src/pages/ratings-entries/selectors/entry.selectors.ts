@@ -122,7 +122,8 @@ export const entriesList = createSelector(entries, searchValue, competitions, re
                                     || isMatchingSearchString(searchValue, entry.event) 
                                     || isMatchingSearchString(searchValue, entry.eventDate) 
                                     || isMatchingSearchString(searchValue, entry.place) 
-                                    || isMatchingSearchString(searchValue, entry.wilks))
+                                    || isMatchingSearchString(searchValue, entry.wilks)
+                                    || isMatchingSearchString(searchValue, entry.coach))
 })
 
 function isMatchingSearchString(search: string, field: any){

@@ -19,3 +19,19 @@ export const getUPFRatings = (contract: Models.RatingModels.GetRatings_Contract)
         data: contract
     });
 }
+
+export const getMinistryCoachRatings = (contract: Models.RatingModels.GetRatings_Contract) => {
+    return CallApi.callApi({
+        url: ratingsApiPath + 'GetCoachMinistryRatings.php',
+        type: apiTypes.GET,
+        data: contract
+    });
+}
+
+export const getUPFCoachRatings = (contract: Models.RatingModels.GetRatings_Contract) => {
+    return CallApi.callApi({
+        url: ratingsApiPath + 'GetCoachUPFRatings.php',
+        type: apiTypes.GET,
+        data: contract
+    })
+}

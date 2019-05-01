@@ -16,7 +16,10 @@ interface StateProps{
     names: string[],
     divisions: SelectOption[],
     compTypes: SelectOption[],
-    regions: SelectOption[]
+    regions: SelectOption[],
+    coaches: string[],
+    fstList: string[],
+    schools: string[]
 }
 
 interface DispatchProps{
@@ -31,7 +34,10 @@ export default connect<StateProps, DispatchProps>(
         names: state.lookup.names,
         divisions: Selectors.EntrySelector.divisionList(state),
         compTypes: Selectors.EntrySelector.compTypesList(state),
-        regions: Selectors.LookupSelector.regionsList(state)
+        regions: Selectors.LookupSelector.regionsList(state),
+        coaches: state.lookup.coaches,
+        fstList: state.lookup.fstList,
+        schools: state.lookup.schools
     }),
     (dispatch): DispatchProps => ({
         actions: bindActionCreators(Actions.EntriesActions.ActionCreators, dispatch)
@@ -94,16 +100,22 @@ export default connect<StateProps, DispatchProps>(
                                 <Form.TextInput 
                                     label="Тренер"
                                     value={this.props.entry.coach}
+                                    autocomplete={true}
+                                    autocompleteItems={this.props.coaches}
                                     onChange={(value) => this.props.actions.updateEntry("coach", value)}
                                 />
                                 <Form.TextInput 
                                     label="ФСТ"
                                     value={this.props.entry.fst}
+                                    autocomplete={true}
+                                    autocompleteItems={this.props.fstList}
                                     onChange={(value) => this.props.actions.updateEntry("fst", value)}
                                 />
                                 <Form.TextInput 
                                     label="ДЮСШ"
                                     value={this.props.entry.school}
+                                    autocomplete={true}
+                                    autocompleteItems={this.props.schools}
                                     onChange={(value) => this.props.actions.updateEntry("school", value)}
                                 />
                             </Form>

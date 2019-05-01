@@ -3,12 +3,16 @@ import * as Models from "../models/index.models";
 
 export interface RatingsState{
     ministryRatings: Models.Rating[],
-    upfRatings: Models.Rating[]
+    upfRatings: Models.Rating[],
+    ministryCoachRatings: Models.Rating[],
+    upfCoachRatings: Models.Rating[]
 }
 
 const defaultState = {
     ministryRatings: [],
-    upfRatings: []
+    upfRatings: [],
+    ministryCoachRatings: [],
+    upfCoachRatings: []
 } as RatingsState
 
 export type ReducerState = typeof defaultState;
@@ -27,6 +31,20 @@ export const ratingsReducer = (state = defaultState, action): ReducerState => {
             return {
                 ...state,
                 upfRatings: payload
+            }
+        }
+        case ActionTypes.LOAD_MINISTRY_COACH_RATINGS: {
+            let payload = action.payload as ActionTypes.LOAD_MINISTRY_COACH_RATINGS_PAYLOAD;
+            return {
+                ...state,
+                ministryCoachRatings: payload
+            }
+        }
+        case ActionTypes.LOAD_UPF_COACH_RATINGS: {
+            let payload = action.payload as ActionTypes.LOAD_UPF_COACH_RATINGS_PAYLOAD;
+            return {
+                ...state,
+                upfCoachRatings: payload
             }
         }
         default:

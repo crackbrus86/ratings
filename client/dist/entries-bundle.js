@@ -720,7 +720,7 @@ var Search = /** @class */ (function (_super) {
             _this.props.onChange('');
         };
         _this.state = {
-            searchValue: ''
+            searchValue: _this.props.searchValue || ''
         };
         return _this;
     }
@@ -1274,6 +1274,11 @@ exports.LOAD_COMP_TYPES = "LOOKUP::LOAD_COMP_TYPES";
 exports.LOAD_UPF_RATINGS = "RATINGS::LOAD_UPF_RATINGS";
 exports.CHANGE_SEARCH_VALUE = "ENTRIES::CHANGE_SEARCH_VALUE";
 exports.LOAD_REGIONS = "LOOKUP::LOAD_REGIONS";
+exports.LOAD_COACHES = "LOOKUP::LOAD_COACHES";
+exports.LOAD_FST = "LOOKUP::LOAD_FST";
+exports.LOAD_SCHOOLS = "LOOKUP::LOAD_SCHOOLS";
+exports.LOAD_MINISTRY_COACH_RATINGS = "RATINGS::LOAD_MINISTRY_COACH_RATINGS";
+exports.LOAD_UPF_COACH_RATINGS = "RATINGS::LOAD_UPF_COACH_RATINGS";
 
 
 /***/ }),
@@ -1318,7 +1323,10 @@ var ActionCreators;
                 event: null,
                 place: null,
                 eventDate: new Date(),
-                wilks: null
+                wilks: null,
+                coach: '',
+                fst: '',
+                school: ''
             }
         });
     }; };
@@ -1474,6 +1482,9 @@ var ActionCreators;
         d(ActionCreators.loadRecords());
         d(ActionCreators.loadCompTypes());
         d(ActionCreators.loadRegions());
+        d(ActionCreators.loadCoaches());
+        d(ActionCreators.loadFstList());
+        d(ActionCreators.loadSchools());
     }; };
     ActionCreators.loadCompetitions = function () { return function (d, gs) {
         Services.getCompetitions().then(function (response) {
@@ -1529,6 +1540,36 @@ var ActionCreators;
             }
         });
     }; };
+    ActionCreators.loadCoaches = function () { return function (d, gs) {
+        Services.getCoaches().then(function (response) {
+            if (response.status) {
+                d({
+                    type: ActionTypes.LOAD_COACHES,
+                    payload: response.data
+                });
+            }
+        });
+    }; };
+    ActionCreators.loadFstList = function () { return function (d, gs) {
+        Services.getFst().then(function (response) {
+            if (response.status) {
+                d({
+                    type: ActionTypes.LOAD_FST,
+                    payload: response.data
+                });
+            }
+        });
+    }; };
+    ActionCreators.loadSchools = function () { return function (d, gs) {
+        Services.getSchools().then(function (response) {
+            if (response.status) {
+                d({
+                    type: ActionTypes.LOAD_SCHOOLS,
+                    payload: response.data
+                });
+            }
+        });
+    }; };
 })(ActionCreators = exports.ActionCreators || (exports.ActionCreators = {}));
 
 
@@ -1572,6 +1613,36 @@ var ActionCreators;
             if (response.status) {
                 d({
                     type: ActionTypes.LOAD_UPF_RATINGS,
+                    payload: response.data
+                });
+            }
+            else {
+                toastr.error(response.message);
+            }
+        });
+    }; };
+    ActionCreators.loadMinistryCoachRatings = function () { return function (d, gs) {
+        Services.getMinistryCoachRatings({
+            year: gs().shell.startDate.getFullYear()
+        }).then(function (response) {
+            if (response.status) {
+                d({
+                    type: ActionTypes.LOAD_MINISTRY_COACH_RATINGS,
+                    payload: response.data
+                });
+            }
+            else {
+                toastr.error(response.message);
+            }
+        });
+    }; };
+    ActionCreators.loadUPFCoachRatings = function () { return function (d, gs) {
+        Services.getUPFCoachRatings({
+            year: gs().shell.startDate.getFullYear()
+        }).then(function (response) {
+            if (response.status) {
+                d({
+                    type: ActionTypes.LOAD_UPF_COACH_RATINGS,
                     payload: response.data
                 });
             }
@@ -1675,7 +1746,10 @@ exports.default = react_redux_1.connect(function (state) { return ({
     names: state.lookup.names,
     divisions: Selectors.EntrySelector.divisionList(state),
     compTypes: Selectors.EntrySelector.compTypesList(state),
-    regions: Selectors.LookupSelector.regionsList(state)
+    regions: Selectors.LookupSelector.regionsList(state),
+    coaches: state.lookup.coaches,
+    fstList: state.lookup.fstList,
+    schools: state.lookup.schools
 }); }, function (dispatch) { return ({
     actions: redux_1.bindActionCreators(Actions.EntriesActions.ActionCreators, dispatch)
 }); })(/** @class */ (function (_super) {
@@ -1708,9 +1782,9 @@ exports.default = react_redux_1.connect(function (state) { return ({
                                 React.createElement(form_1.default.Select, { label: "\u0421\u0442\u0430\u0442\u044C", options: [{ text: "", value: null }, { text: "Чоловіки", value: "M" }, { text: "Жінки", value: "F" }], value: this.props.entry.gender, validation: this.props.validation.isGenderValid, onChange: function (value) { return _this.props.actions.updateEntry("gender", value); } }),
                                 React.createElement(form_1.default.Select, { label: "\u0414\u0438\u0432\u0456\u0437\u0456\u043E\u043D", options: this.props.divisions, value: this.props.entry.division, validation: this.props.validation.isDivisionValid, onChange: function (value) { return _this.props.actions.updateEntry("division", value); } }),
                                 React.createElement(form_1.default.Select, { label: "\u041E\u0431\u043B\u0430\u0441\u0442\u044C", options: this.props.regions, value: this.props.entry.region, validation: this.props.validation.isRegionValid, onChange: function (value) { return _this.props.actions.updateEntry("region", value); } }),
-                                React.createElement(form_1.default.TextInput, { label: "\u0422\u0440\u0435\u043D\u0435\u0440", value: this.props.entry.coach, onChange: function (value) { return _this.props.actions.updateEntry("coach", value); } }),
-                                React.createElement(form_1.default.TextInput, { label: "\u0424\u0421\u0422", value: this.props.entry.fst, onChange: function (value) { return _this.props.actions.updateEntry("fst", value); } }),
-                                React.createElement(form_1.default.TextInput, { label: "\u0414\u042E\u0421\u0428", value: this.props.entry.school, onChange: function (value) { return _this.props.actions.updateEntry("school", value); } }))),
+                                React.createElement(form_1.default.TextInput, { label: "\u0422\u0440\u0435\u043D\u0435\u0440", value: this.props.entry.coach, autocomplete: true, autocompleteItems: this.props.coaches, onChange: function (value) { return _this.props.actions.updateEntry("coach", value); } }),
+                                React.createElement(form_1.default.TextInput, { label: "\u0424\u0421\u0422", value: this.props.entry.fst, autocomplete: true, autocompleteItems: this.props.fstList, onChange: function (value) { return _this.props.actions.updateEntry("fst", value); } }),
+                                React.createElement(form_1.default.TextInput, { label: "\u0414\u042E\u0421\u0428", value: this.props.entry.school, autocomplete: true, autocompleteItems: this.props.schools, onChange: function (value) { return _this.props.actions.updateEntry("school", value); } }))),
                         React.createElement(Layout.GridColumn, null,
                             React.createElement(form_1.default, null,
                                 React.createElement(form_1.default.RadioButton, { label: "\u0422\u0438\u043F \u0437\u0430\u043F\u0438\u0441\u0443", value: this.props.entry.type, name: "RecordType", buttons: [{ label: "Призове місце", value: Models.EntryType.Place }, { label: "Рекорд", value: Models.EntryType.Record }], onChange: function (value) { return _this.props.actions.updateEntry("type", value); } }),
@@ -1913,7 +1987,10 @@ var defaultState = {
     names: [],
     divisions: [{ name: "Open", displayName: "Відкритий" }, { name: "Junior", displayName: "Юніори" }, { name: "SubJunior", displayName: "Юнаки" }],
     compTypes: [],
-    regions: []
+    regions: [],
+    coaches: [],
+    fstList: [],
+    schools: []
 };
 exports.lookupReducer = function (state, action) {
     if (state === void 0) { state = defaultState; }
@@ -1937,6 +2014,18 @@ exports.lookupReducer = function (state, action) {
         case ActionTypes.LOAD_REGIONS: {
             var payload = action.payload;
             return __assign({}, state, { regions: payload });
+        }
+        case ActionTypes.LOAD_COACHES: {
+            var payload = action.payload;
+            return __assign({}, state, { coaches: payload });
+        }
+        case ActionTypes.LOAD_FST: {
+            var payload = action.payload;
+            return __assign({}, state, { fstList: payload });
+        }
+        case ActionTypes.LOAD_SCHOOLS: {
+            var payload = action.payload;
+            return __assign({}, state, { schools: payload });
         }
         default:
             return state;
@@ -1970,7 +2059,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var ActionTypes = __webpack_require__(/*! ../actions/action.types */ "./client/src/pages/ratings-entries/actions/action.types.ts");
 var defaultState = {
     ministryRatings: [],
-    upfRatings: []
+    upfRatings: [],
+    ministryCoachRatings: [],
+    upfCoachRatings: []
 };
 exports.ratingsReducer = function (state, action) {
     if (state === void 0) { state = defaultState; }
@@ -1982,6 +2073,14 @@ exports.ratingsReducer = function (state, action) {
         case ActionTypes.LOAD_UPF_RATINGS: {
             var payload = action.payload;
             return __assign({}, state, { upfRatings: payload });
+        }
+        case ActionTypes.LOAD_MINISTRY_COACH_RATINGS: {
+            var payload = action.payload;
+            return __assign({}, state, { ministryCoachRatings: payload });
+        }
+        case ActionTypes.LOAD_UPF_COACH_RATINGS: {
+            var payload = action.payload;
+            return __assign({}, state, { upfCoachRatings: payload });
         }
         default:
             return state;
@@ -2157,7 +2256,8 @@ exports.entriesList = reselect_1.createSelector(entries, searchValue, competitio
         || isMatchingSearchString(searchValue, entry.event)
         || isMatchingSearchString(searchValue, entry.eventDate)
         || isMatchingSearchString(searchValue, entry.place)
-        || isMatchingSearchString(searchValue, entry.wilks); });
+        || isMatchingSearchString(searchValue, entry.wilks)
+        || isMatchingSearchString(searchValue, entry.coach); });
 });
 function isMatchingSearchString(search, field) {
     if (!field)
@@ -2233,6 +2333,8 @@ var competitions = function (state) { return state.lookup.competitions; };
 var records = function (state) { return state.lookup.records; };
 var compTypes = function (state) { return state.lookup.compTypes; };
 var upfRatings = function (state) { return state.ratings.upfRatings; };
+var ministryCoachRatings = function (state) { return state.ratings.ministryCoachRatings; };
+var upfCoachRatings = function (state) { return state.ratings.upfCoachRatings; };
 exports.modifiedRatings = reselect_1.createSelector(ratings, competitions, compTypes, records, function (ratings, competitions, types, records) {
     return ratings.map(function (r) { return (__assign({}, r, { details: getDetails(r.details, types, competitions, records) })); });
 });
@@ -2250,6 +2352,12 @@ exports.upfRatingsMale = reselect_1.createSelector(exports.modifiedRatingsUPF, f
 });
 exports.upfRatingsFemale = reselect_1.createSelector(exports.modifiedRatingsUPF, function (ratings) {
     return ratings.filter(function (r) { return r.gender == "F"; }).sort(sortUPFRating);
+});
+exports.modifiedMinistryCoachRatings = reselect_1.createSelector(ministryCoachRatings, competitions, compTypes, records, function (ratings, competitions, types, records) {
+    return ratings.map(function (r) { return (__assign({}, r, { details: getDetails(r.details, types, competitions, records) })); });
+});
+exports.modifiedUPFCoachRatings = reselect_1.createSelector(upfCoachRatings, competitions, compTypes, records, function (ratings, competitions, types, records) {
+    return ratings.map(function (r) { return (__assign({}, r, { details: getDetails(r.details, types, competitions, records) })); }).sort(sortUPFRating);
 });
 function getDetails(originalDetails, types, competitions, records) {
     var details = originalDetails;
@@ -2382,6 +2490,24 @@ exports.getRegions = function () {
         type: apiTypes.GET
     });
 };
+exports.getCoaches = function () {
+    return CallApi.callApi({
+        url: lookupApiPath + 'GetAllCoaches.php',
+        type: apiTypes.GET
+    });
+};
+exports.getFst = function () {
+    return CallApi.callApi({
+        url: lookupApiPath + 'GetAllFst.php',
+        type: apiTypes.GET
+    });
+};
+exports.getSchools = function () {
+    return CallApi.callApi({
+        url: lookupApiPath + 'GetAllSchools.php',
+        type: apiTypes.GET
+    });
+};
 
 
 /***/ }),
@@ -2409,6 +2535,20 @@ exports.getMinistryRatings = function (contract) {
 exports.getUPFRatings = function (contract) {
     return CallApi.callApi({
         url: ratingsApiPath + 'GetUPFRatings.php',
+        type: apiTypes.GET,
+        data: contract
+    });
+};
+exports.getMinistryCoachRatings = function (contract) {
+    return CallApi.callApi({
+        url: ratingsApiPath + 'GetCoachMinistryRatings.php',
+        type: apiTypes.GET,
+        data: contract
+    });
+};
+exports.getUPFCoachRatings = function (contract) {
+    return CallApi.callApi({
+        url: ratingsApiPath + 'GetCoachUPFRatings.php',
         type: apiTypes.GET,
         data: contract
     });
@@ -2515,6 +2655,8 @@ var layout_header_1 = __webpack_require__(/*! ./partials/layout.header */ "./cli
 var entries_1 = __webpack_require__(/*! ./partials/entries */ "./client/src/pages/ratings-entries/views/partials/entries.tsx");
 var ministry_ratings_1 = __webpack_require__(/*! ./partials/ministry ratings */ "./client/src/pages/ratings-entries/views/partials/ministry ratings.tsx");
 var upf_ratings_1 = __webpack_require__(/*! ./partials/upf ratings */ "./client/src/pages/ratings-entries/views/partials/upf ratings.tsx");
+var ministry_coach_ratings_1 = __webpack_require__(/*! ./partials/ministry coach ratings */ "./client/src/pages/ratings-entries/views/partials/ministry coach ratings.tsx");
+var upf_coach_ratings_1 = __webpack_require__(/*! ./partials/upf coach ratings */ "./client/src/pages/ratings-entries/views/partials/upf coach ratings.tsx");
 var index_layout_1 = __webpack_require__(/*! ../../../components/layout/index.layout */ "./client/src/components/layout/index.layout.tsx");
 exports.default = react_redux_1.connect(function (state) { return ({}); }, function (dispatch) { return ({}); })(/** @class */ (function (_super) {
     __extends(Layout, _super);
@@ -2534,7 +2676,11 @@ exports.default = react_redux_1.connect(function (state) { return ({}); }, funct
                 React.createElement(tab_1.default, { title: "\u0420\u0435\u0439\u0442\u0438\u043D\u0433 \u0424\u041F\u0423 (\u0427\u043E\u043B\u043E\u0432\u0456\u043A\u0438)", label: "upfRatingMale" },
                     React.createElement(upf_ratings_1.default, { ratingFilter: "Male" })),
                 React.createElement(tab_1.default, { title: "\u0420\u0435\u0439\u0442\u0438\u043D\u0433 \u0424\u041F\u0423 (\u0416\u0456\u043D\u043A\u0438)", label: "upfRatingFemale" },
-                    React.createElement(upf_ratings_1.default, { ratingFilter: "Female" }))));
+                    React.createElement(upf_ratings_1.default, { ratingFilter: "Female" })),
+                React.createElement(tab_1.default, { title: "\u041C\u0456\u043D\u0456\u0441\u0442\u0435\u0440\u0441\u044C\u043A\u0438\u0439 \u0420\u0435\u0439\u0442\u0438\u043D\u0433 (\u0421\u0443\u0434\u0434\u0456)", label: "ministryCoachRating" },
+                    React.createElement(ministry_coach_ratings_1.default, null)),
+                React.createElement(tab_1.default, { title: "\u0420\u0435\u0439\u0442\u0438\u043D\u0433 \u0424\u041F\u0423 (\u0421\u0443\u0434\u0434\u0456)", label: "upfCoachRating" },
+                    React.createElement(upf_coach_ratings_1.default, null))));
     };
     return Layout;
 }(React.Component)));
@@ -2580,7 +2726,8 @@ exports.default = react_redux_1.connect(function (state) { return ({
     competitions: state.lookup.competitions,
     records: state.lookup.records,
     deleteEntryId: state.entries.deleteById,
-    compTypes: state.lookup.compTypes
+    compTypes: state.lookup.compTypes,
+    saerchValue: state.shell.searchValue
 }); }, function (dispatch) { return ({
     entryActions: redux_1.bindActionCreators(Actions.EntriesActions.ActionCreators, dispatch),
     shellActions: redux_1.bindActionCreators(Actions.ShellActions.ActionCreators, dispatch)
@@ -2596,7 +2743,7 @@ exports.default = react_redux_1.connect(function (state) { return ({
         var _this = this;
         return React.createElement("div", { className: "entries" },
             React.createElement("button", { className: "create-button", onClick: this.props.entryActions.addEntry }, "\u0421\u0442\u0432\u043E\u0440\u0438\u0442\u0438 \u0437\u0430\u043F\u0438\u0441"),
-            React.createElement(search_1.default, { onChange: this.props.shellActions.changeSearchValue }),
+            React.createElement(search_1.default, { searchValue: this.props.saerchValue, onChange: this.props.shellActions.changeSearchValue }),
             React.createElement(table_1.default, { items: this.props.entries, columns: [
                     {
                         title: "",
@@ -2615,13 +2762,13 @@ exports.default = react_redux_1.connect(function (state) { return ({
                     {
                         title: "П.І.П",
                         field: "fullname",
-                        width: "300px",
+                        width: "200px",
                         sortable: true
                     },
                     {
                         title: "Подія",
                         field: "event",
-                        width: "350px",
+                        width: "250px",
                         sortable: true
                     },
                     {
@@ -2641,6 +2788,12 @@ exports.default = react_redux_1.connect(function (state) { return ({
                         title: "Показник по ф-лі Вілкса",
                         field: "wilks",
                         width: "100px",
+                        sortable: true
+                    },
+                    {
+                        title: "Тренер",
+                        field: "coach",
+                        width: "200px",
                         sortable: true
                     },
                     {
@@ -2706,6 +2859,75 @@ exports.default = react_redux_1.connect(function (state) { return ({
             React.createElement(Datetime, { value: this.props.startDate, dateFormat: 'YYYY', timeFormat: false, closeOnSelect: true, onChange: function (date) { return _this.changeStartDate(date.toString()); } }));
     };
     return LayoutHeader;
+}(React.Component)));
+
+
+/***/ }),
+
+/***/ "./client/src/pages/ratings-entries/views/partials/ministry coach ratings.tsx":
+/*!************************************************************************************!*\
+  !*** ./client/src/pages/ratings-entries/views/partials/ministry coach ratings.tsx ***!
+  \************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/src/pages/ratings-entries/actions/index.actions.ts");
+var table_1 = __webpack_require__(/*! ../../../../components/table/table */ "./client/src/components/table/table.tsx");
+var column_1 = __webpack_require__(/*! ../../../../components/table/column */ "./client/src/components/table/column.tsx");
+var Selectors = __webpack_require__(/*! ../../selectors/index.selector */ "./client/src/pages/ratings-entries/selectors/index.selector.ts");
+exports.default = react_redux_1.connect(function (state) { return ({
+    ratings: Selectors.RatingSelector.modifiedMinistryCoachRatings(state)
+}); }, function (dispatch) { return ({
+    actions: redux_1.bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch)
+}); })(/** @class */ (function (_super) {
+    __extends(MinistryCoachRatings, _super);
+    function MinistryCoachRatings(props) {
+        return _super.call(this, props) || this;
+    }
+    MinistryCoachRatings.prototype.componentDidMount = function () {
+        this.props.actions.loadMinistryCoachRatings();
+    };
+    MinistryCoachRatings.prototype.render = function () {
+        return React.createElement("div", { className: "ratings" },
+            React.createElement(table_1.default, { items: this.props.ratings, columns: [
+                    {
+                        title: "П.І.П.",
+                        field: "fullname",
+                        width: "250px"
+                    },
+                    {
+                        title: "К-ть очок",
+                        field: "rating",
+                        width: "100px"
+                    },
+                    {
+                        title: "Деталі",
+                        field: "details",
+                        type: column_1.ColumnTypes.Html,
+                        width: "*"
+                    }
+                ] }));
+    };
+    return MinistryCoachRatings;
 }(React.Component)));
 
 
@@ -2787,6 +3009,75 @@ exports.default = react_redux_1.connect(function (state) { return ({
                 ] }));
     };
     return MinistryRatings;
+}(React.Component)));
+
+
+/***/ }),
+
+/***/ "./client/src/pages/ratings-entries/views/partials/upf coach ratings.tsx":
+/*!*******************************************************************************!*\
+  !*** ./client/src/pages/ratings-entries/views/partials/upf coach ratings.tsx ***!
+  \*******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/src/pages/ratings-entries/actions/index.actions.ts");
+var Selectors = __webpack_require__(/*! ../../selectors/index.selector */ "./client/src/pages/ratings-entries/selectors/index.selector.ts");
+var table_1 = __webpack_require__(/*! ../../../../components/table/table */ "./client/src/components/table/table.tsx");
+var column_1 = __webpack_require__(/*! ../../../../components/table/column */ "./client/src/components/table/column.tsx");
+exports.default = react_redux_1.connect(function (state) { return ({
+    ratings: Selectors.RatingSelector.modifiedUPFCoachRatings(state)
+}); }, function (dispatch) { return ({
+    actions: redux_1.bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch)
+}); })(/** @class */ (function (_super) {
+    __extends(UPFCoachRatings, _super);
+    function UPFCoachRatings(props) {
+        return _super.call(this, props) || this;
+    }
+    UPFCoachRatings.prototype.componentDidMount = function () {
+        this.props.actions.loadUPFCoachRatings();
+    };
+    UPFCoachRatings.prototype.render = function () {
+        return React.createElement("div", { className: "ratings" },
+            React.createElement(table_1.default, { items: this.props.ratings, columns: [
+                    {
+                        title: "П.І.П.",
+                        field: "fullname",
+                        width: "250px"
+                    },
+                    {
+                        title: "Ранг",
+                        field: "rating",
+                        width: "50px"
+                    },
+                    {
+                        title: "Деталі",
+                        field: "details",
+                        type: column_1.ColumnTypes.Html,
+                        width: "*"
+                    }
+                ] }));
+    };
+    return UPFCoachRatings;
 }(React.Component)));
 
 

@@ -95,4 +95,70 @@ class RatingService
 
         return $response;
     }
+
+    public function getCoachMinistryRatings()
+    {
+        $year = $_GET["year"];
+
+        $sql = $this->db->prepare("SELECT a.Coach, SUM(b.Value) AS Rating,
+                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів)') separator ', ') AS Details
+                                        FROM $this->entryTable a
+                                        JOIN $this->pointTable b ON b.Target = a.Event AND b.Place = a.Place
+                                        WHERE YEAR(a.EventDate) = %s AND a.Coach != '' AND a.Coach IS NOT NULL
+                                    GROUP BY a.Coach
+                                    ORDER BY Rating DESC", $year);
+
+        $results = $this->db->get_results($sql);
+
+        if(count($results))
+        {
+            foreach ($results as $result) 
+            {
+                array_push($this->ratings, new Rating($result->Coach, $result->Rating, '', $result->Details));
+            }
+        }
+
+        $response = new ResponseModel();
+
+        $response->setResponseModel((object)["status" => TRUE, "data" => $this->ratings]);
+
+        return $response;
+    }
+
+    public function getCoachUPFRatings()
+    {
+        $year = $_GET["year"];
+
+        $sql = $this->db->prepare("SELECT a.Coach, MIN(b.Range) AS Rating,
+                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Range, ' ранг)') separator ', ') AS Details,
+                                        COUNT(a.Event) AS EventCount,
+                                        GROUP_CONCAT(CONCAT(' ', b.Range) separator ', ') AS AllRanks,
+                                        MAX(a.Wilks) AS Wilks
+                                        FROM $this->entryTable a 
+                                        JOIN $this->rangeTale b ON b.Competition = a.Event AND b.Place = a.Place AND b.CompType = a.CompType
+                                    WHERE YEAR(a.EventDate) = %s AND a.Coach != '' AND a.Coach IS NOT NULL
+                                    GROUP BY a.Coach
+                                    ORDER BY Rating ASC, EventCount DESC, Wilks DESC", $year);
+
+        $results = $this->db->get_results($sql);
+
+        if(count($results))
+        {
+            foreach ($results as $result) 
+            {
+                array_push($this->ratings, new Rating($result->Coach, 
+                                                      $result->Rating, 
+                                                      '', 
+                                                      $result->Details, 
+                                                      explode(",", $result->AllRanks), 
+                                                      $result->Wilks));
+            }
+        }
+
+        $response = new ResponseModel();
+
+        $response->setResponseModel((object)["status" => TRUE, "data" => $this->ratings]);
+
+        return $response;
+    }
 }
