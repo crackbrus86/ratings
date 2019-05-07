@@ -6,7 +6,7 @@ class Point
     public $value;
     public $place;
 
-    public function __construct(int $id, string $target, int $value, int $place)
+    public function __construct($id, $target, $value, $place)
     {
         $this->pointId = $id;
         $this->target = $target;

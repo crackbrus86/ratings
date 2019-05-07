@@ -35,12 +35,13 @@ class RatingService
         $year = $_GET["year"];
 
         $sql = $this->db->prepare("SELECT a.Fullname, SUM(b.Value) AS Rating, a.Gender,
-                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів)') separator ', ') AS Details
+                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів)') separator ', ') AS Details,
+                                        MAX(a.Wilks) AS Wilks
                                         FROM $this->entryTable a
                                         JOIN $this->pointTable b ON b.Target = a.Event AND b.Place = a.Place
                                         WHERE YEAR(a.EventDate) = %s
                                     GROUP BY a.Fullname, a.Gender
-                                    ORDER BY Rating DESC", $year);
+                                    ORDER BY Rating DESC, Wilks DESC", $year);
 
         $results = $this->db->get_results($sql);
 
@@ -48,13 +49,13 @@ class RatingService
         {
             foreach ($results as $result) 
             {
-                array_push($this->ratings, new Rating($result->Fullname, $result->Rating, $result->Gender, $result->Details));
+                array_push($this->ratings, new Rating($result->Fullname, $result->Rating, $result->Gender, $result->Details, array(), $result->Wilks));
             }
         }
 
         $response = new ResponseModel();
 
-        $response->setResponseModel((object)["status" => TRUE, "data" => $this->ratings]);
+        $response->setResponseModel((object)array("status" => TRUE, "data" => $this->ratings));
 
         return $response;
     }
@@ -91,7 +92,7 @@ class RatingService
 
         $response = new ResponseModel();
 
-        $response->setResponseModel((object)["status" => TRUE, "data" => $this->ratings]);
+        $response->setResponseModel((object)array("status" => TRUE, "data" => $this->ratings));
 
         return $response;
     }
@@ -101,7 +102,7 @@ class RatingService
         $year = $_GET["year"];
 
         $sql = $this->db->prepare("SELECT a.Coach, SUM(b.Value) AS Rating,
-                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів)') separator ', ') AS Details
+                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів) ', a.Fullname) separator ', ') AS Details
                                         FROM $this->entryTable a
                                         JOIN $this->pointTable b ON b.Target = a.Event AND b.Place = a.Place
                                         WHERE YEAR(a.EventDate) = %s AND a.Coach != '' AND a.Coach IS NOT NULL
@@ -120,7 +121,7 @@ class RatingService
 
         $response = new ResponseModel();
 
-        $response->setResponseModel((object)["status" => TRUE, "data" => $this->ratings]);
+        $response->setResponseModel((object)array("status" => TRUE, "data" => $this->ratings));
 
         return $response;
     }
@@ -130,7 +131,7 @@ class RatingService
         $year = $_GET["year"];
 
         $sql = $this->db->prepare("SELECT a.Coach, MIN(b.Range) AS Rating,
-                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Range, ' ранг)') separator ', ') AS Details,
+                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Range, ' ранг) ', a.Fullname) separator ', ') AS Details,
                                         COUNT(a.Event) AS EventCount,
                                         GROUP_CONCAT(CONCAT(' ', b.Range) separator ', ') AS AllRanks,
                                         MAX(a.Wilks) AS Wilks
@@ -157,7 +158,7 @@ class RatingService
 
         $response = new ResponseModel();
 
-        $response->setResponseModel((object)["status" => TRUE, "data" => $this->ratings]);
+        $response->setResponseModel((object)array("status" => TRUE, "data" => $this->ratings));
 
         return $response;
     }
@@ -167,7 +168,7 @@ class RatingService
         $year = $_GET["year"];
 
         $sql = $this->db->prepare("SELECT a.Region, SUM(b.Value) AS Rating,
-                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів)') separator ', ') AS Details
+                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів) ', a.Fullname) separator ', ') AS Details
                                         FROM $this->entryTable a
                                         JOIN $this->pointTable b ON b.Target = a.Event AND b.Place = a.Place
                                         WHERE YEAR(a.EventDate) = %s AND a.Region != '' AND a.Region IS NOT NULL
@@ -186,7 +187,7 @@ class RatingService
 
         $response = new ResponseModel();
 
-        $response->setResponseModel((object)["status" => TRUE, "data" => $this->ratings]);
+        $response->setResponseModel((object)array("status" => TRUE, "data" => $this->ratings));
 
         return $response; 
     }
@@ -194,9 +195,9 @@ class RatingService
     public function getFstMinistryRatings()
     {
         $year = $_GET["year"];
-
+        $this->db->query("SET SESSION group_concat_max_len = 100000");
         $sql = $this->db->prepare("SELECT a.Fst, SUM(b.Value) AS Rating,
-                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів)') separator ', ') AS Details
+                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів) ', a.Fullname) separator ', ') AS Details
                                         FROM $this->entryTable a
                                         JOIN $this->pointTable b ON b.Target = a.Event AND b.Place = a.Place
                                         WHERE YEAR(a.EventDate) = %s AND a.Fst != '' AND a.Fst IS NOT NULL
@@ -215,7 +216,7 @@ class RatingService
 
         $response = new ResponseModel();
 
-        $response->setResponseModel((object)["status" => TRUE, "data" => $this->ratings]);
+        $response->setResponseModel((object)array("status" => TRUE, "data" => $this->ratings));
 
         return $response; 
     }

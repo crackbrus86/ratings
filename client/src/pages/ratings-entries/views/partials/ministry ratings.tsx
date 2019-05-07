@@ -67,6 +67,15 @@ export default connect<StateProps, DispatchProps, OwnProps>(
                         title: "Деталі",
                         field: "details",
                         type: ColumnTypes.Html,
+                        width: "300px"
+                    },
+                    {
+                        title: "Показник по ф-лі IPF",
+                        field: "wilks",
+                        width: "150px"
+                    },
+                    {
+                        title: "",
                         width: "*"
                     }
                 ] as ColumnModel[]}

@@ -11,7 +11,9 @@ class Record
 
     public $ratingUPF;
 
-    public function __construct(int $id, string $name, int $sortOrder, string $dbName, bool $ratingUPF)
+    public $shortName;
+
+    public function __construct($id, $name, $sortOrder, $dbName, $ratingUPF, $shortName)
     {
         $this->id = $id;
 
@@ -22,6 +24,8 @@ class Record
         $this->dbName = $dbName;
 
         $this->ratingUPF = $ratingUPF;
+
+        $this->shortName = $shortName;
     }
 }
 ?>

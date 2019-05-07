@@ -16,7 +16,13 @@ class CompetitionTypeService
 
             new CompetitionType("BP", "Жим"),
 
-            new CompetitionType("CBP", "Класичний Жим")
+            new CompetitionType("CBP", "Класичний Жим"),
+
+            new CompetitionType("SQS", "Присідання (окрема вправа)"),
+
+            new CompetitionType("BPS", "Жим (окрема вправа)"),
+
+            new CompetitionType("DLS", "Тяга (окрема вправа)")
         );
 
     }
@@ -25,7 +31,7 @@ class CompetitionTypeService
     {
         $response = new ResponseModel();
 
-        $response->setResponseModel((object)["data" => $this->compTypes, "status" => TRUE, "message" => NULL]);
+        $response->setResponseModel((object) array("data" => $this->compTypes, "status" => TRUE, "message" => NULL));
 
         return $response;
     }

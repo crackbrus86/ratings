@@ -70,7 +70,7 @@ export default connect<StateProps, DispatchProps, OwnProps>(
                         width: "300px"
                     },
                     {
-                        title: "Показник по ф-лі Вілкса",
+                        title: "Показник по ф-лі IPF",
                         field: "wilks",
                         width: "150px"
                     },

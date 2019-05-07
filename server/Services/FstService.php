@@ -27,7 +27,7 @@ class FstService
 
         if(!current_user_can("edit_others_pages"))
         {
-            $response->setResponseModel((object) ["status" => FALSE, "message" => "У вас недостатньо прав для отримання даних!"]);
+            $response->setResponseModel((object) array("status" => FALSE, "message" => "У вас недостатньо прав для отримання даних!"));
 
             return $response;
         }
@@ -41,7 +41,7 @@ class FstService
             }
         }
 
-        $response->setResponseModel((object)["status" => TRUE, "data" => $this->fstList, "message" => NULL]);
+        $response->setResponseModel((object)array("status" => TRUE, "data" => $this->fstList, "message" => NULL));
 
         return $response;
     }

@@ -50,10 +50,10 @@ export default connect<StateProps, DispatchProps>(
                     <Tab title="Рейтинг ФПУ (Жінки)" label="upfRatingFemale">
                         <UPFRatings ratingFilter="Female" />
                     </Tab>
-                    <Tab title="Міністерський Рейтинг (Судді)" label="ministryCoachRating">
+                    <Tab title="Міністерський Рейтинг (Тренери)" label="ministryCoachRating">
                         <MinistryCoachRatings />
                     </Tab>
-                    <Tab title="Рейтинг ФПУ (Судді)" label="upfCoachRating">
+                    <Tab title="Рейтинг ФПУ (Тренери)" label="upfCoachRating">
                         <UPFCoachRatings />
                     </Tab>
                     <Tab title="Міністерський рейтинг (Області)" label="ministryRegionRatings">

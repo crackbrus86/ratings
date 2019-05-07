@@ -29,7 +29,7 @@ class PointService
                 array_push($this->points, new Point($point->PointId, $point->Target, $point->Value, $point->Place));
             }
         }
-        $response->setResponseModel((object)["data" => $this->points, "status" => TRUE, "message" => NULL]);
+        $response->setResponseModel((object)array("data" => $this->points, "status" => TRUE, "message" => NULL));
         return $response;
     }
 
@@ -37,7 +37,7 @@ class PointService
     {
         $response = new ResponseModel();
         if(!current_user_can("edit_others_pages")) {
-            $response->setResponseModel((object)['status' => FALSE, 'message' => "У Вас недостатньо прав для збереження даних!"]);
+            $response->setResponseModel((object)array('status' => FALSE, 'message' => "У Вас недостатньо прав для збереження даних!"));
             return $response;
         }
         $point = new Point(intval(escape($_POST["pointId"])), escape($_POST["target"]), escape($_POST["value"]), escape($_POST["place"]));
@@ -53,7 +53,7 @@ class PointService
             $sql = $this->db->prepare("UPDATE $this->pointTableName SET Value = %d WHERE PointId = %d", $point->value, $point->pointId);
             $this->db->query($sql);
         }
-        $response->setResponseModel((object)['status' => TRUE, 'message' => "Значення збережено!"]);
+        $response->setResponseModel((object)array('status' => TRUE, 'message' => "Значення збережено!"));
         return $response;
     }
 

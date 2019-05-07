@@ -3,7 +3,8 @@ export interface Competition {
     name: string,
     dbName: string,
     sortOrder: number,
-    ratingUPF: boolean
+    ratingUPF: boolean,
+    shortName: string
 }
 
 export interface Record {
@@ -11,7 +12,8 @@ export interface Record {
     name: string,
     dbName: string,
     sortOrder: number,
-    ratingUPF: boolean
+    ratingUPF: boolean,
+    shortName: string
 }
 
 export interface Point {

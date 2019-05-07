@@ -34,7 +34,7 @@ class Entry
         $this->school = "";
     }
 
-    public function validate(bool $isEdit = FALSE)
+    public function validate($isEdit = FALSE)
     {
         $validation = new stdClass();
         $validation->isValid = TRUE;

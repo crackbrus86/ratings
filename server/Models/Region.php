@@ -5,7 +5,7 @@ class Region
 
     public $title;
 
-    function __construct(int $id, string $title)
+    function __construct($id, $title)
     {
         $this->id = $id;
 

@@ -28,7 +28,7 @@ class EntryService
 
         if(!current_user_can("edit_others_pages"))
         {
-            $response->setResponseModel((object)['status' => FALSE, 'message' => "У Вас недостатньо прав для створення записів!"]);
+            $response->setResponseModel((object)array('status' => FALSE, 'message' => "У Вас недостатньо прав для створення записів!"));
 
             return $response;
         } 
@@ -39,7 +39,7 @@ class EntryService
 
         if(!$validationResult->isValid) 
         {
-            $response->setResponseModel((object)['status' => FALSE, 'message' => $validationResult->message]);
+            $response->setResponseModel((object)array('status' => FALSE, 'message' => $validationResult->message));
 
             return $response;
         }else{
@@ -52,7 +52,7 @@ class EntryService
             $this->db->query($sql);
         }
 
-        $response->setResponseModel((object)['status' => TRUE, 'message' => "Успішно створено запис!"]);
+        $response->setResponseModel((object)array('status' => TRUE, 'message' => "Успішно створено запис!"));
 
         return $response;
     }
@@ -63,7 +63,7 @@ class EntryService
 
         if(!current_user_can("edit_others_pages"))
         {
-            $response->setResponseModel((object)['status' => FALSE, 'message' => "У Вас недостатньо прав для редагуваня записів!"]);
+            $response->setResponseModel((object)array('status' => FALSE, 'message' => "У Вас недостатньо прав для редагуваня записів!"));
 
             return $response;
         } 
@@ -74,7 +74,7 @@ class EntryService
 
         if(!$validationResult->isValid) 
         {
-            $response->setResponseModel((object)['status' => FALSE, 'message' => $validationResult->message]);
+            $response->setResponseModel((object)array('status' => FALSE, 'message' => $validationResult->message));
 
             return $response;
         }else{
@@ -90,7 +90,7 @@ class EntryService
             $this->db->query($sql);
         }
 
-        $response->setResponseModel((object)['status' => TRUE, 'message' => "Успішно оновлено запис!"]);
+        $response->setResponseModel((object)array('status' => TRUE, 'message' => "Успішно оновлено запис!"));
 
         return $response;
     }
@@ -101,7 +101,7 @@ class EntryService
 
         if(!current_user_can("edit_others_pages")) 
         {
-            $response->setResponseModel((object)['status' => FALSE, 'message' => "У Вас недостатньо прав для отримання записів!"]);
+            $response->setResponseModel((object)array('status' => FALSE, 'message' => "У Вас недостатньо прав для отримання записів!"));
 
             return $response;
         }
@@ -122,7 +122,7 @@ class EntryService
             }
         }
 
-        $response->setResponseModel((object)["status" => TRUE, "data" => $this->entries, "message" => NULL]);
+        $response->setResponseModel((object)array("status" => TRUE, "data" => $this->entries, "message" => NULL));
 
         return $response;
     }
@@ -133,18 +133,18 @@ class EntryService
 
         if(!current_user_can("edit_others_pages")) 
         {
-            $response->setResponseModel((object)['status' => FALSE, 'message' => "У Вас недостатньо прав для видалення записів!"]);
+            $response->setResponseModel((object)array('status' => FALSE, 'message' => "У Вас недостатньо прав для видалення записів!"));
 
             return $response;
         }
 
-        $targetEntry = (object)["ratingEntryId" => NULL];
+        $targetEntry = (object)array("ratingEntryId" => NULL);
 
         $targetEntry = mapPostToObject($targetEntry);
 
         if(!$targetEntry->ratingEntryId)
         {
-            $response->setResponseModel((object)['status' => FALSE, 'message' => "Rating Entry Id is required!"]);
+            $response->setResponseModel((object)array('status' => FALSE, 'message' => "Rating Entry Id is required!"));
 
             return $response;
         }
@@ -153,7 +153,7 @@ class EntryService
 
         $this->db->query($sql);
 
-        $response->setResponseModel((object)["status" => TRUE, "message" => "Запис було успішно видалено!"]);
+        $response->setResponseModel((object)array("status" => TRUE, "message" => "Запис було успішно видалено!"));
 
         return $response;
     }

@@ -5,7 +5,7 @@ class CompetitionType
 
     public $displayName;
 
-    public function __construct(string $name, string $displayName)
+    public function __construct($name, $displayName)
     {
         $this->name = $name;
 

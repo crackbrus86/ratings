@@ -35,7 +35,7 @@ class RangeService
             }
         }
 
-        $response->setResponseModel((object)["data" => $this->ranges, "status" => TRUE, "message" => NULL]);
+        $response->setResponseModel((object)array("data" => $this->ranges, "status" => TRUE, "message" => NULL));
 
         return $response;
     }
@@ -46,7 +46,7 @@ class RangeService
 
         if(!current_user_can("edit_others_pages"))
         {
-            $response->setResponseModel((object)['status' => FALSE, 'message' => "У Вас недостатньо прав для редагуваня записів!"]);
+            $response->setResponseModel((object)array('status' => FALSE, 'message' => "У Вас недостатньо прав для редагуваня записів!"));
 
             return $response;
         } 
@@ -57,7 +57,7 @@ class RangeService
 
         if(!$validationResult->isValid) 
         {
-            $response->setResponseModel((object)['status' => FALSE, 'message' => $validationResult->message]);
+            $response->setResponseModel((object)array('status' => FALSE, 'message' => $validationResult->message));
 
             return $response;
         }else{
@@ -83,7 +83,7 @@ class RangeService
             }
         }
 
-        $response->setResponseModel((object)['status' => TRUE, 'message' => "Успішно збережено ранг!"]);
+        $response->setResponseModel((object)array('status' => TRUE, 'message' => "Успішно збережено ранг!"));
 
         return $response;
     }

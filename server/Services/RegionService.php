@@ -43,7 +43,7 @@ class RegionService
     {
         $response = new ResponseModel();
 
-        $response->setResponseModel((object)["data" => $this->regions, "status" => TRUE, "message" => NULL]);
+        $response->setResponseModel((object)array("data" => $this->regions, "status" => TRUE, "message" => NULL));
 
         return $response;
     }

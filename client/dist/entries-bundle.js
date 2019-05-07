@@ -1825,7 +1825,7 @@ exports.default = react_redux_1.connect(function (state) { return ({
                                 this.props.entry.type == Models.EntryType.Place &&
                                     React.createElement(form_1.default.Select, { label: "\u041C\u0456\u0441\u0446\u0435", options: this.getPlaces(), validation: this.props.validation.isPlaceValid, value: this.props.entry.place, onChange: function (value) { return _this.props.actions.updateEntry("place", value); } }),
                                 React.createElement(form_1.default.DatePicker, { label: "\u0414\u0430\u0442\u0430", value: this.props.entry.eventDate, validation: this.props.validation.isEventDateValid, onChange: function (value) { return _this.props.actions.updateEntry("eventDate", value); } }),
-                                React.createElement(form_1.default.TextInput, { label: "\u041F\u043E\u043A\u0430\u0437\u043D\u0438\u043A \u0437\u0430 \u0444\u043E\u0440\u043C\u0443\u043B\u043E\u044E \u0412\u0456\u043B\u043A\u0441\u0430", value: wilks, onChange: function (value) { return _this.props.actions.updateEntry("wilks", value); } })))))),
+                                React.createElement(form_1.default.TextInput, { label: "\u041F\u043E\u043A\u0430\u0437\u043D\u0438\u043A \u0437\u0430 \u0444\u043E\u0440\u043C\u0443\u043B\u043E\u044E IPF", value: wilks, onChange: function (value) { return _this.props.actions.updateEntry("wilks", value); } })))))),
             React.createElement(modal_1.default.Footer, null,
                 React.createElement(modal_1.default.FooterButton, { label: "\u0417\u0431\u0435\u0440\u0435\u0433\u0442\u0438", icon: "save", disabled: !this.props.validation.isValid, onClick: this.onSave })));
     };
@@ -2413,10 +2413,10 @@ function getDetails(originalDetails, types, competitions, records) {
     var details = originalDetails;
     var detailsAsArray = [];
     for (var i = 0; i < competitions.length; i++) {
-        details = details.replace(new RegExp(" " + competitions[i].dbName, 'g'), competitions[i].name);
+        details = details.replace(new RegExp(" " + competitions[i].dbName, 'g'), competitions[i].shortName);
     }
     for (var i = 0; i < records.length; i++) {
-        details = details.replace(new RegExp(" " + records[i].dbName, 'g'), records[i].name);
+        details = details.replace(new RegExp(" " + records[i].dbName, 'g'), records[i].shortName);
     }
     for (var i = 0; i < types.length; i++) {
         details = details.replace(new RegExp(" " + types[i].name, 'g'), " - " + types[i].displayName);
@@ -2743,9 +2743,9 @@ exports.default = react_redux_1.connect(function (state) { return ({}); }, funct
                     React.createElement(upf_ratings_1.default, { ratingFilter: "Male" })),
                 React.createElement(tab_1.default, { title: "\u0420\u0435\u0439\u0442\u0438\u043D\u0433 \u0424\u041F\u0423 (\u0416\u0456\u043D\u043A\u0438)", label: "upfRatingFemale" },
                     React.createElement(upf_ratings_1.default, { ratingFilter: "Female" })),
-                React.createElement(tab_1.default, { title: "\u041C\u0456\u043D\u0456\u0441\u0442\u0435\u0440\u0441\u044C\u043A\u0438\u0439 \u0420\u0435\u0439\u0442\u0438\u043D\u0433 (\u0421\u0443\u0434\u0434\u0456)", label: "ministryCoachRating" },
+                React.createElement(tab_1.default, { title: "\u041C\u0456\u043D\u0456\u0441\u0442\u0435\u0440\u0441\u044C\u043A\u0438\u0439 \u0420\u0435\u0439\u0442\u0438\u043D\u0433 (\u0422\u0440\u0435\u043D\u0435\u0440\u0438)", label: "ministryCoachRating" },
                     React.createElement(ministry_coach_ratings_1.default, null)),
-                React.createElement(tab_1.default, { title: "\u0420\u0435\u0439\u0442\u0438\u043D\u0433 \u0424\u041F\u0423 (\u0421\u0443\u0434\u0434\u0456)", label: "upfCoachRating" },
+                React.createElement(tab_1.default, { title: "\u0420\u0435\u0439\u0442\u0438\u043D\u0433 \u0424\u041F\u0423 (\u0422\u0440\u0435\u043D\u0435\u0440\u0438)", label: "upfCoachRating" },
                     React.createElement(upf_coach_ratings_1.default, null)),
                 React.createElement(tab_1.default, { title: "\u041C\u0456\u043D\u0456\u0441\u0442\u0435\u0440\u0441\u044C\u043A\u0438\u0439 \u0440\u0435\u0439\u0442\u0438\u043D\u0433 (\u041E\u0431\u043B\u0430\u0441\u0442\u0456)", label: "ministryRegionRatings" },
                     React.createElement(ministry_region_ratings_1.default, null)),
@@ -2855,7 +2855,7 @@ exports.default = react_redux_1.connect(function (state) { return ({
                         sortable: true
                     },
                     {
-                        title: "Показник по ф-лі Вілкса",
+                        title: "Показник по ф-лі IPF",
                         field: "wilks",
                         width: "100px",
                         sortable: true
@@ -3155,6 +3155,15 @@ exports.default = react_redux_1.connect(function (state) { return ({
                         title: "Деталі",
                         field: "details",
                         type: column_1.ColumnTypes.Html,
+                        width: "300px"
+                    },
+                    {
+                        title: "Показник по ф-лі IPF",
+                        field: "wilks",
+                        width: "150px"
+                    },
+                    {
+                        title: "",
                         width: "*"
                     }
                 ] }));
@@ -3377,7 +3386,7 @@ exports.default = react_redux_1.connect(function (state) { return ({
                         width: "300px"
                     },
                     {
-                        title: "Показник по ф-лі Вілкса",
+                        title: "Показник по ф-лі IPF",
                         field: "wilks",
                         width: "150px"
                     },

@@ -58,11 +58,11 @@ function getDetails(originalDetails: string, types: Models.CompetitionType[], co
     let detailsAsArray = [];
 
     for(var i = 0; i < competitions.length; i++){
-        details = details.replace(new RegExp(` ${competitions[i].dbName}`, 'g'), competitions[i].name);
+        details = details.replace(new RegExp(` ${competitions[i].dbName}`, 'g'), competitions[i].shortName);
     }
 
     for(var i = 0; i < records.length; i++){
-        details = details.replace(new RegExp(` ${records[i].dbName}`, 'g'), records[i].name);
+        details = details.replace(new RegExp(` ${records[i].dbName}`, 'g'), records[i].shortName);
     }
 
     for(var i = 0; i < types.length; i++){

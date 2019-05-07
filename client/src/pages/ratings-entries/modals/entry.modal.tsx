@@ -160,7 +160,7 @@ export default connect<StateProps, DispatchProps>(
                                     onChange={(value) => this.props.actions.updateEntry("eventDate", value)}
                                 />
                                 <Form.TextInput
-                                    label="Показник за формулою Вілкса"
+                                    label="Показник за формулою IPF"
                                     value={wilks}
                                     onChange={(value) => this.props.actions.updateEntry("wilks", value)}
                                 />

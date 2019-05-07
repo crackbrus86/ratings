@@ -27,7 +27,7 @@ class CoachService
 
         if(!current_user_can("edit_others_pages"))
         {
-            $response->setResponseModel((object)["status" => FALSE, "message" => "У вас недостатньо прав для отримання даних!"]);
+            $response->setResponseModel((object)array("status" => FALSE, "message" => "У вас недостатньо прав для отримання даних!"));
 
             return  $response;
         }
@@ -41,7 +41,7 @@ class CoachService
             }
         }
 
-        $response->setResponseModel((object)["status" => TRUE, "data" => $this->coaches, "message" => NULL]);
+        $response->setResponseModel((object)array("status" => TRUE, "data" => $this->coaches, "message" => NULL));
 
         return $response;
     }

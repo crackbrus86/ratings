@@ -92,7 +92,7 @@ export default connect<StateProps, DispatchProps>(
                         sortable: true
                     },
                     {
-                        title: "Показник по ф-лі Вілкса",
+                        title: "Показник по ф-лі IPF",
                         field: "wilks",
                         width: "100px",
                         sortable: true

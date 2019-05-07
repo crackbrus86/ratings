@@ -9,26 +9,26 @@ class CompetitionService
     public function __construct()
     {
         $this->competitions = array(
-            new Copmetition(1, "Всесвітні ігри", 1, "WorldGames", TRUE),
-            new Copmetition(2, "Чемпіонат світу", 2, "OpenWorldChampionship", TRUE),
-            new Copmetition(3, "Чемпіонат Європи", 3, "OpenEuropeanChampionship", TRUE),
-            new Copmetition(4, "Чемпіонат України", 4, "OpenUkraineChampionship", FALSE),
-            new Copmetition(5, "Чемпіонат світу серед молоді та юніорів", 5, "JuniorWorldChampionship", TRUE),
-            new Copmetition(6, "Чемпіонат Європи серед молоді та юніорів", 6, "JuniorEuropeanChampionship", TRUE),
-            new Copmetition(7, "Чемпіонат України серед молоді та юніорів", 7, "JuniorUkraineChampionship", FALSE),
-            new Copmetition(8, "Чемпіонат світу серед юнаків", 8, "SubJuniorWorldChampionship", TRUE),
-            new Copmetition(9, "Чемпіонат Європи серед юнаків", 9, "SubJuniorEuropeanChampionship", TRUE),
-            new Copmetition(10, "Чемпіонат України серед юнаків", 10, "SubJuniorUkraineChampionship", FALSE),
-            new Copmetition(11, "Кубок світу", 11, "WorldCup", FALSE),
-            new Copmetition(12, "Кубок Європи/Дунаю", 12, "EuropeanCup", TRUE),
-            new Copmetition(13, "Кубок України", 13, "UkraineCup", FALSE)
+            new Copmetition(1, "Всесвітні ігри", 1, "WorldGames", TRUE, "ВІ"),
+            new Copmetition(2, "Чемпіонат світу", 2, "OpenWorldChampionship", TRUE, "ЧС"),
+            new Copmetition(3, "Чемпіонат Європи", 3, "OpenEuropeanChampionship", TRUE, "ЧЄ"),
+            new Copmetition(4, "Чемпіонат України", 4, "OpenUkraineChampionship", FALSE, "ЧУ"),
+            new Copmetition(5, "Чемпіонат світу серед юніорів", 5, "JuniorWorldChampionship", TRUE, "ЧСю"),
+            new Copmetition(6, "Чемпіонат Європи серед юніорів", 6, "JuniorEuropeanChampionship", TRUE, "ЧЄю"),
+            new Copmetition(7, "Чемпіонат України серед юніорів", 7, "JuniorUkraineChampionship", FALSE, "ЧУю"),
+            new Copmetition(8, "Чемпіонат світу серед юнаків", 8, "SubJuniorWorldChampionship", TRUE, "ЧСюн"),
+            new Copmetition(9, "Чемпіонат Європи серед юнаків", 9, "SubJuniorEuropeanChampionship", TRUE, "ЧЄюн"),
+            new Copmetition(10, "Чемпіонат України серед юнаків", 10, "SubJuniorUkraineChampionship", FALSE, "ЧУюн"),
+            new Copmetition(11, "Кубок світу", 11, "WorldCup", FALSE, "КС"),
+            new Copmetition(12, "Кубок Європи/Дунаю", 12, "EuropeanCup", TRUE, "КЄ"),
+            new Copmetition(13, "Кубок України", 13, "UkraineCup", FALSE, "КУ")
         );
     }
 
     function getAll()
     {
         $response = new ResponseModel();
-        $response->setResponseModel((object)["data" => $this->competitions, "status" => TRUE, "message" => NULL]);
+        $response->setResponseModel((object)array("data" => $this->competitions, "status" => TRUE, "message" => NULL));
         return $response;
     }
 }
