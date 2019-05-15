@@ -6,6 +6,7 @@ import * as Actions from "../../actions/index.actions";
 import Table from "../../../../components/table/table";
 import {ColumnModel, ColumnTypes} from "../../../../components/table/column";
 import * as Selectors from "../../selectors/index.selector";
+import PrintButton from "../../../../components/print button/print.button";
 
 
 interface StateProps{
@@ -34,27 +35,30 @@ export default connect<StateProps, DispatchProps>(
 
     render(){
         return <div className="ratings">
-            <Table 
-                items = {this.props.ratings}
-                columns={[
-                    {
-                        title: "П.І.П.",
-                        field: "fullname",
-                        width: "250px"
-                    },
-                    {
-                        title: "К-ть очок",
-                        field: "rating",
-                        width: "100px"
-                    },
-                    {
-                        title: "Деталі",
-                        field: "details",
-                        type: ColumnTypes.Html,
-                        width: "*"
-                    }
-                ] as ColumnModel[]}
-            />
+            <PrintButton printTargetId="ministryCoachRatings" classNames="print" />
+            <div id="ministryCoachRatings">
+                <Table 
+                    items = {this.props.ratings}
+                    columns={[
+                        {
+                            title: "П.І.П.",
+                            field: "fullname",
+                            width: "250px"
+                        },
+                        {
+                            title: "К-ть очок",
+                            field: "rating",
+                            width: "100px"
+                        },
+                        {
+                            title: "Деталі",
+                            field: "details",
+                            type: ColumnTypes.Html,
+                            width: "*"
+                        }
+                    ] as ColumnModel[]}
+                />
+            </div>
         </div>
     }
 });

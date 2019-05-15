@@ -220,4 +220,33 @@ class RatingService
 
         return $response; 
     }
+
+    public function getSchoolMinistryRatings()
+    {
+        $year = $_GET["year"];
+        $this->db->query("SET SESSION group_concat_max_len = 100000");
+        $sql = $this->db->prepare("SELECT a.School, SUM(b.Value) AS Rating,
+                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів) ', a.Fullname) separator ', ') AS Details
+                                        FROM $this->entryTable a
+                                        JOIN $this->pointTable b ON b.Target = a.Event AND b.Place = a.Place
+                                        WHERE YEAR(a.EventDate) = %s AND a.School != '' AND a.Fst IS NOT NULL
+                                    GROUP BY a.School
+                                    ORDER BY Rating DESC", $year);
+
+        $results = $this->db->get_results($sql);
+
+        if(count($results))
+        {
+            foreach ($results as $result) 
+            {
+                array_push($this->ratings, new Rating($result->School, $result->Rating, '', $result->Details));
+            }
+        }
+
+        $response = new ResponseModel();
+
+        $response->setResponseModel((object)array("status" => TRUE, "data" => $this->ratings));
+
+        return $response; 
+    }
 }

@@ -51,3 +51,11 @@ export const getMinistryFstRatings = (contract: Models.RatingModels.GetRatings_C
         data: contract
     })
 }
+
+export const getMinistrySchoolRatings = (contract: Models.RatingModels.GetRatings_Contract) => {
+    return CallApi.callApi({
+        url: ratingsApiPath + 'GetSchoolMinistryRatings.php',
+        type: apiTypes.GET,
+        data: contract
+    })
+}

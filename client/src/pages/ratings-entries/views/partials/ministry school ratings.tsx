@@ -17,30 +17,30 @@ interface DispatchProps{
 }
 
 export default connect<StateProps, DispatchProps>(
-    (state: Models.StoreState): StateProps => ({
-        ratings: Selectors.RatingSelector.modifiedMinistryRegionRatings(state)
+    (state: Models.StoreState):StateProps => ({
+        ratings: Selectors.RatingSelector.modifiedMinistrySchoolRatings(state)
     }),
     (dispatch): DispatchProps => ({
         actions: bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch)
     })
-)(class MinistryRegionRatings extends React.Component<StateProps & DispatchProps>{
+)(class MinistrySchoolRatings extends React.Component<StateProps & DispatchProps>{
     constructor(props){
         super(props);
     }
 
     componentDidMount(){
-        this.props.actions.loadMinistryRegionRatings();
+        this.props.actions.loadMinistrySchoolRatings()
     }
 
     render(){
         return <div className="ratings">
-            <PrintButton printTargetId="ministryRegionRatings" classNames="print" />
-            <div id="ministryRegionRatings">
+            <PrintButton printTargetId="ministrySchoolRatinhs" classNames="print" />
+            <div id="ministrySchoolRatinhs">
                 <Table 
                     items={this.props.ratings}
                     columns={[
                         {
-                            title: "Область",
+                            title: "ФСТ",
                             field: "fullname",
                             width: "250px"
                         },
@@ -60,4 +60,4 @@ export default connect<StateProps, DispatchProps>(
             </div>
         </div>
     }
-})
+});

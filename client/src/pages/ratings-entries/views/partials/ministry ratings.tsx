@@ -5,6 +5,7 @@ import * as Models from "../../models/index.models";
 import * as Actions from "../../actions/index.actions";
 import Table from "../../../../components/table/table";
 import {ColumnModel, ColumnTypes} from "../../../../components/table/column";
+import PrintButton from "../../../../components/print button/print.button";
 import * as Selectors from "../../selectors/index.selector";
 
 export interface OwnProps{
@@ -50,36 +51,39 @@ export default connect<StateProps, DispatchProps, OwnProps>(
 
     render(){
         return <div  className="ratings">
-            <Table 
-                items={this.getRatings()}
-                columns={[
-                    {
-                        title: "П.І.П",
-                        field: "fullname",
-                        width: "300px",
-                    },
-                    {
-                        title: "К-ть очок",
-                        field: "rating",
-                        width: "100px"
-                    },
-                    {
-                        title: "Деталі",
-                        field: "details",
-                        type: ColumnTypes.Html,
-                        width: "300px"
-                    },
-                    {
-                        title: "Показник по ф-лі IPF",
-                        field: "wilks",
-                        width: "150px"
-                    },
-                    {
-                        title: "",
-                        width: "*"
-                    }
-                ] as ColumnModel[]}
-             />
+            <PrintButton printTargetId="ministryRatings" classNames="print" />
+            <div id="ministryRatings">
+                <Table 
+                    items={this.getRatings()}
+                    columns={[
+                        {
+                            title: "П.І.П",
+                            field: "fullname",
+                            width: "300px",
+                        },
+                        {
+                            title: "К-ть очок",
+                            field: "rating",
+                            width: "100px"
+                        },
+                        {
+                            title: "Деталі",
+                            field: "details",
+                            type: ColumnTypes.Html,
+                            width: "300px"
+                        },
+                        {
+                            title: "Показник по ф-лі IPF",
+                            field: "wilks",
+                            width: "150px"
+                        },
+                        {
+                            title: "",
+                            width: "*"
+                        }
+                    ] as ColumnModel[]}
+                />
+            </div>
         </div>
     }
 })

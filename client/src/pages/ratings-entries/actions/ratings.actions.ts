@@ -94,4 +94,19 @@ export namespace ActionCreators{
             }
         })
     }
+
+    export const loadMinistrySchoolRatings = () => (d, gs: () => Models.StoreState) => {
+        Services.getMinistrySchoolRatings({
+            year: gs().shell.startDate.getFullYear()
+        }).then(response => {
+            if(response.status){
+                d({
+                    type: ActionTypes.LOAD_MINISTRY_SCHOOL_RATINGS,
+                    payload: <ActionTypes.LOAD_MINISTRY_SCHOOL_RATINGS_PAYLOAD> response.data
+                })
+            }else{
+                toastr.error(response.message)
+            }
+        })
+    }
 }

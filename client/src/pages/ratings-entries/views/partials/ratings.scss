@@ -1,4 +1,15 @@
 .ratings{
     width: 100%;
     padding-top: 16px;
+
+    .print{
+        background-color: #07bd69;
+        color: #fff;
+        margin: 4px;
+        text-shadow: 0 0 1px #000;
+
+        &:hover{
+            background-color: #19d37e;
+        }
+    }
 }

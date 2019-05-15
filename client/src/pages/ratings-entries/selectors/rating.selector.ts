@@ -10,6 +10,7 @@ const ministryCoachRatings = (state: Models.StoreState) => state.ratings.ministr
 const upfCoachRatings = (state: Models.StoreState) => state.ratings.upfCoachRatings;
 const ministryRegionRatings = (state: Models.StoreState) => state.ratings.ministryRegionRatings;
 const ministryFstRatings = (state: Models.StoreState) => state.ratings.ministryFstRatings;
+const ministrySchoolRatings = (state: Models.StoreState) => state.ratings.ministrySchoolRatings;
 
 export const modifiedRatings = createSelector(ratings, competitions, compTypes, records, (ratings, competitions, types, records) => {
     return ratings.map(r => ({ ...r, details: getDetails(r.details, types, competitions, records) }));
@@ -48,6 +49,10 @@ export const modifiedMinistryRegionRatings = createSelector(ministryRegionRating
 });
 
 export const modifiedMinistryFstRatings = createSelector(ministryFstRatings, competitions, compTypes, records, (ratings, competitions, types, records) => {
+    return ratings.map(r => ({...r, details: getDetails(r.details, types, competitions, records)}));
+});
+
+export const modifiedMinistrySchoolRatings = createSelector(ministrySchoolRatings, competitions, compTypes, records, (ratings, competitions, types, records) => {
     return ratings.map(r => ({...r, details: getDetails(r.details, types, competitions, records)}));
 });
 

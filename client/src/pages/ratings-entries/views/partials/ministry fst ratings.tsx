@@ -6,6 +6,7 @@ import * as Actions from "../../actions/index.actions";
 import * as Selectors from "../../selectors/index.selector";
 import Table from "../../../../components/table/table";
 import {ColumnModel, ColumnTypes} from "../../../../components/table/column";
+import PrintButton from "../../../../components/print button/print.button";
 
 interface StateProps{
     ratings: Models.Rating[]
@@ -33,27 +34,30 @@ export default connect<StateProps, DispatchProps>(
 
     render(){
         return <div className="ratings">
-            <Table 
-                items={this.props.ratings}
-                columns={[
-                    {
-                        title: "ФСТ",
-                        field: "fullname",
-                        width: "250px"
-                    },
-                    {
-                        title: "К-ть очок",
-                        field: "rating",
-                        width: "100px"
-                    },
-                    {
-                        title: "Деталі",
-                        field: "details",
-                        type: ColumnTypes.Html,
-                        width: "*"
-                    }
-                ] as ColumnModel[]}
-            />
+            <PrintButton printTargetId="ministryFstRatinhs" classNames="print" />
+            <div id="ministryFstRatinhs">
+                <Table 
+                    items={this.props.ratings}
+                    columns={[
+                        {
+                            title: "ФСТ",
+                            field: "fullname",
+                            width: "250px"
+                        },
+                        {
+                            title: "К-ть очок",
+                            field: "rating",
+                            width: "100px"
+                        },
+                        {
+                            title: "Деталі",
+                            field: "details",
+                            type: ColumnTypes.Html,
+                            width: "*"
+                        }
+                    ] as ColumnModel[]}
+                />
+            </div>
         </div>
     }
 });

@@ -13,6 +13,7 @@ import MinistryCoachRatings from "./partials/ministry coach ratings";
 import UPFCoachRatings from "./partials/upf coach ratings";
 import MinistryRegionRatings from "./partials/ministry region ratings";
 import MinistryFstRatings from "./partials/ministry fst ratings";
+import MinistrySchoolRatings from "./partials/ministry school ratings";
 import {ContentWrap} from "../../../components/layout/index.layout";
 
 interface StateProps{
@@ -61,6 +62,9 @@ export default connect<StateProps, DispatchProps>(
                     </Tab>
                     <Tab title="Міністерський рейтинг (ФСТ)" label="ministryFstRatings">
                         <MinistryFstRatings />
+                    </Tab>
+                    <Tab title="Міністерський рейтинг (ДЮСШ)" label="ministrySchoolRatings">
+                        <MinistrySchoolRatings />
                     </Tab>
                 </TabView>
             </ContentWrap>

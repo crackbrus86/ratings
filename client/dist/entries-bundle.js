@@ -680,6 +680,39 @@ exports.default = Modal;
 
 /***/ }),
 
+/***/ "./client/src/components/print button/print.button.tsx":
+/*!*************************************************************!*\
+  !*** ./client/src/components/print button/print.button.tsx ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var FontAwesome = __webpack_require__(/*! react-fontawesome */ "./node_modules/react-fontawesome/lib/index.js");
+var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+var PrintButton = function (props) {
+    return React.createElement(React.Fragment, null,
+        React.createElement("span", { className: classnames("print-button", props.classNames), onClick: function () { return onPrint(props.printTargetId); } },
+            React.createElement(FontAwesome, { name: "print" }),
+            props.label),
+        React.createElement("iframe", { id: "printing-frame", name: "print_frame", src: "about:blank", style: { display: 'none' } }));
+};
+function onPrint(elementId) {
+    var styles = "html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}table{border-collapse:collapse;border-spacing:0; border: 1px solid #000;}body{font:normal normal .8125em/1.4 Arial,Sans-Serif;background-color:white;color:#333}strong,b{font-weight:bold}cite,em,i{font-style:italic}a{text-decoration:none}a:hover{text-decoration:underline}a img{border:none}abbr,acronym{border-bottom:1px dotted;cursor:help}sup,sub{vertical-align:baseline;position:relative;top:-.4em;font-size:86%}sub{top:.4em}small{font-size:86%}kbd{font-size:80%;border:1px solid #999;padding:2px 5px;border-bottom-width:2px;border-radius:3px}mark{background-color:#ffce00;color:black}p,blockquote,pre,table,figure,hr,form,ol,ul,dl{margin:1.5em 0}hr{height:1px;border:none;background-color:#666}h1,h2,h3,h4,h5,h6{font-weight:bold;line-height:normal;margin:1.5em 0 0}h1{font-size:200%}h2{font-size:180%}h3{font-size:160%}h4{font-size:140%}h5{font-size:120%}h6{font-size:100%}ol,ul,dl{margin-left:3em}ol{list-style:decimal outside}ul{list-style:disc outside}li{margin:.5em 0}dt{font-weight:bold}dd{margin:0 0 .5em 2em}input,button,select,textarea{font:inherit;font-size:100%;line-height:normal;vertical-align:baseline}textarea{display:block;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}pre,code{font-family:\"Courier New\",Courier,Monospace;color:inherit}pre{white-space:pre;word-wrap:normal;overflow:auto}blockquote{margin-left:2em;margin-right:2em;border-left:4px solid #ccc;padding-left:1em;font-style:italic}table[border=\"1\"] th,table[border=\"1\"] td,table[border=\"1\"] caption{border:1px solid;padding:.5em 1em;text-align:left;vertical-align:top}th{font-weight:bold}table[border=\"1\"] caption{border:none;font-style:italic}.no-print{display:none}td{border: 1px solid #000; padding: 4px;}td:last-child{ padding: 0; border-left: none;}";
+    var a = document.getElementById(elementId).innerHTML;
+    window.frames["print_frame"].document.title = document.title;
+    window.frames["print_frame"].document.body.innerHTML = '<style>' + styles + '</style>' + a;
+    window.frames["print_frame"].window.focus();
+    window.frames["print_frame"].window.print();
+}
+exports.default = PrintButton;
+
+
+/***/ }),
+
 /***/ "./client/src/components/search/search.tsx":
 /*!*************************************************!*\
   !*** ./client/src/components/search/search.tsx ***!
@@ -1281,6 +1314,7 @@ exports.LOAD_MINISTRY_COACH_RATINGS = "RATINGS::LOAD_MINISTRY_COACH_RATINGS";
 exports.LOAD_UPF_COACH_RATINGS = "RATINGS::LOAD_UPF_COACH_RATINGS";
 exports.LOAD_MINISTRY_REGION_RATINGS = "RATINGS::LOAD_MINISTRY_REGION_RATINGS";
 exports.LOAD_MINISTRY_FST_RATINGS = "RATINGS::LOAD_MINISTRY_FST_RATINGS";
+exports.LOAD_MINISTRY_SCHOOL_RATINGS = "RATINGS::LOAD_MINISTRY_SCHOOL_RATINGS";
 
 
 /***/ }),
@@ -1675,6 +1709,21 @@ var ActionCreators;
             if (response.status) {
                 d({
                     type: ActionTypes.LOAD_MINISTRY_FST_RATINGS,
+                    payload: response.data
+                });
+            }
+            else {
+                toastr.error(response.message);
+            }
+        });
+    }; };
+    ActionCreators.loadMinistrySchoolRatings = function () { return function (d, gs) {
+        Services.getMinistrySchoolRatings({
+            year: gs().shell.startDate.getFullYear()
+        }).then(function (response) {
+            if (response.status) {
+                d({
+                    type: ActionTypes.LOAD_MINISTRY_SCHOOL_RATINGS,
                     payload: response.data
                 });
             }
@@ -2095,7 +2144,8 @@ var defaultState = {
     ministryCoachRatings: [],
     upfCoachRatings: [],
     ministryRegionRatings: [],
-    ministryFstRatings: []
+    ministryFstRatings: [],
+    ministrySchoolRatings: []
 };
 exports.ratingsReducer = function (state, action) {
     if (state === void 0) { state = defaultState; }
@@ -2123,6 +2173,10 @@ exports.ratingsReducer = function (state, action) {
         case ActionTypes.LOAD_MINISTRY_FST_RATINGS: {
             var payload = action.payload;
             return __assign({}, state, { ministryFstRatings: payload });
+        }
+        case ActionTypes.LOAD_MINISTRY_SCHOOL_RATINGS: {
+            var payload = action.payload;
+            return __assign({}, state, { ministrySchoolRatings: payload });
         }
         default:
             return state;
@@ -2379,6 +2433,7 @@ var ministryCoachRatings = function (state) { return state.ratings.ministryCoach
 var upfCoachRatings = function (state) { return state.ratings.upfCoachRatings; };
 var ministryRegionRatings = function (state) { return state.ratings.ministryRegionRatings; };
 var ministryFstRatings = function (state) { return state.ratings.ministryFstRatings; };
+var ministrySchoolRatings = function (state) { return state.ratings.ministrySchoolRatings; };
 exports.modifiedRatings = reselect_1.createSelector(ratings, competitions, compTypes, records, function (ratings, competitions, types, records) {
     return ratings.map(function (r) { return (__assign({}, r, { details: getDetails(r.details, types, competitions, records) })); });
 });
@@ -2407,6 +2462,9 @@ exports.modifiedMinistryRegionRatings = reselect_1.createSelector(ministryRegion
     return ratings.map(function (r) { return (__assign({}, r, { details: getDetails(r.details, types, competitions, records) })); });
 });
 exports.modifiedMinistryFstRatings = reselect_1.createSelector(ministryFstRatings, competitions, compTypes, records, function (ratings, competitions, types, records) {
+    return ratings.map(function (r) { return (__assign({}, r, { details: getDetails(r.details, types, competitions, records) })); });
+});
+exports.modifiedMinistrySchoolRatings = reselect_1.createSelector(ministrySchoolRatings, competitions, compTypes, records, function (ratings, competitions, types, records) {
     return ratings.map(function (r) { return (__assign({}, r, { details: getDetails(r.details, types, competitions, records) })); });
 });
 function getDetails(originalDetails, types, competitions, records) {
@@ -2617,6 +2675,13 @@ exports.getMinistryFstRatings = function (contract) {
         data: contract
     });
 };
+exports.getMinistrySchoolRatings = function (contract) {
+    return CallApi.callApi({
+        url: ratingsApiPath + 'GetSchoolMinistryRatings.php',
+        type: apiTypes.GET,
+        data: contract
+    });
+};
 
 
 /***/ }),
@@ -2723,6 +2788,7 @@ var ministry_coach_ratings_1 = __webpack_require__(/*! ./partials/ministry coach
 var upf_coach_ratings_1 = __webpack_require__(/*! ./partials/upf coach ratings */ "./client/src/pages/ratings-entries/views/partials/upf coach ratings.tsx");
 var ministry_region_ratings_1 = __webpack_require__(/*! ./partials/ministry region ratings */ "./client/src/pages/ratings-entries/views/partials/ministry region ratings.tsx");
 var ministry_fst_ratings_1 = __webpack_require__(/*! ./partials/ministry fst ratings */ "./client/src/pages/ratings-entries/views/partials/ministry fst ratings.tsx");
+var ministry_school_ratings_1 = __webpack_require__(/*! ./partials/ministry school ratings */ "./client/src/pages/ratings-entries/views/partials/ministry school ratings.tsx");
 var index_layout_1 = __webpack_require__(/*! ../../../components/layout/index.layout */ "./client/src/components/layout/index.layout.tsx");
 exports.default = react_redux_1.connect(function (state) { return ({}); }, function (dispatch) { return ({}); })(/** @class */ (function (_super) {
     __extends(Layout, _super);
@@ -2750,7 +2816,9 @@ exports.default = react_redux_1.connect(function (state) { return ({}); }, funct
                 React.createElement(tab_1.default, { title: "\u041C\u0456\u043D\u0456\u0441\u0442\u0435\u0440\u0441\u044C\u043A\u0438\u0439 \u0440\u0435\u0439\u0442\u0438\u043D\u0433 (\u041E\u0431\u043B\u0430\u0441\u0442\u0456)", label: "ministryRegionRatings" },
                     React.createElement(ministry_region_ratings_1.default, null)),
                 React.createElement(tab_1.default, { title: "\u041C\u0456\u043D\u0456\u0441\u0442\u0435\u0440\u0441\u044C\u043A\u0438\u0439 \u0440\u0435\u0439\u0442\u0438\u043D\u0433 (\u0424\u0421\u0422)", label: "ministryFstRatings" },
-                    React.createElement(ministry_fst_ratings_1.default, null))));
+                    React.createElement(ministry_fst_ratings_1.default, null)),
+                React.createElement(tab_1.default, { title: "\u041C\u0456\u043D\u0456\u0441\u0442\u0435\u0440\u0441\u044C\u043A\u0438\u0439 \u0440\u0435\u0439\u0442\u0438\u043D\u0433 (\u0414\u042E\u0421\u0428)", label: "ministrySchoolRatings" },
+                    React.createElement(ministry_school_ratings_1.default, null))));
     };
     return Layout;
 }(React.Component)));
@@ -2976,6 +3044,7 @@ var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/s
 var table_1 = __webpack_require__(/*! ../../../../components/table/table */ "./client/src/components/table/table.tsx");
 var column_1 = __webpack_require__(/*! ../../../../components/table/column */ "./client/src/components/table/column.tsx");
 var Selectors = __webpack_require__(/*! ../../selectors/index.selector */ "./client/src/pages/ratings-entries/selectors/index.selector.ts");
+var print_button_1 = __webpack_require__(/*! ../../../../components/print button/print.button */ "./client/src/components/print button/print.button.tsx");
 exports.default = react_redux_1.connect(function (state) { return ({
     ratings: Selectors.RatingSelector.modifiedMinistryCoachRatings(state)
 }); }, function (dispatch) { return ({
@@ -2990,24 +3059,26 @@ exports.default = react_redux_1.connect(function (state) { return ({
     };
     MinistryCoachRatings.prototype.render = function () {
         return React.createElement("div", { className: "ratings" },
-            React.createElement(table_1.default, { items: this.props.ratings, columns: [
-                    {
-                        title: "П.І.П.",
-                        field: "fullname",
-                        width: "250px"
-                    },
-                    {
-                        title: "К-ть очок",
-                        field: "rating",
-                        width: "100px"
-                    },
-                    {
-                        title: "Деталі",
-                        field: "details",
-                        type: column_1.ColumnTypes.Html,
-                        width: "*"
-                    }
-                ] }));
+            React.createElement(print_button_1.default, { printTargetId: "ministryCoachRatings", classNames: "print" }),
+            React.createElement("div", { id: "ministryCoachRatings" },
+                React.createElement(table_1.default, { items: this.props.ratings, columns: [
+                        {
+                            title: "П.І.П.",
+                            field: "fullname",
+                            width: "250px"
+                        },
+                        {
+                            title: "К-ть очок",
+                            field: "rating",
+                            width: "100px"
+                        },
+                        {
+                            title: "Деталі",
+                            field: "details",
+                            type: column_1.ColumnTypes.Html,
+                            width: "*"
+                        }
+                    ] })));
     };
     return MinistryCoachRatings;
 }(React.Component)));
@@ -3045,6 +3116,7 @@ var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/s
 var Selectors = __webpack_require__(/*! ../../selectors/index.selector */ "./client/src/pages/ratings-entries/selectors/index.selector.ts");
 var table_1 = __webpack_require__(/*! ../../../../components/table/table */ "./client/src/components/table/table.tsx");
 var column_1 = __webpack_require__(/*! ../../../../components/table/column */ "./client/src/components/table/column.tsx");
+var print_button_1 = __webpack_require__(/*! ../../../../components/print button/print.button */ "./client/src/components/print button/print.button.tsx");
 exports.default = react_redux_1.connect(function (state) { return ({
     ratings: Selectors.RatingSelector.modifiedMinistryFstRatings(state)
 }); }, function (dispatch) { return ({
@@ -3059,24 +3131,26 @@ exports.default = react_redux_1.connect(function (state) { return ({
     };
     MinistryFstRatings.prototype.render = function () {
         return React.createElement("div", { className: "ratings" },
-            React.createElement(table_1.default, { items: this.props.ratings, columns: [
-                    {
-                        title: "ФСТ",
-                        field: "fullname",
-                        width: "250px"
-                    },
-                    {
-                        title: "К-ть очок",
-                        field: "rating",
-                        width: "100px"
-                    },
-                    {
-                        title: "Деталі",
-                        field: "details",
-                        type: column_1.ColumnTypes.Html,
-                        width: "*"
-                    }
-                ] }));
+            React.createElement(print_button_1.default, { printTargetId: "ministryFstRatinhs", classNames: "print" }),
+            React.createElement("div", { id: "ministryFstRatinhs" },
+                React.createElement(table_1.default, { items: this.props.ratings, columns: [
+                        {
+                            title: "ФСТ",
+                            field: "fullname",
+                            width: "250px"
+                        },
+                        {
+                            title: "К-ть очок",
+                            field: "rating",
+                            width: "100px"
+                        },
+                        {
+                            title: "Деталі",
+                            field: "details",
+                            type: column_1.ColumnTypes.Html,
+                            width: "*"
+                        }
+                    ] })));
     };
     return MinistryFstRatings;
 }(React.Component)));
@@ -3113,6 +3187,7 @@ var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js
 var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/src/pages/ratings-entries/actions/index.actions.ts");
 var table_1 = __webpack_require__(/*! ../../../../components/table/table */ "./client/src/components/table/table.tsx");
 var column_1 = __webpack_require__(/*! ../../../../components/table/column */ "./client/src/components/table/column.tsx");
+var print_button_1 = __webpack_require__(/*! ../../../../components/print button/print.button */ "./client/src/components/print button/print.button.tsx");
 var Selectors = __webpack_require__(/*! ../../selectors/index.selector */ "./client/src/pages/ratings-entries/selectors/index.selector.ts");
 exports.default = react_redux_1.connect(function (state) { return ({
     ratingsMale: Selectors.RatingSelector.ministryRatingsMale(state),
@@ -3140,33 +3215,35 @@ exports.default = react_redux_1.connect(function (state) { return ({
     };
     MinistryRatings.prototype.render = function () {
         return React.createElement("div", { className: "ratings" },
-            React.createElement(table_1.default, { items: this.getRatings(), columns: [
-                    {
-                        title: "П.І.П",
-                        field: "fullname",
-                        width: "300px",
-                    },
-                    {
-                        title: "К-ть очок",
-                        field: "rating",
-                        width: "100px"
-                    },
-                    {
-                        title: "Деталі",
-                        field: "details",
-                        type: column_1.ColumnTypes.Html,
-                        width: "300px"
-                    },
-                    {
-                        title: "Показник по ф-лі IPF",
-                        field: "wilks",
-                        width: "150px"
-                    },
-                    {
-                        title: "",
-                        width: "*"
-                    }
-                ] }));
+            React.createElement(print_button_1.default, { printTargetId: "ministryRatings", classNames: "print" }),
+            React.createElement("div", { id: "ministryRatings" },
+                React.createElement(table_1.default, { items: this.getRatings(), columns: [
+                        {
+                            title: "П.І.П",
+                            field: "fullname",
+                            width: "300px",
+                        },
+                        {
+                            title: "К-ть очок",
+                            field: "rating",
+                            width: "100px"
+                        },
+                        {
+                            title: "Деталі",
+                            field: "details",
+                            type: column_1.ColumnTypes.Html,
+                            width: "300px"
+                        },
+                        {
+                            title: "Показник по ф-лі IPF",
+                            field: "wilks",
+                            width: "150px"
+                        },
+                        {
+                            title: "",
+                            width: "*"
+                        }
+                    ] })));
     };
     return MinistryRatings;
 }(React.Component)));
@@ -3204,6 +3281,7 @@ var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/s
 var Selectors = __webpack_require__(/*! ../../selectors/index.selector */ "./client/src/pages/ratings-entries/selectors/index.selector.ts");
 var table_1 = __webpack_require__(/*! ../../../../components/table/table */ "./client/src/components/table/table.tsx");
 var column_1 = __webpack_require__(/*! ../../../../components/table/column */ "./client/src/components/table/column.tsx");
+var print_button_1 = __webpack_require__(/*! ../../../../components/print button/print.button */ "./client/src/components/print button/print.button.tsx");
 exports.default = react_redux_1.connect(function (state) { return ({
     ratings: Selectors.RatingSelector.modifiedMinistryRegionRatings(state)
 }); }, function (dispatch) { return ({
@@ -3218,26 +3296,100 @@ exports.default = react_redux_1.connect(function (state) { return ({
     };
     MinistryRegionRatings.prototype.render = function () {
         return React.createElement("div", { className: "ratings" },
-            React.createElement(table_1.default, { items: this.props.ratings, columns: [
-                    {
-                        title: "Область",
-                        field: "fullname",
-                        width: "250px"
-                    },
-                    {
-                        title: "К-ть очок",
-                        field: "rating",
-                        width: "100px"
-                    },
-                    {
-                        title: "Деталі",
-                        field: "details",
-                        type: column_1.ColumnTypes.Html,
-                        width: "*"
-                    }
-                ] }));
+            React.createElement(print_button_1.default, { printTargetId: "ministryRegionRatings", classNames: "print" }),
+            React.createElement("div", { id: "ministryRegionRatings" },
+                React.createElement(table_1.default, { items: this.props.ratings, columns: [
+                        {
+                            title: "Область",
+                            field: "fullname",
+                            width: "250px"
+                        },
+                        {
+                            title: "К-ть очок",
+                            field: "rating",
+                            width: "100px"
+                        },
+                        {
+                            title: "Деталі",
+                            field: "details",
+                            type: column_1.ColumnTypes.Html,
+                            width: "*"
+                        }
+                    ] })));
     };
     return MinistryRegionRatings;
+}(React.Component)));
+
+
+/***/ }),
+
+/***/ "./client/src/pages/ratings-entries/views/partials/ministry school ratings.tsx":
+/*!*************************************************************************************!*\
+  !*** ./client/src/pages/ratings-entries/views/partials/ministry school ratings.tsx ***!
+  \*************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/src/pages/ratings-entries/actions/index.actions.ts");
+var Selectors = __webpack_require__(/*! ../../selectors/index.selector */ "./client/src/pages/ratings-entries/selectors/index.selector.ts");
+var table_1 = __webpack_require__(/*! ../../../../components/table/table */ "./client/src/components/table/table.tsx");
+var column_1 = __webpack_require__(/*! ../../../../components/table/column */ "./client/src/components/table/column.tsx");
+var print_button_1 = __webpack_require__(/*! ../../../../components/print button/print.button */ "./client/src/components/print button/print.button.tsx");
+exports.default = react_redux_1.connect(function (state) { return ({
+    ratings: Selectors.RatingSelector.modifiedMinistrySchoolRatings(state)
+}); }, function (dispatch) { return ({
+    actions: redux_1.bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch)
+}); })(/** @class */ (function (_super) {
+    __extends(MinistrySchoolRatings, _super);
+    function MinistrySchoolRatings(props) {
+        return _super.call(this, props) || this;
+    }
+    MinistrySchoolRatings.prototype.componentDidMount = function () {
+        this.props.actions.loadMinistrySchoolRatings();
+    };
+    MinistrySchoolRatings.prototype.render = function () {
+        return React.createElement("div", { className: "ratings" },
+            React.createElement(print_button_1.default, { printTargetId: "ministrySchoolRatinhs", classNames: "print" }),
+            React.createElement("div", { id: "ministrySchoolRatinhs" },
+                React.createElement(table_1.default, { items: this.props.ratings, columns: [
+                        {
+                            title: "ФСТ",
+                            field: "fullname",
+                            width: "250px"
+                        },
+                        {
+                            title: "К-ть очок",
+                            field: "rating",
+                            width: "100px"
+                        },
+                        {
+                            title: "Деталі",
+                            field: "details",
+                            type: column_1.ColumnTypes.Html,
+                            width: "*"
+                        }
+                    ] })));
+    };
+    return MinistrySchoolRatings;
 }(React.Component)));
 
 
@@ -3273,6 +3425,7 @@ var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/s
 var Selectors = __webpack_require__(/*! ../../selectors/index.selector */ "./client/src/pages/ratings-entries/selectors/index.selector.ts");
 var table_1 = __webpack_require__(/*! ../../../../components/table/table */ "./client/src/components/table/table.tsx");
 var column_1 = __webpack_require__(/*! ../../../../components/table/column */ "./client/src/components/table/column.tsx");
+var print_button_1 = __webpack_require__(/*! ../../../../components/print button/print.button */ "./client/src/components/print button/print.button.tsx");
 exports.default = react_redux_1.connect(function (state) { return ({
     ratings: Selectors.RatingSelector.modifiedUPFCoachRatings(state)
 }); }, function (dispatch) { return ({
@@ -3287,24 +3440,26 @@ exports.default = react_redux_1.connect(function (state) { return ({
     };
     UPFCoachRatings.prototype.render = function () {
         return React.createElement("div", { className: "ratings" },
-            React.createElement(table_1.default, { items: this.props.ratings, columns: [
-                    {
-                        title: "П.І.П.",
-                        field: "fullname",
-                        width: "250px"
-                    },
-                    {
-                        title: "Ранг",
-                        field: "rating",
-                        width: "50px"
-                    },
-                    {
-                        title: "Деталі",
-                        field: "details",
-                        type: column_1.ColumnTypes.Html,
-                        width: "*"
-                    }
-                ] }));
+            React.createElement(print_button_1.default, { printTargetId: "upfCoachRatings", classNames: "print" }),
+            React.createElement("div", { id: "upfCoachRatings" },
+                React.createElement(table_1.default, { items: this.props.ratings, columns: [
+                        {
+                            title: "П.І.П.",
+                            field: "fullname",
+                            width: "250px"
+                        },
+                        {
+                            title: "Ранг",
+                            field: "rating",
+                            width: "50px"
+                        },
+                        {
+                            title: "Деталі",
+                            field: "details",
+                            type: column_1.ColumnTypes.Html,
+                            width: "*"
+                        }
+                    ] })));
     };
     return UPFCoachRatings;
 }(React.Component)));
@@ -3341,6 +3496,7 @@ var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js
 var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/src/pages/ratings-entries/actions/index.actions.ts");
 var table_1 = __webpack_require__(/*! ../../../../components/table/table */ "./client/src/components/table/table.tsx");
 var column_1 = __webpack_require__(/*! ../../../../components/table/column */ "./client/src/components/table/column.tsx");
+var print_button_1 = __webpack_require__(/*! ../../../../components/print button/print.button */ "./client/src/components/print button/print.button.tsx");
 var Selectors = __webpack_require__(/*! ../../selectors/index.selector */ "./client/src/pages/ratings-entries/selectors/index.selector.ts");
 exports.default = react_redux_1.connect(function (state) { return ({
     ratingsMale: Selectors.RatingSelector.upfRatingsMale(state),
@@ -3368,33 +3524,35 @@ exports.default = react_redux_1.connect(function (state) { return ({
     };
     UPFRatings.prototype.render = function () {
         return React.createElement("div", { className: "ratings" },
-            React.createElement(table_1.default, { items: this.getRatings(), columns: [
-                    {
-                        title: "П.І.П",
-                        field: "fullname",
-                        width: "300px",
-                    },
-                    {
-                        title: "Ранг",
-                        field: "rating",
-                        width: "100px"
-                    },
-                    {
-                        title: "Деталі",
-                        field: "details",
-                        type: column_1.ColumnTypes.Html,
-                        width: "300px"
-                    },
-                    {
-                        title: "Показник по ф-лі IPF",
-                        field: "wilks",
-                        width: "150px"
-                    },
-                    {
-                        title: "",
-                        width: "*"
-                    }
-                ] }));
+            React.createElement(print_button_1.default, { printTargetId: "upfRatings", classNames: "print" }),
+            React.createElement("div", { id: "upfRatings" },
+                React.createElement(table_1.default, { items: this.getRatings(), columns: [
+                        {
+                            title: "П.І.П",
+                            field: "fullname",
+                            width: "300px",
+                        },
+                        {
+                            title: "Ранг",
+                            field: "rating",
+                            width: "100px"
+                        },
+                        {
+                            title: "Деталі",
+                            field: "details",
+                            type: column_1.ColumnTypes.Html,
+                            width: "300px"
+                        },
+                        {
+                            title: "Показник по ф-лі IPF",
+                            field: "wilks",
+                            width: "150px"
+                        },
+                        {
+                            title: "",
+                            width: "*"
+                        }
+                    ] })));
     };
     return UPFRatings;
 }(React.Component)));

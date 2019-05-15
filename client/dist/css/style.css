@@ -132,6 +132,15 @@
         .modal-black-out .modal-content .modal-footer .modal-footer-button .fa {
           margin: 0 4px; }
 
+.print-button {
+  display: inline-block;
+  padding: 0.6em 4px;
+  width: 32px;
+  height: 32px;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer; }
+
 .search-box {
   padding: 4px;
   overflow: hidden;
@@ -265,3 +274,10 @@
 .ratings {
   width: 100%;
   padding-top: 16px; }
+  .ratings .print {
+    background-color: #07bd69;
+    color: #fff;
+    margin: 4px;
+    text-shadow: 0 0 1px #000; }
+    .ratings .print:hover {
+      background-color: #19d37e; }

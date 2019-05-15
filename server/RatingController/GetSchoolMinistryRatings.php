@@ -4,6 +4,6 @@ require_once "../core.php";
 
 $service = new RatingService();
 
-$response = $service->getRegionMinistryRatings();
+$response = $service->getSchoolMinistryRatings();
 
 createResponse($response);
