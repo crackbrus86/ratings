@@ -55,6 +55,10 @@ export default connect<StateProps, DispatchProps>(
         return placeOptions;
     }
 
+    onSaveAndClose = () => {
+        this.props.actions.saveAndCloseEntry();
+    }
+
     onSave = () => {
         this.props.actions.saveEntry();
     }
@@ -170,6 +174,7 @@ export default connect<StateProps, DispatchProps>(
                 </div>
             </Modal.Body>
             <Modal.Footer>
+                <Modal.FooterButton label="Зберегти та закрити" icon="save" disabled={!this.props.validation.isValid} onClick={this.onSaveAndClose} />
                 <Modal.FooterButton label="Зберегти" icon="save" disabled={!this.props.validation.isValid} onClick={this.onSave} />
             </Modal.Footer>
         </Modal>

@@ -1410,7 +1410,7 @@ var ActionCreators;
             type: ActionTypes.CLOSE_ENTRY
         });
     }; };
-    ActionCreators.saveEntry = function () { return function (d, gs) {
+    ActionCreators.saveAndCloseEntry = function () { return function (d, gs) {
         var entry = gs().entries.currentEntry;
         if (entry.ratingEntryId) {
             Services.updateEntry(__assign({}, entry)).then(function (response) {
@@ -1429,6 +1429,33 @@ var ActionCreators;
                 if (response.status) {
                     toastr.success(response.message);
                     d(ActionCreators.closeEntry());
+                    d(ActionCreators.getEntries());
+                }
+                else {
+                    toastr.error(response.message);
+                }
+            });
+        }
+    }; };
+    ActionCreators.saveEntry = function () { return function (d, gs) {
+        var entry = gs().entries.currentEntry;
+        if (entry.ratingEntryId) {
+            Services.updateEntry(__assign({}, entry)).then(function (response) {
+                if (response.status) {
+                    toastr.success(response.message);
+                    d(ActionCreators.updateEntry("ratingEntryId", null));
+                    d(ActionCreators.getEntries());
+                }
+                else {
+                    toastr.error(response.message);
+                }
+            });
+        }
+        else {
+            Services.createEntry(__assign({}, entry, { ratingEntryId: null })).then(function (response) {
+                if (response.status) {
+                    toastr.success(response.message);
+                    d(ActionCreators.updateEntry("ratingEntryId", null));
                     d(ActionCreators.getEntries());
                 }
                 else {
@@ -1844,6 +1871,9 @@ exports.default = react_redux_1.connect(function (state) { return ({
             }
             return placeOptions;
         };
+        _this.onSaveAndClose = function () {
+            _this.props.actions.saveAndCloseEntry();
+        };
         _this.onSave = function () {
             _this.props.actions.saveEntry();
         };
@@ -1876,6 +1906,7 @@ exports.default = react_redux_1.connect(function (state) { return ({
                                 React.createElement(form_1.default.DatePicker, { label: "\u0414\u0430\u0442\u0430", value: this.props.entry.eventDate, validation: this.props.validation.isEventDateValid, onChange: function (value) { return _this.props.actions.updateEntry("eventDate", value); } }),
                                 React.createElement(form_1.default.TextInput, { label: "\u041F\u043E\u043A\u0430\u0437\u043D\u0438\u043A \u0437\u0430 \u0444\u043E\u0440\u043C\u0443\u043B\u043E\u044E IPF", value: wilks, onChange: function (value) { return _this.props.actions.updateEntry("wilks", value); } })))))),
             React.createElement(modal_1.default.Footer, null,
+                React.createElement(modal_1.default.FooterButton, { label: "\u0417\u0431\u0435\u0440\u0435\u0433\u0442\u0438 \u0442\u0430 \u0437\u0430\u043A\u0440\u0438\u0442\u0438", icon: "save", disabled: !this.props.validation.isValid, onClick: this.onSaveAndClose }),
                 React.createElement(modal_1.default.FooterButton, { label: "\u0417\u0431\u0435\u0440\u0435\u0433\u0442\u0438", icon: "save", disabled: !this.props.validation.isValid, onClick: this.onSave })));
     };
     return EntryModal;

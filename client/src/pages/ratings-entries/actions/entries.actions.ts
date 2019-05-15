@@ -77,7 +77,7 @@ export namespace ActionCreators{
         })
     }
 
-    export const saveEntry = () => (d, gs: () => Models.StoreState) => {
+    export const saveAndCloseEntry = () => (d, gs: () => Models.StoreState) => {
         let entry: Models.Entry = gs().entries.currentEntry;
         if(entry.ratingEntryId){
             Services.updateEntry({
@@ -99,6 +99,36 @@ export namespace ActionCreators{
                 if(response.status){
                     toastr.success(response.message);
                     d(closeEntry());
+                    d(getEntries());
+                }else{
+                    toastr.error(response.message);
+                }
+            })
+        }
+    }
+
+    export const saveEntry = () => (d, gs: () => Models.StoreState) => {
+        let entry: Models.Entry = gs().entries.currentEntry;
+        if(entry.ratingEntryId){
+            Services.updateEntry({
+                ...entry
+            }).then((response) => {
+                if(response.status){
+                    toastr.success(response.message);
+                    d(updateEntry("ratingEntryId", null));
+                    d(getEntries());
+                }else{
+                    toastr.error(response.message);
+                }
+            })
+        }else{
+            Services.createEntry({
+                ...entry,
+                ratingEntryId: null
+            }).then((response) => {
+                if(response.status){
+                    toastr.success(response.message);
+                    d(updateEntry("ratingEntryId", null));
                     d(getEntries());
                 }else{
                     toastr.error(response.message);
