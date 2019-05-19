@@ -3,7 +3,8 @@ const path = require('path');
 module.exports = {
     entry: {
         settings: "./client/src/pages/ratings-settings/index.tsx",
-        entries: "./client/src/pages/ratings-entries/index.tsx"
+        entries: "./client/src/pages/ratings-entries/index.tsx",
+        tables: "./client/src/pages/ratings-tables/index.tsx"
     },
     mode: "development",
     output: {

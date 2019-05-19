@@ -39,6 +39,21 @@ gulp.task("watch::entries", () => {
   .pipe(gulp.dest('./client/dist/'))
 });
 
+gulp.task("build::tables", () => {
+  return gulp.src("./client//src/pages/ratings-tables/index.tsx")
+  .pipe(webpackStream(webpackConfig), webpack)
+  .pipe(gulp.dest('./client/dist/'))
+});
+
+gulp.task("watch::tables", () => {
+  return gulp.src("./client/src/pages/ratings-tables/index.tsx")
+  .pipe(webpackStream({
+    ...webpackConfig,
+    watch: true
+  }), webpack)
+  .pipe(gulp.dest('./client/dist/'))
+});
+
 gulp.task('sass::concat', function () {
     return gulp.src('./client/src/**/*.scss')
       .pipe(concat('style.scss'))
