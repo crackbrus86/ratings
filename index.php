@@ -11,6 +11,14 @@ add_action("admin_init", array("UPFRatings", "initDb"));
 
 function ratingsTableApp()
 {   
+    wp_register_style('ratings-style', plugins_url('/client/dist/css/style.css?v=' . UPFRatings::$appVersion, __FILE__));
+    wp_enqueue_style('ratings-style');
+    wp_register_style('ratings-fontawesome', plugins_url('/client/dist/css/fontawesome-free-5.7.2-web/css/all.min.css?v=' . UPFRatings::$appVersion, __FILE__));
+    wp_enqueue_style('ratings-fontawesome');
+    wp_register_script('ratings-react_register', 'https://unpkg.com/react@16/umd/react.development.js');
+    wp_enqueue_script('ratings-react_register');
+    wp_register_script('ratings-react_dom_register', 'https://unpkg.com/react-dom@16/umd/react-dom.development.js');
+    wp_enqueue_script('ratings-react_dom_register');
     wp_register_script("ratings_table_script", plugins_url("/client/dist/tables-bundle.js?v=" . UPFRatings::$appVersion, __FILE__));
     wp_enqueue_script("ratings_table_script");
     $content = <<<_END
@@ -24,7 +32,7 @@ add_shortcode("Ratings", "ratingsTableApp");
 
 class UPFRatings
 {
-    public static $appVersion = "1.0.032119";
+    public static $appVersion = "1.0.051919";
 
     public function initRating()
     {

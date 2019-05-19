@@ -60,6 +60,38 @@ class RatingService
         return $response;
     }
 
+    public function getMinistryRatingsByGender()
+    {
+        $year = $_GET["year"];
+
+        $gender = $_GET["gender"];
+
+        $sql = $this->db->prepare("SELECT a.Fullname, SUM(b.Value) AS Rating, a.Gender,
+                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів)') separator ', ') AS Details,
+                                        MAX(a.Wilks) AS Wilks
+                                        FROM $this->entryTable a
+                                        JOIN $this->pointTable b ON b.Target = a.Event AND b.Place = a.Place
+                                        WHERE YEAR(a.EventDate) = %s AND a.Gender = %s
+                                    GROUP BY a.Fullname, a.Gender
+                                    ORDER BY Rating DESC, Wilks DESC", $year, $gender);
+
+        $results = $this->db->get_results($sql);
+
+        if(count($results))
+        {
+            foreach ($results as $result) 
+            {
+                array_push($this->ratings, new Rating($result->Fullname, $result->Rating, $result->Gender, $result->Details, array(), $result->Wilks));
+            }
+        }
+
+        $response = new ResponseModel();
+
+        $response->setResponseModel((object)array("status" => TRUE, "data" => $this->ratings));
+
+        return $response;
+    }
+
     public function getUPFRating()
     {
         $year = $_GET["year"];
