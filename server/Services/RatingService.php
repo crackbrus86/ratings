@@ -33,7 +33,7 @@ class RatingService
     public function getMinistryRatings()
     {
         $year = $_GET["year"];
-
+        $this->db->query("SET SESSION group_concat_max_len = 100000");
         $sql = $this->db->prepare("SELECT a.Fullname, SUM(b.Value) AS Rating, a.Gender,
                                         GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів)') separator ', ') AS Details,
                                         MAX(a.Wilks) AS Wilks
@@ -65,7 +65,7 @@ class RatingService
         $year = $_GET["year"];
 
         $gender = $_GET["gender"];
-
+        $this->db->query("SET SESSION group_concat_max_len = 100000");
         $sql = $this->db->prepare("SELECT a.Fullname, SUM(b.Value) AS Rating, a.Gender,
                                         GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів)') separator ', ') AS Details,
                                         MAX(a.Wilks) AS Wilks
@@ -95,7 +95,7 @@ class RatingService
     public function getUPFRating()
     {
         $year = $_GET["year"];
-
+        $this->db->query("SET SESSION group_concat_max_len = 100000");
         $sql = $this->db->prepare("SELECT a.Fullname, a.Gender, MIN(b.Range) AS Rating,
                                         GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Range, ' ранг)') separator ', ') AS Details,
                                         COUNT(a.Event) AS EventCount,
@@ -132,7 +132,7 @@ class RatingService
     public function getCoachMinistryRatings()
     {
         $year = $_GET["year"];
-
+        $this->db->query("SET SESSION group_concat_max_len = 100000");
         $sql = $this->db->prepare("SELECT a.Coach, SUM(b.Value) AS Rating,
                                         GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів) ', a.Fullname) separator ', ') AS Details
                                         FROM $this->entryTable a
@@ -161,7 +161,7 @@ class RatingService
     public function getCoachUPFRatings()
     {
         $year = $_GET["year"];
-
+        $this->db->query("SET SESSION group_concat_max_len = 100000");
         $sql = $this->db->prepare("SELECT a.Coach, MIN(b.Range) AS Rating,
                                         GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Range, ' ранг) ', a.Fullname) separator ', ') AS Details,
                                         COUNT(a.Event) AS EventCount,
@@ -198,7 +198,7 @@ class RatingService
     public function getRegionMinistryRatings()
     {
         $year = $_GET["year"];
-
+        $this->db->query("SET SESSION group_concat_max_len = 100000");
         $sql = $this->db->prepare("SELECT a.Region, SUM(b.Value) AS Rating,
                                         GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів) ', a.Fullname) separator ', ') AS Details
                                         FROM $this->entryTable a

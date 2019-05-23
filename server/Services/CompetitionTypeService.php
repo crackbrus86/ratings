@@ -20,7 +20,7 @@ class CompetitionTypeService
 
             new CompetitionType("SQS", "Присідання (окрема вправа)"),
 
-            new CompetitionType("BPS", "Жим (окрема вправа)"),
+            new CompetitionType("BS", "Жим (окрема вправа)"),
 
             new CompetitionType("DLS", "Тяга (окрема вправа)")
         );
