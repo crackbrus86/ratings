@@ -9,6 +9,18 @@ var all = require("gulp-all");
 
 sass.compiler = require("node-sass");
 
+gulp.task("build::referee", () => {
+  return gulp.src("./client/src/pages/referee-ratings/index.tsx")
+  .pipe(webpackStream(webpackConfig), webpack)
+  .pipe(gulp.dest("./client/dist/"))
+});
+
+gulp.task("watch::referee", () => {
+  return gulp.src("./client/src/pages/referee-ratings/index.tsx")
+  .pipe(webpackStream({ ...webpackConfig, watch: true }), webpack)
+    .pipe(gulp.dest('./client/dist/'))
+});
+
 gulp.task("build::settings", () => {
     return gulp.src("./client/src/pages/ratings-settings/index.tsx")
     .pipe(webpackStream(webpackConfig), webpack)

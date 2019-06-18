@@ -1,0 +1,1 @@
+export import TestActions = require("./test.actions");

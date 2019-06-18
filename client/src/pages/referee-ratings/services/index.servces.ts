@@ -1,0 +1,1 @@
+export import TestServices = require("./test.data.service");

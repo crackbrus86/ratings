@@ -38,6 +38,7 @@ class UPFRatings
     {
         add_menu_page("UPF Ratings", "Рейтинги ФПУ", "manage_options", "ratings", array("UPFRatings", "ratingsManager"));
         add_submenu_page("ratings", "Рейтинги ФПУ (Установки)", "Установки", "manage_options", "ratings-settings", array("UPFRatings", "ratingsSettings"));
+        add_submenu_page("ratings", "Рейтинги суддів ФПУ", "Судді ФПУ", "manage_options", "ratings-referee", array("UPFRatings", "refereeRatings"));
         wp_register_style('style', plugins_url('/client/dist/css/style.css?v=' . UPFRatings::$appVersion, __FILE__));
         wp_enqueue_style('style');
         wp_register_style('fontawesome', plugins_url('/client/dist/css/fontawesome-free-5.7.2-web/css/all.min.css?v=' . UPFRatings::$appVersion, __FILE__));
@@ -65,6 +66,24 @@ class UPFRatings
         <div class="container-fluid">
             <h2>Рейтинги ФПУ</h2>
             <div id="app-rat-entries"></div>
+        </div>
+_END;
+        echo $content;
+    }
+
+    public function loadRefereeRatingsScript()
+    {
+        wp_register_script("referee_ratings_script", plugins_url("/client/dist/referee-bundle.js?v=" . UPFRatings::$appVersion, __FILE__));
+        wp_enqueue_script("referee_ratings_script");
+    }
+
+    public function refereeRatings()
+    {
+        UPFRatings::loadRefereeRatingsScript();
+        $content = <<<_END
+        <div class="container-fluid">
+            <h2>Рейтинги суддів ФПУ</h2>
+            <div id="app-referee-rat"></div>
         </div>
 _END;
         echo $content;

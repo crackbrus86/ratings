@@ -1,16 +1,16 @@
 import * as React from "react";
-import Tab, { TabProps } from "./tab";
+import * as Tab from "./tab";
 import * as classnames from "classnames";
 
-export interface TabViewProps{
-    children: React.ComponentElement<TabProps, Tab>[]
+interface TabViewProps{
+    children: React.ComponentElement<Tab.TabProps, Tab>[]
 }
 
 interface TabViewState{
     activeTab: string
 }
 
-export default class TabView extends React.Component<TabViewProps, TabViewState>{
+class TabView extends React.Component<TabViewProps, TabViewState>{
     constructor(props){
         super(props);
         this.state = {
@@ -42,3 +42,5 @@ export default class TabView extends React.Component<TabViewProps, TabViewState>
         </div>
     }
 }
+
+export = TabView;

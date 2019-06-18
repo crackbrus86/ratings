@@ -1,9 +1,7 @@
 import * as React from "react";
 import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
-import {GridRow, GridColumn, ContentWrap} from "../../../components/layout/index.layout";
-import TabView from "../../../components/tab view/tab.view";
-import Tab from "../../../components/tab view/tab";
+import * as Components from "../../../components/index";
 import * as Models from "../models/index.models";
 import * as Actions from "../actions/index.actions";
 import * as Selectors from "../selectors/selector";
@@ -40,19 +38,22 @@ export default connect<StateProps, DispatchProps>(
     }
     render(){
         return <div>
-            <ContentWrap>
-                <TabView>
-                    <Tab title="Таблиця нарахування очок рейтингу за місцями" label="byPlace">
+            <Components.Layout.ContentWrap>
+                <Components.TabView>
+                    <Components.Tab title="Таблиця нарахування очок рейтингу за місцями" label="byPlace">
                         <CompetitionRatingsGrid points={this.props.competitionPoints} />
-                    </Tab>
-                    <Tab title="Таблиця нарахування очок рейтингу за встановленими рекордами" label="byRecord">
+                    </Components.Tab>
+                    <Components.Tab title="Таблиця нарахування очок рейтингу за встановленими рекордами" label="byRecord">
                         <RecordsRatingsGrid points={this.props.recordPoints} />
-                    </Tab>
-                    <Tab title="Таблиця ранжування очок рейтингу ФПУ" label="byRange">
+                    </Components.Tab>
+                    <Components.Tab title="Таблиця ранжування очок рейтингу ФПУ" label="byRange">
                         <UPFRangeGrid />
-                    </Tab>
-                </TabView>
-            </ContentWrap>
+                    </Components.Tab>
+                    <Components.Tab title="Таблиця нарахування очок за вид суддівської діяльності" label="byReferee">
+
+                    </Components.Tab>
+                </Components.TabView>
+            </Components.Layout.ContentWrap>
             </div>
     }
 })

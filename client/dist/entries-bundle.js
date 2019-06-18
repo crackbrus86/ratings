@@ -459,6 +459,23 @@ exports.default = TextInput;
 
 /***/ }),
 
+/***/ "./client/src/components/index.ts":
+/*!****************************************!*\
+  !*** ./client/src/components/index.ts ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TabView = __webpack_require__(/*! ./tab view/tab.view */ "./client/src/components/tab view/tab.view.tsx");
+exports.Tab = __webpack_require__(/*! ./tab view/tab */ "./client/src/components/tab view/tab.tsx");
+exports.Layout = __webpack_require__(/*! ./layout/index.layout */ "./client/src/components/layout/index.layout.tsx");
+
+
+/***/ }),
+
 /***/ "./client/src/components/layout/content.wrap.tsx":
 /*!*******************************************************!*\
   !*** ./client/src/components/layout/content.wrap.tsx ***!
@@ -794,7 +811,6 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! React */ "./node_modules/React/index.js");
 var Tab = /** @class */ (function (_super) {
     __extends(Tab, _super);
@@ -810,7 +826,7 @@ var Tab = /** @class */ (function (_super) {
     };
     return Tab;
 }(React.Component));
-exports.default = Tab;
+module.exports = Tab;
 
 
 /***/ }),
@@ -837,7 +853,6 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
-Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
 var TabView = /** @class */ (function (_super) {
@@ -865,7 +880,7 @@ var TabView = /** @class */ (function (_super) {
     };
     return TabView;
 }(React.Component));
-exports.default = TabView;
+module.exports = TabView;
 
 
 /***/ }),
@@ -2771,8 +2786,7 @@ var __extends = (this && this.__extends) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
-var tab_view_1 = __webpack_require__(/*! ../../../components/tab view/tab.view */ "./client/src/components/tab view/tab.view.tsx");
-var tab_1 = __webpack_require__(/*! ../../../components/tab view/tab */ "./client/src/components/tab view/tab.tsx");
+var Components = __webpack_require__(/*! ../../../components/index */ "./client/src/components/index.ts");
 var layout_header_1 = __webpack_require__(/*! ./partials/layout.header */ "./client/src/pages/ratings-entries/views/partials/layout.header.tsx");
 var entries_1 = __webpack_require__(/*! ./partials/entries */ "./client/src/pages/ratings-entries/views/partials/entries.tsx");
 var ministry_ratings_1 = __webpack_require__(/*! ./partials/ministry ratings */ "./client/src/pages/ratings-entries/views/partials/ministry ratings.tsx");
@@ -2782,35 +2796,34 @@ var upf_coach_ratings_1 = __webpack_require__(/*! ./partials/upf coach ratings *
 var ministry_region_ratings_1 = __webpack_require__(/*! ./partials/ministry region ratings */ "./client/src/pages/ratings-entries/views/partials/ministry region ratings.tsx");
 var ministry_fst_ratings_1 = __webpack_require__(/*! ./partials/ministry fst ratings */ "./client/src/pages/ratings-entries/views/partials/ministry fst ratings.tsx");
 var ministry_school_ratings_1 = __webpack_require__(/*! ./partials/ministry school ratings */ "./client/src/pages/ratings-entries/views/partials/ministry school ratings.tsx");
-var index_layout_1 = __webpack_require__(/*! ../../../components/layout/index.layout */ "./client/src/components/layout/index.layout.tsx");
 exports.default = react_redux_1.connect(function (state) { return ({}); }, function (dispatch) { return ({}); })(/** @class */ (function (_super) {
     __extends(Layout, _super);
     function Layout() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
     Layout.prototype.render = function () {
-        return React.createElement(index_layout_1.ContentWrap, null,
+        return React.createElement(Components.Layout.ContentWrap, null,
             React.createElement(layout_header_1.default, null),
-            React.createElement(tab_view_1.default, null,
-                React.createElement(tab_1.default, { title: "\u0417\u0430\u043F\u0438\u0441\u0438", label: "ratingEntries" },
+            React.createElement(Components.TabView, null,
+                React.createElement(Components.Tab, { title: "\u0417\u0430\u043F\u0438\u0441\u0438", label: "ratingEntries" },
                     React.createElement(entries_1.default, null)),
-                React.createElement(tab_1.default, { title: "\u041C\u0456\u043D\u0456\u0441\u0442\u0435\u0440\u0441\u044C\u043A\u0438\u0439 \u0420\u0435\u0439\u0442\u0438\u043D\u0433 (\u0427\u043E\u043B\u043E\u0432\u0456\u043A\u0438)", label: "ministryRatingMale" },
+                React.createElement(Components.Tab, { title: "\u041C\u0456\u043D\u0456\u0441\u0442\u0435\u0440\u0441\u044C\u043A\u0438\u0439 \u0420\u0435\u0439\u0442\u0438\u043D\u0433 (\u0427\u043E\u043B\u043E\u0432\u0456\u043A\u0438)", label: "ministryRatingMale" },
                     React.createElement(ministry_ratings_1.default, { ratingFilter: "Male" })),
-                React.createElement(tab_1.default, { title: "\u041C\u0456\u043D\u0456\u0441\u0442\u0435\u0440\u0441\u044C\u043A\u0438\u0439 \u0420\u0435\u0439\u0442\u0438\u043D\u0433 (\u0416\u0456\u043D\u043A\u0438)", label: "ministryRatingFemale" },
+                React.createElement(Components.Tab, { title: "\u041C\u0456\u043D\u0456\u0441\u0442\u0435\u0440\u0441\u044C\u043A\u0438\u0439 \u0420\u0435\u0439\u0442\u0438\u043D\u0433 (\u0416\u0456\u043D\u043A\u0438)", label: "ministryRatingFemale" },
                     React.createElement(ministry_ratings_1.default, { ratingFilter: "Female" })),
-                React.createElement(tab_1.default, { title: "\u0420\u0435\u0439\u0442\u0438\u043D\u0433 \u0424\u041F\u0423 (\u0427\u043E\u043B\u043E\u0432\u0456\u043A\u0438)", label: "upfRatingMale" },
+                React.createElement(Components.Tab, { title: "\u0420\u0435\u0439\u0442\u0438\u043D\u0433 \u0424\u041F\u0423 (\u0427\u043E\u043B\u043E\u0432\u0456\u043A\u0438)", label: "upfRatingMale" },
                     React.createElement(upf_ratings_1.default, { ratingFilter: "Male" })),
-                React.createElement(tab_1.default, { title: "\u0420\u0435\u0439\u0442\u0438\u043D\u0433 \u0424\u041F\u0423 (\u0416\u0456\u043D\u043A\u0438)", label: "upfRatingFemale" },
+                React.createElement(Components.Tab, { title: "\u0420\u0435\u0439\u0442\u0438\u043D\u0433 \u0424\u041F\u0423 (\u0416\u0456\u043D\u043A\u0438)", label: "upfRatingFemale" },
                     React.createElement(upf_ratings_1.default, { ratingFilter: "Female" })),
-                React.createElement(tab_1.default, { title: "\u041C\u0456\u043D\u0456\u0441\u0442\u0435\u0440\u0441\u044C\u043A\u0438\u0439 \u0420\u0435\u0439\u0442\u0438\u043D\u0433 (\u0422\u0440\u0435\u043D\u0435\u0440\u0438)", label: "ministryCoachRating" },
+                React.createElement(Components.Tab, { title: "\u041C\u0456\u043D\u0456\u0441\u0442\u0435\u0440\u0441\u044C\u043A\u0438\u0439 \u0420\u0435\u0439\u0442\u0438\u043D\u0433 (\u0422\u0440\u0435\u043D\u0435\u0440\u0438)", label: "ministryCoachRating" },
                     React.createElement(ministry_coach_ratings_1.default, null)),
-                React.createElement(tab_1.default, { title: "\u0420\u0435\u0439\u0442\u0438\u043D\u0433 \u0424\u041F\u0423 (\u0422\u0440\u0435\u043D\u0435\u0440\u0438)", label: "upfCoachRating" },
+                React.createElement(Components.Tab, { title: "\u0420\u0435\u0439\u0442\u0438\u043D\u0433 \u0424\u041F\u0423 (\u0422\u0440\u0435\u043D\u0435\u0440\u0438)", label: "upfCoachRating" },
                     React.createElement(upf_coach_ratings_1.default, null)),
-                React.createElement(tab_1.default, { title: "\u041C\u0456\u043D\u0456\u0441\u0442\u0435\u0440\u0441\u044C\u043A\u0438\u0439 \u0440\u0435\u0439\u0442\u0438\u043D\u0433 (\u041E\u0431\u043B\u0430\u0441\u0442\u0456)", label: "ministryRegionRatings" },
+                React.createElement(Components.Tab, { title: "\u041C\u0456\u043D\u0456\u0441\u0442\u0435\u0440\u0441\u044C\u043A\u0438\u0439 \u0440\u0435\u0439\u0442\u0438\u043D\u0433 (\u041E\u0431\u043B\u0430\u0441\u0442\u0456)", label: "ministryRegionRatings" },
                     React.createElement(ministry_region_ratings_1.default, null)),
-                React.createElement(tab_1.default, { title: "\u041C\u0456\u043D\u0456\u0441\u0442\u0435\u0440\u0441\u044C\u043A\u0438\u0439 \u0440\u0435\u0439\u0442\u0438\u043D\u0433 (\u0424\u0421\u0422)", label: "ministryFstRatings" },
+                React.createElement(Components.Tab, { title: "\u041C\u0456\u043D\u0456\u0441\u0442\u0435\u0440\u0441\u044C\u043A\u0438\u0439 \u0440\u0435\u0439\u0442\u0438\u043D\u0433 (\u0424\u0421\u0422)", label: "ministryFstRatings" },
                     React.createElement(ministry_fst_ratings_1.default, null)),
-                React.createElement(tab_1.default, { title: "\u041C\u0456\u043D\u0456\u0441\u0442\u0435\u0440\u0441\u044C\u043A\u0438\u0439 \u0440\u0435\u0439\u0442\u0438\u043D\u0433 (\u0414\u042E\u0421\u0428)", label: "ministrySchoolRatings" },
+                React.createElement(Components.Tab, { title: "\u041C\u0456\u043D\u0456\u0441\u0442\u0435\u0440\u0441\u044C\u043A\u0438\u0439 \u0440\u0435\u0439\u0442\u0438\u043D\u0433 (\u0414\u042E\u0421\u0428)", label: "ministrySchoolRatings" },
                     React.createElement(ministry_school_ratings_1.default, null))));
     };
     return Layout;

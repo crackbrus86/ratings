@@ -3,8 +3,7 @@ import {connect} from "react-redux";
 import {bindActionCreators} from "redux";
 import * as Actions from "../actions/index.actions";
 import * as Models from "../models/index.models";
-import TabView from "../../../components/tab view/tab.view";
-import Tab from "../../../components/tab view/tab";
+import * as Components from "../../../components/index";
 import LayoutHeader from "./partials/layout.header";
 import Entries from "./partials/entries";
 import MinistryRatings from "./partials/ministry ratings";
@@ -14,7 +13,6 @@ import UPFCoachRatings from "./partials/upf coach ratings";
 import MinistryRegionRatings from "./partials/ministry region ratings";
 import MinistryFstRatings from "./partials/ministry fst ratings";
 import MinistrySchoolRatings from "./partials/ministry school ratings";
-import {ContentWrap} from "../../../components/layout/index.layout";
 
 interface StateProps{
 
@@ -33,40 +31,40 @@ export default connect<StateProps, DispatchProps>(
     })
 )(class Layout extends React.Component<StateProps & DispatchProps>{
     render(){
-        return <ContentWrap>
+        return <Components.Layout.ContentWrap>
                 <LayoutHeader/>
-                <TabView>
-                    <Tab title="Записи" label="ratingEntries">
+                <Components.TabView>
+                    <Components.Tab title="Записи" label="ratingEntries">
                         <Entries/>
-                    </Tab>
-                    <Tab title="Міністерський Рейтинг (Чоловіки)" label="ministryRatingMale">
+                    </Components.Tab>
+                    <Components.Tab title="Міністерський Рейтинг (Чоловіки)" label="ministryRatingMale">
                         <MinistryRatings ratingFilter="Male" />
-                    </Tab>
-                    <Tab title="Міністерський Рейтинг (Жінки)" label="ministryRatingFemale">
+                    </Components.Tab>
+                    <Components.Tab title="Міністерський Рейтинг (Жінки)" label="ministryRatingFemale">
                         <MinistryRatings ratingFilter="Female" />
-                    </Tab>
-                    <Tab title="Рейтинг ФПУ (Чоловіки)" label="upfRatingMale">
+                    </Components.Tab>
+                    <Components.Tab title="Рейтинг ФПУ (Чоловіки)" label="upfRatingMale">
                         <UPFRatings ratingFilter="Male" />
-                    </Tab>                    
-                    <Tab title="Рейтинг ФПУ (Жінки)" label="upfRatingFemale">
+                    </Components.Tab>                    
+                    <Components.Tab title="Рейтинг ФПУ (Жінки)" label="upfRatingFemale">
                         <UPFRatings ratingFilter="Female" />
-                    </Tab>
-                    <Tab title="Міністерський Рейтинг (Тренери)" label="ministryCoachRating">
+                    </Components.Tab>
+                    <Components.Tab title="Міністерський Рейтинг (Тренери)" label="ministryCoachRating">
                         <MinistryCoachRatings />
-                    </Tab>
-                    <Tab title="Рейтинг ФПУ (Тренери)" label="upfCoachRating">
+                    </Components.Tab>
+                    <Components.Tab title="Рейтинг ФПУ (Тренери)" label="upfCoachRating">
                         <UPFCoachRatings />
-                    </Tab>
-                    <Tab title="Міністерський рейтинг (Області)" label="ministryRegionRatings">
+                    </Components.Tab>
+                    <Components.Tab title="Міністерський рейтинг (Області)" label="ministryRegionRatings">
                         <MinistryRegionRatings />
-                    </Tab>
-                    <Tab title="Міністерський рейтинг (ФСТ)" label="ministryFstRatings">
+                    </Components.Tab>
+                    <Components.Tab title="Міністерський рейтинг (ФСТ)" label="ministryFstRatings">
                         <MinistryFstRatings />
-                    </Tab>
-                    <Tab title="Міністерський рейтинг (ДЮСШ)" label="ministrySchoolRatings">
+                    </Components.Tab>
+                    <Components.Tab title="Міністерський рейтинг (ДЮСШ)" label="ministrySchoolRatings">
                         <MinistrySchoolRatings />
-                    </Tab>
-                </TabView>
-            </ContentWrap>
+                    </Components.Tab>
+                </Components.TabView>
+            </Components.Layout.ContentWrap>
     }
 })

@@ -1,12 +1,6 @@
 import * as React from "React";
 
-export interface TabProps{
-    title: string,
-    label: string,
-    onClick?: (label: string) => void
-}
-
-class Tab extends React.Component<TabProps>{
+class Tab extends React.Component<Tab.TabProps>{
     onClick = () => {
         this.props.onClick(this.props.label);
     }
@@ -16,4 +10,12 @@ class Tab extends React.Component<TabProps>{
     }
 }
 
-export default Tab;
+namespace Tab{
+    export interface TabProps{
+        title: string,
+        label: string,
+        onClick?: (label: string) => void
+    }
+}
+
+export = Tab;

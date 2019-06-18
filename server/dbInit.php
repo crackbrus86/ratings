@@ -45,3 +45,12 @@ $sql = "CREATE TABLE IF NOT EXISTS {$rangeTableName} (
     PRIMARY KEY (Id)
 ) {$charset_collate}";
 dbDelta($sql);
+
+$refereeSettingTableName = $prefix . "referee_setting";
+$sql = "CREATE TABLE IF NOT EXISTS {$refereeSettingTableName} (
+    Id INT NOT NULL AUTO_INCREMENT,
+    Activity VARCHAR(300) NOT NULL,
+    Coefficient FLOAT(10, 2) NOT NULL,
+    PRIMARY KEY (Id)
+) {$charset_collate}";
+dbDelta($sql);
