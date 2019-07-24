@@ -700,6 +700,7 @@ exports.LOAD_POINTS = "LOAD_POINTS";
 exports.LOAD_RECORDS = "LOAD_RECORDS";
 exports.LOAD_COMP_TYPES = "LOAD_COMP_TYPES";
 exports.LOAD_RANGES = "LOAD_RANGES";
+exports.LOAD_REFEREE_SETTINGS = "REFEREE_SETTINGS::LOAD";
 
 
 /***/ }),
@@ -716,6 +717,7 @@ exports.LOAD_RANGES = "LOAD_RANGES";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.LookupActions = __webpack_require__(/*! ./lookup.actions */ "./client/src/pages/ratings-settings/actions/lookup.actions.ts");
 exports.RangesActions = __webpack_require__(/*! ./ranges.actions */ "./client/src/pages/ratings-settings/actions/ranges.actions.ts");
+exports.RefereeSettingsActions = __webpack_require__(/*! ./referee.setting.actions */ "./client/src/pages/ratings-settings/actions/referee.setting.actions.ts");
 
 
 /***/ }),
@@ -876,6 +878,54 @@ var ActionCreators;
 
 /***/ }),
 
+/***/ "./client/src/pages/ratings-settings/actions/referee.setting.actions.ts":
+/*!******************************************************************************!*\
+  !*** ./client/src/pages/ratings-settings/actions/referee.setting.actions.ts ***!
+  \******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ActionTypes = __webpack_require__(/*! ./action.types */ "./client/src/pages/ratings-settings/actions/action.types.ts");
+var Services = __webpack_require__(/*! ../services/index.services */ "./client/src/pages/ratings-settings/services/index.services.ts");
+var toastr = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
+var ActionCreators;
+(function (ActionCreators) {
+    ActionCreators.loadRefereeSettings = function () { return function (d, gs) {
+        Services.RefereeSettingService.getRefereeSettings().then(function (response) {
+            if (response.status) {
+                d({
+                    type: ActionTypes.LOAD_REFEREE_SETTINGS,
+                    payload: response.data
+                });
+            }
+            else {
+                toastr.error(response.message);
+            }
+        });
+    }; };
+    ActionCreators.updateRefereeSetting = function (setting) { return function (d, gs) {
+        Services.RefereeSettingService.updateRefereeSetting({
+            id: setting.id,
+            activity: setting.activity,
+            coefficient: setting.coefficient
+        }).then(function (response) {
+            if (response.status) {
+                toastr.success(response.message);
+                d(ActionCreators.loadRefereeSettings());
+            }
+            else {
+                toastr.error(response.message);
+            }
+        });
+    }; };
+})(ActionCreators = exports.ActionCreators || (exports.ActionCreators = {}));
+
+
+/***/ }),
+
 /***/ "./client/src/pages/ratings-settings/index.tsx":
 /*!*****************************************************!*\
   !*** ./client/src/pages/ratings-settings/index.tsx ***!
@@ -907,9 +957,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
 exports.Lookup = __webpack_require__(/*! ./lookup.reducer */ "./client/src/pages/ratings-settings/reducers/lookup.reducer.ts");
 exports.Ranges = __webpack_require__(/*! ./range.reducer */ "./client/src/pages/ratings-settings/reducers/range.reducer.ts");
+exports.RefereeSetting = __webpack_require__(/*! ./referee.setting.reducer */ "./client/src/pages/ratings-settings/reducers/referee.setting.reducer.ts");
 exports.reducer = redux_1.combineReducers({
     lookup: exports.Lookup.lookupReducer,
-    ranges: exports.Ranges.rangesReducer
+    ranges: exports.Ranges.rangesReducer,
+    refereeSettings: exports.RefereeSetting.refereeSettingReducer
 });
 
 
@@ -1001,6 +1053,47 @@ exports.rangesReducer = function (state, action) {
         case ActionTypes.LOAD_RANGES: {
             var payload = action.payload;
             return __assign({}, state, { ranges: payload });
+        }
+        default:
+            return state;
+    }
+};
+
+
+/***/ }),
+
+/***/ "./client/src/pages/ratings-settings/reducers/referee.setting.reducer.ts":
+/*!*******************************************************************************!*\
+  !*** ./client/src/pages/ratings-settings/reducers/referee.setting.reducer.ts ***!
+  \*******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var ActionTypes = __webpack_require__(/*! ../actions/action.types */ "./client/src/pages/ratings-settings/actions/action.types.ts");
+exports.defaultState = {
+    settings: [],
+    selectedSetting: null
+};
+exports.refereeSettingReducer = function (state, action) {
+    if (state === void 0) { state = exports.defaultState; }
+    switch (action.type) {
+        case ActionTypes.LOAD_REFEREE_SETTINGS: {
+            var payload = action.payload;
+            return __assign({}, state, { settings: payload });
         }
         default:
             return state;
@@ -1104,6 +1197,23 @@ function getRangeValue(range, ranges) {
 
 /***/ }),
 
+/***/ "./client/src/pages/ratings-settings/services/index.services.ts":
+/*!**********************************************************************!*\
+  !*** ./client/src/pages/ratings-settings/services/index.services.ts ***!
+  \**********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.LookupServices = __webpack_require__(/*! ./lookup.services */ "./client/src/pages/ratings-settings/services/lookup.services.ts");
+exports.RangeServices = __webpack_require__(/*! ./range.services */ "./client/src/pages/ratings-settings/services/range.services.ts");
+exports.RefereeSettingService = __webpack_require__(/*! ./referee.settings.service */ "./client/src/pages/ratings-settings/services/referee.settings.service.ts");
+
+
+/***/ }),
+
 /***/ "./client/src/pages/ratings-settings/services/lookup.services.ts":
 /*!***********************************************************************!*\
   !*** ./client/src/pages/ratings-settings/services/lookup.services.ts ***!
@@ -1176,6 +1286,36 @@ exports.saveRange = function (point) {
         url: rangesApiPath + 'SaveRange.php',
         type: apiTypes.POST,
         data: point
+    });
+};
+
+
+/***/ }),
+
+/***/ "./client/src/pages/ratings-settings/services/referee.settings.service.ts":
+/*!********************************************************************************!*\
+  !*** ./client/src/pages/ratings-settings/services/referee.settings.service.ts ***!
+  \********************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var CallApi = __webpack_require__(/*! ../../../infrastructure/call.api */ "./client/src/infrastructure/call.api.ts");
+var refereeSettingsApiPath = "../wp-content/plugins/ratings/server/RefereeSettingController/";
+var apiTypes = CallApi.RequestTypes;
+exports.getRefereeSettings = function () {
+    return CallApi.callApi({
+        url: refereeSettingsApiPath + 'GetRefereeSettings.php',
+        type: apiTypes.GET
+    });
+};
+exports.updateRefereeSetting = function (setting) {
+    return CallApi.callApi({
+        url: refereeSettingsApiPath + 'UpdateRefereeSetting.php',
+        type: apiTypes.POST,
+        data: setting
     });
 };
 
@@ -1408,12 +1548,14 @@ var Selectors = __webpack_require__(/*! ../selectors/selector */ "./client/src/p
 var competition_ratings_grid_1 = __webpack_require__(/*! ./competition.ratings.grid */ "./client/src/pages/ratings-settings/views/competition.ratings.grid.tsx");
 var records_ratings_grid_1 = __webpack_require__(/*! ./records.ratings.grid */ "./client/src/pages/ratings-settings/views/records.ratings.grid.tsx");
 var upf_range_grid_1 = __webpack_require__(/*! ./upf.range.grid */ "./client/src/pages/ratings-settings/views/upf.range.grid.tsx");
+var referee_settings_grid_1 = __webpack_require__(/*! ./referee.settings.grid */ "./client/src/pages/ratings-settings/views/referee.settings.grid.tsx");
 exports.default = react_redux_1.connect(function (state) { return ({
     competitionPoints: Selectors.getCompetitionsTablePoints(state),
     recordPoints: Selectors.getRecordsTablepoints(state)
 }); }, function (dispatch) { return ({
     lookupActions: redux_1.bindActionCreators(Actions.LookupActions.ActionCreators, dispatch),
-    rangesActions: redux_1.bindActionCreators(Actions.RangesActions.ActionCreators, dispatch)
+    rangesActions: redux_1.bindActionCreators(Actions.RangesActions.ActionCreators, dispatch),
+    refereeSettingsActions: redux_1.bindActionCreators(Actions.RefereeSettingsActions.ActionCreators, dispatch)
 }); })(/** @class */ (function (_super) {
     __extends(RatingsLayout, _super);
     function RatingsLayout() {
@@ -1425,6 +1567,7 @@ exports.default = react_redux_1.connect(function (state) { return ({
         this.props.lookupActions.getRecords();
         this.props.lookupActions.loadCompTypes();
         this.props.rangesActions.loadRanges();
+        this.props.refereeSettingsActions.loadRefereeSettings();
     };
     RatingsLayout.prototype.render = function () {
         return React.createElement("div", null,
@@ -1436,7 +1579,8 @@ exports.default = react_redux_1.connect(function (state) { return ({
                         React.createElement(records_ratings_grid_1.default, { points: this.props.recordPoints })),
                     React.createElement(Components.Tab, { title: "\u0422\u0430\u0431\u043B\u0438\u0446\u044F \u0440\u0430\u043D\u0436\u0443\u0432\u0430\u043D\u043D\u044F \u043E\u0447\u043E\u043A \u0440\u0435\u0439\u0442\u0438\u043D\u0433\u0443 \u0424\u041F\u0423", label: "byRange" },
                         React.createElement(upf_range_grid_1.default, null)),
-                    React.createElement(Components.Tab, { title: "\u0422\u0430\u0431\u043B\u0438\u0446\u044F \u043D\u0430\u0440\u0430\u0445\u0443\u0432\u0430\u043D\u043D\u044F \u043E\u0447\u043E\u043A \u0437\u0430 \u0432\u0438\u0434 \u0441\u0443\u0434\u0434\u0456\u0432\u0441\u044C\u043A\u043E\u0457 \u0434\u0456\u044F\u043B\u044C\u043D\u043E\u0441\u0442\u0456", label: "byReferee" }))));
+                    React.createElement(Components.Tab, { title: "\u0422\u0430\u0431\u043B\u0438\u0446\u044F \u043D\u0430\u0440\u0430\u0445\u0443\u0432\u0430\u043D\u043D\u044F \u043E\u0447\u043E\u043A \u0437\u0430 \u0432\u0438\u0434 \u0441\u0443\u0434\u0434\u0456\u0432\u0441\u044C\u043A\u043E\u0457 \u0434\u0456\u044F\u043B\u044C\u043D\u043E\u0441\u0442\u0456", label: "byReferee" },
+                        React.createElement(referee_settings_grid_1.default, null)))));
     };
     return RatingsLayout;
 }(React.Component)));
@@ -1511,6 +1655,54 @@ exports.default = react_redux_1.connect(function (state) { return ({}); }, funct
     };
     return RecordsRatingsGrid;
 }(React.Component)));
+
+
+/***/ }),
+
+/***/ "./client/src/pages/ratings-settings/views/referee.settings.grid.tsx":
+/*!***************************************************************************!*\
+  !*** ./client/src/pages/ratings-settings/views/referee.settings.grid.tsx ***!
+  \***************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+var Actions = __webpack_require__(/*! ../actions/index.actions */ "./client/src/pages/ratings-settings/actions/index.actions.ts");
+var table_1 = __webpack_require__(/*! ../../../components/table/table */ "./client/src/components/table/table.tsx");
+var column_1 = __webpack_require__(/*! ../../../components/table/column */ "./client/src/components/table/column.tsx");
+var mapStateToProps = function (state) { return ({
+    refereeSettings: state.refereeSettings.settings
+}); };
+var mapDispatchToProps = function (dispatch) { return ({
+    refereeSettingsActions: redux_1.bindActionCreators(Actions.RefereeSettingsActions.ActionCreators, dispatch)
+}); };
+function refereeSettingGrig(props) {
+    return React.createElement(React.Fragment, null,
+        React.createElement(table_1.default, { items: props.refereeSettings, columns: [
+                {
+                    title: "Вид діяльності",
+                    field: "activity",
+                    width: "300px"
+                },
+                {
+                    title: "Коефіцієнт",
+                    field: "coefficient",
+                    type: column_1.ColumnTypes.Input,
+                    width: "120px",
+                    onChange: function (item) { return props.refereeSettingsActions.updateRefereeSetting(item); }
+                },
+                {
+                    title: "",
+                    width: "*"
+                }
+            ] }));
+}
+exports.default = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(refereeSettingGrig);
 
 
 /***/ }),

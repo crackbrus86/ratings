@@ -1,5 +1,5 @@
 import * as Models from "../models/index.models";
-import * as ActionTypes from "../actions/types/action.types";
+import * as ActionTypes from "../actions/action.types";
 
 export interface RefereeSettingReducerState{
     settings: Models.RefereeSetting[],
@@ -20,13 +20,6 @@ export const refereeSettingReducer = (state = defaultState, action): RefereeSett
             return {
                 ...state,
                 settings: payload
-            }
-        }
-        case ActionTypes.SELECT_REFEREE_SETTING: {
-            let payload = action.payload as ActionTypes.SELECT_REFEREE_SETTING_PAYLOAD
-            return {
-                ...state,
-                selectedSetting: payload
             }
         }
         default:

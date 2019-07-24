@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 
 import TestReducer = require("./test.reducer");
-import RefereeSettingReducer = require("./referee.setting.reducer")
+import RefereeSettingReducer = require("../../ratings-settings/reducers/referee.setting.reducer")
 
 export interface ReducerState{
     test: TestReducer.ReducerState,

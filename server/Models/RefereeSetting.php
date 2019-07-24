@@ -7,7 +7,7 @@ class RefereeSetting
 
     public $coefficient;
 
-    public function __construct($id, $activity, $coefficient)
+    public function __construct($id = null, $activity = null, $coefficient = null)
     {
         $this->id = $id;
 

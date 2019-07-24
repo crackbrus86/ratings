@@ -20,3 +20,6 @@ export type LOAD_COMP_TYPES_PAYLOAD = Models.CompType[];
 
 export const LOAD_RANGES = "LOAD_RANGES";
 export type LOAD_RANGES_PAYLOAD = Models.UPFRange[];
+
+export const LOAD_REFEREE_SETTINGS = "REFEREE_SETTINGS::LOAD"
+export type LOAD_REFEREE_SETTINGS_PAYLOAD = Models.RefereeSetting[]

@@ -11,26 +11,10 @@ export const getRefereeSettings = () => {
     });
 }
 
-export const createRefereeSetting = (setting: Models.RefereeSetting) => {
-    return CallApi.callApi({
-        url: refereeSettingsApiPath + 'CreateRefereeSetting.php',
-        type: apiTypes.POST,
-        data: setting
-    })
-}
-
 export const updateRefereeSetting = (setting: Models.RefereeSetting) => {
     return CallApi.callApi({
         url: refereeSettingsApiPath + 'UpdateRefereeSetting.php',
         type: apiTypes.POST,
         data: setting
-    })
-}
-
-export const deleteRefereeSetting = (contract: Models.RefereeSettingModels.DeleteRefereeSetting_Contract) => {
-    return CallApi.callApi({
-        url: refereeSettingsApiPath + 'DeleteRefereeSetting.php',
-        type: apiTypes.POST,
-        data: contract
     })
 }

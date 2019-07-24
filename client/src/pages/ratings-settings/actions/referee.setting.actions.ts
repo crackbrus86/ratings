@@ -1,7 +1,7 @@
-import * as ActionTypes from "./types/action.types";
+import * as ActionTypes from "./action.types";
 import * as Models from "../models/index.models";
 import * as Reducers from "../reducers/index.reducer";
-import * as Services from "../services/index.servces";
+import * as Services from "../services/index.services";
 import * as toastr from "toastr"
 
 export namespace ActionCreators{
@@ -18,10 +18,18 @@ export namespace ActionCreators{
         })
     }
 
-    export const selectRefereeSetting = (setting: Models.RefereeSetting) => (d, gs: () => Models.StoreState) => {
-        d({
-            type: ActionTypes.SELECT_REFEREE_SETTING,
-            payload: setting
+    export const updateRefereeSetting = (setting: Models.RefereeSetting) => (d, gs: () => Models.StoreState) => {
+        Services.RefereeSettingService.updateRefereeSetting({
+            id: setting.id,
+            activity: setting.activity,
+            coefficient: setting.coefficient
+        }).then(response => {
+            if(response.status){
+                toastr.success(response.message);
+                d(loadRefereeSettings());
+            }else{
+                toastr.error(response.message);
+            }
         })
     }
 }

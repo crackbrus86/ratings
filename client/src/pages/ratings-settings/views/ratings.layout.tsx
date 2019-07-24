@@ -8,6 +8,7 @@ import * as Selectors from "../selectors/selector";
 import CompetitionRatingsGrid from "./competition.ratings.grid";
 import RecordsRatingsGrid from "./records.ratings.grid";
 import UPFRangeGrid from "./upf.range.grid";
+import RefereeSettingsGrid from "./referee.settings.grid"
 
 interface StateProps{
     competitionPoints: Models.LookupModels.TablePoint[]
@@ -16,7 +17,8 @@ interface StateProps{
 
 interface DispatchProps{
     lookupActions: typeof Actions.LookupActions.ActionCreators,
-    rangesActions: typeof Actions.RangesActions.ActionCreators
+    rangesActions: typeof Actions.RangesActions.ActionCreators,
+    refereeSettingsActions: typeof Actions.RefereeSettingsActions.ActionCreators
 }
 
 export default connect<StateProps, DispatchProps>(
@@ -26,7 +28,8 @@ export default connect<StateProps, DispatchProps>(
     }),
     (dispatch): DispatchProps => ({
         lookupActions: bindActionCreators(Actions.LookupActions.ActionCreators, dispatch),
-        rangesActions: bindActionCreators(Actions.RangesActions.ActionCreators, dispatch)
+        rangesActions: bindActionCreators(Actions.RangesActions.ActionCreators, dispatch),
+        refereeSettingsActions: bindActionCreators(Actions.RefereeSettingsActions.ActionCreators, dispatch)
     })
 )(class RatingsLayout extends React.Component<StateProps & DispatchProps>{
     componentDidMount(){
@@ -35,6 +38,7 @@ export default connect<StateProps, DispatchProps>(
         this.props.lookupActions.getRecords();
         this.props.lookupActions.loadCompTypes();
         this.props.rangesActions.loadRanges();
+        this.props.refereeSettingsActions.loadRefereeSettings()
     }
     render(){
         return <div>
@@ -50,7 +54,7 @@ export default connect<StateProps, DispatchProps>(
                         <UPFRangeGrid />
                     </Components.Tab>
                     <Components.Tab title="Таблиця нарахування очок за вид суддівської діяльності" label="byReferee">
-
+                        <RefereeSettingsGrid />
                     </Components.Tab>
                 </Components.TabView>
             </Components.Layout.ContentWrap>

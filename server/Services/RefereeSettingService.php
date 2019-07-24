@@ -51,38 +51,6 @@ class RefereeSettingService
         return $response;
     }
 
-    public function create()
-    {
-        $response = new ResponseModel();
-
-        if(!current_user_can("edit_others_pages"))
-        {
-            $response->setResponseModel((object)array("status" => FALSE, "message" => "У Вас недостатньо прав для отримання цих даних!"));
-
-            return $response;
-        }
-
-        $setting = $this->mapRefereeSetting();
-
-        $validationResult = $setting->validate();
-
-        if(!$validationResult->isValid)
-        {
-            $response->setResponseModel((object)array('status' => FALSE, 'message' => $validationResult->message));
-
-            return $response;
-        }else{
-            $sql = $this->db->prepare("INSERT INTO {$this->tableName} (Activity, Coeficient) 
-                VALUES (%s, %d)", $setting->activity, $setting->coefficient);
-
-            $this->db->query($sql);
-        }
-
-        $response->setResponseModel((object)array('status' => TRUE, 'message' => "Успішно збережено налаштування!"));
-
-        return $response;
-    }
-
     public function update()
     {
         $response = new ResponseModel();
@@ -104,7 +72,7 @@ class RefereeSettingService
 
             return $response;
         }else{
-            $sql = $this->db->prepare("UPDATE {$this->tableName} SET Activity = %s, Coefficient = %d 
+            $sql = $this->db->prepare("UPDATE {$this->tableName} SET Activity = %s, Coefficient = %f 
                 WHERE Id = %d", $setting->activity, $setting->coefficient, $setting->id);
 
             $this->db->query($sql);
@@ -113,37 +81,6 @@ class RefereeSettingService
         $response->setResponseModel((object)array('status' => TRUE, 'message' => "Успішно оновлено налаштування!"));
 
         return $response;        
-    }
-
-    public function delete()
-    {
-        $response = new ResponseModel();
-
-        if(!current_user_can("edit_others_pages")) 
-        {
-            $response->setResponseModel((object)array('status' => FALSE, 'message' => "У Вас недостатньо прав для видалення налаштувань!"));
-
-            return $response;
-        }
-
-        $targetSetting = (object)array("id" => NULL);
-
-        $targetSetting = mapPostToObject($targetSetting);
-
-        if(!$targetSetting->id)
-        {
-            $response->setResponseModel((object)array('status' => FALSE, 'message' => "Referee setting Id is required!"));
-
-            return $response;
-        }
-
-        $sql = $this->db->prepare("DELETE FROM {$this->tableName} WHERE Id = %d", $targetSetting->id);
-
-        $this->db->query($sql);
-
-        $response->setResponseModel((object)array("status" => TRUE, "message" => "Налаштування було успішно видалено!"));
-
-        return $response;
     }
 
     private function mapRefereeSettingToMySQLResult($result)
