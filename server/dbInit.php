@@ -30,7 +30,7 @@ $sql = "CREATE TABLE IF NOT EXISTS {$entryTableName} (
     Region VARCHAR(50) NULL,
     Coach VARCHAR(300) NULL,
     Fst VARCHAR(300) NULL,
-    School VARCHAR(300) NULL
+    School VARCHAR(300) NULL,
     PRIMARY KEY (RatingEntryId)
 ) {$charset_collate}";
 dbDelta($sql);
@@ -51,6 +51,17 @@ $sql = "CREATE TABLE IF NOT EXISTS {$refereeSettingTableName} (
     Id INT NOT NULL AUTO_INCREMENT,
     Activity VARCHAR(300) NOT NULL,
     Coefficient FLOAT(10, 2) NOT NULL,
+    PRIMARY KEY (Id)
+) {$charset_collate}";
+dbDelta($sql);
+
+$refereeEntryTableName = $prefix . "referee_entry";
+$sql = "CREATE TABLE IF NOT EXISTS {$refereeEntryTableName} (
+    Id INT NOT NULL AUTO_INCREMENT,
+    Fullname VARCHAR(300) NOT NULL,
+    Event VARCHAR(50) NOT NULL,
+    Activity INT NOT NULL,
+    EventDate DATETIME NOT NULL,
     PRIMARY KEY (Id)
 ) {$charset_collate}";
 dbDelta($sql);
