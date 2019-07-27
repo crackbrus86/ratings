@@ -3,11 +3,11 @@ import {connect} from "react-redux";
 import * as Models from "../models/index.models";
 
 interface StateProps{
-    entries: Models.TestRefereeEntry[]
+    entries: Models.RefereeEntry[]
 }
 
 const mapStateToProps = (state: Models.StoreState): StateProps => ({
-    entries: state.test.refereeEntries
+    entries: state.refereeEntries.entries
 });
 
 export default connect(mapStateToProps)(
@@ -17,7 +17,7 @@ export default connect(mapStateToProps)(
                 !!props.entries.length &&
                 <ul>
                     {
-                        props.entries.map((x, index) => <li key={index}>{x.name}</li>)
+                        props.entries.map((x, index) => <li key={index}>{x.fullname}</li>)
                     }
                 </ul>
             }

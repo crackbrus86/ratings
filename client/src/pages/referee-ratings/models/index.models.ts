@@ -1,10 +1,6 @@
-import { ResponseModel } from "../../../infrastructure/call.api";
-import { ThunkAction } from "../../../infrastructure/models";
-import * as TestModels from "./test.models";
-export import RefereeSettingModels = require("../../ratings-settings/models/referee.setting")
 import { ReducerState } from "../reducers/index.reducer";
+export import RefereeEntryModels = require("./referee.entry.models");
 
-export type TestRefereeEntry = TestModels.TestRefereeEntry;
-export type RefereeSetting = RefereeSettingModels.RefereeSetting;
+export type RefereeEntry = RefereeEntryModels.RefereeEntry;
 
 export type StoreState = ReducerState;

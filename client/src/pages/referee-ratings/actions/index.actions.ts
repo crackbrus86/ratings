@@ -1,2 +1,2 @@
-export import TestActions = require("./test.actions");
-export import RefereeSettingActions = require("../../ratings-settings/actions/referee.setting.actions")
+export import RefereeEntryActions = require("./referee.entry.actions")
+export import ShellActions = require("./shell.actions")

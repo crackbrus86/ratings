@@ -1,14 +1,14 @@
-import { combineReducers } from "redux";
+import { combineReducers } from "redux"
 
-import TestReducer = require("./test.reducer");
-import RefereeSettingReducer = require("../../ratings-settings/reducers/referee.setting.reducer")
+import RefereeEntryReducer = require("./referee.entry.reducer")
+import ShellReducer = require("./shell.reducer")
 
 export interface ReducerState{
-    test: TestReducer.ReducerState,
-    refereeSetting: RefereeSettingReducer.ReducerState
+    refereeEntries: RefereeEntryReducer.ReducerState,
+    shell: ShellReducer.ReducerState
 }
 
 export const reducer = combineReducers({
-    test: TestReducer.testReducer,
-    refereeSetting: RefereeSettingReducer.refereeSettingReducer
+    refereeEntries: RefereeEntryReducer.reducer,
+    shell: ShellReducer.reducer
 });

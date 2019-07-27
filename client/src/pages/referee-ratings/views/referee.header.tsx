@@ -6,27 +6,31 @@ import * as Actions from "../actions/index.actions";
 import * as Reducers from "../reducers/index.reducer";
 import {bindActionCreators} from "redux";
 
-interface DispatchProps {
-    testActions: typeof Actions.TestActions.ActionCreators;
+interface StateProps{
+    startDate: Date
 }
 
-const mapStateToProps = (state: () => Models.StoreState) => ({
+interface DispatchProps {
+   shellActions: typeof Actions.ShellActions.ActionCreators;
+}
 
+const mapStateToProps = (state: Models.StoreState):StateProps => ({
+    startDate: state.shell.startDate
 })
 
 const mapDispatchToProps = (dispatch): DispatchProps => ({
-    testActions: bindActionCreators(Actions.TestActions.ActionCreators, dispatch)
+    shellActions: bindActionCreators(Actions.ShellActions.ActionCreators, dispatch)
 })
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(
-    function RefereeHeader(props: DispatchProps) {
-        const [startDate, setStartDate] = React.useState(new Date(new Date().getFullYear(), 0, 1))
+    function RefereeHeader(props: StateProps & DispatchProps) {
+        const [startDate, setStartDate] = React.useState(props.startDate)
 
         React.useEffect(() => {
-            props.testActions.getTestRefereeEntries(startDate.getFullYear());
+            props.shellActions.modifyStartDate(startDate)
         }, [startDate])
     
         return <div className="referee-header">

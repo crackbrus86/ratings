@@ -351,9 +351,9 @@ function deleteBlackOut() {
 
 /***/ }),
 
-/***/ "./client/src/pages/ratings-settings/actions/action.types.ts":
+/***/ "./client/src/pages/referee-ratings/actions/index.actions.ts":
 /*!*******************************************************************!*\
-  !*** ./client/src/pages/ratings-settings/actions/action.types.ts ***!
+  !*** ./client/src/pages/referee-ratings/actions/index.actions.ts ***!
   \*******************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -361,68 +361,16 @@ function deleteBlackOut() {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LOAD_COMPETITIONS = "LOAD_COMPETITIONS";
-exports.LOAD_POINTS = "LOAD_POINTS";
-exports.LOAD_RECORDS = "LOAD_RECORDS";
-exports.LOAD_COMP_TYPES = "LOAD_COMP_TYPES";
-exports.LOAD_RANGES = "LOAD_RANGES";
-exports.LOAD_REFEREE_SETTINGS = "REFEREE_SETTINGS::LOAD";
+exports.RefereeEntryActions = __webpack_require__(/*! ./referee.entry.actions */ "./client/src/pages/referee-ratings/actions/referee.entry.actions.ts");
+exports.ShellActions = __webpack_require__(/*! ./shell.actions */ "./client/src/pages/referee-ratings/actions/shell.actions.ts");
 
 
 /***/ }),
 
-/***/ "./client/src/pages/ratings-settings/actions/referee.setting.actions.ts":
-/*!******************************************************************************!*\
-  !*** ./client/src/pages/ratings-settings/actions/referee.setting.actions.ts ***!
-  \******************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var ActionTypes = __webpack_require__(/*! ./action.types */ "./client/src/pages/ratings-settings/actions/action.types.ts");
-var Services = __webpack_require__(/*! ../services/index.services */ "./client/src/pages/ratings-settings/services/index.services.ts");
-var toastr = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
-var ActionCreators;
-(function (ActionCreators) {
-    ActionCreators.loadRefereeSettings = function () { return function (d, gs) {
-        Services.RefereeSettingService.getRefereeSettings().then(function (response) {
-            if (response.status) {
-                d({
-                    type: ActionTypes.LOAD_REFEREE_SETTINGS,
-                    payload: response.data
-                });
-            }
-            else {
-                toastr.error(response.message);
-            }
-        });
-    }; };
-    ActionCreators.updateRefereeSetting = function (setting) { return function (d, gs) {
-        Services.RefereeSettingService.updateRefereeSetting({
-            id: setting.id,
-            activity: setting.activity,
-            coefficient: setting.coefficient
-        }).then(function (response) {
-            if (response.status) {
-                toastr.success(response.message);
-                d(ActionCreators.loadRefereeSettings());
-            }
-            else {
-                toastr.error(response.message);
-            }
-        });
-    }; };
-})(ActionCreators = exports.ActionCreators || (exports.ActionCreators = {}));
-
-
-/***/ }),
-
-/***/ "./client/src/pages/ratings-settings/reducers/referee.setting.reducer.ts":
-/*!*******************************************************************************!*\
-  !*** ./client/src/pages/ratings-settings/reducers/referee.setting.reducer.ts ***!
-  \*******************************************************************************/
+/***/ "./client/src/pages/referee-ratings/actions/referee.entry.actions.ts":
+/*!***************************************************************************!*\
+  !*** ./client/src/pages/referee-ratings/actions/referee.entry.actions.ts ***!
+  \***************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -440,170 +388,89 @@ var __assign = (this && this.__assign) || function () {
     return __assign.apply(this, arguments);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var ActionTypes = __webpack_require__(/*! ../actions/action.types */ "./client/src/pages/ratings-settings/actions/action.types.ts");
-exports.defaultState = {
-    settings: [],
-    selectedSetting: null
-};
-exports.refereeSettingReducer = function (state, action) {
-    if (state === void 0) { state = exports.defaultState; }
-    switch (action.type) {
-        case ActionTypes.LOAD_REFEREE_SETTINGS: {
-            var payload = action.payload;
-            return __assign({}, state, { settings: payload });
-        }
-        default:
-            return state;
-    }
-};
+var ActionTypes = __webpack_require__(/*! ./types/action.types */ "./client/src/pages/referee-ratings/actions/types/action.types.ts");
+var Services = __webpack_require__(/*! ../services/index.servces */ "./client/src/pages/referee-ratings/services/index.servces.ts");
+var toastr = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
+toastr.options.timeOut = 5000;
+var ActionCreators;
+(function (ActionCreators) {
+    ActionCreators.loadRefereeEntries = function () { return function (d, gs) {
+        Services.RefereeEntryServices.getAll({
+            year: gs().shell.startDate.getFullYear()
+        }).then(function (response) {
+            if (response.status) {
+                d({
+                    type: ActionTypes.LOAD_REFEREE_ENTRIES,
+                    payload: response.data
+                });
+            }
+            else {
+                toastr.error(response.message);
+            }
+        });
+    }; };
+    ActionCreators.editRefereeEntry = function (entry) { return function (d, gs) {
+        d({
+            type: ActionTypes.SELECT_REFEREE_ENTRY,
+            payload: __assign({}, entry)
+        });
+    }; };
+    ActionCreators.closeRefereeEntry = function () { return function (d, gs) {
+        d({
+            type: ActionTypes.CLOSE_REFEREE_ENTRY
+        });
+    }; };
+    ActionCreators.createRefereeEntry = function (entry, closeOnSuccess) {
+        if (closeOnSuccess === void 0) { closeOnSuccess = false; }
+        return function (d, gs) {
+            Services.RefereeEntryServices.create(entry).then(function (response) {
+                if (response.status) {
+                    if (closeOnSuccess)
+                        d(ActionCreators.closeRefereeEntry());
+                    toastr.success(response.message);
+                    d(ActionCreators.loadRefereeEntries());
+                }
+                else {
+                    toastr.error(response.message);
+                }
+            });
+        };
+    };
+    ActionCreators.updateRefereeEntry = function (entry, closeOnSuccess) {
+        if (closeOnSuccess === void 0) { closeOnSuccess = false; }
+        return function (d, gs) {
+            Services.RefereeEntryServices.update(entry).then(function (response) {
+                if (response.status) {
+                    if (closeOnSuccess)
+                        d(ActionCreators.closeRefereeEntry());
+                    toastr.success(response.message);
+                    d(ActionCreators.loadRefereeEntries());
+                }
+                else {
+                    toastr.error(response.message);
+                }
+            });
+        };
+    };
+    ActionCreators.saveRefereeEntry = function (entry, closeOnSuccess) {
+        if (closeOnSuccess === void 0) { closeOnSuccess = false; }
+        return function (d, gs) {
+            if (!entry.id) {
+                d(ActionCreators.createRefereeEntry(entry, closeOnSuccess));
+            }
+            else {
+                d(ActionCreators.updateRefereeEntry(entry, closeOnSuccess));
+            }
+        };
+    };
+})(ActionCreators = exports.ActionCreators || (exports.ActionCreators = {}));
 
 
 /***/ }),
 
-/***/ "./client/src/pages/ratings-settings/services/index.services.ts":
-/*!**********************************************************************!*\
-  !*** ./client/src/pages/ratings-settings/services/index.services.ts ***!
-  \**********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.LookupServices = __webpack_require__(/*! ./lookup.services */ "./client/src/pages/ratings-settings/services/lookup.services.ts");
-exports.RangeServices = __webpack_require__(/*! ./range.services */ "./client/src/pages/ratings-settings/services/range.services.ts");
-exports.RefereeSettingService = __webpack_require__(/*! ./referee.settings.service */ "./client/src/pages/ratings-settings/services/referee.settings.service.ts");
-
-
-/***/ }),
-
-/***/ "./client/src/pages/ratings-settings/services/lookup.services.ts":
-/*!***********************************************************************!*\
-  !*** ./client/src/pages/ratings-settings/services/lookup.services.ts ***!
-  \***********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var CallApi = __webpack_require__(/*! ../../../infrastructure/call.api */ "./client/src/infrastructure/call.api.ts");
-var lookupApiPath = "../wp-content/plugins/ratings/server/LookupController/";
-var apiTypes = CallApi.RequestTypes;
-exports.getCompetitions = function () {
-    return CallApi.callApi({
-        url: lookupApiPath + 'GetCompetitionsLookup.php',
-        type: apiTypes.GET
-    });
-};
-exports.getPoints = function () {
-    return CallApi.callApi({
-        url: lookupApiPath + 'GetAllPointsLookup.php',
-        type: apiTypes.GET
-    });
-};
-exports.savePoint = function (point) {
-    return CallApi.callApi({
-        url: lookupApiPath + 'SavePoint.php',
-        type: apiTypes.POST,
-        data: point
-    });
-};
-exports.getRecords = function () {
-    return CallApi.callApi({
-        url: lookupApiPath + 'GetRecordsLookup.php',
-        type: apiTypes.GET
-    });
-};
-exports.getCompTypes = function () {
-    return CallApi.callApi({
-        url: lookupApiPath + 'GetCompetitionTypesLookup.php',
-        type: apiTypes.GET
-    });
-};
-
-
-/***/ }),
-
-/***/ "./client/src/pages/ratings-settings/services/range.services.ts":
-/*!**********************************************************************!*\
-  !*** ./client/src/pages/ratings-settings/services/range.services.ts ***!
-  \**********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var CallApi = __webpack_require__(/*! ../../../infrastructure/call.api */ "./client/src/infrastructure/call.api.ts");
-var rangesApiPath = "../wp-content/plugins/ratings/server/RangesController/";
-var apiTypes = CallApi.RequestTypes;
-exports.getRanges = function () {
-    return CallApi.callApi({
-        url: rangesApiPath + 'GetAllRanges.php',
-        type: apiTypes.GET
-    });
-};
-exports.saveRange = function (point) {
-    return CallApi.callApi({
-        url: rangesApiPath + 'SaveRange.php',
-        type: apiTypes.POST,
-        data: point
-    });
-};
-
-
-/***/ }),
-
-/***/ "./client/src/pages/ratings-settings/services/referee.settings.service.ts":
-/*!********************************************************************************!*\
-  !*** ./client/src/pages/ratings-settings/services/referee.settings.service.ts ***!
-  \********************************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-var CallApi = __webpack_require__(/*! ../../../infrastructure/call.api */ "./client/src/infrastructure/call.api.ts");
-var refereeSettingsApiPath = "../wp-content/plugins/ratings/server/RefereeSettingController/";
-var apiTypes = CallApi.RequestTypes;
-exports.getRefereeSettings = function () {
-    return CallApi.callApi({
-        url: refereeSettingsApiPath + 'GetRefereeSettings.php',
-        type: apiTypes.GET
-    });
-};
-exports.updateRefereeSetting = function (setting) {
-    return CallApi.callApi({
-        url: refereeSettingsApiPath + 'UpdateRefereeSetting.php',
-        type: apiTypes.POST,
-        data: setting
-    });
-};
-
-
-/***/ }),
-
-/***/ "./client/src/pages/referee-ratings/actions/index.actions.ts":
+/***/ "./client/src/pages/referee-ratings/actions/shell.actions.ts":
 /*!*******************************************************************!*\
-  !*** ./client/src/pages/referee-ratings/actions/index.actions.ts ***!
-  \*******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.TestActions = __webpack_require__(/*! ./test.actions */ "./client/src/pages/referee-ratings/actions/test.actions.tsx");
-exports.RefereeSettingActions = __webpack_require__(/*! ../../ratings-settings/actions/referee.setting.actions */ "./client/src/pages/ratings-settings/actions/referee.setting.actions.ts");
-
-
-/***/ }),
-
-/***/ "./client/src/pages/referee-ratings/actions/test.actions.tsx":
-/*!*******************************************************************!*\
-  !*** ./client/src/pages/referee-ratings/actions/test.actions.tsx ***!
+  !*** ./client/src/pages/referee-ratings/actions/shell.actions.ts ***!
   \*******************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
@@ -612,16 +479,15 @@ exports.RefereeSettingActions = __webpack_require__(/*! ../../ratings-settings/a
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var ActionTypes = __webpack_require__(/*! ./types/action.types */ "./client/src/pages/referee-ratings/actions/types/action.types.ts");
-var Services = __webpack_require__(/*! ../services/index.servces */ "./client/src/pages/referee-ratings/services/index.servces.ts");
+var Actions = __webpack_require__(/*! ./index.actions */ "./client/src/pages/referee-ratings/actions/index.actions.ts");
 var ActionCreators;
 (function (ActionCreators) {
-    ActionCreators.getTestRefereeEntries = function (year) { return function (d, gs) {
-        Services.TestServices.getTestEmployeeEntries(year).then(function (data) {
-            d({
-                type: ActionTypes.LOAD_TEST_ENTRIES,
-                payload: data
-            });
+    ActionCreators.modifyStartDate = function (startDate) { return function (d) {
+        d({
+            type: ActionTypes.CHANGE_START_DATE,
+            payload: startDate
         });
+        d(Actions.RefereeEntryActions.ActionCreators.loadRefereeEntries());
     }; };
 })(ActionCreators = exports.ActionCreators || (exports.ActionCreators = {}));
 
@@ -638,7 +504,10 @@ var ActionCreators;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LOAD_TEST_ENTRIES = "TEST::LOAD_ENTRIES";
+exports.CHANGE_START_DATE = "SHELL::CHANGE_START_DATE";
+exports.LOAD_REFEREE_ENTRIES = "REFEREE_ENTRIES::LOAD";
+exports.SELECT_REFEREE_ENTRY = "REFEREE_ENTRIES::SELECT";
+exports.CLOSE_REFEREE_ENTRY = "REFEREE_ENTRIES::CLOSE";
 
 
 /***/ }),
@@ -680,48 +549,57 @@ function RefereeRatingsApp() {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
-var TestReducer = __webpack_require__(/*! ./test.reducer */ "./client/src/pages/referee-ratings/reducers/test.reducer.tsx");
-var RefereeSettingReducer = __webpack_require__(/*! ../../ratings-settings/reducers/referee.setting.reducer */ "./client/src/pages/ratings-settings/reducers/referee.setting.reducer.ts");
+var RefereeEntryReducer = __webpack_require__(/*! ./referee.entry.reducer */ "./client/src/pages/referee-ratings/reducers/referee.entry.reducer.ts");
+var ShellReducer = __webpack_require__(/*! ./shell.reducer */ "./client/src/pages/referee-ratings/reducers/shell.reducer.tsx");
 exports.reducer = redux_1.combineReducers({
-    test: TestReducer.testReducer,
-    refereeSetting: RefereeSettingReducer.refereeSettingReducer
+    refereeEntries: RefereeEntryReducer.reducer,
+    shell: ShellReducer.reducer
 });
 
 
 /***/ }),
 
-/***/ "./client/src/pages/referee-ratings/reducers/test.reducer.tsx":
-/*!********************************************************************!*\
-  !*** ./client/src/pages/referee-ratings/reducers/test.reducer.tsx ***!
-  \********************************************************************/
+/***/ "./client/src/pages/referee-ratings/reducers/referee.entry.reducer.ts":
+/*!****************************************************************************!*\
+  !*** ./client/src/pages/referee-ratings/reducers/referee.entry.reducer.ts ***!
+  \****************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-var ActionTypes = __webpack_require__(/*! ../actions/types/action.types */ "./client/src/pages/referee-ratings/actions/types/action.types.ts");
-exports.defaultState = {
-    refereeEntries: []
+var defaultState = {
+    entries: [],
+    selectedEntry: null
 };
-exports.testReducer = function (state, action) {
-    if (state === void 0) { state = exports.defaultState; }
+exports.reducer = function (state, action) {
+    if (state === void 0) { state = defaultState; }
     switch (action.type) {
-        case ActionTypes.LOAD_TEST_ENTRIES: {
-            var payload = action.payload;
-            return __assign({}, state, { refereeEntries: payload });
-        }
+        default:
+            return state;
+    }
+};
+
+
+/***/ }),
+
+/***/ "./client/src/pages/referee-ratings/reducers/shell.reducer.tsx":
+/*!*********************************************************************!*\
+  !*** ./client/src/pages/referee-ratings/reducers/shell.reducer.tsx ***!
+  \*********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var defaultState = {
+    startDate: new Date()
+};
+exports.reducer = function (state, action) {
+    if (state === void 0) { state = defaultState; }
+    switch (action.type) {
         default:
             return state;
     }
@@ -740,33 +618,50 @@ exports.testReducer = function (state, action) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TestServices = __webpack_require__(/*! ./test.data.service */ "./client/src/pages/referee-ratings/services/test.data.service.ts");
-exports.RefereeSettingService = __webpack_require__(/*! ../../ratings-settings/services/referee.settings.service */ "./client/src/pages/ratings-settings/services/referee.settings.service.ts");
+exports.RefereeEntryServices = __webpack_require__(/*! ./referee.entry.services */ "./client/src/pages/referee-ratings/services/referee.entry.services.ts");
 
 
 /***/ }),
 
-/***/ "./client/src/pages/referee-ratings/services/test.data.service.ts":
-/*!************************************************************************!*\
-  !*** ./client/src/pages/referee-ratings/services/test.data.service.ts ***!
-  \************************************************************************/
+/***/ "./client/src/pages/referee-ratings/services/referee.entry.services.ts":
+/*!*****************************************************************************!*\
+  !*** ./client/src/pages/referee-ratings/services/referee.entry.services.ts ***!
+  \*****************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var testData = [
-    { refereeEntryId: 1, name: "Іваненко Іван Іванович", event: "Чемпіонат світу", point: 300, date: new Date("2018-05-11 16:45:024") },
-    { refereeEntryId: 2, name: "Петренко Петро Петрович", event: "Чемпіонат світу", point: 250, date: new Date("2019-05-11 09:15:048") },
-    { refereeEntryId: 3, name: "Миколенко Микола Миколаєвич", event: "Чемпіонат світу", point: 180, date: new Date("2019-04-30 19:05:015") }
-];
-exports.getTestEmployeeEntries = function (year) {
-    return new Promise(function (resolve, reject) {
-        setTimeout(function () {
-            var data = testData.filter(function (x) { return x.date.getFullYear() == year; });
-            resolve(data);
-        }, 2000);
+var CallApi = __webpack_require__(/*! ../../../infrastructure/call.api */ "./client/src/infrastructure/call.api.ts");
+var path = "../wp-content/plugins/ratings/server/RefereeEntryController/";
+var apiTypes = CallApi.RequestTypes;
+exports.create = function (refereeEntry) {
+    return CallApi.callApi({
+        url: path + "Create.php",
+        type: apiTypes.POST,
+        data: refereeEntry
+    });
+};
+exports.update = function (refereeEntry) {
+    return CallApi.callApi({
+        url: path + "Update.php",
+        type: apiTypes.POST,
+        data: refereeEntry
+    });
+};
+exports.getAll = function (contract) {
+    return CallApi.callApi({
+        url: path + "GetAll.php",
+        type: apiTypes.GET,
+        data: contract
+    });
+};
+exports.remove = function (contract) {
+    return CallApi.callApi({
+        url: path + "Delete.php",
+        type: apiTypes.POST,
+        data: contract
     });
 };
 
@@ -807,11 +702,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 var mapStateToProps = function (state) { return ({
-    entries: state.test.refereeEntries
+    entries: state.refereeEntries.entries
 }); };
 exports.default = react_redux_1.connect(mapStateToProps)(function EntriesTable(props) {
     return React.createElement(React.Fragment, null, !!props.entries.length &&
-        React.createElement("ul", null, props.entries.map(function (x, index) { return React.createElement("li", { key: index }, x.name); })));
+        React.createElement("ul", null, props.entries.map(function (x, index) { return React.createElement("li", { key: index }, x.fullname); })));
 });
 
 
@@ -832,14 +727,16 @@ var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react
 var Datetime = __webpack_require__(/*! react-datetime */ "./node_modules/react-datetime/DateTime.js");
 var Actions = __webpack_require__(/*! ../actions/index.actions */ "./client/src/pages/referee-ratings/actions/index.actions.ts");
 var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
-var mapStateToProps = function (state) { return ({}); };
+var mapStateToProps = function (state) { return ({
+    startDate: state.shell.startDate
+}); };
 var mapDispatchToProps = function (dispatch) { return ({
-    testActions: redux_1.bindActionCreators(Actions.TestActions.ActionCreators, dispatch)
+    shellActions: redux_1.bindActionCreators(Actions.ShellActions.ActionCreators, dispatch)
 }); };
 exports.default = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(function RefereeHeader(props) {
-    var _a = React.useState(new Date(new Date().getFullYear(), 0, 1)), startDate = _a[0], setStartDate = _a[1];
+    var _a = React.useState(props.startDate), startDate = _a[0], setStartDate = _a[1];
     React.useEffect(function () {
-        props.testActions.getTestRefereeEntries(startDate.getFullYear());
+        props.shellActions.modifyStartDate(startDate);
     }, [startDate]);
     return React.createElement("div", { className: "referee-header" },
         React.createElement("label", null, "\u0421\u0442\u0430\u043D\u043E\u043C \u043D\u0430: "),
