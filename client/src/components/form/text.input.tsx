@@ -3,7 +3,7 @@ import * as classnames from "classnames";
 import {ValidationResult} from "../../infrastructure/models";
 import Autocomplete from "./autocomplete";
 
-const doc = document;
+
 
 export interface TextInputProps{
     label?: string,
@@ -26,18 +26,18 @@ interface Position{
 
 class TextInput extends React.Component<TextInputProps, TextInputState>{
     private inputObject;
-
+    doc = document;
     constructor(props){
         super(props);
         this.state = {
             isFocused: false
         }
 
-        doc.addEventListener("click", (e) => this.unsetAsFocused(e))
+        this.doc.addEventListener("click", (e) => this.unsetAsFocused(e))
     }
 
     componentWillUnmount(){
-        doc.removeEventListener('click', (e) => this.unsetAsFocused(e))
+        this.doc.removeEventListener('click', (e) => this.unsetAsFocused(e))
     }
 
     unsetAsFocused = (e) => {

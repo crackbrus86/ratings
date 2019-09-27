@@ -357,11 +357,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
 var autocomplete_1 = __webpack_require__(/*! ./autocomplete */ "./client/src/components/form/autocomplete.tsx");
-var doc = document;
 var TextInput = /** @class */ (function (_super) {
     __extends(TextInput, _super);
     function TextInput(props) {
         var _this = _super.call(this, props) || this;
+        _this.doc = document;
         _this.unsetAsFocused = function (e) {
             if (!e.defaultPrevented)
                 _this.setState({ isFocused: false });
@@ -385,12 +385,12 @@ var TextInput = /** @class */ (function (_super) {
         _this.state = {
             isFocused: false
         };
-        doc.addEventListener("click", function (e) { return _this.unsetAsFocused(e); });
+        _this.doc.addEventListener("click", function (e) { return _this.unsetAsFocused(e); });
         return _this;
     }
     TextInput.prototype.componentWillUnmount = function () {
         var _this = this;
-        doc.removeEventListener('click', function (e) { return _this.unsetAsFocused(e); });
+        this.doc.removeEventListener('click', function (e) { return _this.unsetAsFocused(e); });
     };
     TextInput.prototype.render = function () {
         var _this = this;

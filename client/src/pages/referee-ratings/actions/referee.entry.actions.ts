@@ -64,4 +64,11 @@ export namespace ActionCreators{
             d(updateRefereeEntry(entry, closeOnSuccess))
         }
     }
+
+    export const addRefereeEntry = () => (d) => {
+        d({
+            type: ActionTypes.SELECT_REFEREE_ENTRY,
+            payload: {id: null, fullname: null, activity: null, event: null, eventDate: new Date()} as ActionTypes.SELECT_REFEREE_ENTRY_PAYLOAD
+        })
+    }
 }

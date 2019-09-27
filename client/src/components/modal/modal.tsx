@@ -7,7 +7,11 @@ import ModalFooterButton from "./modal.footer.button";
 
 const modalRoot = document.body;
 
-export default class Modal extends React.Component<any, any>{
+export interface ModalProps{
+    width?: string
+}
+
+export default class Modal extends React.Component<ModalProps, any>{
     modalLayout: HTMLElement;
     modalContent: HTMLElement;
     static Header = ModalHeader;
@@ -28,6 +32,7 @@ export default class Modal extends React.Component<any, any>{
         modalRoot.appendChild(this.modalLayout);
         this.modalContent.style.marginLeft = `${-this.modalContent.clientWidth / 2}px`;
         this.modalContent.style.marginTop = `${-this.modalContent.clientHeight / 2}px`;
+        if(!!this.props.width) this.modalContent.style.width = this.props.width
     }
 
     componentWillUnmount(){

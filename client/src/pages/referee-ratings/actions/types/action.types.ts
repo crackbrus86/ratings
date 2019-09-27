@@ -10,3 +10,9 @@ export const SELECT_REFEREE_ENTRY = "REFEREE_ENTRIES::SELECT"
 export type SELECT_REFEREE_ENTRY_PAYLOAD = Models.RefereeEntry
 
 export const CLOSE_REFEREE_ENTRY = "REFEREE_ENTRIES::CLOSE"
+
+export const LOAD_ACTIVITIES = "LOOKUP::LOAD_ACTIVITIES"
+export type LOAD_ACTIVITIES_PAYLOAD = Models.Activity[]
+
+export const LOAD_EVENTS = "LOOKUP::LOAD_EVENTS"
+export type LOAD_EVENTS_PAYLOAD = Models.Event[]

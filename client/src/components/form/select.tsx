@@ -5,12 +5,12 @@ import { ValidationResult } from "../../infrastructure/models";
 export interface SelectProps {
     label?: string,
     value?: any,
-    options?: SelectOption[],
+    options?: SelectOption<any>[],
     validation?: ValidationResult,
     onChange?: (value: any) => void
 }
 
-export interface SelectOption {
+export interface SelectOption<T = any> {
     text: string,
     value: any
 }

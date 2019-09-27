@@ -33,7 +33,7 @@ export default connect(
             props.shellActions.modifyStartDate(startDate)
         }, [startDate])
     
-        return <div className="referee-header">
+        return <div className="layout-header">
                 <label>Станом на: </label>
                 <Datetime 
                     value={startDate} 
