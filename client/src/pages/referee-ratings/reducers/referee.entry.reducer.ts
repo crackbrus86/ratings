@@ -4,11 +4,13 @@ import * as ActionTypes from "../actions/types/action.types"
 interface State{
     entries: Models.RefereeEntry[],
     selectedEntry: Models.RefereeEntry
+    deleteById?: number
 }
 
 const defaultState: State = {
     entries: [],
-    selectedEntry: null
+    selectedEntry: null,
+    deleteById: null
 }
 
 export type ReducerState = typeof defaultState;
@@ -33,6 +35,19 @@ export const reducer = (state = defaultState, action): ReducerState => {
             return {
                 ...state,
                 selectedEntry: null
+            }
+        }
+        case ActionTypes.SELECT_TO_REMOVE: {
+            let payload = action.payload as ActionTypes.SELECT_TO_REMOVE_PAYLOAD
+            return {
+                ...state,
+                deleteById: payload
+            }
+        }
+        case ActionTypes.CANCEL_REMOVE: {
+            return {
+                ...state,
+                deleteById: null
             }
         }
         default:

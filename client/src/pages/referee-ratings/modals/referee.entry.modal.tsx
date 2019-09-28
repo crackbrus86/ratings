@@ -9,6 +9,7 @@ export interface OwnProps{
     entry?: Models.RefereeEntry,
     activities?: SelectOption<Models.Activity>[],
     events?: SelectOption<Models.Event>[],
+    names?: string[],
     onClose?: () => void,
     onSave?: (entry: Models.RefereeEntry) => void
 }
@@ -45,11 +46,13 @@ const reducer = (state: Models.RefereeEntry, action: ActionType) => {
 }
 
 export const RefereeEntryModal: React.FunctionComponent<OwnProps> = (props) => {
-    const [state, dispatch] = React.useReducer(reducer, initialState)
+    const [state, dispatch] = React.useReducer<React.Reducer<Models.RefereeEntry, any>>(reducer, initialState)
 
     React.useEffect(() => {
         if(!!props.entry) dispatch({type: "set", payload: props.entry})
-    },[])
+        return () => dispatch({type: "set", initialState})
+    }
+    ,[props.entry])
 
     const onUpdate = (key: keyof Models.RefereeEntry, value: any) => {
         dispatch({type: "update", payload: {key: key, value: value}})
@@ -83,6 +86,8 @@ export const RefereeEntryModal: React.FunctionComponent<OwnProps> = (props) => {
                 <Form.TextInput 
                     label="Прізвище, Ім'я, По-батькові" 
                     value={state.fullname} 
+                    autocomplete={true}
+                    autocompleteItems={props.names}
                     validation={validation().isFullNameValid}
                     onChange={(v) => onUpdate("fullname", v)} />
                 <Form.Select 

@@ -1,5 +1,5 @@
 import * as React from "react";
-import * as Tab from "./tab";
+import Tab from "./tab";
 import * as classnames from "classnames";
 
 interface TabViewProps{
@@ -43,4 +43,4 @@ class TabView extends React.Component<TabViewProps, TabViewState>{
     }
 }
 
-export = TabView;
+export default TabView;

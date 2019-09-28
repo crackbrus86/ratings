@@ -6,7 +6,7 @@ toastr.options.timeOut = 5000
 
 export namespace ActionCreators{
     export const loadRefereeEntries = () => (d, gs: () => Models.StoreState) => {
-        Services.RefereeEntryServices.getAll({
+        Services.RefereeEntry.getAll({
             year: gs().shell.startDate.getFullYear()
         }).then(response => {
             if(response.status){
@@ -23,7 +23,7 @@ export namespace ActionCreators{
     export const editRefereeEntry = (entry: Models.RefereeEntry) => (d, gs: () => Models.StoreState) => {
         d({
             type: ActionTypes.SELECT_REFEREE_ENTRY,
-            payload: {...entry} as ActionTypes.SELECT_REFEREE_ENTRY_PAYLOAD
+            payload: {...entry, eventDate: new Date(entry.eventDate)} as ActionTypes.SELECT_REFEREE_ENTRY_PAYLOAD
         })
     }
 
@@ -34,7 +34,7 @@ export namespace ActionCreators{
     }
 
     export const createRefereeEntry = (entry: Models.RefereeEntry, closeOnSuccess: boolean = false) => (d, gs: () => Models.StoreState) => {
-        Services.RefereeEntryServices.create(entry).then(response => {
+        Services.RefereeEntry.create(entry).then(response => {
             if(response.status){
                 if(closeOnSuccess) d(closeRefereeEntry())
                 toastr.success(response.message)
@@ -46,7 +46,7 @@ export namespace ActionCreators{
     }
 
     export const updateRefereeEntry = (entry: Models.RefereeEntry, closeOnSuccess: boolean = false) => (d, gs: () => Models.StoreState) => {
-        Services.RefereeEntryServices.update(entry).then(response => {
+        Services.RefereeEntry.update(entry).then(response => {
             if(response.status){
                 if(closeOnSuccess) d(closeRefereeEntry())
                 toastr.success(response.message)
@@ -69,6 +69,29 @@ export namespace ActionCreators{
         d({
             type: ActionTypes.SELECT_REFEREE_ENTRY,
             payload: {id: null, fullname: null, activity: null, event: null, eventDate: new Date()} as ActionTypes.SELECT_REFEREE_ENTRY_PAYLOAD
+        })
+    }
+
+    export const selectToRemove = (id: number) => (d) => {
+        d({
+            type: ActionTypes.SELECT_TO_REMOVE,
+            payload: id as ActionTypes.SELECT_TO_REMOVE_PAYLOAD
+        })
+    }
+
+    export const cancelRemove = () => (d) => {
+        d({type: ActionTypes.CANCEL_REMOVE})
+    }
+
+    export const removeEntry = () => (d, gs: () => Models.StoreState) => {
+        Services.RefereeEntry.remove({id: gs().refereeEntries.deleteById}).then(response => {
+            if(response.status){
+                toastr.success(response.message)
+                d(cancelRemove())
+                d(loadRefereeEntries())
+            }else{
+                toastr.error(response.message)
+            }
         })
     }
 }

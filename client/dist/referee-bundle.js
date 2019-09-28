@@ -86,6 +86,52 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./client/src/components/confirm/confirm.tsx":
+/*!***************************************************!*\
+  !*** ./client/src/components/confirm/confirm.tsx ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var modal_1 = __webpack_require__(/*! ../modal/modal */ "./client/src/components/modal/modal.tsx");
+var Confirm = /** @class */ (function (_super) {
+    __extends(Confirm, _super);
+    function Confirm(props) {
+        return _super.call(this, props) || this;
+    }
+    Confirm.prototype.render = function () {
+        return this.props.show && React.createElement(modal_1.default, null,
+            React.createElement(modal_1.default.Header, { title: this.props.title, onClose: this.props.onClose }),
+            React.createElement(modal_1.default.Body, null,
+                React.createElement("p", { className: "confirm-body-text" }, this.props.text)),
+            React.createElement(modal_1.default.Footer, null,
+                React.createElement(modal_1.default.FooterButton, { icon: "check", label: "Ok", onClick: this.props.onConfirm }),
+                React.createElement(modal_1.default.FooterButton, { icon: "times", label: "Cancel", onClick: this.props.onClose })));
+    };
+    return Confirm;
+}(React.Component));
+exports.default = Confirm;
+
+
+/***/ }),
+
 /***/ "./client/src/components/form/autocomplete.tsx":
 /*!*****************************************************!*\
   !*** ./client/src/components/form/autocomplete.tsx ***!
@@ -423,9 +469,20 @@ exports.default = TextInput;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TabView = __webpack_require__(/*! ./tab view/tab.view */ "./client/src/components/tab view/tab.view.tsx");
-exports.Tab = __webpack_require__(/*! ./tab view/tab */ "./client/src/components/tab view/tab.tsx");
-exports.Layout = __webpack_require__(/*! ./layout/index.layout */ "./client/src/components/layout/index.layout.tsx");
+var tab_view_1 = __webpack_require__(/*! ./tab view/tab.view */ "./client/src/components/tab view/tab.view.tsx");
+exports.TabView = tab_view_1.default;
+var tab_1 = __webpack_require__(/*! ./tab view/tab */ "./client/src/components/tab view/tab.tsx");
+exports.Tab = tab_1.default;
+var Layout = __webpack_require__(/*! ./layout/index.layout */ "./client/src/components/layout/index.layout.tsx");
+exports.Layout = Layout;
+var search_1 = __webpack_require__(/*! ./search/search */ "./client/src/components/search/search.tsx");
+exports.Search = search_1.default;
+var table_1 = __webpack_require__(/*! ./table/table */ "./client/src/components/table/table.tsx");
+exports.Table = table_1.default;
+var column_1 = __webpack_require__(/*! ./table/column */ "./client/src/components/table/column.tsx");
+exports.ColumnTypes = column_1.ColumnTypes;
+var confirm_1 = __webpack_require__(/*! ./confirm/confirm */ "./client/src/components/confirm/confirm.tsx");
+exports.Confirm = confirm_1.default;
 
 
 /***/ }),
@@ -653,6 +710,65 @@ exports.default = Modal;
 
 /***/ }),
 
+/***/ "./client/src/components/search/search.tsx":
+/*!*************************************************!*\
+  !*** ./client/src/components/search/search.tsx ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var FontAwesome = __webpack_require__(/*! react-fontawesome */ "./node_modules/react-fontawesome/lib/index.js");
+var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+var Search = /** @class */ (function (_super) {
+    __extends(Search, _super);
+    function Search(props) {
+        var _this = _super.call(this, props) || this;
+        _this.onUpdate = function (e) {
+            var value = e.target.value;
+            _this.setState({ searchValue: value });
+            _this.props.onChange(value);
+        };
+        _this.onReset = function () {
+            _this.setState({ searchValue: '' });
+            _this.props.onChange('');
+        };
+        _this.state = {
+            searchValue: _this.props.searchValue || ''
+        };
+        return _this;
+    }
+    Search.prototype.render = function () {
+        var _this = this;
+        var value = this.state.searchValue;
+        return React.createElement("div", { className: classnames("search-box", this.props.className) },
+            React.createElement(FontAwesome, { name: "search", className: "search-icon" }),
+            React.createElement("input", { type: "text", value: value, onChange: function (e) { return _this.onUpdate(e); } }),
+            this.state.searchValue && React.createElement(FontAwesome, { name: "times", className: "close-icon", onClick: this.onReset }));
+    };
+    return Search;
+}(React.Component));
+exports.default = Search;
+
+
+/***/ }),
+
 /***/ "./client/src/components/tab view/tab.tsx":
 /*!************************************************!*\
   !*** ./client/src/components/tab view/tab.tsx ***!
@@ -675,6 +791,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! React */ "./node_modules/React/index.js");
 var Tab = /** @class */ (function (_super) {
     __extends(Tab, _super);
@@ -690,7 +807,7 @@ var Tab = /** @class */ (function (_super) {
     };
     return Tab;
 }(React.Component));
-module.exports = Tab;
+exports.default = Tab;
 
 
 /***/ }),
@@ -717,6 +834,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
 var TabView = /** @class */ (function (_super) {
@@ -744,7 +862,341 @@ var TabView = /** @class */ (function (_super) {
     };
     return TabView;
 }(React.Component));
-module.exports = TabView;
+exports.default = TabView;
+
+
+/***/ }),
+
+/***/ "./client/src/components/table/cell.tsx":
+/*!**********************************************!*\
+  !*** ./client/src/components/table/cell.tsx ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var column_1 = __webpack_require__(/*! ./column */ "./client/src/components/table/column.tsx");
+var editable_cell_1 = __webpack_require__(/*! ./editable.cell */ "./client/src/components/table/editable.cell.tsx");
+var table_button_1 = __webpack_require__(/*! ./table.button */ "./client/src/components/table/table.button.tsx");
+var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
+var Cell = /** @class */ (function (_super) {
+    __extends(Cell, _super);
+    function Cell() {
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.onItemChange = function (value, item, column) {
+            item[column] = value;
+            _this.props.onChange(item);
+        };
+        _this.createMarkup = function (value) {
+            return { __html: value };
+        };
+        _this.renderItem = function () {
+            switch (_this.props.column.type) {
+                case column_1.ColumnTypes.Button:
+                    return React.createElement(table_button_1.default, { icon: _this.props.column.icon, onClick: function () { return _this.props.column.onClick(_this.props.item); } });
+                case column_1.ColumnTypes.Input:
+                    return React.createElement(editable_cell_1.default, { value: _this.props.item[_this.props.column.field], onChange: function (v) { return _this.onItemChange(v, _this.props.item, _this.props.column.field); } });
+                case column_1.ColumnTypes.Date:
+                    return moment(_this.props.item[_this.props.column.field]).format("DD/MM/YYYY");
+                case column_1.ColumnTypes.Html:
+                    return React.createElement("div", { dangerouslySetInnerHTML: _this.createMarkup(_this.props.item[_this.props.column.field]) });
+                default:
+                    return _this.props.item[_this.props.column.field];
+            }
+        };
+        return _this;
+    }
+    Cell.prototype.render = function () {
+        return React.createElement("td", { key: this.props.index }, this.renderItem());
+    };
+    return Cell;
+}(React.PureComponent));
+exports.default = Cell;
+
+
+/***/ }),
+
+/***/ "./client/src/components/table/column.tsx":
+/*!************************************************!*\
+  !*** ./client/src/components/table/column.tsx ***!
+  \************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var FontAwesome = __webpack_require__(/*! react-fontawesome */ "./node_modules/react-fontawesome/lib/index.js");
+var ColumnTypes;
+(function (ColumnTypes) {
+    ColumnTypes["Button"] = "button";
+    ColumnTypes["Input"] = "input";
+    ColumnTypes["Date"] = "date";
+    ColumnTypes["Html"] = "html";
+})(ColumnTypes = exports.ColumnTypes || (exports.ColumnTypes = {}));
+var Column = /** @class */ (function (_super) {
+    __extends(Column, _super);
+    function Column() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Column.prototype.render = function () {
+        var _this = this;
+        return React.createElement("th", { key: this.props.index, style: { width: this.props.column.width } },
+            this.props.column.title,
+            this.props.column.sortable &&
+                (this.props.sortAsc || (this.props.sortField != this.props.column.field) ?
+                    React.createElement(FontAwesome, { name: "caret-up", className: "sort-control", onClick: function () { return _this.props.onSort(_this.props.column.field, false); } })
+                    : React.createElement(FontAwesome, { name: "caret-down", className: "sort-control", onClick: function () { return _this.props.onSort(_this.props.column.field, true); } })));
+    };
+    return Column;
+}(React.PureComponent));
+exports.default = Column;
+
+
+/***/ }),
+
+/***/ "./client/src/components/table/editable.cell.tsx":
+/*!*******************************************************!*\
+  !*** ./client/src/components/table/editable.cell.tsx ***!
+  \*******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var FontAwesome = __webpack_require__(/*! react-fontawesome */ "./node_modules/react-fontawesome/lib/index.js");
+var EditableCell = /** @class */ (function (_super) {
+    __extends(EditableCell, _super);
+    function EditableCell(props) {
+        var _this = _super.call(this, props) || this;
+        _this.enableEditMode = function () {
+            _this.setState({ editMode: true }, function () { return _this.editableCellInput.focus(); });
+        };
+        _this.handleFocus = function (event) {
+            event.target.select();
+        };
+        _this.cancelEditMode = function () {
+            _this.setState({ editMode: false, value: _this.props.value });
+        };
+        _this.onEdit = function (value) {
+            _this.setState({ value: value });
+        };
+        _this.onSave = function () {
+            _this.props.onChange(_this.state.value);
+            _this.cancelEditMode();
+        };
+        _this.state = {
+            value: null,
+            editMode: false
+        };
+        return _this;
+    }
+    EditableCell.prototype.componentDidMount = function () {
+        this.setState({ value: this.props.value });
+    };
+    EditableCell.prototype.componentDidUpdate = function (prevProps) {
+        if (prevProps.value != this.props.value)
+            this.setState({ value: this.props.value });
+    };
+    EditableCell.prototype.render = function () {
+        var _this = this;
+        return React.createElement("div", { className: "editable-cell" },
+            !this.state.editMode &&
+                React.createElement("div", null,
+                    this.state.value,
+                    React.createElement(FontAwesome, { name: "pen", className: "editable-cell-icon edit", onClick: this.enableEditMode })),
+            this.state.editMode &&
+                React.createElement("div", null,
+                    React.createElement("input", { type: "text", ref: function (input) { return _this.editableCellInput = input; }, value: this.state.value, className: "editable-cell-input", onChange: function (e) { return _this.onEdit(e.target.value); }, onFocus: this.handleFocus }),
+                    React.createElement(FontAwesome, { name: "times", className: "editable-cell-icon close", onClick: this.cancelEditMode }),
+                    React.createElement(FontAwesome, { name: "check", className: "editable-cell-icon check", onClick: this.onSave })));
+    };
+    return EditableCell;
+}(React.Component));
+exports.default = EditableCell;
+
+
+/***/ }),
+
+/***/ "./client/src/components/table/row.tsx":
+/*!*********************************************!*\
+  !*** ./client/src/components/table/row.tsx ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var cell_1 = __webpack_require__(/*! ./cell */ "./client/src/components/table/cell.tsx");
+var Row = /** @class */ (function (_super) {
+    __extends(Row, _super);
+    function Row() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    Row.prototype.render = function () {
+        var _this = this;
+        return React.createElement("tr", { key: this.props.index }, this.props.columns.map(function (column, index) { return React.createElement(cell_1.default, { key: index, item: _this.props.item, column: column, onChange: column.onChange }); }));
+    };
+    return Row;
+}(React.PureComponent));
+exports.default = Row;
+
+
+/***/ }),
+
+/***/ "./client/src/components/table/table.button.tsx":
+/*!******************************************************!*\
+  !*** ./client/src/components/table/table.button.tsx ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var FontAwesome = __webpack_require__(/*! react-fontawesome */ "./node_modules/react-fontawesome/lib/index.js");
+var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+var TableButton = function (props) {
+    return React.createElement(React.Fragment, null,
+        React.createElement("span", { className: classnames('table-button', { 'disabled': props.disabled }), onClick: function () { return !props.disabled && props.onClick(); } },
+            React.createElement(FontAwesome, { name: props.icon })));
+};
+exports.default = TableButton;
+
+
+/***/ }),
+
+/***/ "./client/src/components/table/table.tsx":
+/*!***********************************************!*\
+  !*** ./client/src/components/table/table.tsx ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var column_1 = __webpack_require__(/*! ./column */ "./client/src/components/table/column.tsx");
+var row_1 = __webpack_require__(/*! ./row */ "./client/src/components/table/row.tsx");
+var Table = /** @class */ (function (_super) {
+    __extends(Table, _super);
+    function Table(props) {
+        var _this = _super.call(this, props) || this;
+        _this.setFirstSorting = function () {
+            var sortableColumns = _this.props.columns.filter(function (column) { return column.sortable; });
+            if (sortableColumns.length) {
+                _this.setState({ sortField: sortableColumns[0].field });
+            }
+        };
+        _this.sortingMethod = function (itemA, itemB) {
+            var field = _this.state.sortField;
+            var collator = new Intl.Collator();
+            if (!(itemA[field] instanceof String && itemA[field].indexOf('-') > -1) && !(Date.parse(itemA[field]) && Date.parse(itemB[field])) && !(itemB[field] instanceof String && itemA[field].indexOf('-') > -1) && !isNaN(parseFloat(itemA[field])) && !isNaN(parseFloat(itemB[field])))
+                return _this.state.sortAsc ? itemA[field] - itemB[field] : itemB[field] - itemA[field];
+            else
+                return _this.state.sortAsc ? collator.compare(itemA[field], itemB[field]) : collator.compare(itemB[field], itemA[field]);
+        };
+        _this.onChangeSorting = function (field, asc) {
+            _this.setState({ sortField: field, sortAsc: asc });
+        };
+        _this.state = {
+            sortField: null,
+            sortAsc: true
+        };
+        return _this;
+    }
+    Table.prototype.componentDidMount = function () {
+        this.setFirstSorting();
+    };
+    Table.prototype.render = function () {
+        var _this = this;
+        var items = !this.state.sortField ? this.props.items : this.props.items.sort(function (a, b) { return _this.sortingMethod(a, b); });
+        return React.createElement("table", { className: "rat-table" },
+            React.createElement("thead", null,
+                React.createElement("tr", null, this.props.columns.length &&
+                    this.props.columns.map(function (column, index) {
+                        return React.createElement(column_1.default, { key: index, index: index, column: column, sortAsc: _this.state.sortAsc, onSort: _this.onChangeSorting, sortField: _this.state.sortField });
+                    }))),
+            React.createElement("tbody", null, items.map(function (item, index) { return React.createElement(row_1.default, { key: index, index: index, item: item, columns: _this.props.columns }); })));
+    };
+    return Table;
+}(React.PureComponent));
+exports.default = Table;
 
 
 /***/ }),
@@ -862,6 +1314,7 @@ toastr.options.timeOut = 5000;
 exports.loadLookups = function () { return function (d) {
     d(loadActivities());
     d(loadEvents());
+    d(loadNames());
 }; };
 var loadActivities = function () { return function (d) {
     Services.Lookup.getActivities().then(function (response) {
@@ -880,6 +1333,16 @@ var loadEvents = function () { return function (d) {
     Services.Lookup.getCompetitions().then(function (response) {
         if (response.status) {
             d({ type: ActionTypes.LOAD_EVENTS, payload: response.data });
+        }
+        else {
+            toastr.error(response.message);
+        }
+    });
+}; };
+var loadNames = function () { return function (d) {
+    Services.Lookup.getNames().then(function (response) {
+        if (response.status) {
+            d({ type: ActionTypes.LOAD_NAMES, payload: response.data });
         }
         else {
             toastr.error(response.message);
@@ -935,7 +1398,7 @@ var ActionCreators;
     ActionCreators.editRefereeEntry = function (entry) { return function (d, gs) {
         d({
             type: ActionTypes.SELECT_REFEREE_ENTRY,
-            payload: __assign({}, entry)
+            payload: __assign({}, entry, { eventDate: new Date(entry.eventDate) })
         });
     }; };
     ActionCreators.closeRefereeEntry = function () { return function (d, gs) {
@@ -992,6 +1455,27 @@ var ActionCreators;
             payload: { id: null, fullname: null, activity: null, event: null, eventDate: new Date() }
         });
     }; };
+    ActionCreators.selectToRemove = function (id) { return function (d) {
+        d({
+            type: ActionTypes.SELECT_TO_REMOVE,
+            payload: id
+        });
+    }; };
+    ActionCreators.cancelRemove = function () { return function (d) {
+        d({ type: ActionTypes.CANCEL_REMOVE });
+    }; };
+    ActionCreators.removeEntry = function () { return function (d, gs) {
+        Services.RefereeEntryServices.remove({ id: gs().refereeEntries.deleteById }).then(function (response) {
+            if (response.status) {
+                toastr.success(response.message);
+                d(ActionCreators.cancelRemove());
+                d(ActionCreators.loadRefereeEntries());
+            }
+            else {
+                toastr.error(response.message);
+            }
+        });
+    }; };
 })(ActionCreators = exports.ActionCreators || (exports.ActionCreators = {}));
 
 
@@ -1039,6 +1523,9 @@ exports.SELECT_REFEREE_ENTRY = "REFEREE_ENTRIES::SELECT";
 exports.CLOSE_REFEREE_ENTRY = "REFEREE_ENTRIES::CLOSE";
 exports.LOAD_ACTIVITIES = "LOOKUP::LOAD_ACTIVITIES";
 exports.LOAD_EVENTS = "LOOKUP::LOAD_EVENTS";
+exports.SELECT_TO_REMOVE = "REFEREE_ENTRIES::SELECT_TO_REMOVE";
+exports.CANCEL_REMOVE = "REFEREE_ENTRIES::CANCEL_REMOVE";
+exports.LOAD_NAMES = "LOOKUP::LOAD_NAMES";
 
 
 /***/ }),
@@ -1120,7 +1607,8 @@ exports.RefereeEntryModal = function (props) {
     React.useEffect(function () {
         if (!!props.entry)
             dispatch({ type: "set", payload: props.entry });
-    }, []);
+        return function () { return dispatch({ type: "set", initialState: initialState }); };
+    }, [props.entry]);
     var onUpdate = function (key, value) {
         dispatch({ type: "update", payload: { key: key, value: value } });
     };
@@ -1148,7 +1636,7 @@ exports.RefereeEntryModal = function (props) {
         React.createElement(modal_1.default.Header, { title: (state.id ? 'Редагувати' : 'Створити') + " \u0417\u0430\u043F\u0438\u0441", onClose: props.onClose }),
         React.createElement(modal_1.default.Body, null,
             React.createElement(form_1.default, null,
-                React.createElement(form_1.default.TextInput, { label: "\u041F\u0440\u0456\u0437\u0432\u0438\u0449\u0435, \u0406\u043C'\u044F, \u041F\u043E-\u0431\u0430\u0442\u044C\u043A\u043E\u0432\u0456", value: state.fullname, validation: validation().isFullNameValid, onChange: function (v) { return onUpdate("fullname", v); } }),
+                React.createElement(form_1.default.TextInput, { label: "\u041F\u0440\u0456\u0437\u0432\u0438\u0449\u0435, \u0406\u043C'\u044F, \u041F\u043E-\u0431\u0430\u0442\u044C\u043A\u043E\u0432\u0456", value: state.fullname, autocomplete: true, autocompleteItems: props.names, validation: validation().isFullNameValid, onChange: function (v) { return onUpdate("fullname", v); } }),
                 React.createElement(form_1.default.Select, { label: "\u0417\u043C\u0430\u0433\u0430\u043D\u043D\u044F", options: props.events, value: state.event, validation: validation().isEventValid, onChange: function (v) { return onUpdate("event", v); } }),
                 React.createElement(form_1.default.Select, { label: "\u0412\u0438\u0434 \u0434\u0456\u044F\u043B\u044C\u043D\u043E\u0441\u0442\u0456", options: props.activities, value: state.activity, validation: validation().isActivityValid, onChange: function (v) { return onUpdate("activity", v); } }),
                 React.createElement(form_1.default.DatePicker, { label: "\u0414\u0430\u0442\u0430 \u043F\u0440\u043E\u0432\u0435\u0434\u0435\u043D\u043D\u044F", value: state.eventDate, validation: validation().isEventDateValid, onChange: function (v) { return onUpdate("eventDate", v); } }))),
@@ -1207,7 +1695,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var ActionTypes = __webpack_require__(/*! ../actions/types/action.types */ "./client/src/pages/referee-ratings/actions/types/action.types.ts");
 var defaultState = {
     activities: [],
-    events: []
+    events: [],
+    names: []
 };
 exports.reducer = function (state, action) {
     if (state === void 0) { state = defaultState; }
@@ -1219,6 +1708,10 @@ exports.reducer = function (state, action) {
         case ActionTypes.LOAD_EVENTS: {
             var payload = action.payload;
             return __assign({}, state, { events: payload });
+        }
+        case ActionTypes.LOAD_NAMES: {
+            var payload = action.payload;
+            return __assign({}, state, { names: payload });
         }
         default:
             return state;
@@ -1252,7 +1745,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var ActionTypes = __webpack_require__(/*! ../actions/types/action.types */ "./client/src/pages/referee-ratings/actions/types/action.types.ts");
 var defaultState = {
     entries: [],
-    selectedEntry: null
+    selectedEntry: null,
+    deleteById: null
 };
 exports.reducer = function (state, action) {
     if (state === void 0) { state = defaultState; }
@@ -1267,6 +1761,13 @@ exports.reducer = function (state, action) {
         }
         case ActionTypes.CLOSE_REFEREE_ENTRY: {
             return __assign({}, state, { selectedEntry: null });
+        }
+        case ActionTypes.SELECT_TO_REMOVE: {
+            var payload = action.payload;
+            return __assign({}, state, { deleteById: payload });
+        }
+        case ActionTypes.CANCEL_REMOVE: {
+            return __assign({}, state, { deleteById: null });
         }
         default:
             return state;
@@ -1312,6 +1813,8 @@ exports.reducer = function (state, action) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Lookup = __webpack_require__(/*! ./lookup.selectors */ "./client/src/pages/referee-ratings/selectors/lookup.selectors.ts");
 exports.Lookup = Lookup;
+var RefereeEntry = __webpack_require__(/*! ./referee.entry.selectors */ "./client/src/pages/referee-ratings/selectors/referee.entry.selectors.ts");
+exports.RefereeEntry = RefereeEntry;
 
 
 /***/ }),
@@ -1334,6 +1837,42 @@ exports.eventsList = reselect_1.createSelector(events, function (events) {
 });
 exports.activitiesList = reselect_1.createSelector(activities, function (activities) {
     return [{ text: "", value: null }].concat(activities.map(function (a) { return ({ text: a.activity, value: a.id }); }));
+});
+
+
+/***/ }),
+
+/***/ "./client/src/pages/referee-ratings/selectors/referee.entry.selectors.ts":
+/*!*******************************************************************************!*\
+  !*** ./client/src/pages/referee-ratings/selectors/referee.entry.selectors.ts ***!
+  \*******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var reselect_1 = __webpack_require__(/*! reselect */ "./node_modules/reselect/es/index.js");
+var entries = function (state) { return state.refereeEntries.entries; };
+var events = function (state) { return state.lookup.events; };
+var activities = function (state) { return state.lookup.activities; };
+exports.getTableEntries = reselect_1.createSelector(entries, events, activities, function (entries, events, activities) {
+    return entries.map(function (x) {
+        var event = events.find(function (e) { return e.id == parseInt(x.event); });
+        var activity = activities.find(function (a) { return a.id == x.activity; });
+        return __assign({}, x, { eventName: !!event ? event.name : null, activityName: !!activity ? activity.activity : null });
+    });
 });
 
 
@@ -1378,6 +1917,12 @@ exports.getActivities = function () {
 exports.getCompetitions = function () {
     return CallApi.callApi({
         url: path + 'GetCompetitionsLookup.php',
+        type: apiTypes.GET
+    });
+};
+exports.getNames = function () {
+    return CallApi.callApi({
+        url: path + 'GetAllRefereeNames.php',
         type: apiTypes.GET
     });
 };
@@ -1465,24 +2010,77 @@ var React = __webpack_require__(/*! react */ "react");
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 var Actions = __webpack_require__(/*! ../actions/index.actions */ "./client/src/pages/referee-ratings/actions/index.actions.ts");
 var referee_entry_modal_1 = __webpack_require__(/*! ../modals/referee.entry.modal */ "./client/src/pages/referee-ratings/modals/referee.entry.modal.tsx");
+var Components = __webpack_require__(/*! ../../../components/index */ "./client/src/components/index.ts");
 var Selectors = __webpack_require__(/*! ../selectors/index.selectors */ "./client/src/pages/referee-ratings/selectors/index.selectors.ts");
 var mapStateToProps = function (state) { return ({
-    entries: state.refereeEntries.entries,
+    entries: Selectors.RefereeEntry.getTableEntries(state),
     selectedEntry: state.refereeEntries.selectedEntry,
     activities: Selectors.Lookup.activitiesList(state),
-    events: Selectors.Lookup.eventsList(state)
+    events: Selectors.Lookup.eventsList(state),
+    names: state.lookup.names,
+    deleteById: state.refereeEntries.deleteById
 }); };
 var mapDispatchToProps = function (dispatch) { return ({
     addEntry: function () { return dispatch(Actions.RefereeEntryActions.ActionCreators.addRefereeEntry()); },
     closeEntry: function () { return dispatch(Actions.RefereeEntryActions.ActionCreators.closeRefereeEntry()); },
-    saveEntry: function (entry) { return dispatch(Actions.RefereeEntryActions.ActionCreators.saveRefereeEntry(entry, true)); }
+    saveEntry: function (entry) { return dispatch(Actions.RefereeEntryActions.ActionCreators.saveRefereeEntry(entry, true)); },
+    editEntry: function (entry) { return dispatch(Actions.RefereeEntryActions.ActionCreators.editRefereeEntry(entry)); },
+    selectToRemove: function (id) { return dispatch(Actions.RefereeEntryActions.ActionCreators.selectToRemove(id)); },
+    cancelRemove: function () { return dispatch(Actions.RefereeEntryActions.ActionCreators.cancelRemove()); },
+    removeEntry: function () { return dispatch(Actions.RefereeEntryActions.ActionCreators.removeEntry()); }
 }); };
 exports.default = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(function EntriesTable(props) {
     return React.createElement("div", { className: "entries" },
         React.createElement("button", { className: "create-button", onClick: props.addEntry }, "\u0421\u0442\u0432\u043E\u0440\u0438\u0442\u0438 \u0437\u0430\u043F\u0438\u0441"),
         !!props.entries.length &&
-            React.createElement("ul", null, props.entries.map(function (x, index) { return React.createElement("li", { key: index }, x.fullname); })),
-        React.createElement(referee_entry_modal_1.default, { entry: props.selectedEntry, onClose: props.closeEntry, activities: props.activities, events: props.events, onSave: props.saveEntry }));
+            React.createElement(React.Fragment, null,
+                React.createElement(Components.Table, { items: props.entries, columns: [
+                        {
+                            title: "",
+                            type: Components.ColumnTypes.Button,
+                            icon: "edit",
+                            width: "20px",
+                            onClick: function (entry) { return props.editEntry(entry); }
+                        },
+                        {
+                            title: "",
+                            type: Components.ColumnTypes.Button,
+                            icon: "trash-alt",
+                            width: "20px",
+                            onClick: function (entry) { return props.selectToRemove(entry.id); }
+                        },
+                        {
+                            title: "П.І.П",
+                            field: "fullname",
+                            width: "200px",
+                            sortable: true
+                        },
+                        {
+                            title: "Подія",
+                            field: "eventName",
+                            width: "250px",
+                            sortable: true
+                        },
+                        {
+                            title: "Вид діяльності",
+                            field: "activityName",
+                            width: "200px",
+                            sortable: true
+                        },
+                        {
+                            title: "Дата",
+                            field: "eventDate",
+                            type: Components.ColumnTypes.Date,
+                            width: "80px",
+                            sortable: true
+                        },
+                        {
+                            title: "",
+                            width: "*"
+                        }
+                    ] })),
+        React.createElement(referee_entry_modal_1.default, { entry: props.selectedEntry, onClose: props.closeEntry, activities: props.activities, names: props.names, events: props.events, onSave: props.saveEntry }),
+        React.createElement(Components.Confirm, { title: "\u041F\u0456\u0434\u0442\u0432\u0435\u0440\u0434\u0456\u0442\u044C \u0432\u0438\u0434\u0430\u043B\u0435\u043D\u043D\u044F", text: "\u0412\u0438 \u0432\u043F\u0435\u0432\u043D\u0435\u043D\u0456 \u0449\u043E \u0445\u043E\u0447\u0435\u0442\u0435 \u0432\u0438\u0434\u0430\u043B\u0438\u0442\u0438 \u0446\u0435\u0439 \u0437\u0430\u043F\u0438\u0441?", show: !!props.deleteById, onClose: props.cancelRemove, onConfirm: props.removeEntry }));
 });
 
 

@@ -1,2 +1,3 @@
 import * as Lookup from "./lookup.selectors"
-export {Lookup}
+import * as RefereeEntry from "./referee.entry.selectors"
+export {Lookup, RefereeEntry}

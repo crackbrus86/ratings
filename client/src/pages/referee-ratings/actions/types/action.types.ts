@@ -16,3 +16,14 @@ export type LOAD_ACTIVITIES_PAYLOAD = Models.Activity[]
 
 export const LOAD_EVENTS = "LOOKUP::LOAD_EVENTS"
 export type LOAD_EVENTS_PAYLOAD = Models.Event[]
+
+export const SELECT_TO_REMOVE = "REFEREE_ENTRIES::SELECT_TO_REMOVE"
+export type SELECT_TO_REMOVE_PAYLOAD = number
+
+export const CANCEL_REMOVE = "REFEREE_ENTRIES::CANCEL_REMOVE"
+
+export const LOAD_NAMES = "LOOKUP::LOAD_NAMES"
+export type LOAD_NAMES_PAYLOAD = string[]
+
+export const LOAD_RATING = "REFEREE_RATING::LOAD"
+export type LOAD_RATING_PAYLOAD = Models.Rating[]

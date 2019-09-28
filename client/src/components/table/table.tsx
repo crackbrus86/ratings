@@ -36,7 +36,7 @@ class Table extends React.PureComponent<TableProps, TableState>{
         let field = this.state.sortField;
         var collator = new Intl.Collator();
 
-        if(!(itemA[field] instanceof String && itemA[field].indexOf('-') > -1) && !(itemB[field] instanceof String && itemA[field].indexOf('-') > -1) && !isNaN(parseFloat(itemA[field])) && !isNaN(parseFloat(itemB[field])))
+        if(!(itemA[field] instanceof String && itemA[field].indexOf('-') > -1) && !(Date.parse(itemA[field]) && Date.parse(itemB[field])) && !(itemB[field] instanceof String && itemA[field].indexOf('-') > -1) && !isNaN(parseFloat(itemA[field])) && !isNaN(parseFloat(itemB[field])))
             return this.state.sortAsc ? itemA[field] - itemB[field] : itemB[field] - itemA[field];
         else
             return this.state.sortAsc ? collator.compare(itemA[field], itemB[field]) : collator.compare(itemB[field], itemA[field]);

@@ -86,6 +86,52 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./client/src/components/confirm/confirm.tsx":
+/*!***************************************************!*\
+  !*** ./client/src/components/confirm/confirm.tsx ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var modal_1 = __webpack_require__(/*! ../modal/modal */ "./client/src/components/modal/modal.tsx");
+var Confirm = /** @class */ (function (_super) {
+    __extends(Confirm, _super);
+    function Confirm(props) {
+        return _super.call(this, props) || this;
+    }
+    Confirm.prototype.render = function () {
+        return this.props.show && React.createElement(modal_1.default, null,
+            React.createElement(modal_1.default.Header, { title: this.props.title, onClose: this.props.onClose }),
+            React.createElement(modal_1.default.Body, null,
+                React.createElement("p", { className: "confirm-body-text" }, this.props.text)),
+            React.createElement(modal_1.default.Footer, null,
+                React.createElement(modal_1.default.FooterButton, { icon: "check", label: "Ok", onClick: this.props.onConfirm }),
+                React.createElement(modal_1.default.FooterButton, { icon: "times", label: "Cancel", onClick: this.props.onClose })));
+    };
+    return Confirm;
+}(React.Component));
+exports.default = Confirm;
+
+
+/***/ }),
+
 /***/ "./client/src/components/index.ts":
 /*!****************************************!*\
   !*** ./client/src/components/index.ts ***!
@@ -96,9 +142,20 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TabView = __webpack_require__(/*! ./tab view/tab.view */ "./client/src/components/tab view/tab.view.tsx");
-exports.Tab = __webpack_require__(/*! ./tab view/tab */ "./client/src/components/tab view/tab.tsx");
-exports.Layout = __webpack_require__(/*! ./layout/index.layout */ "./client/src/components/layout/index.layout.tsx");
+var tab_view_1 = __webpack_require__(/*! ./tab view/tab.view */ "./client/src/components/tab view/tab.view.tsx");
+exports.TabView = tab_view_1.default;
+var tab_1 = __webpack_require__(/*! ./tab view/tab */ "./client/src/components/tab view/tab.tsx");
+exports.Tab = tab_1.default;
+var Layout = __webpack_require__(/*! ./layout/index.layout */ "./client/src/components/layout/index.layout.tsx");
+exports.Layout = Layout;
+var search_1 = __webpack_require__(/*! ./search/search */ "./client/src/components/search/search.tsx");
+exports.Search = search_1.default;
+var table_1 = __webpack_require__(/*! ./table/table */ "./client/src/components/table/table.tsx");
+exports.Table = table_1.default;
+var column_1 = __webpack_require__(/*! ./table/column */ "./client/src/components/table/column.tsx");
+exports.ColumnTypes = column_1.ColumnTypes;
+var confirm_1 = __webpack_require__(/*! ./confirm/confirm */ "./client/src/components/confirm/confirm.tsx");
+exports.Confirm = confirm_1.default;
 
 
 /***/ }),
@@ -177,6 +234,214 @@ exports.ContentWrap = content_wrap_1.ContentWrap;
 
 /***/ }),
 
+/***/ "./client/src/components/modal/modal.body.tsx":
+/*!****************************************************!*\
+  !*** ./client/src/components/modal/modal.body.tsx ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var ModalBody = function (props) {
+    return React.createElement("div", { className: "modal-body" }, props.children);
+};
+exports.default = ModalBody;
+
+
+/***/ }),
+
+/***/ "./client/src/components/modal/modal.footer.button.tsx":
+/*!*************************************************************!*\
+  !*** ./client/src/components/modal/modal.footer.button.tsx ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var FontAwesome = __webpack_require__(/*! react-fontawesome */ "./node_modules/react-fontawesome/lib/index.js");
+var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+var ModalFooterButton = function (props) {
+    return React.createElement(React.Fragment, null,
+        React.createElement("span", { className: classnames('modal-footer-button', { 'disabled': props.disabled }), onClick: function () { return !props.disabled && props.onClick(); } },
+            React.createElement(FontAwesome, { name: props.icon }),
+            props.label));
+};
+exports.default = ModalFooterButton;
+
+
+/***/ }),
+
+/***/ "./client/src/components/modal/modal.footer.tsx":
+/*!******************************************************!*\
+  !*** ./client/src/components/modal/modal.footer.tsx ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var ModalFooter = function (props) {
+    return React.createElement("div", { className: "modal-footer" }, props.children);
+};
+exports.default = ModalFooter;
+
+
+/***/ }),
+
+/***/ "./client/src/components/modal/modal.header.tsx":
+/*!******************************************************!*\
+  !*** ./client/src/components/modal/modal.header.tsx ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var FontAwesome = __webpack_require__(/*! react-fontawesome */ "./node_modules/react-fontawesome/lib/index.js");
+var ModalHeader = function (props) {
+    return React.createElement("div", { className: "modal-header" },
+        React.createElement("h4", null, props.title),
+        React.createElement(FontAwesome, { name: "times", className: "modal-close-icon", onClick: function () { return props.onClose(); } }));
+};
+exports.default = ModalHeader;
+
+
+/***/ }),
+
+/***/ "./client/src/components/modal/modal.tsx":
+/*!***********************************************!*\
+  !*** ./client/src/components/modal/modal.tsx ***!
+  \***********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var ReactDOM = __webpack_require__(/*! react-dom */ "react-dom");
+var modal_header_1 = __webpack_require__(/*! ./modal.header */ "./client/src/components/modal/modal.header.tsx");
+var modal_footer_1 = __webpack_require__(/*! ./modal.footer */ "./client/src/components/modal/modal.footer.tsx");
+var modal_body_1 = __webpack_require__(/*! ./modal.body */ "./client/src/components/modal/modal.body.tsx");
+var modal_footer_button_1 = __webpack_require__(/*! ./modal.footer.button */ "./client/src/components/modal/modal.footer.button.tsx");
+var modalRoot = document.body;
+var Modal = /** @class */ (function (_super) {
+    __extends(Modal, _super);
+    function Modal(props) {
+        var _this = _super.call(this, props) || this;
+        _this.modalLayout = document.createElement("div");
+        _this.modalLayout.className = "modal-black-out";
+        _this.modalContent = document.createElement("div");
+        _this.modalContent.className = "modal-content";
+        _this.modalLayout.appendChild(_this.modalContent);
+        return _this;
+    }
+    Modal.prototype.componentDidMount = function () {
+        modalRoot.appendChild(this.modalLayout);
+        this.modalContent.style.marginLeft = -this.modalContent.clientWidth / 2 + "px";
+        this.modalContent.style.marginTop = -this.modalContent.clientHeight / 2 + "px";
+        if (!!this.props.width)
+            this.modalContent.style.width = this.props.width;
+    };
+    Modal.prototype.componentWillUnmount = function () {
+        modalRoot.removeChild(this.modalLayout);
+    };
+    Modal.prototype.render = function () {
+        return ReactDOM.createPortal(this.props.children, this.modalContent);
+    };
+    Modal.Header = modal_header_1.default;
+    Modal.Footer = modal_footer_1.default;
+    Modal.Body = modal_body_1.default;
+    Modal.FooterButton = modal_footer_button_1.default;
+    return Modal;
+}(React.Component));
+exports.default = Modal;
+
+
+/***/ }),
+
+/***/ "./client/src/components/search/search.tsx":
+/*!*************************************************!*\
+  !*** ./client/src/components/search/search.tsx ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var FontAwesome = __webpack_require__(/*! react-fontawesome */ "./node_modules/react-fontawesome/lib/index.js");
+var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+var Search = /** @class */ (function (_super) {
+    __extends(Search, _super);
+    function Search(props) {
+        var _this = _super.call(this, props) || this;
+        _this.onUpdate = function (e) {
+            var value = e.target.value;
+            _this.setState({ searchValue: value });
+            _this.props.onChange(value);
+        };
+        _this.onReset = function () {
+            _this.setState({ searchValue: '' });
+            _this.props.onChange('');
+        };
+        _this.state = {
+            searchValue: _this.props.searchValue || ''
+        };
+        return _this;
+    }
+    Search.prototype.render = function () {
+        var _this = this;
+        var value = this.state.searchValue;
+        return React.createElement("div", { className: classnames("search-box", this.props.className) },
+            React.createElement(FontAwesome, { name: "search", className: "search-icon" }),
+            React.createElement("input", { type: "text", value: value, onChange: function (e) { return _this.onUpdate(e); } }),
+            this.state.searchValue && React.createElement(FontAwesome, { name: "times", className: "close-icon", onClick: this.onReset }));
+    };
+    return Search;
+}(React.Component));
+exports.default = Search;
+
+
+/***/ }),
+
 /***/ "./client/src/components/tab view/tab.tsx":
 /*!************************************************!*\
   !*** ./client/src/components/tab view/tab.tsx ***!
@@ -199,6 +464,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! React */ "./node_modules/React/index.js");
 var Tab = /** @class */ (function (_super) {
     __extends(Tab, _super);
@@ -214,7 +480,7 @@ var Tab = /** @class */ (function (_super) {
     };
     return Tab;
 }(React.Component));
-module.exports = Tab;
+exports.default = Tab;
 
 
 /***/ }),
@@ -241,6 +507,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
 var TabView = /** @class */ (function (_super) {
@@ -268,7 +535,7 @@ var TabView = /** @class */ (function (_super) {
     };
     return TabView;
 }(React.Component));
-module.exports = TabView;
+exports.default = TabView;
 
 
 /***/ }),
@@ -572,7 +839,7 @@ var Table = /** @class */ (function (_super) {
         _this.sortingMethod = function (itemA, itemB) {
             var field = _this.state.sortField;
             var collator = new Intl.Collator();
-            if (!(itemA[field] instanceof String && itemA[field].indexOf('-') > -1) && !(itemB[field] instanceof String && itemA[field].indexOf('-') > -1) && !isNaN(parseFloat(itemA[field])) && !isNaN(parseFloat(itemB[field])))
+            if (!(itemA[field] instanceof String && itemA[field].indexOf('-') > -1) && !(Date.parse(itemA[field]) && Date.parse(itemB[field])) && !(itemB[field] instanceof String && itemA[field].indexOf('-') > -1) && !isNaN(parseFloat(itemA[field])) && !isNaN(parseFloat(itemB[field])))
                 return _this.state.sortAsc ? itemA[field] - itemB[field] : itemB[field] - itemA[field];
             else
                 return _this.state.sortAsc ? collator.compare(itemA[field], itemB[field]) : collator.compare(itemB[field], itemA[field]);

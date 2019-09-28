@@ -17,3 +17,10 @@ export const getCompetitions = () => {
         type: apiTypes.GET 
     });
 }
+
+export const getNames = () => {
+    return CallApi.callApi({
+        url: path + 'GetAllRefereeNames.php',
+        type: apiTypes.GET
+    })
+}

@@ -1,4 +1,5 @@
-export import RefereeEntryServices = require("./referee.entry.services");
+import * as RefereeEntry from "./referee.entry.services"
 import * as Lookup from "./lookup.services"
+import * as RefereeRating from "./referee.rating.services"
 
-export {Lookup}
+export {RefereeEntry, Lookup, RefereeRating}

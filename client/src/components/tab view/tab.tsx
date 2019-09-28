@@ -18,4 +18,4 @@ namespace Tab{
     }
 }
 
-export = Tab;
+export default Tab;

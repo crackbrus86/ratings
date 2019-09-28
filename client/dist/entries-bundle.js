@@ -469,9 +469,20 @@ exports.default = TextInput;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.TabView = __webpack_require__(/*! ./tab view/tab.view */ "./client/src/components/tab view/tab.view.tsx");
-exports.Tab = __webpack_require__(/*! ./tab view/tab */ "./client/src/components/tab view/tab.tsx");
-exports.Layout = __webpack_require__(/*! ./layout/index.layout */ "./client/src/components/layout/index.layout.tsx");
+var tab_view_1 = __webpack_require__(/*! ./tab view/tab.view */ "./client/src/components/tab view/tab.view.tsx");
+exports.TabView = tab_view_1.default;
+var tab_1 = __webpack_require__(/*! ./tab view/tab */ "./client/src/components/tab view/tab.tsx");
+exports.Tab = tab_1.default;
+var Layout = __webpack_require__(/*! ./layout/index.layout */ "./client/src/components/layout/index.layout.tsx");
+exports.Layout = Layout;
+var search_1 = __webpack_require__(/*! ./search/search */ "./client/src/components/search/search.tsx");
+exports.Search = search_1.default;
+var table_1 = __webpack_require__(/*! ./table/table */ "./client/src/components/table/table.tsx");
+exports.Table = table_1.default;
+var column_1 = __webpack_require__(/*! ./table/column */ "./client/src/components/table/column.tsx");
+exports.ColumnTypes = column_1.ColumnTypes;
+var confirm_1 = __webpack_require__(/*! ./confirm/confirm */ "./client/src/components/confirm/confirm.tsx");
+exports.Confirm = confirm_1.default;
 
 
 /***/ }),
@@ -813,6 +824,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! React */ "./node_modules/React/index.js");
 var Tab = /** @class */ (function (_super) {
     __extends(Tab, _super);
@@ -828,7 +840,7 @@ var Tab = /** @class */ (function (_super) {
     };
     return Tab;
 }(React.Component));
-module.exports = Tab;
+exports.default = Tab;
 
 
 /***/ }),
@@ -855,6 +867,7 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
 var TabView = /** @class */ (function (_super) {
@@ -882,7 +895,7 @@ var TabView = /** @class */ (function (_super) {
     };
     return TabView;
 }(React.Component));
-module.exports = TabView;
+exports.default = TabView;
 
 
 /***/ }),
@@ -1186,7 +1199,7 @@ var Table = /** @class */ (function (_super) {
         _this.sortingMethod = function (itemA, itemB) {
             var field = _this.state.sortField;
             var collator = new Intl.Collator();
-            if (!(itemA[field] instanceof String && itemA[field].indexOf('-') > -1) && !(itemB[field] instanceof String && itemA[field].indexOf('-') > -1) && !isNaN(parseFloat(itemA[field])) && !isNaN(parseFloat(itemB[field])))
+            if (!(itemA[field] instanceof String && itemA[field].indexOf('-') > -1) && !(Date.parse(itemA[field]) && Date.parse(itemB[field])) && !(itemB[field] instanceof String && itemA[field].indexOf('-') > -1) && !isNaN(parseFloat(itemA[field])) && !isNaN(parseFloat(itemB[field])))
                 return _this.state.sortAsc ? itemA[field] - itemB[field] : itemB[field] - itemA[field];
             else
                 return _this.state.sortAsc ? collator.compare(itemA[field], itemB[field]) : collator.compare(itemB[field], itemA[field]);
