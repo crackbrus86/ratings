@@ -483,6 +483,8 @@ var column_1 = __webpack_require__(/*! ./table/column */ "./client/src/component
 exports.ColumnTypes = column_1.ColumnTypes;
 var confirm_1 = __webpack_require__(/*! ./confirm/confirm */ "./client/src/components/confirm/confirm.tsx");
 exports.Confirm = confirm_1.default;
+var print_button_1 = __webpack_require__(/*! ./print button/print.button */ "./client/src/components/print button/print.button.tsx");
+exports.PrintButton = print_button_1.default;
 
 
 /***/ }),
@@ -3639,7 +3641,8 @@ exports.default = react_redux_1.connect(function (state) { return ({}); }, funct
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-function getDetails(originalDetails, types, competitions, records) {
+function getDetails(originalDetails, types, competitions, records, isReferee) {
+    if (isReferee === void 0) { isReferee = false; }
     var details = originalDetails;
     var detailsAsArray = [];
     for (var i = 0; i < competitions.length; i++) {
@@ -3652,7 +3655,8 @@ function getDetails(originalDetails, types, competitions, records) {
         details = details.replace(new RegExp(" " + types[i].name, 'g'), " - " + types[i].displayName);
     }
     detailsAsArray = details.split(",");
-    detailsAsArray = detailsAsArray.map(function (d) { return ({ text: d, range: d.split(' - ')[2].split(' ')[0] }); });
+    detailsAsArray = !isReferee ? detailsAsArray.map(function (d) { return ({ text: d, range: d.split(' - ')[2].split(' ')[0] }); })
+        : detailsAsArray.map(function (d) { return ({ text: d, range: d.split(' - ')[1].split(' ')[0] }); });
     detailsAsArray = detailsAsArray.sort(function (a, b) { return a.range - b.range; });
     detailsAsArray = detailsAsArray.map(function (d) { return "<li>" + d.text + "</li>"; });
     return "<ul>" + detailsAsArray.join('') + "</ul>";

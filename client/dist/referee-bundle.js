@@ -483,6 +483,8 @@ var column_1 = __webpack_require__(/*! ./table/column */ "./client/src/component
 exports.ColumnTypes = column_1.ColumnTypes;
 var confirm_1 = __webpack_require__(/*! ./confirm/confirm */ "./client/src/components/confirm/confirm.tsx");
 exports.Confirm = confirm_1.default;
+var print_button_1 = __webpack_require__(/*! ./print button/print.button */ "./client/src/components/print button/print.button.tsx");
+exports.PrintButton = print_button_1.default;
 
 
 /***/ }),
@@ -706,6 +708,39 @@ var Modal = /** @class */ (function (_super) {
     return Modal;
 }(React.Component));
 exports.default = Modal;
+
+
+/***/ }),
+
+/***/ "./client/src/components/print button/print.button.tsx":
+/*!*************************************************************!*\
+  !*** ./client/src/components/print button/print.button.tsx ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var FontAwesome = __webpack_require__(/*! react-fontawesome */ "./node_modules/react-fontawesome/lib/index.js");
+var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+var PrintButton = function (props) {
+    return React.createElement(React.Fragment, null,
+        React.createElement("span", { className: classnames("print-button", props.classNames), onClick: function () { return onPrint(props.printTargetId); } },
+            React.createElement(FontAwesome, { name: "print" }),
+            props.label),
+        React.createElement("iframe", { id: "printing-frame", name: "print_frame", src: "about:blank", style: { display: 'none' } }));
+};
+function onPrint(elementId) {
+    var styles = "html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video{margin:0;padding:0;border:0;font-size:100%;font:inherit;vertical-align:baseline}article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{display:block}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}table{border-collapse:collapse;border-spacing:0; border: 1px solid #000;}body{font:normal normal .8125em/1.4 Arial,Sans-Serif;background-color:white;color:#333}strong,b{font-weight:bold}cite,em,i{font-style:italic}a{text-decoration:none}a:hover{text-decoration:underline}a img{border:none}abbr,acronym{border-bottom:1px dotted;cursor:help}sup,sub{vertical-align:baseline;position:relative;top:-.4em;font-size:86%}sub{top:.4em}small{font-size:86%}kbd{font-size:80%;border:1px solid #999;padding:2px 5px;border-bottom-width:2px;border-radius:3px}mark{background-color:#ffce00;color:black}p,blockquote,pre,table,figure,hr,form,ol,ul,dl{margin:1.5em 0}hr{height:1px;border:none;background-color:#666}h1,h2,h3,h4,h5,h6{font-weight:bold;line-height:normal;margin:1.5em 0 0}h1{font-size:200%}h2{font-size:180%}h3{font-size:160%}h4{font-size:140%}h5{font-size:120%}h6{font-size:100%}ol,ul,dl{margin-left:3em}ol{list-style:decimal outside}ul{list-style:disc outside}li{margin:.5em 0}dt{font-weight:bold}dd{margin:0 0 .5em 2em}input,button,select,textarea{font:inherit;font-size:100%;line-height:normal;vertical-align:baseline}textarea{display:block;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}pre,code{font-family:\"Courier New\",Courier,Monospace;color:inherit}pre{white-space:pre;word-wrap:normal;overflow:auto}blockquote{margin-left:2em;margin-right:2em;border-left:4px solid #ccc;padding-left:1em;font-style:italic}table[border=\"1\"] th,table[border=\"1\"] td,table[border=\"1\"] caption{border:1px solid;padding:.5em 1em;text-align:left;vertical-align:top}th{font-weight:bold}table[border=\"1\"] caption{border:none;font-style:italic}.no-print{display:none}td{border: 1px solid #000; padding: 4px;}td:last-child{ padding: 0; border-left: none;}";
+    var a = document.getElementById(elementId).innerHTML;
+    window.frames["print_frame"].document.title = document.title;
+    window.frames["print_frame"].document.body.innerHTML = '<style>' + styles + '</style>' + a;
+    window.frames["print_frame"].window.focus();
+    window.frames["print_frame"].window.print();
+}
+exports.default = PrintButton;
 
 
 /***/ }),
@@ -1293,6 +1328,8 @@ exports.RefereeEntryActions = __webpack_require__(/*! ./referee.entry.actions */
 exports.ShellActions = __webpack_require__(/*! ./shell.actions */ "./client/src/pages/referee-ratings/actions/shell.actions.ts");
 var Lookup = __webpack_require__(/*! ./lookup.actions */ "./client/src/pages/referee-ratings/actions/lookup.actions.ts");
 exports.Lookup = Lookup;
+var Ratings = __webpack_require__(/*! ./rating.actions */ "./client/src/pages/referee-ratings/actions/rating.actions.ts");
+exports.Ratings = Ratings;
 
 
 /***/ }),
@@ -1353,6 +1390,32 @@ var loadNames = function () { return function (d) {
 
 /***/ }),
 
+/***/ "./client/src/pages/referee-ratings/actions/rating.actions.ts":
+/*!********************************************************************!*\
+  !*** ./client/src/pages/referee-ratings/actions/rating.actions.ts ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var ActionTypes = __webpack_require__(/*! ./types/action.types */ "./client/src/pages/referee-ratings/actions/types/action.types.ts");
+var Services = __webpack_require__(/*! ../services/index.servces */ "./client/src/pages/referee-ratings/services/index.servces.ts");
+exports.getRating = function () { return function (d, gs) {
+    Services.RefereeRating.getRating(gs().shell.startDate.getFullYear()).then(function (response) {
+        if (response.status) {
+            d({ type: ActionTypes.LOAD_RATING, payload: response.data });
+        }
+        else {
+            toastr.error(response.message);
+        }
+    });
+}; };
+
+
+/***/ }),
+
 /***/ "./client/src/pages/referee-ratings/actions/referee.entry.actions.ts":
 /*!***************************************************************************!*\
   !*** ./client/src/pages/referee-ratings/actions/referee.entry.actions.ts ***!
@@ -1381,7 +1444,7 @@ toastr.options.timeOut = 5000;
 var ActionCreators;
 (function (ActionCreators) {
     ActionCreators.loadRefereeEntries = function () { return function (d, gs) {
-        Services.RefereeEntryServices.getAll({
+        Services.RefereeEntry.getAll({
             year: gs().shell.startDate.getFullYear()
         }).then(function (response) {
             if (response.status) {
@@ -1409,7 +1472,7 @@ var ActionCreators;
     ActionCreators.createRefereeEntry = function (entry, closeOnSuccess) {
         if (closeOnSuccess === void 0) { closeOnSuccess = false; }
         return function (d, gs) {
-            Services.RefereeEntryServices.create(entry).then(function (response) {
+            Services.RefereeEntry.create(entry).then(function (response) {
                 if (response.status) {
                     if (closeOnSuccess)
                         d(ActionCreators.closeRefereeEntry());
@@ -1425,7 +1488,7 @@ var ActionCreators;
     ActionCreators.updateRefereeEntry = function (entry, closeOnSuccess) {
         if (closeOnSuccess === void 0) { closeOnSuccess = false; }
         return function (d, gs) {
-            Services.RefereeEntryServices.update(entry).then(function (response) {
+            Services.RefereeEntry.update(entry).then(function (response) {
                 if (response.status) {
                     if (closeOnSuccess)
                         d(ActionCreators.closeRefereeEntry());
@@ -1465,7 +1528,7 @@ var ActionCreators;
         d({ type: ActionTypes.CANCEL_REMOVE });
     }; };
     ActionCreators.removeEntry = function () { return function (d, gs) {
-        Services.RefereeEntryServices.remove({ id: gs().refereeEntries.deleteById }).then(function (response) {
+        Services.RefereeEntry.remove({ id: gs().refereeEntries.deleteById }).then(function (response) {
             if (response.status) {
                 toastr.success(response.message);
                 d(ActionCreators.cancelRemove());
@@ -1526,6 +1589,7 @@ exports.LOAD_EVENTS = "LOOKUP::LOAD_EVENTS";
 exports.SELECT_TO_REMOVE = "REFEREE_ENTRIES::SELECT_TO_REMOVE";
 exports.CANCEL_REMOVE = "REFEREE_ENTRIES::CANCEL_REMOVE";
 exports.LOAD_NAMES = "LOOKUP::LOAD_NAMES";
+exports.LOAD_RATING = "REFEREE_RATING::LOAD";
 
 
 /***/ }),
@@ -1662,10 +1726,12 @@ var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js
 var RefereeEntryReducer = __webpack_require__(/*! ./referee.entry.reducer */ "./client/src/pages/referee-ratings/reducers/referee.entry.reducer.ts");
 var ShellReducer = __webpack_require__(/*! ./shell.reducer */ "./client/src/pages/referee-ratings/reducers/shell.reducer.tsx");
 var Lookup = __webpack_require__(/*! ./lookup.reducer */ "./client/src/pages/referee-ratings/reducers/lookup.reducer.ts");
+var Rating = __webpack_require__(/*! ./referee.rating.reducer */ "./client/src/pages/referee-ratings/reducers/referee.rating.reducer.ts");
 exports.reducer = redux_1.combineReducers({
     refereeEntries: RefereeEntryReducer.reducer,
     shell: ShellReducer.reducer,
-    lookup: Lookup.reducer
+    lookup: Lookup.reducer,
+    rating: Rating.reducer
 });
 
 
@@ -1777,6 +1843,46 @@ exports.reducer = function (state, action) {
 
 /***/ }),
 
+/***/ "./client/src/pages/referee-ratings/reducers/referee.rating.reducer.ts":
+/*!*****************************************************************************!*\
+  !*** ./client/src/pages/referee-ratings/reducers/referee.rating.reducer.ts ***!
+  \*****************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var ActionTypes = __webpack_require__(/*! ../actions/types/action.types */ "./client/src/pages/referee-ratings/actions/types/action.types.ts");
+var defaultState = {
+    ratings: []
+};
+exports.reducer = function (state, action) {
+    if (state === void 0) { state = defaultState; }
+    switch (action.type) {
+        case ActionTypes.LOAD_RATING: {
+            var payload = action.payload;
+            return __assign({}, state, { ratings: payload });
+        }
+        default:
+            return state;
+    }
+};
+
+
+/***/ }),
+
 /***/ "./client/src/pages/referee-ratings/reducers/shell.reducer.tsx":
 /*!*********************************************************************!*\
   !*** ./client/src/pages/referee-ratings/reducers/shell.reducer.tsx ***!
@@ -1815,6 +1921,8 @@ var Lookup = __webpack_require__(/*! ./lookup.selectors */ "./client/src/pages/r
 exports.Lookup = Lookup;
 var RefereeEntry = __webpack_require__(/*! ./referee.entry.selectors */ "./client/src/pages/referee-ratings/selectors/referee.entry.selectors.ts");
 exports.RefereeEntry = RefereeEntry;
+var Rating = __webpack_require__(/*! ./rating.selectors */ "./client/src/pages/referee-ratings/selectors/rating.selectors.ts");
+exports.Rating = Rating;
 
 
 /***/ }),
@@ -1833,10 +1941,42 @@ var reselect_1 = __webpack_require__(/*! reselect */ "./node_modules/reselect/es
 var activities = function (state) { return state.lookup.activities; };
 var events = function (state) { return state.lookup.events; };
 exports.eventsList = reselect_1.createSelector(events, function (events) {
-    return [{ text: "", value: null }].concat(events.map(function (event) { return ({ text: event.name, value: event.id }); }));
+    return [{ text: "", value: null }].concat(events.map(function (event) { return ({ text: event.name, value: event.dbName }); }));
 });
 exports.activitiesList = reselect_1.createSelector(activities, function (activities) {
     return [{ text: "", value: null }].concat(activities.map(function (a) { return ({ text: a.activity, value: a.id }); }));
+});
+
+
+/***/ }),
+
+/***/ "./client/src/pages/referee-ratings/selectors/rating.selectors.ts":
+/*!************************************************************************!*\
+  !*** ./client/src/pages/referee-ratings/selectors/rating.selectors.ts ***!
+  \************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+var reselect_1 = __webpack_require__(/*! reselect */ "./node_modules/reselect/es/index.js");
+var utils_1 = __webpack_require__(/*! ../../../utils/utils */ "./client/src/utils/utils.ts");
+var ratings = function (state) { return state.rating.ratings; };
+var competitions = function (state) { return state.lookup.events; };
+exports.refereeRatings = reselect_1.createSelector(ratings, competitions, function (ratings, competitions) {
+    return ratings.map(function (r) { return (__assign({}, r, { details: utils_1.getDetails(r.details, [], competitions, [], true) })); });
 });
 
 
@@ -1869,7 +2009,7 @@ var events = function (state) { return state.lookup.events; };
 var activities = function (state) { return state.lookup.activities; };
 exports.getTableEntries = reselect_1.createSelector(entries, events, activities, function (entries, events, activities) {
     return entries.map(function (x) {
-        var event = events.find(function (e) { return e.id == parseInt(x.event); });
+        var event = events.find(function (e) { return e.dbName == x.event; });
         var activity = activities.find(function (a) { return a.id == x.activity; });
         return __assign({}, x, { eventName: !!event ? event.name : null, activityName: !!activity ? activity.activity : null });
     });
@@ -1888,9 +2028,12 @@ exports.getTableEntries = reselect_1.createSelector(entries, events, activities,
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RefereeEntryServices = __webpack_require__(/*! ./referee.entry.services */ "./client/src/pages/referee-ratings/services/referee.entry.services.ts");
+var RefereeEntry = __webpack_require__(/*! ./referee.entry.services */ "./client/src/pages/referee-ratings/services/referee.entry.services.ts");
+exports.RefereeEntry = RefereeEntry;
 var Lookup = __webpack_require__(/*! ./lookup.services */ "./client/src/pages/referee-ratings/services/lookup.services.ts");
 exports.Lookup = Lookup;
+var RefereeRating = __webpack_require__(/*! ./referee.rating.services */ "./client/src/pages/referee-ratings/services/referee.rating.services.ts");
+exports.RefereeRating = RefereeRating;
 
 
 /***/ }),
@@ -1969,6 +2112,30 @@ exports.remove = function (contract) {
         url: path + "Delete.php",
         type: apiTypes.POST,
         data: contract
+    });
+};
+
+
+/***/ }),
+
+/***/ "./client/src/pages/referee-ratings/services/referee.rating.services.ts":
+/*!******************************************************************************!*\
+  !*** ./client/src/pages/referee-ratings/services/referee.rating.services.ts ***!
+  \******************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var CallApi = __webpack_require__(/*! ../../../infrastructure/call.api */ "./client/src/infrastructure/call.api.ts");
+var path = "../wp-content/plugins/ratings/server/RefereeRatingController/";
+var apiTypes = CallApi.RequestTypes;
+exports.getRating = function (year) {
+    return CallApi.callApi({
+        url: path + "GetAllRatings.php",
+        type: apiTypes.GET,
+        data: { year: year }
     });
 };
 
@@ -2120,6 +2287,57 @@ exports.default = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(fun
 
 /***/ }),
 
+/***/ "./client/src/pages/referee-ratings/views/referee.ratings.tsx":
+/*!********************************************************************!*\
+  !*** ./client/src/pages/referee-ratings/views/referee.ratings.tsx ***!
+  \********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+var Actions = __webpack_require__(/*! ../actions/index.actions */ "./client/src/pages/referee-ratings/actions/index.actions.ts");
+var Components = __webpack_require__(/*! ../../../components */ "./client/src/components/index.ts");
+var Selectors = __webpack_require__(/*! ../selectors/index.selectors */ "./client/src/pages/referee-ratings/selectors/index.selectors.ts");
+var mapStateToProps = function (state) { return ({
+    ratings: Selectors.Rating.refereeRatings(state)
+}); };
+var mapDispatchToProps = function (dispatch) { return ({
+    loadRatings: function () { return dispatch(Actions.Ratings.getRating()); }
+}); };
+exports.default = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(function refereeRatingView(props) {
+    React.useEffect(function () {
+        props.loadRatings();
+    }, []);
+    return React.createElement("div", { className: "ratings" },
+        React.createElement(Components.PrintButton, { printTargetId: "referee-rating", classNames: "print" }),
+        React.createElement("div", { id: "referee-rating" },
+            React.createElement(Components.Table, { items: props.ratings, columns: [
+                    {
+                        title: "П.І.П.",
+                        field: "fullname",
+                        width: "250px"
+                    },
+                    {
+                        title: "К-ть очок",
+                        field: "rating",
+                        width: "100px"
+                    },
+                    {
+                        title: "Деталі",
+                        field: "details",
+                        type: Components.ColumnTypes.Html,
+                        width: "*"
+                    }
+                ] })));
+});
+
+
+/***/ }),
+
 /***/ "./client/src/pages/referee-ratings/views/referee.tabs.tsx":
 /*!*****************************************************************!*\
   !*** ./client/src/pages/referee-ratings/views/referee.tabs.tsx ***!
@@ -2136,6 +2354,7 @@ var Components = __webpack_require__(/*! ../../../components/index */ "./client/
 var referee_header_1 = __webpack_require__(/*! ./referee.header */ "./client/src/pages/referee-ratings/views/referee.header.tsx");
 var referee_entries_1 = __webpack_require__(/*! ./referee entries */ "./client/src/pages/referee-ratings/views/referee entries.tsx");
 var Actions = __webpack_require__(/*! ../actions/index.actions */ "./client/src/pages/referee-ratings/actions/index.actions.ts");
+var referee_ratings_1 = __webpack_require__(/*! ./referee.ratings */ "./client/src/pages/referee-ratings/views/referee.ratings.tsx");
 var mapDispatchProps = function (dispatch) { return ({
     loadLookups: function () { return dispatch(Actions.Lookup.loadLookups()); }
 }); };
@@ -2148,8 +2367,66 @@ exports.default = react_redux_1.connect(null, mapDispatchProps)(function Referee
         React.createElement(Components.TabView, null,
             React.createElement(Components.Tab, { title: "\u0417\u0430\u043F\u0438\u0441\u0438", label: "refereeEntries" },
                 React.createElement(referee_entries_1.default, null)),
-            React.createElement(Components.Tab, { title: "\u0420\u0435\u0439\u0442\u0438\u043D\u0433\u0438 \u0441\u0443\u0434\u0434\u0456\u0432", label: "refereeRatings" })));
+            React.createElement(Components.Tab, { title: "\u0420\u0435\u0439\u0442\u0438\u043D\u0433\u0438 \u0441\u0443\u0434\u0434\u0456\u0432", label: "refereeRatings" },
+                React.createElement(referee_ratings_1.default, null))));
 });
+
+
+/***/ }),
+
+/***/ "./client/src/utils/utils.ts":
+/*!***********************************!*\
+  !*** ./client/src/utils/utils.ts ***!
+  \***********************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+function getDetails(originalDetails, types, competitions, records, isReferee) {
+    if (isReferee === void 0) { isReferee = false; }
+    var details = originalDetails;
+    var detailsAsArray = [];
+    for (var i = 0; i < competitions.length; i++) {
+        details = details.replace(new RegExp(" " + competitions[i].dbName, 'g'), competitions[i].shortName);
+    }
+    for (var i = 0; i < records.length; i++) {
+        details = details.replace(new RegExp(" " + records[i].dbName, 'g'), records[i].shortName);
+    }
+    for (var i = 0; i < types.length; i++) {
+        details = details.replace(new RegExp(" " + types[i].name, 'g'), " - " + types[i].displayName);
+    }
+    detailsAsArray = details.split(",");
+    detailsAsArray = !isReferee ? detailsAsArray.map(function (d) { return ({ text: d, range: d.split(' - ')[2].split(' ')[0] }); })
+        : detailsAsArray.map(function (d) { return ({ text: d, range: d.split(' - ')[1].split(' ')[0] }); });
+    detailsAsArray = detailsAsArray.sort(function (a, b) { return a.range - b.range; });
+    detailsAsArray = detailsAsArray.map(function (d) { return "<li>" + d.text + "</li>"; });
+    return "<ul>" + detailsAsArray.join('') + "</ul>";
+}
+exports.getDetails = getDetails;
+function sortUPFRating(ratingA, ratingB) {
+    var detailsA = ratingA.detailsData.map(function (x) { return parseInt(x.trim()); });
+    var detailsB = ratingB.detailsData.map(function (x) { return parseInt(x.trim()); });
+    var globalLength = detailsA.length >= detailsB.length ? detailsA.length : detailsB.length;
+    detailsA = detailsA.sort(function (a, b) { return a - b; });
+    detailsB = detailsB.sort(function (a, b) { return a - b; });
+    var i = 0;
+    while (i < globalLength) {
+        var valueA = detailsA[i] || 1000;
+        var valueB = detailsB[i] || 1000;
+        if (valueA == valueB) {
+            ++i;
+            continue;
+        }
+        if (valueA > valueB)
+            return 1;
+        if (valueA < valueB)
+            return -1;
+    }
+    return 1;
+}
+exports.sortUPFRating = sortUPFRating;
 
 
 /***/ }),

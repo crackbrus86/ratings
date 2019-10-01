@@ -7,7 +7,7 @@ const activities = (state: Models.StoreState) => state.lookup.activities
 
 export const getTableEntries = createSelector(entries, events, activities, (entries, events, activities) => {
     return entries.map(x => {
-        let event = events.find(e => e.id == parseInt(x.event))
+        let event = events.find(e => e.dbName == x.event)
         let activity = activities.find(a => a.id == x.activity)
         return {...x, eventName: !!event ? event.name : null, activityName: !!activity ? activity.activity : null} as Models.ExtendedEntry
     })

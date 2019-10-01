@@ -5,7 +5,8 @@ import Search from "./search/search"
 import Table from "./table/table"
 import {ColumnModel, ColumnTypes} from "./table/column"
 import Confirm from "./confirm/confirm"
+import PrintButton from "./print button/print.button"
 
-export {TabView, Tab, Layout, Search, Table, ColumnTypes, Confirm}
+export {TabView, Tab, Layout, Search, Table, ColumnTypes, Confirm, PrintButton}
 
 export type ColumnModel = ColumnModel

@@ -6,7 +6,7 @@ const activities = (state: Models.StoreState) => state.lookup.activities
 const events = (state: Models.StoreState) => state.lookup.events
 
 export const eventsList = createSelector(events, (events) => {
-    return [{text: "", value: null}].concat(events.map(event => ({ text: event.name, value: event.id }) as SelectOption))
+    return [{text: "", value: null}].concat(events.map(event => ({ text: event.name, value: event.dbName }) as SelectOption))
 })
 
 export const activitiesList = createSelector(activities, (activities) => {

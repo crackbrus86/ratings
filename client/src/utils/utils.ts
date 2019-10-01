@@ -30,7 +30,7 @@ interface Rating{
     wilks: string
 }
 
-export function getDetails(originalDetails: string, types: CompetitionType[], competitions: Competition[], records: Record[]){
+export function getDetails(originalDetails: string, types: CompetitionType[], competitions: Competition[], records: Record[], isReferee = false){
 
     let details = originalDetails;
 
@@ -50,7 +50,8 @@ export function getDetails(originalDetails: string, types: CompetitionType[], co
 
     detailsAsArray = details.split(",");
 
-    detailsAsArray = detailsAsArray.map(d => ({text: d, range: d.split(' - ')[2].split(' ')[0]}));
+    detailsAsArray = !isReferee ? detailsAsArray.map(d => ({text: d, range: d.split(' - ')[2].split(' ')[0]})) 
+                                : detailsAsArray.map(d => ({text: d, range: d.split(' - ')[1].split(' ')[0]}));
 
     detailsAsArray = detailsAsArray.sort((a,b) => a.range - b.range);
 
