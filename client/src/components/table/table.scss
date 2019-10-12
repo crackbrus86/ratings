@@ -37,9 +37,11 @@
         color: green;
         cursor: pointer;
         font-size: 1.2em;
+        text-align: center;
         &:hover{
             color: #07bc69;
         }
+        span{display: block;}
     }
     .editable-cell{
         .editable-cell-icon{

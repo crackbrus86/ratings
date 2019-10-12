@@ -364,7 +364,7 @@ var Select = /** @class */ (function (_super) {
     Select.prototype.render = function () {
         var _this = this;
         return React.createElement(React.Fragment, null,
-            React.createElement("div", { className: classnames('form-control', 'select', { 'validation-error': this.props.validation && !this.props.validation.isValid }) },
+            React.createElement("div", { className: classnames('form-control', 'select', { 'validation-error': this.props.validation && !this.props.validation.isValid }, this.props.classNames) },
                 this.props.label && React.createElement("label", null, this.props.label),
                 React.createElement("select", { value: this.props.value || "", onChange: function (e) { return _this.props.onChange(e.target.value); } }, this.props.options.map(function (option, index) { return React.createElement("option", { key: index, value: option.value }, option.text); }))),
             this.props.validation && !this.props.validation.isValid &&
@@ -958,7 +958,9 @@ var Cell = /** @class */ (function (_super) {
         return _this;
     }
     Cell.prototype.render = function () {
-        return React.createElement("td", { key: this.props.index }, this.renderItem());
+        if (this.props.column.hide)
+            return null;
+        return React.createElement("td", { key: this.props.index, style: this.props.column.cellStyle }, this.renderItem());
     };
     return Cell;
 }(React.PureComponent));
@@ -1006,6 +1008,8 @@ var Column = /** @class */ (function (_super) {
     }
     Column.prototype.render = function () {
         var _this = this;
+        if (this.props.column.hide)
+            return null;
         return React.createElement("th", { key: this.props.index, style: { width: this.props.column.width } },
             this.props.column.title,
             this.props.column.sortable &&

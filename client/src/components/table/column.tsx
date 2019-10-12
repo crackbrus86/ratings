@@ -17,6 +17,8 @@ export interface ColumnModel{
     sortable?: boolean,
     icon?: string,
     onClick?: (item: any) => void
+    hide?: boolean
+    cellStyle?: React.CSSProperties
 }
 
 export interface ColumnProps{
@@ -29,6 +31,7 @@ export interface ColumnProps{
 
 class Column extends React.PureComponent<ColumnProps>{
     render(){
+        if(this.props.column.hide) return null
         return <th key={this.props.index} style={{width: this.props.column.width}}>
         {this.props.column.title}
         {

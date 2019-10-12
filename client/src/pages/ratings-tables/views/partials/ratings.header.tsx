@@ -46,6 +46,7 @@ export default connect<StateProps, DispatchProps>(
                         options={this.props.ratings} 
                         value={this.props.rating}
                         onChange={(value) => this.props.shellActions.changeRating(value)}
+                        classNames="upf-ratings-filter"
                     />
                 </Layout.GridRow>
                 <Layout.GridRow>

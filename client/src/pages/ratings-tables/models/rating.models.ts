@@ -2,7 +2,8 @@ export interface Rating{
     id: number,
     ratingType: string,
     title: string,
-    organization: string
+    organization: string,
+    type: "athlete" | "coach" | "region" | "fst" | "school"
 }
 
 export interface RatingEntry{
@@ -17,6 +18,10 @@ export interface RatingEntry{
 export interface GetRatingsByGender_Contract{
     year: number,
     gender: string
+}
+
+export interface GetRatingsByYear_Contract{
+    year: number
 }
 
 export enum RatingTypes {

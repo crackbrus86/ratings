@@ -37,7 +37,8 @@ class Cell extends React.PureComponent<CellProps>{
         }
     }
     render(){
-        return <td key={this.props.index}>
+        if(this.props.column.hide) return null
+        return <td key={this.props.index} style={this.props.column.cellStyle}>
         {
             this.renderItem()
         }

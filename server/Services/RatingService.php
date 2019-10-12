@@ -129,6 +129,44 @@ class RatingService
         return $response;
     }
 
+    public function getUPFRatingsByGender()
+    {
+        $year = $_GET["year"];
+        $gender = $_GET["gender"];
+        $this->db->query("SET SESSION group_concat_max_len = 100000");
+        $sql = $this->db->prepare("SELECT a.Fullname, a.Gender, MIN(b.Range) AS Rating,
+                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Range, ' ранг)') separator ', ') AS Details,
+                                        COUNT(a.Event) AS EventCount,
+                                        GROUP_CONCAT(CONCAT(' ', b.Range) separator ', ') AS AllRanks,
+                                        MAX(a.Wilks) AS Wilks
+                                        FROM $this->entryTable a 
+                                        JOIN $this->rangeTale b ON b.Competition = a.Event AND b.Place = a.Place AND b.CompType = a.CompType
+                                    WHERE YEAR(a.EventDate) = %s AND a.Gender = %s
+                                    GROUP BY a.Fullname, a.Gender
+                                    ORDER BY Rating ASC, EventCount DESC, Wilks DESC", $year, $gender);
+
+        $results = $this->db->get_results($sql);
+
+        if(count($results))
+        {
+            foreach ($results as $result) 
+            {
+                array_push($this->ratings, new Rating($result->Fullname, 
+                                                      $result->Rating, 
+                                                      $result->Gender, 
+                                                      $result->Details, 
+                                                      explode(",", $result->AllRanks), 
+                                                      $result->Wilks));
+            }
+        }
+
+        $response = new ResponseModel();
+
+        $response->setResponseModel((object)array("status" => TRUE, "data" => $this->ratings));
+
+        return $response;
+    }
+
     public function getCoachMinistryRatings()
     {
         $year = $_GET["year"];

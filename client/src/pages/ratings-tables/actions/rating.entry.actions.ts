@@ -14,6 +14,34 @@ export namespace ActionCreators{
                 d(loadMinistryRatingByGender("F"));
                 return;
             }
+            case Models.RatingModels.RatingTypes.UpfAthMale: {
+                d(loadUPFRatingsByGender("M"))
+                return
+            }
+            case Models.RatingModels.RatingTypes.UpfAthFemale: {
+                d(loadUPFRatingsByGender("F"))
+                return
+            }
+            case Models.RatingModels.RatingTypes.MinCoach: {
+                d(loadCoachMinistryRatings())
+                return
+            }
+            case Models.RatingModels.RatingTypes.UpfCoach: {
+                d(loadCoachUPFRatings())
+                return
+            }
+            case Models.RatingModels.RatingTypes.MinRegion: {
+                d(loadRegionsRatings())
+                return
+            }
+            case Models.RatingModels.RatingTypes.MinFST: {
+                d(loadFstRatings())
+                return
+            }
+            case Models.RatingModels.RatingTypes.MinSchool: {
+                d(loadSchoolRatings())
+                return
+            }
             default:
                 d(emptyRatingEntries());
                 return;
@@ -34,7 +62,86 @@ export namespace ActionCreators{
         })
     }
 
-    export const emptyRatingEntries = () => (d, gs: () => Models.StoreState) => {
+    export const loadUPFRatingsByGender = (gender: string) => (d, gs: () => Models.StoreState) => {
+        Services.RatingEntryService.getUPFRatingsByGender({
+            year: new Date().getFullYear(),
+            gender
+        }).then(response => {
+            if(response.status){
+                d({
+                    type: types.LOAD_RATING_ENTRIES,
+                    payload: <types.LOAD_RATING_ENTRIES_PAYLOAD>response.data
+                })
+            }
+        })
+    }
+
+    export const loadCoachMinistryRatings = () => (d) => {
+        Services.RatingEntryService.getCoachMinistryRatings({
+            year: new Date().getFullYear()
+        }).then(response => {
+            if(response.status){
+                d({
+                    type: types.LOAD_RATING_ENTRIES,
+                    payload: <types.LOAD_RATING_ENTRIES_PAYLOAD>response.data
+                })
+            }
+        })
+    }
+
+    export const loadCoachUPFRatings = () => (d) => {
+        Services.RatingEntryService.getCoachUPFRatings({
+            year: new Date().getFullYear()
+        }).then(response => {
+            if(response.status){
+                d({
+                    type: types.LOAD_RATING_ENTRIES,
+                    payload: <types.LOAD_RATING_ENTRIES_PAYLOAD>response.data
+                })
+            }
+        })
+    }
+
+    export const loadRegionsRatings = () => (d) => {
+        Services.RatingEntryService.getRegionsRatings({
+            year: new Date().getFullYear()
+        }).then(response => {
+            if(response.status){
+                d({
+                    type: types.LOAD_RATING_ENTRIES,
+                    payload: <types.LOAD_RATING_ENTRIES_PAYLOAD>response.data
+                })
+            }
+        })
+    }
+
+    export const loadFstRatings = () => (d) => {
+        Services.RatingEntryService.getFstRatings({
+            year: new Date().getFullYear()
+        }).then(response => {
+            if(response.status){
+                d({
+                    type: types.LOAD_RATING_ENTRIES,
+                    payload: <types.LOAD_RATING_ENTRIES_PAYLOAD>response.data
+                })
+            }
+        })
+    }
+
+    export const loadSchoolRatings = () => (d) => {
+        Services.RatingEntryService.getSchoolRatings({
+            year: new Date().getFullYear()
+        }).then(response => {
+            if(response.status){
+                d({
+                    type: types.LOAD_RATING_ENTRIES,
+                    payload: <types.LOAD_RATING_ENTRIES_PAYLOAD>response.data
+                })
+            }
+        })
+    }
+
+    export const emptyRatingEntries = () => (d) => {
         d({
             type: types.EMPTY_RATING_ENTRIES
         });

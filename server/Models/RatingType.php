@@ -9,7 +9,9 @@ class RatingType
 
     public $organization;
 
-    function __construct($id, $ratingType, $title, $organization)
+    public $type;
+
+    function __construct($id, $ratingType, $title, $organization, $type)
     {
         $this->id = $id;
 
@@ -18,6 +20,8 @@ class RatingType
         $this->title = $title;
 
         $this->organization = $organization;
+
+        $this->type = $type;
     }
 }
 ?>

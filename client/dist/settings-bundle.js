@@ -631,7 +631,9 @@ var Cell = /** @class */ (function (_super) {
         return _this;
     }
     Cell.prototype.render = function () {
-        return React.createElement("td", { key: this.props.index }, this.renderItem());
+        if (this.props.column.hide)
+            return null;
+        return React.createElement("td", { key: this.props.index, style: this.props.column.cellStyle }, this.renderItem());
     };
     return Cell;
 }(React.PureComponent));
@@ -679,6 +681,8 @@ var Column = /** @class */ (function (_super) {
     }
     Column.prototype.render = function () {
         var _this = this;
+        if (this.props.column.hide)
+            return null;
         return React.createElement("th", { key: this.props.index, style: { width: this.props.column.width } },
             this.props.column.title,
             this.props.column.sortable &&

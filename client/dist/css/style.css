@@ -132,15 +132,6 @@
         .modal-black-out .modal-content .modal-footer .modal-footer-button .fa {
           margin: 0 4px; }
 
-.print-button {
-  display: inline-block;
-  padding: 0.6em 4px;
-  width: 32px;
-  height: 32px;
-  box-sizing: border-box;
-  text-align: center;
-  cursor: pointer; }
-
 .search-box {
   padding: 4px;
   overflow: hidden;
@@ -157,6 +148,15 @@
       cursor: pointer; }
       .search-box .fa.close-icon:hover {
         color: #eb0e21; }
+
+.print-button {
+  display: inline-block;
+  padding: 0.6em 4px;
+  width: 32px;
+  height: 32px;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer; }
 
 .tabs {
   display: flex;
@@ -220,9 +220,12 @@
   .rat-table .table-button {
     color: green;
     cursor: pointer;
-    font-size: 1.2em; }
+    font-size: 1.2em;
+    text-align: center; }
     .rat-table .table-button:hover {
       color: #07bc69; }
+    .rat-table .table-button span {
+      display: block; }
   .rat-table .editable-cell .editable-cell-icon {
     float: right;
     opacity: 0.6;
@@ -243,6 +246,9 @@
     outline: none;
     box-shadow: none;
     background-color: #e8e8e8; }
+
+#app-rat-tables .upf-ratings-filter {
+  width: 450px; }
 
 .entries {
   width: 100%; }

@@ -168,15 +168,6 @@
         }
     }
 }
-.print-button{
-    display: inline-block;
-    padding: 0.6em 4px;
-    width: 32px;
-    height: 32px;
-    box-sizing: border-box;
-    text-align: center;
-    cursor: pointer;
-}
 .search-box{
     padding: 4px;
     overflow: hidden;
@@ -203,6 +194,15 @@
         }
     }
 
+}
+.print-button{
+    display: inline-block;
+    padding: 0.6em 4px;
+    width: 32px;
+    height: 32px;
+    box-sizing: border-box;
+    text-align: center;
+    cursor: pointer;
 }
 .tabs{
     display: flex;
@@ -278,9 +278,11 @@
         color: green;
         cursor: pointer;
         font-size: 1.2em;
+        text-align: center;
         &:hover{
             color: #07bc69;
         }
+        span{display: block;}
     }
     .editable-cell{
         .editable-cell-icon{
@@ -309,6 +311,11 @@
             box-shadow: none;
             background-color: #e8e8e8;
         }
+    }
+}
+#app-rat-tables{
+    .upf-ratings-filter{
+        width: 450px;
     }
 }
 .entries{

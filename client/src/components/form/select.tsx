@@ -8,6 +8,7 @@ export interface SelectProps {
     options?: SelectOption<any>[],
     validation?: ValidationResult,
     onChange?: (value: any) => void
+    classNames?: string
 }
 
 export interface SelectOption<T = any> {
@@ -22,7 +23,7 @@ class Select extends React.Component<SelectProps>{
 
     render() {
         return <>
-            <div className={classnames('form-control', 'select', { 'validation-error': this.props.validation && !this.props.validation.isValid })}>
+            <div className={classnames('form-control', 'select', { 'validation-error': this.props.validation && !this.props.validation.isValid }, this.props.classNames)}>
                 {
                     this.props.label && <label>{this.props.label}</label>
                 }
