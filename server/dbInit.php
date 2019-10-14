@@ -65,3 +65,15 @@ $sql = "CREATE TABLE IF NOT EXISTS {$refereeEntryTableName} (
     PRIMARY KEY (Id)
 ) {$charset_collate}";
 dbDelta($sql);
+
+$ratingTypeTableName = $prefix . "rating_type";
+$sql = "CREATE TABLE IF NOT EXISTS {$ratingTypeTableName} (
+    Id INT NOT NULL AUTO_INCREMENT,
+    RatingType VARCHAR(50) NOT NULL,
+    Title VARCHAR(300) NOT NULL,
+    Organization VARCHAR(50) NOT NULL,
+    Type VARCHAR(50) NOT NULL,
+    IsActive TINYINT NOT NULL,
+    PRIMARY KEY (Id)
+) {$charset_collate}";
+dbDelta($sql);

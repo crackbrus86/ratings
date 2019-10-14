@@ -14,7 +14,6 @@ interface StateProps{
 }
 
 interface DispatchProps{
-    lookupActions: typeof Actions.LookupActions.ActionCreators,
     shellActions: typeof Actions.ShellActions.ActionCreators
 }
 
@@ -25,16 +24,11 @@ export default connect<StateProps, DispatchProps>(
         ratingTitle: Selectors.ShellSelectors.ratingTitle(state)
     }),
     (dispatch): DispatchProps => ({
-        lookupActions: bindActionCreators(Actions.LookupActions.ActionCreators, dispatch),
         shellActions: bindActionCreators(Actions.ShellActions.ActionCreators, dispatch)
     })
 )(class RatingsHeader extends React.Component<StateProps & DispatchProps>{
     constructor(props){
         super(props);
-    }
-
-    componentDidMount(){
-        this.props.lookupActions.loadRatings();
     }
 
     render(){

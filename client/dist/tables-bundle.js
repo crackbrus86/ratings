@@ -187,6 +187,28 @@ exports.default = Autocomplete;
 
 /***/ }),
 
+/***/ "./client/src/components/form/checkbox.tsx":
+/*!*************************************************!*\
+  !*** ./client/src/components/form/checkbox.tsx ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+exports.CheckBox = function (props) {
+    return React.createElement("div", { className: classnames("form-checkbox", props.className) },
+        props.label && React.createElement("label", null, props.label),
+        React.createElement("input", { type: "checkbox", checked: props.isChecked, onChange: props.onChange }));
+};
+exports.default = exports.CheckBox;
+
+
+/***/ }),
+
 /***/ "./client/src/components/form/datepicker.tsx":
 /*!***************************************************!*\
   !*** ./client/src/components/form/datepicker.tsx ***!
@@ -267,6 +289,7 @@ var text_input_1 = __webpack_require__(/*! ./text.input */ "./client/src/compone
 var radio_button_1 = __webpack_require__(/*! ./radio.button */ "./client/src/components/form/radio.button.tsx");
 var select_1 = __webpack_require__(/*! ./select */ "./client/src/components/form/select.tsx");
 var datepicker_1 = __webpack_require__(/*! ./datepicker */ "./client/src/components/form/datepicker.tsx");
+var checkbox_1 = __webpack_require__(/*! ./checkbox */ "./client/src/components/form/checkbox.tsx");
 var Form = /** @class */ (function (_super) {
     __extends(Form, _super);
     function Form(props) {
@@ -279,6 +302,7 @@ var Form = /** @class */ (function (_super) {
     Form.RadioButton = radio_button_1.default;
     Form.Select = select_1.default;
     Form.DatePicker = datepicker_1.default;
+    Form.CheckBox = checkbox_1.default;
     return Form;
 }(React.Component));
 exports.default = Form;
@@ -446,7 +470,7 @@ var TextInput = /** @class */ (function (_super) {
         return React.createElement(React.Fragment, null,
             React.createElement("div", { className: classnames('form-control', 'text-input', { 'validation-error': this.props.validation && !this.props.validation.isValid }) },
                 this.props.label && React.createElement("label", null, this.props.label),
-                React.createElement("input", { type: "text", value: this.props.value, ref: function (c) { return _this.inputObject = c; }, onKeyUp: function (e) { return _this.setAsFocused(e); }, onChange: function (e) { return _this.props.onChange(e.target.value); } }),
+                React.createElement("input", { type: "text", value: this.props.value, ref: function (c) { return _this.inputObject = c; }, onKeyUp: function (e) { return _this.setAsFocused(e); }, readOnly: this.props.readonly, onChange: function (e) { return _this.props.onChange(e.target.value); } }),
                 !!autocompleteItems.length &&
                     this.state.isFocused && React.createElement(autocomplete_1.default, { items: autocompleteItems, top: offset.top, left: offset.left, chooseItem: this.props.onChange })),
             this.props.validation && !this.props.validation.isValid &&
@@ -485,6 +509,10 @@ var confirm_1 = __webpack_require__(/*! ./confirm/confirm */ "./client/src/compo
 exports.Confirm = confirm_1.default;
 var print_button_1 = __webpack_require__(/*! ./print button/print.button */ "./client/src/components/print button/print.button.tsx");
 exports.PrintButton = print_button_1.default;
+var modal_1 = __webpack_require__(/*! ./modal/modal */ "./client/src/components/modal/modal.tsx");
+exports.Modal = modal_1.default;
+var form_1 = __webpack_require__(/*! ./form/form */ "./client/src/components/form/form.tsx");
+exports.Form = form_1.default;
 
 
 /***/ }),
@@ -500,8 +528,9 @@ exports.PrintButton = print_button_1.default;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
+var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
 exports.ContentWrap = function (props) {
-    return React.createElement("div", { className: "content-wrap" }, props.children);
+    return React.createElement("div", { id: props.id, className: classnames("content-wrap", props.className) }, props.children);
 };
 
 
@@ -684,7 +713,7 @@ var Modal = /** @class */ (function (_super) {
         _this.modalLayout = document.createElement("div");
         _this.modalLayout.className = "modal-black-out";
         _this.modalContent = document.createElement("div");
-        _this.modalContent.className = "modal-content";
+        _this.modalContent.className = !_this.props.className ? "modal-content" : "modal-content " + _this.props.className;
         _this.modalLayout.appendChild(_this.modalContent);
         return _this;
     }
@@ -1332,6 +1361,11 @@ exports.CHANGE_RATING = "SHELL::CHANGE_RATING";
 exports.LOAD_RATINGS = "LOOKUP::LOAD_RATINGS";
 exports.LOAD_RATING_ENTRIES = "RATINGS::LOAD_RATING_ENTRIES";
 exports.EMPTY_RATING_ENTRIES = "RATINGS::EMPTY_RATING_ENTRIES";
+exports.OPEN_ENTRY_DETAILS = "RATINGS::OPEN_ENTRY_DETAILS";
+exports.CLOSE_ENTRY_DETAILS = "RATINGS::CLOSE_ENTRY_DETAILS";
+exports.LOAD_COMPETITIONS = "LOOKUP::LOAD_COMPETITIONS";
+exports.LOAD_COMPETITION_TYPES = "LOOKUP::LOAD_COMPETITION_TYPES";
+exports.LOAD_RECORDS = "LOOKUP::LOAD_RECORDS";
 
 
 /***/ }),
@@ -1376,6 +1410,30 @@ var ActionCreators;
                 });
             }
         });
+    }; };
+    ActionCreators.loadCompetitions = function () { return function (d) {
+        Services.LookupService.getCompetitions().then(function (response) {
+            if (response.status)
+                d({ type: types.LOAD_COMPETITIONS, payload: response.data });
+        });
+    }; };
+    ActionCreators.loadCompetitionTypes = function () { return function (d) {
+        Services.LookupService.getCompetitionTypes().then(function (response) {
+            if (response.status)
+                d({ type: types.LOAD_COMPETITION_TYPES, payload: response.data });
+        });
+    }; };
+    ActionCreators.loadRecords = function () { return function (d) {
+        Services.LookupService.getRecords().then(function (response) {
+            if (response.status)
+                d({ type: types.LOAD_RECORDS, payload: response.data });
+        });
+    }; };
+    ActionCreators.loadLookups = function () { return function (d) {
+        d(ActionCreators.loadRatings());
+        d(ActionCreators.loadCompetitions());
+        d(ActionCreators.loadCompetitionTypes());
+        d(ActionCreators.loadRecords());
     }; };
 })(ActionCreators = exports.ActionCreators || (exports.ActionCreators = {}));
 
@@ -1434,6 +1492,10 @@ var ActionCreators;
             }
             case Models.RatingModels.RatingTypes.MinSchool: {
                 d(ActionCreators.loadSchoolRatings());
+                return;
+            }
+            case Models.RatingModels.RatingTypes.MinReferee: {
+                d(ActionCreators.loadRefereeRatings());
                 return;
             }
             default:
@@ -1527,10 +1589,31 @@ var ActionCreators;
             }
         });
     }; };
+    ActionCreators.loadRefereeRatings = function () { return function (d) {
+        Services.RatingEntryService.getRefereeRatings({
+            year: new Date().getFullYear()
+        }).then(function (response) {
+            if (response.status) {
+                d({
+                    type: types.LOAD_RATING_ENTRIES,
+                    payload: response.data
+                });
+            }
+        });
+    }; };
     ActionCreators.emptyRatingEntries = function () { return function (d) {
         d({
             type: types.EMPTY_RATING_ENTRIES
         });
+    }; };
+    ActionCreators.openEntryDetails = function (entry) { return function (d) {
+        d({
+            type: types.OPEN_ENTRY_DETAILS,
+            payload: entry
+        });
+    }; };
+    ActionCreators.closeEntryDetails = function () { return function (d) {
+        d({ type: types.CLOSE_ENTRY_DETAILS });
     }; };
 })(ActionCreators = exports.ActionCreators || (exports.ActionCreators = {}));
 
@@ -1581,6 +1664,45 @@ ReactDOM.render(React.createElement(startup_1.default, null), document.getElemen
 
 /***/ }),
 
+/***/ "./client/src/pages/ratings-tables/modals/details.tsx":
+/*!************************************************************!*\
+  !*** ./client/src/pages/ratings-tables/modals/details.tsx ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+var Components = __webpack_require__(/*! ../../../components/index */ "./client/src/components/index.ts");
+var Actions = __webpack_require__(/*! ../actions/index.actions */ "./client/src/pages/ratings-tables/actions/index.actions.ts");
+var Selectors = __webpack_require__(/*! ../selectors/index.selectors */ "./client/src/pages/ratings-tables/selectors/index.selectors.ts");
+var mapStateToProps = function (state) { return ({
+    entry: Selectors.Ratings.getEntryDetails(state),
+    rating: Selectors.Ratings.getCurrentRating(state),
+    showWilks: Selectors.ShellSelectors.showWilks(state)
+}); };
+var mapDispatchToProps = function (dispatch) { return ({
+    onClose: function () { return dispatch(Actions.RatingEntryActions.ActionCreators.closeEntryDetails()); }
+}); };
+exports.default = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(function (props) {
+    return props.entry && React.createElement(Components.Modal, { className: "rating-details-modal" },
+        React.createElement(Components.Modal.Header, { title: props.entry.fullname, onClose: props.onClose }),
+        React.createElement(Components.Modal.Body, null,
+            React.createElement(Components.Layout.ContentWrap, { id: "ratingDetailsList" },
+                React.createElement(Components.Form, null,
+                    React.createElement(Components.Form.TextInput, { label: props.rating.organization == "ministry" ? "Кількість очок" : "Ранг", value: props.entry.rating, readonly: true }),
+                    props.showWilks && React.createElement(Components.Form.TextInput, { label: "\u041F\u043E\u043A\u0430\u0437\u043D\u0438\u043A \u043F\u043E \u0444\u043E\u0440\u043C\u0443\u043B\u0456 IPF", value: props.entry.wilks, readonly: true }),
+                    React.createElement("div", { dangerouslySetInnerHTML: { __html: props.entry.details } })))),
+        React.createElement(Components.Modal.Footer, null,
+            React.createElement(Components.PrintButton, { printTargetId: "ratingDetailsList", classNames: "print" })));
+});
+
+
+/***/ }),
+
 /***/ "./client/src/pages/ratings-tables/models/index.models.ts":
 /*!****************************************************************!*\
   !*** ./client/src/pages/ratings-tables/models/index.models.ts ***!
@@ -1617,6 +1739,7 @@ var RatingTypes;
     RatingTypes["MinRegion"] = "minRegion";
     RatingTypes["MinFST"] = "minFST";
     RatingTypes["MinSchool"] = "minSchool";
+    RatingTypes["MinReferee"] = "minReferee";
 })(RatingTypes = exports.RatingTypes || (exports.RatingTypes = {}));
 
 
@@ -1668,7 +1791,10 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ActionTypes = __webpack_require__(/*! ../actions/action.types */ "./client/src/pages/ratings-tables/actions/action.types.ts");
 var defaultState = {
-    ratings: []
+    ratings: [],
+    competitions: [],
+    competitionTypes: [],
+    records: []
 };
 exports.lookupReducer = function (state, action) {
     if (state === void 0) { state = defaultState; }
@@ -1676,6 +1802,18 @@ exports.lookupReducer = function (state, action) {
         case ActionTypes.LOAD_RATINGS: {
             var payload = action.payload;
             return __assign({}, state, { ratings: payload });
+        }
+        case ActionTypes.LOAD_COMPETITIONS: {
+            var payload = action.payload;
+            return __assign({}, state, { competitions: payload });
+        }
+        case ActionTypes.LOAD_COMPETITION_TYPES: {
+            var payload = action.payload;
+            return __assign({}, state, { competitionTypes: payload });
+        }
+        case ActionTypes.LOAD_RECORDS: {
+            var payload = action.payload;
+            return __assign({}, state, { records: payload });
         }
         default:
             return state;
@@ -1708,7 +1846,8 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ActionTypes = __webpack_require__(/*! ../actions/action.types */ "./client/src/pages/ratings-tables/actions/action.types.ts");
 var defaultState = {
-    entries: []
+    entries: [],
+    entryDetails: null
 };
 exports.ratingEntryReducer = function (state, action) {
     if (state === void 0) { state = defaultState; }
@@ -1719,6 +1858,13 @@ exports.ratingEntryReducer = function (state, action) {
         }
         case ActionTypes.EMPTY_RATING_ENTRIES: {
             return __assign({}, state, { entries: [] });
+        }
+        case ActionTypes.OPEN_ENTRY_DETAILS: {
+            var payload = action.payload;
+            return __assign({}, state, { entryDetails: payload });
+        }
+        case ActionTypes.CLOSE_ENTRY_DETAILS: {
+            return __assign({}, state, { entryDetails: null });
         }
         default:
             return state;
@@ -1816,18 +1962,38 @@ exports.ratingsList = reselect_1.createSelector(ratings, function (ratings) {
 
 "use strict";
 
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var reselect_1 = __webpack_require__(/*! reselect */ "./node_modules/reselect/es/index.js");
 var utils_1 = __webpack_require__(/*! ../../../utils/utils */ "./client/src/utils/utils.ts");
 var ratings = function (state) { return state.entries.entries; };
 var rating = function (state) { return state.shell.rating; };
 var ratingTypes = function (state) { return state.lookups.ratings; };
-exports.getCurrentRatingOrganization = reselect_1.createSelector(rating, ratingTypes, function (rating, types) {
-    var current = types.find(function (x) { return x.ratingType == rating; });
-    return !!current ? current.organization : null;
+var entryDetails = function (state) { return state.entries.entryDetails; };
+var competitions = function (state) { return state.lookups.competitions; };
+var competitionTypes = function (state) { return state.lookups.competitionTypes; };
+var records = function (state) { return state.lookups.records; };
+exports.getCurrentRating = reselect_1.createSelector(rating, ratingTypes, function (rating, types) {
+    return types.find(function (x) { return x.ratingType == rating; });
+});
+exports.getCurrentRatingOrganization = reselect_1.createSelector(exports.getCurrentRating, function (rating) {
+    return !!rating ? rating.organization : null;
 });
 exports.getRatings = reselect_1.createSelector(exports.getCurrentRatingOrganization, ratings, function (organization, ratings) {
     return organization == "upf" ? ratings.sort(utils_1.sortUPFRating) : ratings;
+});
+exports.getEntryDetails = reselect_1.createSelector(entryDetails, competitions, competitionTypes, records, exports.getCurrentRating, function (entryDetails, competitions, competitionTypes, records, rating) {
+    return !!entryDetails ? __assign({}, entryDetails, { details: utils_1.getDetails(entryDetails.details, competitionTypes, competitions, records, rating.type == "referee", true) }) : entryDetails;
 });
 
 
@@ -1891,6 +2057,24 @@ exports.getRatings = function () {
         type: apiTypes.GET
     });
 };
+exports.getCompetitions = function () {
+    return ApiService.callApi({
+        url: lookupPath + "GetCompetitionsLookup.php",
+        type: apiTypes.GET
+    });
+};
+exports.getCompetitionTypes = function () {
+    return ApiService.callApi({
+        url: lookupPath + "GetCompetitionTypesLookup.php",
+        type: apiTypes.GET
+    });
+};
+exports.getRecords = function () {
+    return ApiService.callApi({
+        url: lookupPath + "GetRecordsLookup.php",
+        type: apiTypes.GET
+    });
+};
 
 
 /***/ }),
@@ -1907,6 +2091,7 @@ exports.getRatings = function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ApiService = __webpack_require__(/*! ../../../infrastructure/call.api */ "./client/src/infrastructure/call.api.ts");
 var ratingEntryPath = "../wp-content/plugins/ratings/server/RatingController/";
+var refereeRatingApiPath = "../wp-content/plugins/ratings/server/RefereeRatingController/";
 var apiTypes = ApiService.RequestTypes;
 exports.getMinistryRatingsByGender = function (contract) {
     return ApiService.callApi({
@@ -1957,6 +2142,13 @@ exports.getSchoolRatings = function (contract) {
         data: contract
     });
 };
+exports.getRefereeRatings = function (contract) {
+    return ApiService.callApi({
+        url: refereeRatingApiPath + "GetAllRatings.php",
+        type: apiTypes.GET,
+        data: contract
+    });
+};
 
 
 /***/ }),
@@ -1988,6 +2180,7 @@ var React = __webpack_require__(/*! react */ "react");
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 var store_1 = __webpack_require__(/*! ./store */ "./client/src/pages/ratings-tables/store.ts");
 var ratings_layout_1 = __webpack_require__(/*! ./views/ratings.layout */ "./client/src/pages/ratings-tables/views/ratings.layout.tsx");
+var Actions = __webpack_require__(/*! ./actions/index.actions */ "./client/src/pages/ratings-tables/actions/index.actions.ts");
 var RatingsTablesIndex = /** @class */ (function (_super) {
     __extends(RatingsTablesIndex, _super);
     function RatingsTablesIndex(props) {
@@ -1995,6 +2188,9 @@ var RatingsTablesIndex = /** @class */ (function (_super) {
         _this.store = store_1.createRatingsStore();
         return _this;
     }
+    RatingsTablesIndex.prototype.componentDidMount = function () {
+        this.store.dispatch(Actions.LookupActions.ActionCreators.loadLookups());
+    };
     RatingsTablesIndex.prototype.render = function () {
         return React.createElement(react_redux_1.Provider, { store: this.store },
             React.createElement(ratings_layout_1.default, null));
@@ -2043,13 +2239,15 @@ var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react
 var Components = __webpack_require__(/*! ../../../../components/index */ "./client/src/components/index.ts");
 var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/src/pages/ratings-tables/actions/index.actions.ts");
 var Selectors = __webpack_require__(/*! ../../selectors/index.selectors */ "./client/src/pages/ratings-tables/selectors/index.selectors.ts");
+var details_1 = __webpack_require__(/*! ../../modals/details */ "./client/src/pages/ratings-tables/modals/details.tsx");
 var mapStateToProps = function (state) { return ({
     ratingRecords: Selectors.Ratings.getRatings(state),
-    rating: state.shell.rating,
+    rating: Selectors.Ratings.getCurrentRating(state),
     showWilks: Selectors.ShellSelectors.showWilks(state)
 }); };
 var mapDispatchToProps = function (dispatch) { return ({
-    cleanRatings: function () { return dispatch(Actions.RatingEntryActions.ActionCreators.emptyRatingEntries()); }
+    cleanRatings: function () { return dispatch(Actions.RatingEntryActions.ActionCreators.emptyRatingEntries()); },
+    onOpen: function (entry) { return dispatch(Actions.RatingEntryActions.ActionCreators.openEntryDetails(entry)); }
 }); };
 exports.default = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(function (props) {
     React.useEffect(function () {
@@ -2057,7 +2255,7 @@ exports.default = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(fun
     }, []);
     return React.createElement("div", { className: "ratings" },
         !props.ratingRecords.length && React.createElement("span", null,
-            React.createElement("b", null, props.rating ? "На жаль, для цього рейтнигу не знайдено жодного запису" : "Оберіть рейтинг у випадаючому списку вище")),
+            React.createElement("b", null, !!props.rating ? "На жаль, для цього рейтнигу не знайдено жодного запису" : "Оберіть рейтинг у випадаючому списку вище")),
         !!props.ratingRecords.length && React.createElement(React.Fragment, null,
             React.createElement(Components.PrintButton, { printTargetId: "ratingsTab", classNames: "print" }),
             React.createElement("div", { id: "ratingsTab" },
@@ -2068,7 +2266,7 @@ exports.default = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(fun
                             width: "300px"
                         },
                         {
-                            title: "К-ть очок",
+                            title: props.rating.organization == "ministry" ? "К-ть очок" : "Ранг",
                             field: "rating",
                             width: "100px"
                         },
@@ -2083,12 +2281,13 @@ exports.default = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(fun
                             type: Components.ColumnTypes.Button,
                             icon: "external-link-alt",
                             width: "100px",
-                            onClick: function () { return null; }
+                            onClick: function (entry) { return props.onOpen(entry); }
                         },
                         {
                             width: "*"
                         }
-                    ] }))));
+                    ] })),
+            React.createElement(details_1.default, null)));
 });
 
 
@@ -2129,16 +2328,12 @@ exports.default = react_redux_1.connect(function (state) { return ({
     rating: state.shell.rating,
     ratingTitle: Selectors.ShellSelectors.ratingTitle(state)
 }); }, function (dispatch) { return ({
-    lookupActions: redux_1.bindActionCreators(Actions.LookupActions.ActionCreators, dispatch),
     shellActions: redux_1.bindActionCreators(Actions.ShellActions.ActionCreators, dispatch)
 }); })(/** @class */ (function (_super) {
     __extends(RatingsHeader, _super);
     function RatingsHeader(props) {
         return _super.call(this, props) || this;
     }
-    RatingsHeader.prototype.componentDidMount = function () {
-        this.props.lookupActions.loadRatings();
-    };
     RatingsHeader.prototype.render = function () {
         var _this = this;
         return React.createElement(React.Fragment, null,
@@ -2210,15 +2405,16 @@ exports.default = RatingsLayout;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-function getDetails(originalDetails, types, competitions, records, isReferee) {
+function getDetails(originalDetails, types, competitions, records, isReferee, showFullName) {
     if (isReferee === void 0) { isReferee = false; }
+    if (showFullName === void 0) { showFullName = false; }
     var details = originalDetails;
     var detailsAsArray = [];
     for (var i = 0; i < competitions.length; i++) {
-        details = details.replace(new RegExp(" " + competitions[i].dbName, 'g'), competitions[i].shortName);
+        details = details.replace(new RegExp(" " + competitions[i].dbName, 'g'), !showFullName ? competitions[i].shortName : competitions[i].name);
     }
     for (var i = 0; i < records.length; i++) {
-        details = details.replace(new RegExp(" " + records[i].dbName, 'g'), records[i].shortName);
+        details = details.replace(new RegExp(" " + records[i].dbName, 'g'), !showFullName ? records[i].shortName : records[i].name);
     }
     for (var i = 0; i < types.length; i++) {
         details = details.replace(new RegExp(" " + types[i].name, 'g'), " - " + types[i].displayName);

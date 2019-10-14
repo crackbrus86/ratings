@@ -6,7 +6,9 @@ import Table from "./table/table"
 import {ColumnModel, ColumnTypes} from "./table/column"
 import Confirm from "./confirm/confirm"
 import PrintButton from "./print button/print.button"
+import Modal from "./modal/modal"
+import Form from "./form/form"
 
-export {TabView, Tab, Layout, Search, Table, ColumnTypes, Confirm, PrintButton}
+export {TabView, Tab, Layout, Search, Table, ColumnTypes, Confirm, PrintButton, Modal, Form}
 
 export type ColumnModel = ColumnModel

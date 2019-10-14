@@ -7,6 +7,7 @@ import Table from "../../../../components/table/table";
 import {ColumnModel, ColumnTypes} from "../../../../components/table/column";
 import PrintButton from "../../../../components/print button/print.button";
 import * as Selectors from "../../selectors/index.selector";
+import * as Components from "../../../../components/index"
 
 export interface OwnProps{
     ratingFilter: string
@@ -52,6 +53,7 @@ export default connect<StateProps, DispatchProps, OwnProps>(
     render(){
         return <div  className="ratings">
             <PrintButton printTargetId="ministryRatings" classNames="print" />
+            <Components.Form><Components.Form.CheckBox label="Показати на сайті" isChecked={true} className="ratings-activity" /></Components.Form>
             <div id="ministryRatings">
                 <Table 
                     items={this.getRatings()}

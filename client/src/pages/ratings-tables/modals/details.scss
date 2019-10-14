@@ -1,0 +1,39 @@
+.rating-details-modal.modal-content{
+    .modal-header{
+        h4{
+            color: #fff;
+            font-size: 1.4em;
+            font-weight: 600;
+        }
+    }
+    .modal-body{
+        .form{
+            margin: 10px;
+            input[type=text]{
+                border: none;
+            }
+            ul{
+                padding: 10px 0;
+                margin: 0px;
+                li{
+                    font-size: 1.2em;
+                    list-style: none;
+                }
+            }
+        }
+    }
+    .modal-footer{
+        .print-button{
+            background-color: #06bd68;
+            color: #fff;
+            text-shadow: 0 0 1px #000;
+            padding: 8px 0;
+            margin: 0 auto 2px;
+            height: 28px;
+
+            &:hover{
+                background-color: #19d37e;            
+            }
+        }
+    }
+}

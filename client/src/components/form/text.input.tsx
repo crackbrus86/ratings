@@ -12,7 +12,8 @@ export interface TextInputProps{
     validation?: ValidationResult,
     onChange?: (value: any) => void,
     autocomplete?: boolean,
-    autocompleteItems?: string[]
+    autocompleteItems?: string[],
+    readonly?: boolean
 }
 
 interface TextInputState{
@@ -72,6 +73,7 @@ class TextInput extends React.Component<TextInputProps, TextInputState>{
                 <input type="text" value={this.props.value} 
                 ref={(c) => this.inputObject = c}
                 onKeyUp={(e) =>this.setAsFocused(e)}
+                readOnly={this.props.readonly}
                 onChange={(e) => this.props.onChange(e.target.value)} />
                 {
                     !!autocompleteItems.length &&

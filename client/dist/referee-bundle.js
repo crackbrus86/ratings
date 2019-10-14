@@ -187,6 +187,28 @@ exports.default = Autocomplete;
 
 /***/ }),
 
+/***/ "./client/src/components/form/checkbox.tsx":
+/*!*************************************************!*\
+  !*** ./client/src/components/form/checkbox.tsx ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+exports.CheckBox = function (props) {
+    return React.createElement("div", { className: classnames("form-checkbox", props.className) },
+        props.label && React.createElement("label", null, props.label),
+        React.createElement("input", { type: "checkbox", checked: props.isChecked, onChange: props.onChange }));
+};
+exports.default = exports.CheckBox;
+
+
+/***/ }),
+
 /***/ "./client/src/components/form/datepicker.tsx":
 /*!***************************************************!*\
   !*** ./client/src/components/form/datepicker.tsx ***!
@@ -267,6 +289,7 @@ var text_input_1 = __webpack_require__(/*! ./text.input */ "./client/src/compone
 var radio_button_1 = __webpack_require__(/*! ./radio.button */ "./client/src/components/form/radio.button.tsx");
 var select_1 = __webpack_require__(/*! ./select */ "./client/src/components/form/select.tsx");
 var datepicker_1 = __webpack_require__(/*! ./datepicker */ "./client/src/components/form/datepicker.tsx");
+var checkbox_1 = __webpack_require__(/*! ./checkbox */ "./client/src/components/form/checkbox.tsx");
 var Form = /** @class */ (function (_super) {
     __extends(Form, _super);
     function Form(props) {
@@ -279,6 +302,7 @@ var Form = /** @class */ (function (_super) {
     Form.RadioButton = radio_button_1.default;
     Form.Select = select_1.default;
     Form.DatePicker = datepicker_1.default;
+    Form.CheckBox = checkbox_1.default;
     return Form;
 }(React.Component));
 exports.default = Form;
@@ -446,7 +470,7 @@ var TextInput = /** @class */ (function (_super) {
         return React.createElement(React.Fragment, null,
             React.createElement("div", { className: classnames('form-control', 'text-input', { 'validation-error': this.props.validation && !this.props.validation.isValid }) },
                 this.props.label && React.createElement("label", null, this.props.label),
-                React.createElement("input", { type: "text", value: this.props.value, ref: function (c) { return _this.inputObject = c; }, onKeyUp: function (e) { return _this.setAsFocused(e); }, onChange: function (e) { return _this.props.onChange(e.target.value); } }),
+                React.createElement("input", { type: "text", value: this.props.value, ref: function (c) { return _this.inputObject = c; }, onKeyUp: function (e) { return _this.setAsFocused(e); }, readOnly: this.props.readonly, onChange: function (e) { return _this.props.onChange(e.target.value); } }),
                 !!autocompleteItems.length &&
                     this.state.isFocused && React.createElement(autocomplete_1.default, { items: autocompleteItems, top: offset.top, left: offset.left, chooseItem: this.props.onChange })),
             this.props.validation && !this.props.validation.isValid &&
@@ -485,6 +509,10 @@ var confirm_1 = __webpack_require__(/*! ./confirm/confirm */ "./client/src/compo
 exports.Confirm = confirm_1.default;
 var print_button_1 = __webpack_require__(/*! ./print button/print.button */ "./client/src/components/print button/print.button.tsx");
 exports.PrintButton = print_button_1.default;
+var modal_1 = __webpack_require__(/*! ./modal/modal */ "./client/src/components/modal/modal.tsx");
+exports.Modal = modal_1.default;
+var form_1 = __webpack_require__(/*! ./form/form */ "./client/src/components/form/form.tsx");
+exports.Form = form_1.default;
 
 
 /***/ }),
@@ -500,8 +528,9 @@ exports.PrintButton = print_button_1.default;
 
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
+var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
 exports.ContentWrap = function (props) {
-    return React.createElement("div", { className: "content-wrap" }, props.children);
+    return React.createElement("div", { id: props.id, className: classnames("content-wrap", props.className) }, props.children);
 };
 
 
@@ -684,7 +713,7 @@ var Modal = /** @class */ (function (_super) {
         _this.modalLayout = document.createElement("div");
         _this.modalLayout.className = "modal-black-out";
         _this.modalContent = document.createElement("div");
-        _this.modalContent.className = "modal-content";
+        _this.modalContent.className = !_this.props.className ? "modal-content" : "modal-content " + _this.props.className;
         _this.modalLayout.appendChild(_this.modalContent);
         return _this;
     }
@@ -2388,15 +2417,16 @@ exports.default = react_redux_1.connect(null, mapDispatchProps)(function Referee
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-function getDetails(originalDetails, types, competitions, records, isReferee) {
+function getDetails(originalDetails, types, competitions, records, isReferee, showFullName) {
     if (isReferee === void 0) { isReferee = false; }
+    if (showFullName === void 0) { showFullName = false; }
     var details = originalDetails;
     var detailsAsArray = [];
     for (var i = 0; i < competitions.length; i++) {
-        details = details.replace(new RegExp(" " + competitions[i].dbName, 'g'), competitions[i].shortName);
+        details = details.replace(new RegExp(" " + competitions[i].dbName, 'g'), !showFullName ? competitions[i].shortName : competitions[i].name);
     }
     for (var i = 0; i < records.length; i++) {
-        details = details.replace(new RegExp(" " + records[i].dbName, 'g'), records[i].shortName);
+        details = details.replace(new RegExp(" " + records[i].dbName, 'g'), !showFullName ? records[i].shortName : records[i].name);
     }
     for (var i = 0; i < types.length; i++) {
         details = details.replace(new RegExp(" " + types[i].name, 'g'), " - " + types[i].displayName);

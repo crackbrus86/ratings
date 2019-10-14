@@ -9,6 +9,7 @@ const modalRoot = document.body;
 
 export interface ModalProps{
     width?: string
+    className?: string
 }
 
 export default class Modal extends React.Component<ModalProps, any>{
@@ -24,7 +25,7 @@ export default class Modal extends React.Component<ModalProps, any>{
         this.modalLayout = document.createElement("div");
         this.modalLayout.className = "modal-black-out";
         this.modalContent = document.createElement("div");
-        this.modalContent.className = "modal-content";
+        this.modalContent.className = !this.props.className ? "modal-content" : `modal-content ${this.props.className}`;
         this.modalLayout.appendChild(this.modalContent);
     }
 

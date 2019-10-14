@@ -3,7 +3,7 @@ export interface Rating{
     ratingType: string,
     title: string,
     organization: string,
-    type: "athlete" | "coach" | "region" | "fst" | "school"
+    type: "athlete" | "coach" | "region" | "fst" | "school" | "referee"
 }
 
 export interface RatingEntry{
@@ -33,5 +33,6 @@ export enum RatingTypes {
     UpfCoach = "upfCoach",
     MinRegion = "minRegion",
     MinFST = "minFST",
-    MinSchool = "minSchool"
+    MinSchool = "minSchool",
+    MinReferee = "minReferee"
 }

@@ -30,18 +30,18 @@ interface Rating{
     wilks: string
 }
 
-export function getDetails(originalDetails: string, types: CompetitionType[], competitions: Competition[], records: Record[], isReferee = false){
+export function getDetails(originalDetails: string, types: CompetitionType[], competitions: Competition[], records: Record[], isReferee = false, showFullName = false){
 
     let details = originalDetails;
 
     let detailsAsArray = [];
 
     for(var i = 0; i < competitions.length; i++){
-        details = details.replace(new RegExp(` ${competitions[i].dbName}`, 'g'), competitions[i].shortName);
+        details = details.replace(new RegExp(` ${competitions[i].dbName}`, 'g'), !showFullName ? competitions[i].shortName : competitions[i].name);
     }
 
     for(var i = 0; i < records.length; i++){
-        details = details.replace(new RegExp(` ${records[i].dbName}`, 'g'), records[i].shortName);
+        details = details.replace(new RegExp(` ${records[i].dbName}`, 'g'), !showFullName ? records[i].shortName : records[i].name);
     }
 
     for(var i = 0; i < types.length; i++){

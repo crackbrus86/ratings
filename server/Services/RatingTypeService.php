@@ -1,32 +1,60 @@
 <?php
+require_once "../connect.php";
 require_once "../Models/RatingType.php";
 require_once "../core.php";
 
 class RatingTypeService
 {
+    private $db;
+    private $tableName;
     private $ratingTypes;
 
     public function __construct()
     {
-        $this->ratingTypes = array(
-            new RatingType(1, "minAthMale", "Міністерський Рейтинг (Чоловіки)", "ministry", "athlete"),
-            new RatingType(2, "minAthFemale", "Міністерський Рейтинг (Жінки)", "ministry", "athlete"),
-            new RatingType(3, "upfAthMale", "Рейтинг ФПУ (Чоловіки)", "upf", "athlete"),
-            new RatingType(4, "upfAthFemale", "Рейтинг ФПУ (Жінки)", "upf", "athlete"),
-            new RatingType(5, "minCoach", "Міністерський Рейтинг (Тренери)", "ministry", "coach"),
-            new RatingType(6, "upfCoach", "Рейтинг ФПУ (Тренери)", "upf", "coach"),
-            new RatingType(7, "minRegion", "Міністерський Рейтинг (Області)", "ministry", "region"),
-            new RatingType(8, "minFST", "Міністерський Рейтинг (ФСТ)", "ministry", "fst"),
-            new RatingType(9, "minSchool", "Міністерський Рейтинг (ДЮСШ)", "ministry", "school")
-        );
+        global $wpdb;
+        $this->db = $wpdb;
+        $this->tableName = $this->db->get_blog_prefix() . "rat_rating_type";
+        $this->ratingTypes = array();
     }
 
     public function getAll()
     {
         $response = new ResponseModel();
 
+        $sql = "SELECT * FROM {$this->tableName}";
+        $results = $this->db->get_results($sql);
+
+        if(count($results))
+        {
+            foreach ($results as $item) 
+            {
+                $ratingType = new RatingType($item->Id, $item->RatingType, $item->Title, $item->Organization, $item->Type);
+
+                array_push($this->ratingTypes, $ratingType);
+            }
+        }
+
         $response->setResponseModel((object)array("data" => $this->ratingTypes, "status" => TRUE, "message" => NULL));
 
+        return $response;
+    }
+
+    public function changeStatus()
+    {
+        $response = new ResponseModel();
+
+        if(!current_user_can("edit_others_pages"))
+        {
+            $response->setResponseModel((object)array('status' => FALSE, 'message' => "У Вас недостатньо прав для оновлення записів!"));
+            return $response;
+        }
+
+        $ratingType = $_POST["ratingType"];
+        $sql = $this->db->prepare("UPDATE {$this->tableName}
+                                    SET IsActive = CASE WHEN IsActive = 0 THEN 1 ELSE 0 END
+                                    WHERE RatingType = %s", $ratingType);
+        $this->db->query($sql);
+        $response->setResponseModel((object)array('status' => TRUE, 'message' => "Успішно оновлено рейтинг!"));
         return $response;
     }
 }

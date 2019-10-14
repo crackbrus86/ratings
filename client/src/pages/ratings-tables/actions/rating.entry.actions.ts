@@ -42,6 +42,10 @@ export namespace ActionCreators{
                 d(loadSchoolRatings())
                 return
             }
+            case Models.RatingModels.RatingTypes.MinReferee: {
+                d(loadRefereeRatings())
+                return
+            }
             default:
                 d(emptyRatingEntries());
                 return;
@@ -141,9 +145,33 @@ export namespace ActionCreators{
         })
     }
 
+    export const loadRefereeRatings = () => (d) => {
+        Services.RatingEntryService.getRefereeRatings({
+            year: new Date().getFullYear()
+        }).then(response => {
+            if(response.status){
+                d({
+                    type: types.LOAD_RATING_ENTRIES,
+                    payload: <types.LOAD_RATING_ENTRIES_PAYLOAD>response.data
+                })
+            }
+        })
+    }
+
     export const emptyRatingEntries = () => (d) => {
         d({
             type: types.EMPTY_RATING_ENTRIES
         });
+    }
+
+    export const openEntryDetails = (entry: Models.RatingEntry) => (d) => {
+        d({
+            type: types.OPEN_ENTRY_DETAILS,
+            payload: entry as types.OPEN_ENTRY_DETAILS_PAYLOAD
+        })
+    }
+
+    export const closeEntryDetails = () => (d) => {
+        d({type: types.CLOSE_ENTRY_DETAILS})
     }
 }
