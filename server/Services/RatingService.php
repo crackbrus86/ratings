@@ -13,6 +13,8 @@ class RatingService
 
     private $rangeTale;
 
+    private $ratingTypeTable;
+
     private $ratings;
 
     function __construct()
@@ -26,6 +28,8 @@ class RatingService
         $this->pointTable = $this->db->get_blog_prefix() . "rat_point";
 
         $this->rangeTale = $this->db->get_blog_prefix() . "rat_range";
+
+        $this->ratingTypeTable = $this->db->get_blog_prefix() . "rat_rating_type";
 
         $this->ratings = array();
     }
@@ -63,8 +67,20 @@ class RatingService
     public function getMinistryRatingsByGender()
     {
         $year = $_GET["year"];
-
         $gender = $_GET["gender"];
+        $rType = $gender == "M" ? "minAthMale" : "minAthFemale";
+
+        $response = new ResponseModel();
+
+        $isActive = (bool)$this->getRatingActivity($rType);
+
+        if(!current_user_can("edit_others_pages") && !$isActive)
+        {
+            $response->setResponseModel((object)array('status' => FALSE, 'message' => "Рейтинг недоступний!"));
+
+            return $response;
+        } 
+
         $this->db->query("SET SESSION group_concat_max_len = 100000");
         $sql = $this->db->prepare("SELECT a.Fullname, SUM(b.Value) AS Rating, a.Gender,
                                         GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів)') separator ', ') AS Details,
@@ -84,8 +100,6 @@ class RatingService
                 array_push($this->ratings, new Rating($result->Fullname, $result->Rating, $result->Gender, $result->Details, array(), $result->Wilks));
             }
         }
-
-        $response = new ResponseModel();
 
         $response->setResponseModel((object)array("status" => TRUE, "data" => $this->ratings));
 
@@ -133,6 +147,16 @@ class RatingService
     {
         $year = $_GET["year"];
         $gender = $_GET["gender"];
+        $rType = $gender == "M" ? "upfAthMale" : "upfAthFemale";
+        $response = new ResponseModel();
+        $isActive = (bool)$this->getRatingActivity($rType);
+
+        if(!current_user_can("edit_others_pages") && !$isActive)
+        {
+            $response->setResponseModel((object)array('status' => FALSE, 'message' => "Рейтинг недоступний!"));
+
+            return $response;
+        }
         $this->db->query("SET SESSION group_concat_max_len = 100000");
         $sql = $this->db->prepare("SELECT a.Fullname, a.Gender, MIN(b.Range) AS Rating,
                                         GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Range, ' ранг)') separator ', ') AS Details,
@@ -159,9 +183,6 @@ class RatingService
                                                       $result->Wilks));
             }
         }
-
-        $response = new ResponseModel();
-
         $response->setResponseModel((object)array("status" => TRUE, "data" => $this->ratings));
 
         return $response;
@@ -170,6 +191,15 @@ class RatingService
     public function getCoachMinistryRatings()
     {
         $year = $_GET["year"];
+        $response = new ResponseModel();
+        $isActive = (bool)$this->getRatingActivity("minCoach");
+
+        if(!current_user_can("edit_others_pages") && !$isActive)
+        {
+            $response->setResponseModel((object)array('status' => FALSE, 'message' => "Рейтинг недоступний!"));
+
+            return $response;
+        }
         $this->db->query("SET SESSION group_concat_max_len = 100000");
         $sql = $this->db->prepare("SELECT a.Coach, SUM(b.Value) AS Rating,
                                         GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів) ', a.Fullname) separator ', ') AS Details
@@ -188,9 +218,6 @@ class RatingService
                 array_push($this->ratings, new Rating($result->Coach, $result->Rating, '', $result->Details));
             }
         }
-
-        $response = new ResponseModel();
-
         $response->setResponseModel((object)array("status" => TRUE, "data" => $this->ratings));
 
         return $response;
@@ -199,6 +226,15 @@ class RatingService
     public function getCoachUPFRatings()
     {
         $year = $_GET["year"];
+        $response = new ResponseModel();
+        $isActive = (bool)$this->getRatingActivity("upfCoach");
+
+        if(!current_user_can("edit_others_pages") && !$isActive)
+        {
+            $response->setResponseModel((object)array('status' => FALSE, 'message' => "Рейтинг недоступний!"));
+
+            return $response;
+        }
         $this->db->query("SET SESSION group_concat_max_len = 100000");
         $sql = $this->db->prepare("SELECT a.Coach, MIN(b.Range) AS Rating,
                                         GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Range, ' ранг) ', a.Fullname) separator ', ') AS Details,
@@ -225,9 +261,6 @@ class RatingService
                                                       $result->Wilks));
             }
         }
-
-        $response = new ResponseModel();
-
         $response->setResponseModel((object)array("status" => TRUE, "data" => $this->ratings));
 
         return $response;
@@ -236,6 +269,15 @@ class RatingService
     public function getRegionMinistryRatings()
     {
         $year = $_GET["year"];
+        $response = new ResponseModel();
+        $isActive = (bool)$this->getRatingActivity("minRegion");
+
+        if(!current_user_can("edit_others_pages") && !$isActive)
+        {
+            $response->setResponseModel((object)array('status' => FALSE, 'message' => "Рейтинг недоступний!"));
+
+            return $response;
+        }
         $this->db->query("SET SESSION group_concat_max_len = 100000");
         $sql = $this->db->prepare("SELECT a.Region, SUM(b.Value) AS Rating,
                                         GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів) ', a.Fullname) separator ', ') AS Details
@@ -254,9 +296,6 @@ class RatingService
                 array_push($this->ratings, new Rating($result->Region, $result->Rating, '', $result->Details));
             }
         }
-
-        $response = new ResponseModel();
-
         $response->setResponseModel((object)array("status" => TRUE, "data" => $this->ratings));
 
         return $response; 
@@ -265,6 +304,15 @@ class RatingService
     public function getFstMinistryRatings()
     {
         $year = $_GET["year"];
+        $response = new ResponseModel();
+        $isActive = (bool)$this->getRatingActivity("minFST");
+
+        if(!current_user_can("edit_others_pages") && !$isActive)
+        {
+            $response->setResponseModel((object)array('status' => FALSE, 'message' => "Рейтинг недоступний!"));
+
+            return $response;
+        }
         $this->db->query("SET SESSION group_concat_max_len = 100000");
         $sql = $this->db->prepare("SELECT a.Fst, SUM(b.Value) AS Rating,
                                         GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів) ', a.Fullname) separator ', ') AS Details
@@ -283,9 +331,6 @@ class RatingService
                 array_push($this->ratings, new Rating($result->Fst, $result->Rating, '', $result->Details));
             }
         }
-
-        $response = new ResponseModel();
-
         $response->setResponseModel((object)array("status" => TRUE, "data" => $this->ratings));
 
         return $response; 
@@ -294,6 +339,15 @@ class RatingService
     public function getSchoolMinistryRatings()
     {
         $year = $_GET["year"];
+        $response = new ResponseModel();
+        $isActive = (bool)$this->getRatingActivity("minSchool");
+
+        if(!current_user_can("edit_others_pages") && !$isActive)
+        {
+            $response->setResponseModel((object)array('status' => FALSE, 'message' => "Рейтинг недоступний!"));
+
+            return $response;
+        }
         $this->db->query("SET SESSION group_concat_max_len = 100000");
         $sql = $this->db->prepare("SELECT a.School, SUM(b.Value) AS Rating,
                                         GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів) ', a.Fullname) separator ', ') AS Details
@@ -312,11 +366,15 @@ class RatingService
                 array_push($this->ratings, new Rating($result->School, $result->Rating, '', $result->Details));
             }
         }
-
-        $response = new ResponseModel();
-
         $response->setResponseModel((object)array("status" => TRUE, "data" => $this->ratings));
 
         return $response; 
+    }
+
+    public function getRatingActivity($ratingType)
+    {
+        $sql = $this->db->prepare("SELECT IsActive FROM {$this->ratingTypeTable} WHERE RatingType = %s", $ratingType);
+        $result = $this->db->get_var($sql);
+        return $result == "1" ? TRUE : FALSE;
     }
 }

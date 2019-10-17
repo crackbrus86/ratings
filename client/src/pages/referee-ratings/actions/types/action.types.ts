@@ -25,5 +25,8 @@ export const CANCEL_REMOVE = "REFEREE_ENTRIES::CANCEL_REMOVE"
 export const LOAD_NAMES = "LOOKUP::LOAD_NAMES"
 export type LOAD_NAMES_PAYLOAD = string[]
 
+export const LOAD_RATING_TYPES = "LOOKUP::LOAD_RATING_TYPES"
+export type LOAD_RATING_TYPES_PAYLOAD = Models.RatingType[]
+
 export const LOAD_RATING = "REFEREE_RATING::LOAD"
 export type LOAD_RATING_PAYLOAD = Models.Rating[]

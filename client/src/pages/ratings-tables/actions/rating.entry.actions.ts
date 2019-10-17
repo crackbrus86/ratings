@@ -5,6 +5,7 @@ import * as Models from "../models/index.models";
 export namespace ActionCreators{
     export const loadRatingEntries = () => (d, gs: () => Models.StoreState) => {
         let rating = gs().shell.rating;
+        d(emptyRatingEntries());
         switch(rating){
             case Models.RatingModels.RatingTypes.MinAthMale: {
                 d(loadMinistryRatingByGender("M"));

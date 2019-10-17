@@ -1457,6 +1457,7 @@ var ActionCreators;
 (function (ActionCreators) {
     ActionCreators.loadRatingEntries = function () { return function (d, gs) {
         var rating = gs().shell.rating;
+        d(ActionCreators.emptyRatingEntries());
         switch (rating) {
             case Models.RatingModels.RatingTypes.MinAthMale: {
                 d(ActionCreators.loadMinistryRatingByGender("M"));
@@ -2053,7 +2054,7 @@ var lookupPath = "../wp-content/plugins/ratings/server/LookupController/";
 var apiTypes = ApiService.RequestTypes;
 exports.getRatings = function () {
     return ApiService.callApi({
-        url: lookupPath + "GetRatingTypes.php",
+        url: lookupPath + "GetActiveRatingTypes.php",
         type: apiTypes.GET
     });
 };

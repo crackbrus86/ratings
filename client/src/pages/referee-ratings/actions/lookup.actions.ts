@@ -8,6 +8,7 @@ export const loadLookups = () => (d) => {
     d(loadActivities())
     d(loadEvents())
     d(loadNames())
+    d(loadRatingTypes())
 }
 
 const loadActivities = () => (d) => {
@@ -37,6 +38,16 @@ const loadNames = () => (d) => {
     Services.Lookup.getNames().then(response => {
         if(response.status){
             d({type: ActionTypes.LOAD_NAMES, payload: response.data as ActionTypes.LOAD_NAMES_PAYLOAD})
+        }else{
+            toastr.error(response.message)
+        }
+    })
+}
+
+export const loadRatingTypes = () => (d) => {
+    Services.Lookup.getRatingTypes().then(response => {
+        if(response.status){
+            d({type: ActionTypes.LOAD_RATING_TYPES, payload: response.data as ActionTypes.LOAD_RATING_TYPES_PAYLOAD})
         }else{
             toastr.error(response.message)
         }

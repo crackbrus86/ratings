@@ -11,7 +11,9 @@ class RatingType
 
     public $type;
 
-    function __construct($id, $ratingType, $title, $organization, $type)
+    public $isActive;
+
+    function __construct($id, $ratingType, $title, $organization, $type, $isActive = FALSE)
     {
         $this->id = $id;
 
@@ -22,6 +24,8 @@ class RatingType
         $this->organization = $organization;
 
         $this->type = $type;
+
+        $this->isActive = $isActive;
     }
 }
 ?>

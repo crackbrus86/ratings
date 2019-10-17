@@ -1375,6 +1375,7 @@ exports.LOAD_REGIONS = "LOOKUP::LOAD_REGIONS";
 exports.LOAD_COACHES = "LOOKUP::LOAD_COACHES";
 exports.LOAD_FST = "LOOKUP::LOAD_FST";
 exports.LOAD_SCHOOLS = "LOOKUP::LOAD_SCHOOLS";
+exports.LOAD_RATING_TYPES = "LOOKUP::LOAD_RATING_TYPES";
 exports.LOAD_MINISTRY_COACH_RATINGS = "RATINGS::LOAD_MINISTRY_COACH_RATINGS";
 exports.LOAD_UPF_COACH_RATINGS = "RATINGS::LOAD_UPF_COACH_RATINGS";
 exports.LOAD_MINISTRY_REGION_RATINGS = "RATINGS::LOAD_MINISTRY_REGION_RATINGS";
@@ -1601,8 +1602,10 @@ exports.RatingsActions = __webpack_require__(/*! ./ratings.actions */ "./client/
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-var Services = __webpack_require__(/*! ../services/lookup.services */ "./client/src/pages/ratings-entries/services/lookup.services.ts");
+var Services = __webpack_require__(/*! ../services/index.services */ "./client/src/pages/ratings-entries/services/index.services.ts");
 var ActionTypes = __webpack_require__(/*! ./action.types */ "./client/src/pages/ratings-entries/actions/action.types.ts");
+var toastr = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
+toastr.options.timeOut = 5000;
 var ActionCreators;
 (function (ActionCreators) {
     ActionCreators.initLookups = function () { return function (d, gs) {
@@ -1613,9 +1616,10 @@ var ActionCreators;
         d(ActionCreators.loadCoaches());
         d(ActionCreators.loadFstList());
         d(ActionCreators.loadSchools());
+        d(ActionCreators.loadRatingTypes());
     }; };
     ActionCreators.loadCompetitions = function () { return function (d, gs) {
-        Services.getCompetitions().then(function (response) {
+        Services.LookupServices.getCompetitions().then(function (response) {
             if (response.status) {
                 d({
                     type: ActionTypes.LOAD_COMPETITIONS,
@@ -1627,7 +1631,7 @@ var ActionCreators;
         });
     }; };
     ActionCreators.loadRecords = function () { return function (d, gs) {
-        Services.getRecords().then(function (response) {
+        Services.LookupServices.getRecords().then(function (response) {
             if (response.status) {
                 d({
                     type: ActionTypes.LOAD_RECORDS,
@@ -1639,7 +1643,7 @@ var ActionCreators;
         });
     }; };
     ActionCreators.loadNames = function () { return function (d, gs) {
-        Services.getNames().then(function (response) {
+        Services.LookupServices.getNames().then(function (response) {
             if (response.status) {
                 d({
                     type: ActionTypes.LOAD_NAMES,
@@ -1649,7 +1653,7 @@ var ActionCreators;
         });
     }; };
     ActionCreators.loadCompTypes = function () { return function (d, gs) {
-        Services.getCompTypes().then(function (response) {
+        Services.LookupServices.getCompTypes().then(function (response) {
             if (response.status) {
                 d({
                     type: ActionTypes.LOAD_COMP_TYPES,
@@ -1659,7 +1663,7 @@ var ActionCreators;
         });
     }; };
     ActionCreators.loadRegions = function () { return function (d, gs) {
-        Services.getRegions().then(function (response) {
+        Services.LookupServices.getRegions().then(function (response) {
             if (response.status) {
                 d({
                     type: ActionTypes.LOAD_REGIONS,
@@ -1669,7 +1673,7 @@ var ActionCreators;
         });
     }; };
     ActionCreators.loadCoaches = function () { return function (d, gs) {
-        Services.getCoaches().then(function (response) {
+        Services.LookupServices.getCoaches().then(function (response) {
             if (response.status) {
                 d({
                     type: ActionTypes.LOAD_COACHES,
@@ -1679,7 +1683,7 @@ var ActionCreators;
         });
     }; };
     ActionCreators.loadFstList = function () { return function (d, gs) {
-        Services.getFst().then(function (response) {
+        Services.LookupServices.getFst().then(function (response) {
             if (response.status) {
                 d({
                     type: ActionTypes.LOAD_FST,
@@ -1689,12 +1693,30 @@ var ActionCreators;
         });
     }; };
     ActionCreators.loadSchools = function () { return function (d, gs) {
-        Services.getSchools().then(function (response) {
+        Services.LookupServices.getSchools().then(function (response) {
             if (response.status) {
                 d({
                     type: ActionTypes.LOAD_SCHOOLS,
                     payload: response.data
                 });
+            }
+        });
+    }; };
+    ActionCreators.loadRatingTypes = function () { return function (d) {
+        Services.LookupServices.getRatingTypes().then(function (response) {
+            if (response.status) {
+                d({
+                    type: ActionTypes.LOAD_RATING_TYPES,
+                    payload: response.data
+                });
+            }
+        });
+    }; };
+    ActionCreators.changeRatingType = function (ratingType) { return function (d) {
+        Services.RatingsServices.changeRatingType({ ratingType: ratingType }).then(function (response) {
+            if (response.status) {
+                toastr.success(response.message);
+                d(ActionCreators.loadRatingTypes());
             }
         });
     }; };
@@ -2018,6 +2040,19 @@ var DivisionName;
     DivisionName["Junior"] = "Junior";
     DivisionName["SubJunior"] = "SubJunior";
 })(DivisionName = exports.DivisionName || (exports.DivisionName = {}));
+var RatingTypes;
+(function (RatingTypes) {
+    RatingTypes["MinAthMale"] = "minAthMale";
+    RatingTypes["MinAthFemale"] = "minAthFemale";
+    RatingTypes["UpfAthMale"] = "upfAthMale";
+    RatingTypes["UpfAthFemale"] = "upfAthFemale";
+    RatingTypes["MinCoach"] = "minCoach";
+    RatingTypes["UpfCoach"] = "upfCoach";
+    RatingTypes["MinRegion"] = "minRegion";
+    RatingTypes["MinFST"] = "minFST";
+    RatingTypes["MinSchool"] = "minSchool";
+    RatingTypes["MinReferee"] = "minReferee";
+})(RatingTypes = exports.RatingTypes || (exports.RatingTypes = {}));
 
 
 /***/ }),
@@ -2167,7 +2202,8 @@ var defaultState = {
     regions: [],
     coaches: [],
     fstList: [],
-    schools: []
+    schools: [],
+    ratingTypes: []
 };
 exports.lookupReducer = function (state, action) {
     if (state === void 0) { state = defaultState; }
@@ -2203,6 +2239,10 @@ exports.lookupReducer = function (state, action) {
         case ActionTypes.LOAD_SCHOOLS: {
             var payload = action.payload;
             return __assign({}, state, { schools: payload });
+        }
+        case ActionTypes.LOAD_RATING_TYPES: {
+            var payload = action.payload;
+            return __assign({}, state, { ratingTypes: payload });
         }
         default:
             return state;
@@ -2613,6 +2653,23 @@ exports.deleteEntry = function (contract) {
 
 /***/ }),
 
+/***/ "./client/src/pages/ratings-entries/services/index.services.ts":
+/*!*********************************************************************!*\
+  !*** ./client/src/pages/ratings-entries/services/index.services.ts ***!
+  \*********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.LookupServices = __webpack_require__(/*! ./lookup.services */ "./client/src/pages/ratings-entries/services/lookup.services.ts");
+exports.EntryServices = __webpack_require__(/*! ./entry.services */ "./client/src/pages/ratings-entries/services/entry.services.ts");
+exports.RatingsServices = __webpack_require__(/*! ./ratings.services */ "./client/src/pages/ratings-entries/services/ratings.services.ts");
+
+
+/***/ }),
+
 /***/ "./client/src/pages/ratings-entries/services/lookup.services.ts":
 /*!**********************************************************************!*\
   !*** ./client/src/pages/ratings-entries/services/lookup.services.ts ***!
@@ -2671,6 +2728,12 @@ exports.getFst = function () {
 exports.getSchools = function () {
     return CallApi.callApi({
         url: lookupApiPath + 'GetAllSchools.php',
+        type: apiTypes.GET
+    });
+};
+exports.getRatingTypes = function () {
+    return CallApi.callApi({
+        url: lookupApiPath + 'GetRatingTypes.php',
         type: apiTypes.GET
     });
 };
@@ -2737,6 +2800,13 @@ exports.getMinistrySchoolRatings = function (contract) {
     return CallApi.callApi({
         url: ratingsApiPath + 'GetSchoolMinistryRatings.php',
         type: apiTypes.GET,
+        data: contract
+    });
+};
+exports.changeRatingType = function (contract) {
+    return CallApi.callApi({
+        url: ratingsApiPath + 'ChangeRatingType.php',
+        type: apiTypes.POST,
         data: contract
     });
 };
@@ -3096,15 +3166,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+var Models = __webpack_require__(/*! ../../models/index.models */ "./client/src/pages/ratings-entries/models/index.models.ts");
 var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/src/pages/ratings-entries/actions/index.actions.ts");
 var table_1 = __webpack_require__(/*! ../../../../components/table/table */ "./client/src/components/table/table.tsx");
 var column_1 = __webpack_require__(/*! ../../../../components/table/column */ "./client/src/components/table/column.tsx");
 var Selectors = __webpack_require__(/*! ../../selectors/index.selector */ "./client/src/pages/ratings-entries/selectors/index.selector.ts");
 var print_button_1 = __webpack_require__(/*! ../../../../components/print button/print.button */ "./client/src/components/print button/print.button.tsx");
+var Components = __webpack_require__(/*! ../../../../components/index */ "./client/src/components/index.ts");
 exports.default = react_redux_1.connect(function (state) { return ({
-    ratings: Selectors.RatingSelector.modifiedMinistryCoachRatings(state)
+    ratings: Selectors.RatingSelector.modifiedMinistryCoachRatings(state),
+    ratingTypes: state.lookup.ratingTypes
 }); }, function (dispatch) { return ({
-    actions: redux_1.bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch)
+    actions: redux_1.bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch),
+    changeRatingType: function (type) { return dispatch(Actions.LookupActions.ActionCreators.changeRatingType(type)); }
 }); })(/** @class */ (function (_super) {
     __extends(MinistryCoachRatings, _super);
     function MinistryCoachRatings(props) {
@@ -3114,8 +3188,12 @@ exports.default = react_redux_1.connect(function (state) { return ({
         this.props.actions.loadMinistryCoachRatings();
     };
     MinistryCoachRatings.prototype.render = function () {
+        var _this = this;
+        var ratingType = this.props.ratingTypes.find(function (x) { return x.ratingType == Models.RatingTypes.MinCoach; });
         return React.createElement("div", { className: "ratings" },
             React.createElement(print_button_1.default, { printTargetId: "ministryCoachRatings", classNames: "print" }),
+            !!ratingType && React.createElement(Components.Form, null,
+                React.createElement(Components.Form.CheckBox, { label: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0438 \u043D\u0430 \u0441\u0430\u0439\u0442\u0456", isChecked: ratingType.isActive, onChange: function () { return _this.props.changeRatingType(ratingType.ratingType); }, className: "ratings-activity" })),
             React.createElement("div", { id: "ministryCoachRatings" },
                 React.createElement(table_1.default, { items: this.props.ratings, columns: [
                         {
@@ -3168,15 +3246,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+var Models = __webpack_require__(/*! ../../models/index.models */ "./client/src/pages/ratings-entries/models/index.models.ts");
 var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/src/pages/ratings-entries/actions/index.actions.ts");
 var Selectors = __webpack_require__(/*! ../../selectors/index.selector */ "./client/src/pages/ratings-entries/selectors/index.selector.ts");
 var table_1 = __webpack_require__(/*! ../../../../components/table/table */ "./client/src/components/table/table.tsx");
 var column_1 = __webpack_require__(/*! ../../../../components/table/column */ "./client/src/components/table/column.tsx");
 var print_button_1 = __webpack_require__(/*! ../../../../components/print button/print.button */ "./client/src/components/print button/print.button.tsx");
+var Components = __webpack_require__(/*! ../../../../components/index */ "./client/src/components/index.ts");
 exports.default = react_redux_1.connect(function (state) { return ({
-    ratings: Selectors.RatingSelector.modifiedMinistryFstRatings(state)
+    ratings: Selectors.RatingSelector.modifiedMinistryFstRatings(state),
+    ratingTypes: state.lookup.ratingTypes
 }); }, function (dispatch) { return ({
-    actions: redux_1.bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch)
+    actions: redux_1.bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch),
+    changeRatingType: function (type) { return dispatch(Actions.LookupActions.ActionCreators.changeRatingType(type)); }
 }); })(/** @class */ (function (_super) {
     __extends(MinistryFstRatings, _super);
     function MinistryFstRatings(props) {
@@ -3186,8 +3268,12 @@ exports.default = react_redux_1.connect(function (state) { return ({
         this.props.actions.loadMinistryFstRatings();
     };
     MinistryFstRatings.prototype.render = function () {
+        var _this = this;
+        var ratingType = this.props.ratingTypes.find(function (x) { return x.ratingType == Models.RatingTypes.MinFST; });
         return React.createElement("div", { className: "ratings" },
             React.createElement(print_button_1.default, { printTargetId: "ministryFstRatinhs", classNames: "print" }),
+            !!ratingType && React.createElement(Components.Form, null,
+                React.createElement(Components.Form.CheckBox, { label: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0438 \u043D\u0430 \u0441\u0430\u0439\u0442\u0456", isChecked: ratingType.isActive, onChange: function () { return _this.props.changeRatingType(ratingType.ratingType); }, className: "ratings-activity" })),
             React.createElement("div", { id: "ministryFstRatinhs" },
                 React.createElement(table_1.default, { items: this.props.ratings, columns: [
                         {
@@ -3240,6 +3326,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+var Models = __webpack_require__(/*! ../../models/index.models */ "./client/src/pages/ratings-entries/models/index.models.ts");
 var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/src/pages/ratings-entries/actions/index.actions.ts");
 var table_1 = __webpack_require__(/*! ../../../../components/table/table */ "./client/src/components/table/table.tsx");
 var column_1 = __webpack_require__(/*! ../../../../components/table/column */ "./client/src/components/table/column.tsx");
@@ -3248,9 +3335,11 @@ var Selectors = __webpack_require__(/*! ../../selectors/index.selector */ "./cli
 var Components = __webpack_require__(/*! ../../../../components/index */ "./client/src/components/index.ts");
 exports.default = react_redux_1.connect(function (state) { return ({
     ratingsMale: Selectors.RatingSelector.ministryRatingsMale(state),
-    ratingsFemale: Selectors.RatingSelector.ministryRatingsFemale(state)
+    ratingsFemale: Selectors.RatingSelector.ministryRatingsFemale(state),
+    ratingTypes: state.lookup.ratingTypes
 }); }, function (dispatch) { return ({
-    actions: redux_1.bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch)
+    actions: redux_1.bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch),
+    changeRatingType: function (type) { return dispatch(Actions.LookupActions.ActionCreators.changeRatingType(type)); }
 }); })(/** @class */ (function (_super) {
     __extends(MinistryRatings, _super);
     function MinistryRatings(props) {
@@ -3271,10 +3360,13 @@ exports.default = react_redux_1.connect(function (state) { return ({
         this.props.actions.loadMinistryRatings();
     };
     MinistryRatings.prototype.render = function () {
+        var _this = this;
+        var ratingType = this.props.ratingTypes.find(function (x) { return (_this.props.ratingFilter == "Male" && x.ratingType == Models.RatingTypes.MinAthMale) ||
+            (_this.props.ratingFilter == "Female" && x.ratingType == Models.RatingTypes.MinAthFemale); });
         return React.createElement("div", { className: "ratings" },
             React.createElement(print_button_1.default, { printTargetId: "ministryRatings", classNames: "print" }),
-            React.createElement(Components.Form, null,
-                React.createElement(Components.Form.CheckBox, { label: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0438 \u043D\u0430 \u0441\u0430\u0439\u0442\u0456", isChecked: true, className: "ratings-activity" })),
+            !!ratingType && React.createElement(Components.Form, null,
+                React.createElement(Components.Form.CheckBox, { label: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0438 \u043D\u0430 \u0441\u0430\u0439\u0442\u0456", isChecked: ratingType.isActive, onChange: function () { return _this.props.changeRatingType(ratingType.ratingType); }, className: "ratings-activity" })),
             React.createElement("div", { id: "ministryRatings" },
                 React.createElement(table_1.default, { items: this.getRatings(), columns: [
                         {
@@ -3336,15 +3428,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+var Models = __webpack_require__(/*! ../../models/index.models */ "./client/src/pages/ratings-entries/models/index.models.ts");
 var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/src/pages/ratings-entries/actions/index.actions.ts");
 var Selectors = __webpack_require__(/*! ../../selectors/index.selector */ "./client/src/pages/ratings-entries/selectors/index.selector.ts");
 var table_1 = __webpack_require__(/*! ../../../../components/table/table */ "./client/src/components/table/table.tsx");
 var column_1 = __webpack_require__(/*! ../../../../components/table/column */ "./client/src/components/table/column.tsx");
 var print_button_1 = __webpack_require__(/*! ../../../../components/print button/print.button */ "./client/src/components/print button/print.button.tsx");
+var Components = __webpack_require__(/*! ../../../../components/index */ "./client/src/components/index.ts");
 exports.default = react_redux_1.connect(function (state) { return ({
-    ratings: Selectors.RatingSelector.modifiedMinistryRegionRatings(state)
+    ratings: Selectors.RatingSelector.modifiedMinistryRegionRatings(state),
+    ratingTypes: state.lookup.ratingTypes
 }); }, function (dispatch) { return ({
-    actions: redux_1.bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch)
+    actions: redux_1.bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch),
+    changeRatingType: function (type) { return dispatch(Actions.LookupActions.ActionCreators.changeRatingType(type)); }
 }); })(/** @class */ (function (_super) {
     __extends(MinistryRegionRatings, _super);
     function MinistryRegionRatings(props) {
@@ -3354,8 +3450,12 @@ exports.default = react_redux_1.connect(function (state) { return ({
         this.props.actions.loadMinistryRegionRatings();
     };
     MinistryRegionRatings.prototype.render = function () {
+        var _this = this;
+        var ratingType = this.props.ratingTypes.find(function (x) { return x.ratingType == Models.RatingTypes.MinRegion; });
         return React.createElement("div", { className: "ratings" },
             React.createElement(print_button_1.default, { printTargetId: "ministryRegionRatings", classNames: "print" }),
+            !!ratingType && React.createElement(Components.Form, null,
+                React.createElement(Components.Form.CheckBox, { label: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0438 \u043D\u0430 \u0441\u0430\u0439\u0442\u0456", isChecked: ratingType.isActive, onChange: function () { return _this.props.changeRatingType(ratingType.ratingType); }, className: "ratings-activity" })),
             React.createElement("div", { id: "ministryRegionRatings" },
                 React.createElement(table_1.default, { items: this.props.ratings, columns: [
                         {
@@ -3408,15 +3508,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+var Models = __webpack_require__(/*! ../../models/index.models */ "./client/src/pages/ratings-entries/models/index.models.ts");
 var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/src/pages/ratings-entries/actions/index.actions.ts");
 var Selectors = __webpack_require__(/*! ../../selectors/index.selector */ "./client/src/pages/ratings-entries/selectors/index.selector.ts");
 var table_1 = __webpack_require__(/*! ../../../../components/table/table */ "./client/src/components/table/table.tsx");
 var column_1 = __webpack_require__(/*! ../../../../components/table/column */ "./client/src/components/table/column.tsx");
 var print_button_1 = __webpack_require__(/*! ../../../../components/print button/print.button */ "./client/src/components/print button/print.button.tsx");
+var Components = __webpack_require__(/*! ../../../../components/index */ "./client/src/components/index.ts");
 exports.default = react_redux_1.connect(function (state) { return ({
-    ratings: Selectors.RatingSelector.modifiedMinistrySchoolRatings(state)
+    ratings: Selectors.RatingSelector.modifiedMinistrySchoolRatings(state),
+    ratingTypes: state.lookup.ratingTypes
 }); }, function (dispatch) { return ({
-    actions: redux_1.bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch)
+    actions: redux_1.bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch),
+    changeRatingType: function (type) { return dispatch(Actions.LookupActions.ActionCreators.changeRatingType(type)); }
 }); })(/** @class */ (function (_super) {
     __extends(MinistrySchoolRatings, _super);
     function MinistrySchoolRatings(props) {
@@ -3426,8 +3530,12 @@ exports.default = react_redux_1.connect(function (state) { return ({
         this.props.actions.loadMinistrySchoolRatings();
     };
     MinistrySchoolRatings.prototype.render = function () {
+        var _this = this;
+        var ratingType = this.props.ratingTypes.find(function (x) { return x.ratingType == Models.RatingTypes.MinSchool; });
         return React.createElement("div", { className: "ratings" },
             React.createElement(print_button_1.default, { printTargetId: "ministrySchoolRatinhs", classNames: "print" }),
+            !!ratingType && React.createElement(Components.Form, null,
+                React.createElement(Components.Form.CheckBox, { label: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0438 \u043D\u0430 \u0441\u0430\u0439\u0442\u0456", isChecked: ratingType.isActive, onChange: function () { return _this.props.changeRatingType(ratingType.ratingType); }, className: "ratings-activity" })),
             React.createElement("div", { id: "ministrySchoolRatinhs" },
                 React.createElement(table_1.default, { items: this.props.ratings, columns: [
                         {
@@ -3480,15 +3588,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+var Models = __webpack_require__(/*! ../../models/index.models */ "./client/src/pages/ratings-entries/models/index.models.ts");
 var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/src/pages/ratings-entries/actions/index.actions.ts");
 var Selectors = __webpack_require__(/*! ../../selectors/index.selector */ "./client/src/pages/ratings-entries/selectors/index.selector.ts");
 var table_1 = __webpack_require__(/*! ../../../../components/table/table */ "./client/src/components/table/table.tsx");
 var column_1 = __webpack_require__(/*! ../../../../components/table/column */ "./client/src/components/table/column.tsx");
 var print_button_1 = __webpack_require__(/*! ../../../../components/print button/print.button */ "./client/src/components/print button/print.button.tsx");
+var Components = __webpack_require__(/*! ../../../../components/index */ "./client/src/components/index.ts");
 exports.default = react_redux_1.connect(function (state) { return ({
-    ratings: Selectors.RatingSelector.modifiedUPFCoachRatings(state)
+    ratings: Selectors.RatingSelector.modifiedUPFCoachRatings(state),
+    ratingTypes: state.lookup.ratingTypes
 }); }, function (dispatch) { return ({
-    actions: redux_1.bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch)
+    actions: redux_1.bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch),
+    changeRatingType: function (type) { return dispatch(Actions.LookupActions.ActionCreators.changeRatingType(type)); }
 }); })(/** @class */ (function (_super) {
     __extends(UPFCoachRatings, _super);
     function UPFCoachRatings(props) {
@@ -3498,8 +3610,12 @@ exports.default = react_redux_1.connect(function (state) { return ({
         this.props.actions.loadUPFCoachRatings();
     };
     UPFCoachRatings.prototype.render = function () {
+        var _this = this;
+        var ratingType = this.props.ratingTypes.find(function (x) { return x.ratingType == Models.RatingTypes.UpfCoach; });
         return React.createElement("div", { className: "ratings" },
             React.createElement(print_button_1.default, { printTargetId: "upfCoachRatings", classNames: "print" }),
+            !!ratingType && React.createElement(Components.Form, null,
+                React.createElement(Components.Form.CheckBox, { label: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0438 \u043D\u0430 \u0441\u0430\u0439\u0442\u0456", isChecked: ratingType.isActive, onChange: function () { return _this.props.changeRatingType(ratingType.ratingType); }, className: "ratings-activity" })),
             React.createElement("div", { id: "upfCoachRatings" },
                 React.createElement(table_1.default, { items: this.props.ratings, columns: [
                         {
@@ -3552,16 +3668,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
 var redux_1 = __webpack_require__(/*! redux */ "./node_modules/redux/es/redux.js");
+var Models = __webpack_require__(/*! ../../models/index.models */ "./client/src/pages/ratings-entries/models/index.models.ts");
 var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/src/pages/ratings-entries/actions/index.actions.ts");
 var table_1 = __webpack_require__(/*! ../../../../components/table/table */ "./client/src/components/table/table.tsx");
 var column_1 = __webpack_require__(/*! ../../../../components/table/column */ "./client/src/components/table/column.tsx");
 var print_button_1 = __webpack_require__(/*! ../../../../components/print button/print.button */ "./client/src/components/print button/print.button.tsx");
 var Selectors = __webpack_require__(/*! ../../selectors/index.selector */ "./client/src/pages/ratings-entries/selectors/index.selector.ts");
+var Components = __webpack_require__(/*! ../../../../components/index */ "./client/src/components/index.ts");
 exports.default = react_redux_1.connect(function (state) { return ({
     ratingsMale: Selectors.RatingSelector.upfRatingsMale(state),
-    ratingsFemale: Selectors.RatingSelector.upfRatingsFemale(state)
+    ratingsFemale: Selectors.RatingSelector.upfRatingsFemale(state),
+    ratingTypes: state.lookup.ratingTypes
 }); }, function (dispatch) { return ({
-    actions: redux_1.bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch)
+    actions: redux_1.bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch),
+    changeRatingType: function (type) { return dispatch(Actions.LookupActions.ActionCreators.changeRatingType(type)); }
 }); })(/** @class */ (function (_super) {
     __extends(UPFRatings, _super);
     function UPFRatings(props) {
@@ -3582,8 +3702,13 @@ exports.default = react_redux_1.connect(function (state) { return ({
         this.props.actions.loadUPFRatings();
     };
     UPFRatings.prototype.render = function () {
+        var _this = this;
+        var ratingType = this.props.ratingTypes.find(function (x) { return (_this.props.ratingFilter == "Male" && x.ratingType == Models.RatingTypes.UpfAthMale) ||
+            (_this.props.ratingFilter == "Female" && x.ratingType == Models.RatingTypes.UpfAthFemale); });
         return React.createElement("div", { className: "ratings" },
             React.createElement(print_button_1.default, { printTargetId: "upfRatings", classNames: "print" }),
+            !!ratingType && React.createElement(Components.Form, null,
+                React.createElement(Components.Form.CheckBox, { label: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0438 \u043D\u0430 \u0441\u0430\u0439\u0442\u0456", isChecked: ratingType.isActive, onChange: function () { return _this.props.changeRatingType(ratingType.ratingType); }, className: "ratings-activity" })),
             React.createElement("div", { id: "upfRatings" },
                 React.createElement(table_1.default, { items: this.getRatings(), columns: [
                         {

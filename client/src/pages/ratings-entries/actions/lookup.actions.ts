@@ -1,6 +1,8 @@
-import * as Services from "../services/lookup.services";
+import * as Services from "../services/index.services";
 import * as Models from "../models/index.models";
 import * as ActionTypes from "./action.types";
+import * as toastr from "toastr";
+toastr.options.timeOut = 5000;
 
 export namespace ActionCreators{
     export const initLookups = () => (d, gs: () => Models.StoreState) => {
@@ -11,10 +13,11 @@ export namespace ActionCreators{
         d(loadCoaches());
         d(loadFstList());
         d(loadSchools());
+        d(loadRatingTypes())
     }
 
     export const loadCompetitions = () => (d, gs: () => Models.StoreState) => {
-        Services.getCompetitions().then((response) => {
+        Services.LookupServices.getCompetitions().then((response) => {
             if(response.status){
                 d({
                     type: ActionTypes.LOAD_COMPETITIONS,
@@ -27,7 +30,7 @@ export namespace ActionCreators{
     }
 
     export const loadRecords = () => (d, gs: () => Models.StoreState) => {
-        Services.getRecords().then((response) => {
+        Services.LookupServices.getRecords().then((response) => {
             if(response.status){
                 d({
                     type: ActionTypes.LOAD_RECORDS,
@@ -40,7 +43,7 @@ export namespace ActionCreators{
     }
 
     export const loadNames = () => (d, gs: () => Models.StoreState) => {
-        Services.getNames().then((response) => {
+        Services.LookupServices.getNames().then((response) => {
             if(response.status){
                 d({
                     type: ActionTypes.LOAD_NAMES,
@@ -51,7 +54,7 @@ export namespace ActionCreators{
     }
 
     export const loadCompTypes = () => (d, gs: () => Models.StoreState) => {
-        Services.getCompTypes().then((response) => {
+        Services.LookupServices.getCompTypes().then((response) => {
             if(response.status){
                 d({
                     type: ActionTypes.LOAD_COMP_TYPES,
@@ -62,7 +65,7 @@ export namespace ActionCreators{
     }
 
     export const loadRegions = () => (d, gs: () => Models.StoreState) => {
-        Services.getRegions().then(response => {
+        Services.LookupServices.getRegions().then(response => {
             if(response.status){
                 d({
                     type: ActionTypes.LOAD_REGIONS,
@@ -73,7 +76,7 @@ export namespace ActionCreators{
     }
 
     export const loadCoaches = () => (d, gs: () => Models.StoreState) => {
-        Services.getCoaches().then(response => {
+        Services.LookupServices.getCoaches().then(response => {
             if(response.status){
                 d({
                     type: ActionTypes.LOAD_COACHES,
@@ -84,7 +87,7 @@ export namespace ActionCreators{
     }
 
     export const loadFstList = () => (d, gs: () => Models.StoreState) => {
-        Services.getFst().then(response => {
+        Services.LookupServices.getFst().then(response => {
             if(response.status){
                 d({
                     type: ActionTypes.LOAD_FST,
@@ -95,7 +98,7 @@ export namespace ActionCreators{
     }
 
     export const loadSchools = () => (d, gs: () => Models.StoreState) => {
-        Services.getSchools().then(response => {
+        Services.LookupServices.getSchools().then(response => {
             if(response.status){
                 d({
                     type: ActionTypes.LOAD_SCHOOLS,
@@ -103,5 +106,25 @@ export namespace ActionCreators{
                 })
             }
         });
+    }
+
+    export const loadRatingTypes = () => (d) => {
+        Services.LookupServices.getRatingTypes().then(response => {
+            if(response.status){
+                d({
+                    type: ActionTypes.LOAD_RATING_TYPES,
+                    payload: <ActionTypes.LOAD_RATING_TYPES_PAYLOAD>response.data
+                })
+            }
+        })
+    }
+
+    export const changeRatingType = (ratingType: string) => (d) => {
+        Services.RatingsServices.changeRatingType({ratingType}).then(response => {
+            if(response.status){
+                toastr.success(response.message)
+                d(loadRatingTypes())
+            }
+        })
     }
 }

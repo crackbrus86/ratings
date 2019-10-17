@@ -59,3 +59,10 @@ export const getSchools = () => {
         type: apiTypes.GET
     });
 }
+
+export const getRatingTypes = () => {
+    return CallApi.callApi({
+        url: lookupApiPath + 'GetRatingTypes.php',
+        type: apiTypes.GET
+    })
+}

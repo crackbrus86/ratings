@@ -4,13 +4,15 @@ import * as ActionTypes from "../actions/types/action.types"
 interface State{
     activities: Models.Activity[],
     events: Models.Event[],
-    names?: string[]
+    names?: string[],
+    ratingTypes?: Models.RatingType[]
 }
 
 const defaultState: State = {
     activities: [],
     events: [],
-    names: []
+    names: [],
+    ratingTypes: []
 }
 
 export type ReducerState = typeof defaultState;
@@ -36,6 +38,13 @@ export const reducer = (state = defaultState, action): ReducerState => {
             return {
                 ...state,
                 names: payload
+            }
+        }
+        case ActionTypes.LOAD_RATING_TYPES: {
+            let payload = action.payload as ActionTypes.LOAD_RATING_TYPES_PAYLOAD
+            return {
+                ...state,
+                ratingTypes: payload
             }
         }
         default:

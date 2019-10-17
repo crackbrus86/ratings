@@ -5,7 +5,7 @@ const apiTypes = ApiService.RequestTypes;
 
 export const getRatings = () => {
     return ApiService.callApi({
-        url: lookupPath + "GetRatingTypes.php",
+        url: lookupPath + "GetActiveRatingTypes.php",
         type: apiTypes.GET
     });
 }

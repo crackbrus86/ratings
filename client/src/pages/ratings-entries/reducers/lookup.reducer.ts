@@ -10,7 +10,8 @@ export interface LookupState{
     regions: Models.Region[],
     coaches: string[],
     fstList: string[],
-    schools: string[]
+    schools: string[],
+    ratingTypes?: Models.RatingType[]
 }
 
 const defaultState = {
@@ -22,7 +23,8 @@ const defaultState = {
     regions: [],
     coaches: [],
     fstList: [],
-    schools: []
+    schools: [],
+    ratingTypes: []
 } as LookupState
 
 export type ReducerState = typeof defaultState;
@@ -83,6 +85,13 @@ export const lookupReducer = (state = defaultState, action): ReducerState => {
             return {
                 ...state,
                 schools: payload
+            }
+        }
+        case ActionTypes.LOAD_RATING_TYPES: {
+            let payload = action.payload as ActionTypes.LOAD_RATING_TYPES_PAYLOAD
+            return {
+                ...state,
+                ratingTypes: payload
             }
         }
         default:

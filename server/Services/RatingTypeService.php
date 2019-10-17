@@ -28,7 +28,29 @@ class RatingTypeService
         {
             foreach ($results as $item) 
             {
-                $ratingType = new RatingType($item->Id, $item->RatingType, $item->Title, $item->Organization, $item->Type);
+                $ratingType = new RatingType($item->Id, $item->RatingType, $item->Title, $item->Organization, $item->Type, $item->IsActive == "1" ? TRUE : FALSE);
+
+                array_push($this->ratingTypes, $ratingType);
+            }
+        }
+
+        $response->setResponseModel((object)array("data" => $this->ratingTypes, "status" => TRUE, "message" => NULL));
+
+        return $response;
+    }
+
+    public function getAcative()
+    {
+        $response = new ResponseModel();
+
+        $sql = "SELECT * FROM {$this->tableName} WHERE IsActive = 1";
+        $results = $this->db->get_results($sql);
+
+        if(count($results))
+        {
+            foreach ($results as $item) 
+            {
+                $ratingType = new RatingType($item->Id, $item->RatingType, $item->Title, $item->Organization, $item->Type, $item->IsActive == "1" ? TRUE : FALSE);
 
                 array_push($this->ratingTypes, $ratingType);
             }

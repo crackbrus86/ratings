@@ -7,6 +7,7 @@ import Table from "../../../../components/table/table";
 import {ColumnModel, ColumnTypes} from "../../../../components/table/column";
 import PrintButton from "../../../../components/print button/print.button";
 import * as Selectors from "../../selectors/index.selector";
+import * as Components from "../../../../components/index"
 
 export interface OwnProps{
     ratingFilter: string
@@ -14,19 +15,23 @@ export interface OwnProps{
 interface StateProps{
     ratingsMale: Models.Rating[],
     ratingsFemale: Models.Rating[]
+    ratingTypes?: Models.RatingType[]
 }
 
 interface DispatchProps{
     actions: typeof Actions.RatingsActions.ActionCreators
+    changeRatingType?: (ratingType: string) => void
 }
 
 export default connect<StateProps, DispatchProps, OwnProps>(
     (state: Models.StoreState):StateProps => ({
         ratingsMale: Selectors.RatingSelector.upfRatingsMale(state),
-        ratingsFemale: Selectors.RatingSelector.upfRatingsFemale(state)
+        ratingsFemale: Selectors.RatingSelector.upfRatingsFemale(state),
+        ratingTypes: state.lookup.ratingTypes
     }),
     (dispatch): DispatchProps => ({
-        actions: bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch)
+        actions: bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch),
+        changeRatingType: (type) => dispatch(Actions.LookupActions.ActionCreators.changeRatingType(type))
     })
 )(class UPFRatings extends React.Component<StateProps & DispatchProps & OwnProps>{
 
@@ -50,8 +55,17 @@ export default connect<StateProps, DispatchProps, OwnProps>(
     }
 
     render(){
+        let ratingType = this.props.ratingTypes.find(x => (this.props.ratingFilter == "Male" && x.ratingType == Models.RatingTypes.UpfAthMale) || 
+        (this.props.ratingFilter == "Female" && x.ratingType == Models.RatingTypes.UpfAthFemale))
         return <div  className="ratings">
                 <PrintButton printTargetId="upfRatings" classNames="print" />
+                { !!ratingType && <Components.Form>
+                <Components.Form.CheckBox 
+                    label="Показати на сайті" 
+                    isChecked={ratingType.isActive} 
+                    onChange={() => this.props.changeRatingType(ratingType.ratingType)} 
+                    className="ratings-activity" />
+                </Components.Form> }
                 <div id="upfRatings">
                     <Table 
                     items={this.getRatings()}

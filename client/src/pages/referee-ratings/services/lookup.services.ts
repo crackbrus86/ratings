@@ -24,3 +24,10 @@ export const getNames = () => {
         type: apiTypes.GET
     })
 }
+
+export const getRatingTypes = () => {
+    return CallApi.callApi({
+        url: path + 'GetRatingTypes.php',
+        type: apiTypes.GET
+    })
+}

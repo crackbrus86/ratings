@@ -1385,6 +1385,7 @@ exports.loadLookups = function () { return function (d) {
     d(loadActivities());
     d(loadEvents());
     d(loadNames());
+    d(exports.loadRatingTypes());
 }; };
 var loadActivities = function () { return function (d) {
     Services.Lookup.getActivities().then(function (response) {
@@ -1419,6 +1420,16 @@ var loadNames = function () { return function (d) {
         }
     });
 }; };
+exports.loadRatingTypes = function () { return function (d) {
+    Services.Lookup.getRatingTypes().then(function (response) {
+        if (response.status) {
+            d({ type: ActionTypes.LOAD_RATING_TYPES, payload: response.data });
+        }
+        else {
+            toastr.error(response.message);
+        }
+    });
+}; };
 
 
 /***/ }),
@@ -1435,6 +1446,9 @@ var loadNames = function () { return function (d) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ActionTypes = __webpack_require__(/*! ./types/action.types */ "./client/src/pages/referee-ratings/actions/types/action.types.ts");
 var Services = __webpack_require__(/*! ../services/index.servces */ "./client/src/pages/referee-ratings/services/index.servces.ts");
+var Actions = __webpack_require__(/*! ./index.actions */ "./client/src/pages/referee-ratings/actions/index.actions.ts");
+var toastr = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
+toastr.options.timeOut = 5000;
 exports.getRating = function () { return function (d, gs) {
     Services.RefereeRating.getRating(gs().shell.startDate.getFullYear()).then(function (response) {
         if (response.status) {
@@ -1442,6 +1456,14 @@ exports.getRating = function () { return function (d, gs) {
         }
         else {
             toastr.error(response.message);
+        }
+    });
+}; };
+exports.changeRatingType = function (ratingType) { return function (d) {
+    Services.RatingType.changeRatingType({ ratingType: ratingType }).then(function (response) {
+        if (response.status) {
+            toastr.success(response.message);
+            d(Actions.Lookup.loadRatingTypes());
         }
     });
 }; };
@@ -1622,6 +1644,7 @@ exports.LOAD_EVENTS = "LOOKUP::LOAD_EVENTS";
 exports.SELECT_TO_REMOVE = "REFEREE_ENTRIES::SELECT_TO_REMOVE";
 exports.CANCEL_REMOVE = "REFEREE_ENTRIES::CANCEL_REMOVE";
 exports.LOAD_NAMES = "LOOKUP::LOAD_NAMES";
+exports.LOAD_RATING_TYPES = "LOOKUP::LOAD_RATING_TYPES";
 exports.LOAD_RATING = "REFEREE_RATING::LOAD";
 
 
@@ -1745,6 +1768,48 @@ exports.default = exports.RefereeEntryModal;
 
 /***/ }),
 
+/***/ "./client/src/pages/referee-ratings/models/index.models.ts":
+/*!*****************************************************************!*\
+  !*** ./client/src/pages/referee-ratings/models/index.models.ts ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RefereeEntryModels = __webpack_require__(/*! ./referee.entry.models */ "./client/src/pages/referee-ratings/models/referee.entry.models.ts");
+var RatingTypes;
+(function (RatingTypes) {
+    RatingTypes["MinAthMale"] = "minAthMale";
+    RatingTypes["MinAthFemale"] = "minAthFemale";
+    RatingTypes["UpfAthMale"] = "upfAthMale";
+    RatingTypes["UpfAthFemale"] = "upfAthFemale";
+    RatingTypes["MinCoach"] = "minCoach";
+    RatingTypes["UpfCoach"] = "upfCoach";
+    RatingTypes["MinRegion"] = "minRegion";
+    RatingTypes["MinFST"] = "minFST";
+    RatingTypes["MinSchool"] = "minSchool";
+    RatingTypes["MinReferee"] = "minReferee";
+})(RatingTypes = exports.RatingTypes || (exports.RatingTypes = {}));
+
+
+/***/ }),
+
+/***/ "./client/src/pages/referee-ratings/models/referee.entry.models.ts":
+/*!*************************************************************************!*\
+  !*** ./client/src/pages/referee-ratings/models/referee.entry.models.ts ***!
+  \*************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+
+
+/***/ }),
+
 /***/ "./client/src/pages/referee-ratings/reducers/index.reducer.ts":
 /*!********************************************************************!*\
   !*** ./client/src/pages/referee-ratings/reducers/index.reducer.ts ***!
@@ -1795,7 +1860,8 @@ var ActionTypes = __webpack_require__(/*! ../actions/types/action.types */ "./cl
 var defaultState = {
     activities: [],
     events: [],
-    names: []
+    names: [],
+    ratingTypes: []
 };
 exports.reducer = function (state, action) {
     if (state === void 0) { state = defaultState; }
@@ -1811,6 +1877,10 @@ exports.reducer = function (state, action) {
         case ActionTypes.LOAD_NAMES: {
             var payload = action.payload;
             return __assign({}, state, { names: payload });
+        }
+        case ActionTypes.LOAD_RATING_TYPES: {
+            var payload = action.payload;
+            return __assign({}, state, { ratingTypes: payload });
         }
         default:
             return state;
@@ -2067,6 +2137,8 @@ var Lookup = __webpack_require__(/*! ./lookup.services */ "./client/src/pages/re
 exports.Lookup = Lookup;
 var RefereeRating = __webpack_require__(/*! ./referee.rating.services */ "./client/src/pages/referee-ratings/services/referee.rating.services.ts");
 exports.RefereeRating = RefereeRating;
+var RatingType = __webpack_require__(/*! ./rating.type.services */ "./client/src/pages/referee-ratings/services/rating.type.services.ts");
+exports.RatingType = RatingType;
 
 
 /***/ }),
@@ -2100,6 +2172,36 @@ exports.getNames = function () {
     return CallApi.callApi({
         url: path + 'GetAllRefereeNames.php',
         type: apiTypes.GET
+    });
+};
+exports.getRatingTypes = function () {
+    return CallApi.callApi({
+        url: path + 'GetRatingTypes.php',
+        type: apiTypes.GET
+    });
+};
+
+
+/***/ }),
+
+/***/ "./client/src/pages/referee-ratings/services/rating.type.services.ts":
+/*!***************************************************************************!*\
+  !*** ./client/src/pages/referee-ratings/services/rating.type.services.ts ***!
+  \***************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var CallApi = __webpack_require__(/*! ../../../infrastructure/call.api */ "./client/src/infrastructure/call.api.ts");
+var ratingsApiPath = "../wp-content/plugins/ratings/server/RatingController/";
+var apiTypes = CallApi.RequestTypes;
+exports.changeRatingType = function (contract) {
+    return CallApi.callApi({
+        url: ratingsApiPath + 'ChangeRatingType.php',
+        type: apiTypes.POST,
+        data: contract
     });
 };
 
@@ -2332,21 +2434,27 @@ exports.default = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(fun
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var react_redux_1 = __webpack_require__(/*! react-redux */ "./node_modules/react-redux/es/index.js");
+var Models = __webpack_require__(/*! ../models/index.models */ "./client/src/pages/referee-ratings/models/index.models.ts");
 var Actions = __webpack_require__(/*! ../actions/index.actions */ "./client/src/pages/referee-ratings/actions/index.actions.ts");
 var Components = __webpack_require__(/*! ../../../components */ "./client/src/components/index.ts");
 var Selectors = __webpack_require__(/*! ../selectors/index.selectors */ "./client/src/pages/referee-ratings/selectors/index.selectors.ts");
 var mapStateToProps = function (state) { return ({
-    ratings: Selectors.Rating.refereeRatings(state)
+    ratings: Selectors.Rating.refereeRatings(state),
+    ratingTypes: state.lookup.ratingTypes
 }); };
 var mapDispatchToProps = function (dispatch) { return ({
-    loadRatings: function () { return dispatch(Actions.Ratings.getRating()); }
+    loadRatings: function () { return dispatch(Actions.Ratings.getRating()); },
+    changeRatingType: function (type) { return dispatch(Actions.Ratings.changeRatingType(type)); }
 }); };
 exports.default = react_redux_1.connect(mapStateToProps, mapDispatchToProps)(function refereeRatingView(props) {
     React.useEffect(function () {
         props.loadRatings();
     }, []);
+    var ratingType = props.ratingTypes.find(function (x) { return x.ratingType == Models.RatingTypes.MinReferee; });
     return React.createElement("div", { className: "ratings" },
         React.createElement(Components.PrintButton, { printTargetId: "referee-rating", classNames: "print" }),
+        !!ratingType && React.createElement(Components.Form, null,
+            React.createElement(Components.Form.CheckBox, { label: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0438 \u043D\u0430 \u0441\u0430\u0439\u0442\u0456", className: "ratings-activity", isChecked: ratingType.isActive, onChange: function () { return props.changeRatingType(ratingType.ratingType); } })),
         React.createElement("div", { id: "referee-rating" },
             React.createElement(Components.Table, { items: props.ratings, columns: [
                     {

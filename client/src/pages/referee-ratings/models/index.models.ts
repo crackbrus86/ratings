@@ -10,6 +10,7 @@ export type StoreState = ReducerState;
 export type Activity = Lookup.Activity;
 export type Event = Lookup.Competition;
 export type Rating = RefereeRating.Rating;
+export type RatingType = Lookup.Rating
 export {ValidationResult}
 
 export interface ExtendedEntry extends RefereeEntry{
@@ -19,4 +20,17 @@ export interface ExtendedEntry extends RefereeEntry{
 
 export interface ExtendedRating extends Rating{
     competition?: string
+}
+
+export enum RatingTypes {
+    MinAthMale = "minAthMale",
+    MinAthFemale = "minAthFemale",
+    UpfAthMale = "upfAthMale",
+    UpfAthFemale = "upfAthFemale",
+    MinCoach = "minCoach",
+    UpfCoach = "upfCoach",
+    MinRegion = "minRegion",
+    MinFST = "minFST",
+    MinSchool = "minSchool",
+    MinReferee = "minReferee"
 }

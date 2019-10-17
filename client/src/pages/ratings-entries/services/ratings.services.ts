@@ -59,3 +59,11 @@ export const getMinistrySchoolRatings = (contract: Models.RatingModels.GetRating
         data: contract
     })
 }
+
+export const changeRatingType = (contract: { ratingType: string}) => {
+    return CallApi.callApi({
+        url: ratingsApiPath + 'ChangeRatingType.php',
+        type: apiTypes.POST,
+        data: contract
+    })
+}

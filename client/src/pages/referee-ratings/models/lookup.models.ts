@@ -12,3 +12,12 @@ export interface Competition {
     ratingUPF: boolean,
     shortName: string
 }
+
+export interface Rating{
+    id: number,
+    ratingType: string,
+    title: string,
+    organization: string,
+    type: "athlete" | "coach" | "region" | "fst" | "school" | "referee",
+    isActive: boolean
+}

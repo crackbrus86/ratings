@@ -7,22 +7,26 @@ import Table from "../../../../components/table/table";
 import {ColumnModel, ColumnTypes} from "../../../../components/table/column";
 import * as Selectors from "../../selectors/index.selector";
 import PrintButton from "../../../../components/print button/print.button";
-
+import * as Components from "../../../../components/index"
 
 interface StateProps{
     ratings: Models.Rating[]
+    ratingTypes?: Models.RatingType[]
 }
 
 interface DispatchProps{
     actions: typeof Actions.RatingsActions.ActionCreators
+    changeRatingType?: (ratingType: string) => void
 }
 
 export default connect<StateProps, DispatchProps>(
     (state: Models.StoreState):StateProps => ({
-        ratings: Selectors.RatingSelector.modifiedMinistryCoachRatings(state)
+        ratings: Selectors.RatingSelector.modifiedMinistryCoachRatings(state),
+        ratingTypes: state.lookup.ratingTypes
     }),
     (dispatch): DispatchProps => ({
-        actions: bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch)
+        actions: bindActionCreators(Actions.RatingsActions.ActionCreators, dispatch),
+        changeRatingType: (type) => dispatch(Actions.LookupActions.ActionCreators.changeRatingType(type))
     })
 )(class MinistryCoachRatings extends React.Component<StateProps & DispatchProps>{
     constructor(props){
@@ -34,8 +38,16 @@ export default connect<StateProps, DispatchProps>(
     }
 
     render(){
+        let ratingType = this.props.ratingTypes.find(x => x.ratingType == Models.RatingTypes.MinCoach) 
         return <div className="ratings">
             <PrintButton printTargetId="ministryCoachRatings" classNames="print" />
+            { !!ratingType && <Components.Form>
+                <Components.Form.CheckBox 
+                    label="Показати на сайті" 
+                    isChecked={ratingType.isActive} 
+                    onChange={() => this.props.changeRatingType(ratingType.ratingType)} 
+                    className="ratings-activity" />
+                </Components.Form> }
             <div id="ministryCoachRatings">
                 <Table 
                     items = {this.props.ratings}

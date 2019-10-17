@@ -64,6 +64,9 @@ export type LOAD_FST_PAYLOAD = string[];
 export const LOAD_SCHOOLS = "LOOKUP::LOAD_SCHOOLS";
 export type LOAD_SCHOOLS_PAYLOAD = string[];
 
+export const LOAD_RATING_TYPES = "LOOKUP::LOAD_RATING_TYPES"
+export type LOAD_RATING_TYPES_PAYLOAD = Models.RatingType[]
+
 export const LOAD_MINISTRY_COACH_RATINGS = "RATINGS::LOAD_MINISTRY_COACH_RATINGS";
 export type LOAD_MINISTRY_COACH_RATINGS_PAYLOAD = Models.Rating[];
 
