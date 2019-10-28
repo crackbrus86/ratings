@@ -268,6 +268,7 @@
   .rating-details-modal.modal-content .modal-body .form input[type=text] {
     border: none; }
   .rating-details-modal.modal-content .modal-body .form ul {
+    max-height: 300px;
     padding: 10px 0;
     margin: 0px; }
     .rating-details-modal.modal-content .modal-body .form ul li {
