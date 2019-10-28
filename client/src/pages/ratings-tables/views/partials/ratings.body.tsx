@@ -34,6 +34,19 @@ export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchTo
         React.useEffect(() => {
             return () => props.cleanRatings()
         }, [])
+
+        const ratingFullnameTitle = () => {
+            switch(props.rating.type){
+                case "fst":
+                    return "Назва ФСТ"
+                case "school":
+                    return "Назва ДЮСШ"
+                case "region":
+                    return "Назва області"
+                default:
+                    return "П.І.П" 
+            }
+        }
         return <div className="ratings">
             {
                 !props.ratingRecords.length && <span><b>{!!props.rating ? "На жаль, для цього рейтнигу не знайдено жодного запису" : "Оберіть рейтинг у випадаючому списку вище"}</b></span>
@@ -46,7 +59,12 @@ export default connect<StateProps, DispatchProps>(mapStateToProps, mapDispatchTo
                             items={props.ratingRecords} 
                             columns={[
                                 {
-                                    title: "П.І.П",
+                                    title: "Місце",
+                                    type: Components.ColumnTypes.No,
+                                    width: "30px"
+                                },
+                                {
+                                    title: ratingFullnameTitle(),
                                     field: "fullname",
                                     width: "300px"
                                 },

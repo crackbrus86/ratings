@@ -47,6 +47,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(
             <div id="referee-rating">
                 <Components.Table items={props.ratings} columns={[
                     {
+                        title: "Місце",
+                        type: Components.ColumnTypes.No,
+                        width: "30px"
+                    },
+                    {
                         title: "П.І.П.",
                         field: "fullname",
                         width: "250px"

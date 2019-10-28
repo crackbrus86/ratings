@@ -32,6 +32,8 @@ class Cell extends React.PureComponent<CellProps>{
                 return moment(this.props.item[this.props.column.field]).format("DD/MM/YYYY")
             case ColumnTypes.Html:
                 return <div dangerouslySetInnerHTML={this.createMarkup(this.props.item[this.props.column.field])}></div>
+            case ColumnTypes.No:
+                return <>{this.props.index + 1}</>
             default:
                 return this.props.item[this.props.column.field];
         }

@@ -980,6 +980,8 @@ var Cell = /** @class */ (function (_super) {
                     return moment(_this.props.item[_this.props.column.field]).format("DD/MM/YYYY");
                 case column_1.ColumnTypes.Html:
                     return React.createElement("div", { dangerouslySetInnerHTML: _this.createMarkup(_this.props.item[_this.props.column.field]) });
+                case column_1.ColumnTypes.No:
+                    return React.createElement(React.Fragment, null, _this.props.index + 1);
                 default:
                     return _this.props.item[_this.props.column.field];
             }
@@ -1029,6 +1031,7 @@ var ColumnTypes;
     ColumnTypes["Input"] = "input";
     ColumnTypes["Date"] = "date";
     ColumnTypes["Html"] = "html";
+    ColumnTypes["No"] = "No";
 })(ColumnTypes = exports.ColumnTypes || (exports.ColumnTypes = {}));
 var Column = /** @class */ (function (_super) {
     __extends(Column, _super);
@@ -1163,7 +1166,7 @@ var Row = /** @class */ (function (_super) {
     }
     Row.prototype.render = function () {
         var _this = this;
-        return React.createElement("tr", { key: this.props.index }, this.props.columns.map(function (column, index) { return React.createElement(cell_1.default, { key: index, item: _this.props.item, column: column, onChange: column.onChange }); }));
+        return React.createElement("tr", { key: this.props.index }, this.props.columns.map(function (column, index) { return React.createElement(cell_1.default, { key: index, index: _this.props.index, item: _this.props.item, column: column, onChange: column.onChange }); }));
     };
     return Row;
 }(React.PureComponent));

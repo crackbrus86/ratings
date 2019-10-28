@@ -5,7 +5,8 @@ export enum ColumnTypes{
     Button = "button",
     Input = "input",
     Date = "date",
-    Html = "html"
+    Html = "html",
+    No = "No"
 }
 
 export interface ColumnModel{

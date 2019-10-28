@@ -980,6 +980,8 @@ var Cell = /** @class */ (function (_super) {
                     return moment(_this.props.item[_this.props.column.field]).format("DD/MM/YYYY");
                 case column_1.ColumnTypes.Html:
                     return React.createElement("div", { dangerouslySetInnerHTML: _this.createMarkup(_this.props.item[_this.props.column.field]) });
+                case column_1.ColumnTypes.No:
+                    return React.createElement(React.Fragment, null, _this.props.index + 1);
                 default:
                     return _this.props.item[_this.props.column.field];
             }
@@ -1029,6 +1031,7 @@ var ColumnTypes;
     ColumnTypes["Input"] = "input";
     ColumnTypes["Date"] = "date";
     ColumnTypes["Html"] = "html";
+    ColumnTypes["No"] = "No";
 })(ColumnTypes = exports.ColumnTypes || (exports.ColumnTypes = {}));
 var Column = /** @class */ (function (_super) {
     __extends(Column, _super);
@@ -1163,7 +1166,7 @@ var Row = /** @class */ (function (_super) {
     }
     Row.prototype.render = function () {
         var _this = this;
-        return React.createElement("tr", { key: this.props.index }, this.props.columns.map(function (column, index) { return React.createElement(cell_1.default, { key: index, item: _this.props.item, column: column, onChange: column.onChange }); }));
+        return React.createElement("tr", { key: this.props.index }, this.props.columns.map(function (column, index) { return React.createElement(cell_1.default, { key: index, index: _this.props.index, item: _this.props.item, column: column, onChange: column.onChange }); }));
     };
     return Row;
 }(React.PureComponent));
@@ -3197,6 +3200,11 @@ exports.default = react_redux_1.connect(function (state) { return ({
             React.createElement("div", { id: "ministryCoachRatings" },
                 React.createElement(table_1.default, { items: this.props.ratings, columns: [
                         {
+                            title: "Місце",
+                            type: column_1.ColumnTypes.No,
+                            width: "30px"
+                        },
+                        {
                             title: "П.І.П.",
                             field: "fullname",
                             width: "250px"
@@ -3276,6 +3284,11 @@ exports.default = react_redux_1.connect(function (state) { return ({
                 React.createElement(Components.Form.CheckBox, { label: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0438 \u043D\u0430 \u0441\u0430\u0439\u0442\u0456", isChecked: ratingType.isActive, onChange: function () { return _this.props.changeRatingType(ratingType.ratingType); }, className: "ratings-activity" })),
             React.createElement("div", { id: "ministryFstRatinhs" },
                 React.createElement(table_1.default, { items: this.props.ratings, columns: [
+                        {
+                            title: "Місце",
+                            type: column_1.ColumnTypes.No,
+                            width: "30px"
+                        },
                         {
                             title: "ФСТ",
                             field: "fullname",
@@ -3370,6 +3383,11 @@ exports.default = react_redux_1.connect(function (state) { return ({
             React.createElement("div", { id: "ministryRatings" },
                 React.createElement(table_1.default, { items: this.getRatings(), columns: [
                         {
+                            title: "Місце",
+                            type: column_1.ColumnTypes.No,
+                            width: "30px"
+                        },
+                        {
                             title: "П.І.П",
                             field: "fullname",
                             width: "300px",
@@ -3459,6 +3477,11 @@ exports.default = react_redux_1.connect(function (state) { return ({
             React.createElement("div", { id: "ministryRegionRatings" },
                 React.createElement(table_1.default, { items: this.props.ratings, columns: [
                         {
+                            title: "Місце",
+                            type: column_1.ColumnTypes.No,
+                            width: "30px"
+                        },
+                        {
                             title: "Область",
                             field: "fullname",
                             width: "250px"
@@ -3539,6 +3562,11 @@ exports.default = react_redux_1.connect(function (state) { return ({
             React.createElement("div", { id: "ministrySchoolRatinhs" },
                 React.createElement(table_1.default, { items: this.props.ratings, columns: [
                         {
+                            title: "Місце",
+                            type: column_1.ColumnTypes.No,
+                            width: "30px"
+                        },
+                        {
                             title: "ФСТ",
                             field: "fullname",
                             width: "250px"
@@ -3618,6 +3646,11 @@ exports.default = react_redux_1.connect(function (state) { return ({
                 React.createElement(Components.Form.CheckBox, { label: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0438 \u043D\u0430 \u0441\u0430\u0439\u0442\u0456", isChecked: ratingType.isActive, onChange: function () { return _this.props.changeRatingType(ratingType.ratingType); }, className: "ratings-activity" })),
             React.createElement("div", { id: "upfCoachRatings" },
                 React.createElement(table_1.default, { items: this.props.ratings, columns: [
+                        {
+                            title: "Місце",
+                            type: column_1.ColumnTypes.No,
+                            width: "30px"
+                        },
                         {
                             title: "П.І.П.",
                             field: "fullname",
@@ -3711,6 +3744,11 @@ exports.default = react_redux_1.connect(function (state) { return ({
                 React.createElement(Components.Form.CheckBox, { label: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0438 \u043D\u0430 \u0441\u0430\u0439\u0442\u0456", isChecked: ratingType.isActive, onChange: function () { return _this.props.changeRatingType(ratingType.ratingType); }, className: "ratings-activity" })),
             React.createElement("div", { id: "upfRatings" },
                 React.createElement(table_1.default, { items: this.getRatings(), columns: [
+                        {
+                            title: "Місце",
+                            type: column_1.ColumnTypes.No,
+                            width: "30px"
+                        },
                         {
                             title: "П.І.П",
                             field: "fullname",

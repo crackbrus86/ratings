@@ -71,6 +71,11 @@ export default connect<StateProps, DispatchProps, OwnProps>(
                     items={this.getRatings()}
                     columns={[
                         {
+                            title: "Місце",
+                            type: ColumnTypes.No,
+                            width: "30px"
+                        },
+                        {
                             title: "П.І.П",
                             field: "fullname",
                             width: "300px",

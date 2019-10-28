@@ -53,6 +53,11 @@ export default connect<StateProps, DispatchProps>(
                     items={this.props.ratings}
                     columns={[
                         {
+                            title: "Місце",
+                            type: ColumnTypes.No,
+                            width: "30px"
+                        },
+                        {
                             title: "Область",
                             field: "fullname",
                             width: "250px"
