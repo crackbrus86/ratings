@@ -132,6 +132,46 @@ exports.default = Confirm;
 
 /***/ }),
 
+/***/ "./client/src/components/export to word/export.to.word.tsx":
+/*!*****************************************************************!*\
+  !*** ./client/src/components/export to word/export.to.word.tsx ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var FontAwesome = __webpack_require__(/*! react-fontawesome */ "./node_modules/react-fontawesome/lib/index.js");
+var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+var ExportToWord = function (props) {
+    return React.createElement(React.Fragment, null,
+        React.createElement("span", { className: classnames("export-button", props.classNames), onClick: function () { return exportHTML(props.sourceId, props.docTitle); } },
+            React.createElement(FontAwesome, { name: "file-word" }),
+            props.label));
+};
+function exportHTML(sourceId, title) {
+    if (title === void 0) { title = null; }
+    var header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
+        "xmlns:w='urn:schemas-microsoft-com:office:word' " +
+        "xmlns='http://www.w3.org/TR/REC-html40'>" +
+        "<head><meta charset='utf-8'><title>Export HTML to Word Document with JavaScript</title></head><body>";
+    var footer = "</body></html>";
+    var sourceHTML = header + document.getElementById(sourceId).innerHTML + footer;
+    var source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+    var fileDownload = document.createElement("a");
+    document.body.appendChild(fileDownload);
+    fileDownload.href = source;
+    fileDownload.download = title || 'document.doc';
+    fileDownload.click();
+    document.body.removeChild(fileDownload);
+}
+exports.default = ExportToWord;
+
+
+/***/ }),
+
 /***/ "./client/src/components/form/autocomplete.tsx":
 /*!*****************************************************!*\
   !*** ./client/src/components/form/autocomplete.tsx ***!
@@ -513,6 +553,8 @@ var modal_1 = __webpack_require__(/*! ./modal/modal */ "./client/src/components/
 exports.Modal = modal_1.default;
 var form_1 = __webpack_require__(/*! ./form/form */ "./client/src/components/form/form.tsx");
 exports.Form = form_1.default;
+var export_to_word_1 = __webpack_require__(/*! ./export to word/export.to.word */ "./client/src/components/export to word/export.to.word.tsx");
+exports.ExportToWord = export_to_word_1.default;
 
 
 /***/ }),
@@ -3195,6 +3237,7 @@ exports.default = react_redux_1.connect(function (state) { return ({
         var ratingType = this.props.ratingTypes.find(function (x) { return x.ratingType == Models.RatingTypes.MinCoach; });
         return React.createElement("div", { className: "ratings" },
             React.createElement(print_button_1.default, { printTargetId: "ministryCoachRatings", classNames: "print" }),
+            React.createElement(Components.ExportToWord, { sourceId: "ministryCoachRatings", classNames: "export", docTitle: "Reitynhy_Ministerstvo(Trenery).doc" }),
             !!ratingType && React.createElement(Components.Form, null,
                 React.createElement(Components.Form.CheckBox, { label: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0438 \u043D\u0430 \u0441\u0430\u0439\u0442\u0456", isChecked: ratingType.isActive, onChange: function () { return _this.props.changeRatingType(ratingType.ratingType); }, className: "ratings-activity" })),
             React.createElement("div", { id: "ministryCoachRatings" },
@@ -3280,6 +3323,7 @@ exports.default = react_redux_1.connect(function (state) { return ({
         var ratingType = this.props.ratingTypes.find(function (x) { return x.ratingType == Models.RatingTypes.MinFST; });
         return React.createElement("div", { className: "ratings" },
             React.createElement(print_button_1.default, { printTargetId: "ministryFstRatinhs", classNames: "print" }),
+            React.createElement(Components.ExportToWord, { sourceId: "ministryFstRatinhs", classNames: "export", docTitle: "Reitynhy_Ministerstvo(FST).doc" }),
             !!ratingType && React.createElement(Components.Form, null,
                 React.createElement(Components.Form.CheckBox, { label: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0438 \u043D\u0430 \u0441\u0430\u0439\u0442\u0456", isChecked: ratingType.isActive, onChange: function () { return _this.props.changeRatingType(ratingType.ratingType); }, className: "ratings-activity" })),
             React.createElement("div", { id: "ministryFstRatinhs" },
@@ -3378,6 +3422,7 @@ exports.default = react_redux_1.connect(function (state) { return ({
             (_this.props.ratingFilter == "Female" && x.ratingType == Models.RatingTypes.MinAthFemale); });
         return React.createElement("div", { className: "ratings" },
             React.createElement(print_button_1.default, { printTargetId: "ministryRatings", classNames: "print" }),
+            React.createElement(Components.ExportToWord, { sourceId: "ministryRatings", classNames: "export", docTitle: "Reitynhy_Ministerstvo.doc" }),
             !!ratingType && React.createElement(Components.Form, null,
                 React.createElement(Components.Form.CheckBox, { label: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0438 \u043D\u0430 \u0441\u0430\u0439\u0442\u0456", isChecked: ratingType.isActive, onChange: function () { return _this.props.changeRatingType(ratingType.ratingType); }, className: "ratings-activity" })),
             React.createElement("div", { id: "ministryRatings" },
@@ -3472,6 +3517,7 @@ exports.default = react_redux_1.connect(function (state) { return ({
         var ratingType = this.props.ratingTypes.find(function (x) { return x.ratingType == Models.RatingTypes.MinRegion; });
         return React.createElement("div", { className: "ratings" },
             React.createElement(print_button_1.default, { printTargetId: "ministryRegionRatings", classNames: "print" }),
+            React.createElement(Components.ExportToWord, { sourceId: "ministryRegionRatings", classNames: "export", docTitle: "Reitynhy_Ministerstvo(Oblasti).doc" }),
             !!ratingType && React.createElement(Components.Form, null,
                 React.createElement(Components.Form.CheckBox, { label: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0438 \u043D\u0430 \u0441\u0430\u0439\u0442\u0456", isChecked: ratingType.isActive, onChange: function () { return _this.props.changeRatingType(ratingType.ratingType); }, className: "ratings-activity" })),
             React.createElement("div", { id: "ministryRegionRatings" },
@@ -3557,6 +3603,7 @@ exports.default = react_redux_1.connect(function (state) { return ({
         var ratingType = this.props.ratingTypes.find(function (x) { return x.ratingType == Models.RatingTypes.MinSchool; });
         return React.createElement("div", { className: "ratings" },
             React.createElement(print_button_1.default, { printTargetId: "ministrySchoolRatinhs", classNames: "print" }),
+            React.createElement(Components.ExportToWord, { sourceId: "ministrySchoolRatinhs", classNames: "export", docTitle: "Reitynhy_Ministerstvo(DUSSH).doc" }),
             !!ratingType && React.createElement(Components.Form, null,
                 React.createElement(Components.Form.CheckBox, { label: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0438 \u043D\u0430 \u0441\u0430\u0439\u0442\u0456", isChecked: ratingType.isActive, onChange: function () { return _this.props.changeRatingType(ratingType.ratingType); }, className: "ratings-activity" })),
             React.createElement("div", { id: "ministrySchoolRatinhs" },
@@ -3642,6 +3689,7 @@ exports.default = react_redux_1.connect(function (state) { return ({
         var ratingType = this.props.ratingTypes.find(function (x) { return x.ratingType == Models.RatingTypes.UpfCoach; });
         return React.createElement("div", { className: "ratings" },
             React.createElement(print_button_1.default, { printTargetId: "upfCoachRatings", classNames: "print" }),
+            React.createElement(Components.ExportToWord, { sourceId: "upfCoachRatings", classNames: "export", docTitle: "Reitynhy_FPU(Trenery).doc" }),
             !!ratingType && React.createElement(Components.Form, null,
                 React.createElement(Components.Form.CheckBox, { label: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0438 \u043D\u0430 \u0441\u0430\u0439\u0442\u0456", isChecked: ratingType.isActive, onChange: function () { return _this.props.changeRatingType(ratingType.ratingType); }, className: "ratings-activity" })),
             React.createElement("div", { id: "upfCoachRatings" },
@@ -3740,6 +3788,7 @@ exports.default = react_redux_1.connect(function (state) { return ({
             (_this.props.ratingFilter == "Female" && x.ratingType == Models.RatingTypes.UpfAthFemale); });
         return React.createElement("div", { className: "ratings" },
             React.createElement(print_button_1.default, { printTargetId: "upfRatings", classNames: "print" }),
+            React.createElement(Components.ExportToWord, { sourceId: "upfRatings", classNames: "export", docTitle: "Reitynhy_FPU.doc" }),
             !!ratingType && React.createElement(Components.Form, null,
                 React.createElement(Components.Form.CheckBox, { label: "\u041F\u043E\u043A\u0430\u0437\u0430\u0442\u0438 \u043D\u0430 \u0441\u0430\u0439\u0442\u0456", isChecked: ratingType.isActive, onChange: function () { return _this.props.changeRatingType(ratingType.ratingType); }, className: "ratings-activity" })),
             React.createElement("div", { id: "upfRatings" },

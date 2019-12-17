@@ -59,6 +59,7 @@ export default connect<StateProps, DispatchProps, OwnProps>(
         (this.props.ratingFilter == "Female" && x.ratingType == Models.RatingTypes.MinAthFemale))
         return <div  className="ratings">
             <PrintButton printTargetId="ministryRatings" classNames="print" />
+            <Components.ExportToWord sourceId="ministryRatings" classNames="export" docTitle="Reitynhy_Ministerstvo.doc" />
             { !!ratingType && <Components.Form>
                 <Components.Form.CheckBox 
                     label="Показати на сайті" 

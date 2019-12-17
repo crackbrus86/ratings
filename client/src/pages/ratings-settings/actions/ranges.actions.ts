@@ -18,7 +18,7 @@ export namespace ActionCreators{
 
    export const saveRange = (range: Models.Range) => (d, gs: () => Models.StoreState) => {
         Services.saveRange({
-            id: range.sortOrder,
+            id: range.id,
             competition: range.comp,
             place: range.place,
             compType: range.compType,

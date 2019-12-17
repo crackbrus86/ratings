@@ -50,20 +50,14 @@
   .autocomplete ul li {
     cursor: pointer; }
 
-.grid-row {
-  display: flex;
-  flex-direction: row;
-  width: 100%; }
-  .grid-row .grid-column {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    margin: 0 5px; }
-
-.content-wrap {
-  overflow-x: auto;
-  margin-right: 20px;
-  min-height: 400px; }
+.export-button {
+  display: inline-block;
+  padding: 0.6em 4px;
+  width: 32px;
+  height: 32px;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer; }
 
 .modal-black-out {
   position: fixed;
@@ -255,6 +249,21 @@
     box-shadow: none;
     background-color: #e8e8e8; }
 
+.grid-row {
+  display: flex;
+  flex-direction: row;
+  width: 100%; }
+  .grid-row .grid-column {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    margin: 0 5px; }
+
+.content-wrap {
+  overflow-x: auto;
+  margin-right: 20px;
+  min-height: 400px; }
+
 #app-rat-tables .upf-ratings-filter {
   width: 450px; }
 
@@ -315,12 +324,12 @@
 .ratings {
   width: 100%;
   padding-top: 16px; }
-  .ratings .print {
+  .ratings .print, .ratings .export {
     background-color: #07bd69;
     color: #fff;
     margin: 4px;
     text-shadow: 0 0 1px #000; }
-    .ratings .print:hover {
+    .ratings .print:hover, .ratings .export:hover {
       background-color: #19d37e; }
   .ratings .ratings-activity {
     width: 240px;

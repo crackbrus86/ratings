@@ -132,6 +132,46 @@ exports.default = Confirm;
 
 /***/ }),
 
+/***/ "./client/src/components/export to word/export.to.word.tsx":
+/*!*****************************************************************!*\
+  !*** ./client/src/components/export to word/export.to.word.tsx ***!
+  \*****************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var FontAwesome = __webpack_require__(/*! react-fontawesome */ "./node_modules/react-fontawesome/lib/index.js");
+var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+var ExportToWord = function (props) {
+    return React.createElement(React.Fragment, null,
+        React.createElement("span", { className: classnames("export-button", props.classNames), onClick: function () { return exportHTML(props.sourceId, props.docTitle); } },
+            React.createElement(FontAwesome, { name: "file-word" }),
+            props.label));
+};
+function exportHTML(sourceId, title) {
+    if (title === void 0) { title = null; }
+    var header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' " +
+        "xmlns:w='urn:schemas-microsoft-com:office:word' " +
+        "xmlns='http://www.w3.org/TR/REC-html40'>" +
+        "<head><meta charset='utf-8'><title>Export HTML to Word Document with JavaScript</title></head><body>";
+    var footer = "</body></html>";
+    var sourceHTML = header + document.getElementById(sourceId).innerHTML + footer;
+    var source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+    var fileDownload = document.createElement("a");
+    document.body.appendChild(fileDownload);
+    fileDownload.href = source;
+    fileDownload.download = title || 'document.doc';
+    fileDownload.click();
+    document.body.removeChild(fileDownload);
+}
+exports.default = ExportToWord;
+
+
+/***/ }),
+
 /***/ "./client/src/components/form/autocomplete.tsx":
 /*!*****************************************************!*\
   !*** ./client/src/components/form/autocomplete.tsx ***!
@@ -513,6 +553,8 @@ var modal_1 = __webpack_require__(/*! ./modal/modal */ "./client/src/components/
 exports.Modal = modal_1.default;
 var form_1 = __webpack_require__(/*! ./form/form */ "./client/src/components/form/form.tsx");
 exports.Form = form_1.default;
+var export_to_word_1 = __webpack_require__(/*! ./export to word/export.to.word */ "./client/src/components/export to word/export.to.word.tsx");
+exports.ExportToWord = export_to_word_1.default;
 
 
 /***/ }),
@@ -1523,7 +1565,7 @@ var ActionCreators;
     }; };
     ActionCreators.saveRange = function (range) { return function (d, gs) {
         Services.saveRange({
-            id: range.sortOrder,
+            id: range.id,
             competition: range.comp,
             place: range.place,
             compType: range.compType,
@@ -1817,14 +1859,15 @@ exports.upfRanges = reselect_1.createSelector(competitions, compTypes, uRanges, 
     comp.filter(function (c) { return !!c.ratingUPF; }).map(function (c) {
         for (var i = 1; i < 4; i++) {
             var range = {
+                id: null,
                 comp: c.dbName,
                 name: c.name,
                 place: i,
-                compType: (c.dbName != "WorldGames" && c.dbName != "EuropeanCup") ? "PL" : null,
+                compType: "PL",
                 compTypeName: null,
                 rangeValue: null
             };
-            if (range.comp != "WorldGames" && range.comp != "EuropeanCup") {
+            if (range.comp != "WorldGames" && range.comp != "EuropeanCup" && range.comp != "DonauCup") {
                 for (var j = 0; j < types.length; j++) {
                     range = __assign({}, range, { compType: types[j].name, compTypeName: types[j].displayName, sortOrder: counter });
                     ranges = ranges.concat(range);
@@ -1854,8 +1897,9 @@ exports.upfRanges = reselect_1.createSelector(competitions, compTypes, uRanges, 
     return ranges.map(function (r) { return getRangeValue(r, uRanges); });
 });
 function getRangeValue(range, ranges) {
-    var upfRange = ranges.find(function (r) { return r.id == range.sortOrder || (r.competition == range.comp && r.compType == range.compType && r.place == range.place); });
+    var upfRange = ranges.find(function (r) { return r.competition == range.comp && r.compType == range.compType && r.place == range.place; });
     range.rangeValue = !!upfRange ? upfRange.range : 0;
+    range.id = !!upfRange ? upfRange.id : null;
     return range;
 }
 

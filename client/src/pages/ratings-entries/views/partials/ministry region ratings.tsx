@@ -41,6 +41,7 @@ export default connect<StateProps, DispatchProps>(
         let ratingType = this.props.ratingTypes.find(x => x.ratingType == Models.RatingTypes.MinRegion) 
         return <div className="ratings">
             <PrintButton printTargetId="ministryRegionRatings" classNames="print" />
+            <Components.ExportToWord sourceId="ministryRegionRatings" classNames="export" docTitle="Reitynhy_Ministerstvo(Oblasti).doc" />
             { !!ratingType && <Components.Form>
                 <Components.Form.CheckBox 
                     label="Показати на сайті" 

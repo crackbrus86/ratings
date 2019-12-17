@@ -37,6 +37,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
 
         return <div className="ratings">
             <Components.PrintButton printTargetId="referee-rating" classNames="print" />
+            <Components.ExportToWord sourceId="referee-rating" docTitle="Reitynhy_suddiv.doc" classNames="export" />
             {!!ratingType && <Components.Form>
                 <Components.Form.CheckBox 
                     label="Показати на сайті" 

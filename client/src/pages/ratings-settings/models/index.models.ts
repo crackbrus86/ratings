@@ -13,6 +13,7 @@ export type RefereeSetting = RefereeSettingModels.RefereeSetting;
 export type StoreState = ReducerState;
 
 export interface Range{
+    id?: number,
     comp: string,
     name: string,
     sortOrder?: number,

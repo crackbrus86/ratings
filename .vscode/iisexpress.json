@@ -1,0 +1,6 @@
+{
+  "port": 8275,
+  "path": "c:\\wamp64\\www\\lifting\\wp-content\\plugins\\ratings",
+  "clr": "v4.0",
+  "protocol": "http"
+}

@@ -42,14 +42,15 @@ export const upfRanges = createSelector(competitions, compTypes, uRanges, record
     comp.filter(c => !!c.ratingUPF).map(c => {
         for(var i = 1; i < 4; i++){
             let range: Models.Range = {
+                id: null,
                 comp: c.dbName,
                 name: c.name,
                 place: i,
-                compType: (c.dbName != "WorldGames" && c.dbName != "EuropeanCup") ? "PL" : null,
+                compType: "PL",
                 compTypeName: null,
                 rangeValue: null
             }
-            if(range.comp != "WorldGames" && range.comp != "EuropeanCup"){
+            if(range.comp != "WorldGames" && range.comp != "EuropeanCup" && range.comp != "DonauCup"){
                 for(var j = 0; j < types.length; j++){
                     range = {
                         ...range,
@@ -94,7 +95,8 @@ export const upfRanges = createSelector(competitions, compTypes, uRanges, record
 });
 
 function getRangeValue(range: Models.Range, ranges: Models.UPFRange[]){
-    var upfRange = ranges.find(r => r.id == range.sortOrder || (r.competition == range.comp && r.compType == range.compType && r.place == range.place));
+    var upfRange = ranges.find(r => r.competition == range.comp && r.compType == range.compType && r.place == range.place);
     range.rangeValue = !!upfRange ? upfRange.range : 0;
+    range.id = !!upfRange ? upfRange.id : null;
     return range;
 }
