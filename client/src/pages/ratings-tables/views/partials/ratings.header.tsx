@@ -6,11 +6,13 @@ import * as Selectors from "../../selectors/index.selectors";
 import * as Actions from "../../actions/index.actions";
 import Form from "../../../../components/form/form";
 import * as Layout from "../../../../components/layout/index.layout";
+import * as Datetime from "react-datetime";
 
 interface StateProps{
-    ratings: Models.SelectOption[],
-    rating: string,
+    ratings: Models.SelectOption[]
+    rating: string
     ratingTitle?: string
+    startDate?: Date
 }
 
 interface DispatchProps{
@@ -21,7 +23,8 @@ export default connect<StateProps, DispatchProps>(
     (state: Models.StoreState):StateProps => ({
         ratings: Selectors.LookupSelectors.ratingsList(state),
         rating: state.shell.rating,
-        ratingTitle: Selectors.ShellSelectors.ratingTitle(state)
+        ratingTitle: Selectors.ShellSelectors.ratingTitle(state),
+        startDate: state.shell.startDate
     }),
     (dispatch): DispatchProps => ({
         shellActions: bindActionCreators(Actions.ShellActions.ActionCreators, dispatch)
@@ -29,6 +32,11 @@ export default connect<StateProps, DispatchProps>(
 )(class RatingsHeader extends React.Component<StateProps & DispatchProps>{
     constructor(props){
         super(props);
+    }
+
+    changeStartDate = (date?: string) => { 
+        let nextDate = !isNaN(new Date(date).getTime()) ? new Date(date) : null;
+        this.props.shellActions.changeStartDate(nextDate);
     }
 
     render(){
@@ -42,6 +50,17 @@ export default connect<StateProps, DispatchProps>(
                         onChange={(value) => this.props.shellActions.changeRating(value)}
                         classNames="upf-ratings-filter"
                     />
+                </Layout.GridRow>
+                <Layout.GridRow>
+                    <div className="form-control" style={{width: 450}}>
+                        <label>Станом на</label>
+                        <Datetime 
+                        value={this.props.startDate} 
+                        dateFormat={'YYYY'} 
+                        timeFormat={false} 
+                        closeOnSelect={true} 
+                        onChange={(date) => this.changeStartDate(date.toString())} />
+                    </div>
                 </Layout.GridRow>
                 <Layout.GridRow>
                     {

@@ -1403,6 +1403,7 @@ function deleteBlackOut() {
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CHANGE_RATING = "SHELL::CHANGE_RATING";
+exports.CHANGE_START_DATE = "SHELL::CHANGE_START_DATE";
 exports.LOAD_RATINGS = "LOOKUP::LOAD_RATINGS";
 exports.LOAD_RATING_ENTRIES = "RATINGS::LOAD_RATING_ENTRIES";
 exports.EMPTY_RATING_ENTRIES = "RATINGS::EMPTY_RATING_ENTRIES";
@@ -1551,7 +1552,7 @@ var ActionCreators;
     }; };
     ActionCreators.loadMinistryRatingByGender = function (gender) { return function (d, gs) {
         Services.RatingEntryService.getMinistryRatingsByGender({
-            year: new Date().getFullYear(),
+            year: gs().shell.startDate.getFullYear(),
             gender: gender
         }).then(function (response) {
             if (response.status) {
@@ -1564,7 +1565,7 @@ var ActionCreators;
     }; };
     ActionCreators.loadUPFRatingsByGender = function (gender) { return function (d, gs) {
         Services.RatingEntryService.getUPFRatingsByGender({
-            year: new Date().getFullYear(),
+            year: gs().shell.startDate.getFullYear(),
             gender: gender
         }).then(function (response) {
             if (response.status) {
@@ -1575,9 +1576,9 @@ var ActionCreators;
             }
         });
     }; };
-    ActionCreators.loadCoachMinistryRatings = function () { return function (d) {
+    ActionCreators.loadCoachMinistryRatings = function () { return function (d, gs) {
         Services.RatingEntryService.getCoachMinistryRatings({
-            year: new Date().getFullYear()
+            year: gs().shell.startDate.getFullYear()
         }).then(function (response) {
             if (response.status) {
                 d({
@@ -1587,9 +1588,9 @@ var ActionCreators;
             }
         });
     }; };
-    ActionCreators.loadCoachUPFRatings = function () { return function (d) {
+    ActionCreators.loadCoachUPFRatings = function () { return function (d, gs) {
         Services.RatingEntryService.getCoachUPFRatings({
-            year: new Date().getFullYear()
+            year: gs().shell.startDate.getFullYear()
         }).then(function (response) {
             if (response.status) {
                 d({
@@ -1599,9 +1600,9 @@ var ActionCreators;
             }
         });
     }; };
-    ActionCreators.loadRegionsRatings = function () { return function (d) {
+    ActionCreators.loadRegionsRatings = function () { return function (d, gs) {
         Services.RatingEntryService.getRegionsRatings({
-            year: new Date().getFullYear()
+            year: gs().shell.startDate.getFullYear()
         }).then(function (response) {
             if (response.status) {
                 d({
@@ -1611,9 +1612,9 @@ var ActionCreators;
             }
         });
     }; };
-    ActionCreators.loadFstRatings = function () { return function (d) {
+    ActionCreators.loadFstRatings = function () { return function (d, gs) {
         Services.RatingEntryService.getFstRatings({
-            year: new Date().getFullYear()
+            year: gs().shell.startDate.getFullYear()
         }).then(function (response) {
             if (response.status) {
                 d({
@@ -1623,9 +1624,9 @@ var ActionCreators;
             }
         });
     }; };
-    ActionCreators.loadSchoolRatings = function () { return function (d) {
+    ActionCreators.loadSchoolRatings = function () { return function (d, gs) {
         Services.RatingEntryService.getSchoolRatings({
-            year: new Date().getFullYear()
+            year: gs().shell.startDate.getFullYear()
         }).then(function (response) {
             if (response.status) {
                 d({
@@ -1635,9 +1636,9 @@ var ActionCreators;
             }
         });
     }; };
-    ActionCreators.loadRefereeRatings = function () { return function (d) {
+    ActionCreators.loadRefereeRatings = function () { return function (d, gs) {
         Services.RatingEntryService.getRefereeRatings({
-            year: new Date().getFullYear()
+            year: gs().shell.startDate.getFullYear()
         }).then(function (response) {
             if (response.status) {
                 d({
@@ -1684,6 +1685,13 @@ var ActionCreators;
         d({
             type: types.CHANGE_RATING,
             payload: ratingType
+        });
+        d(Actions.RatingEntryActions.ActionCreators.loadRatingEntries());
+    }; };
+    ActionCreators.changeStartDate = function (startDate) { return function (d, gs) {
+        d({
+            type: types.CHANGE_START_DATE,
+            payload: startDate
         });
         d(Actions.RatingEntryActions.ActionCreators.loadRatingEntries());
     }; };
@@ -1943,7 +1951,8 @@ var __assign = (this && this.__assign) || function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 var ActionTypes = __webpack_require__(/*! ../actions/action.types */ "./client/src/pages/ratings-tables/actions/action.types.ts");
 var defaultState = {
-    rating: null
+    rating: null,
+    startDate: new Date()
 };
 exports.shellReducer = function (state, action) {
     if (state === void 0) { state = defaultState; }
@@ -1951,6 +1960,9 @@ exports.shellReducer = function (state, action) {
         case ActionTypes.CHANGE_RATING: {
             var payload = action.payload;
             return __assign({}, state, { rating: payload });
+        }
+        case ActionTypes.CHANGE_START_DATE: {
+            return __assign({}, state, { startDate: action.payload });
         }
         default:
             return state;
@@ -2386,16 +2398,23 @@ var Selectors = __webpack_require__(/*! ../../selectors/index.selectors */ "./cl
 var Actions = __webpack_require__(/*! ../../actions/index.actions */ "./client/src/pages/ratings-tables/actions/index.actions.ts");
 var form_1 = __webpack_require__(/*! ../../../../components/form/form */ "./client/src/components/form/form.tsx");
 var Layout = __webpack_require__(/*! ../../../../components/layout/index.layout */ "./client/src/components/layout/index.layout.tsx");
+var Datetime = __webpack_require__(/*! react-datetime */ "./node_modules/react-datetime/DateTime.js");
 exports.default = react_redux_1.connect(function (state) { return ({
     ratings: Selectors.LookupSelectors.ratingsList(state),
     rating: state.shell.rating,
-    ratingTitle: Selectors.ShellSelectors.ratingTitle(state)
+    ratingTitle: Selectors.ShellSelectors.ratingTitle(state),
+    startDate: state.shell.startDate
 }); }, function (dispatch) { return ({
     shellActions: redux_1.bindActionCreators(Actions.ShellActions.ActionCreators, dispatch)
 }); })(/** @class */ (function (_super) {
     __extends(RatingsHeader, _super);
     function RatingsHeader(props) {
-        return _super.call(this, props) || this;
+        var _this = _super.call(this, props) || this;
+        _this.changeStartDate = function (date) {
+            var nextDate = !isNaN(new Date(date).getTime()) ? new Date(date) : null;
+            _this.props.shellActions.changeStartDate(nextDate);
+        };
+        return _this;
     }
     RatingsHeader.prototype.render = function () {
         var _this = this;
@@ -2403,6 +2422,10 @@ exports.default = react_redux_1.connect(function (state) { return ({
             React.createElement(form_1.default, null,
                 React.createElement(Layout.GridRow, null,
                     React.createElement(form_1.default.Select, { label: "\u041E\u0431\u0435\u0440\u0456\u0442\u044C \u0440\u0435\u0439\u0442\u0438\u043D\u0433", options: this.props.ratings, value: this.props.rating, onChange: function (value) { return _this.props.shellActions.changeRating(value); }, classNames: "upf-ratings-filter" })),
+                React.createElement(Layout.GridRow, null,
+                    React.createElement("div", { className: "form-control", style: { width: 450 } },
+                        React.createElement("label", null, "\u0421\u0442\u0430\u043D\u043E\u043C \u043D\u0430"),
+                        React.createElement(Datetime, { value: this.props.startDate, dateFormat: 'YYYY', timeFormat: false, closeOnSelect: true, onChange: function (date) { return _this.changeStartDate(date.toString()); } }))),
                 React.createElement(Layout.GridRow, null, this.props.ratingTitle &&
                     React.createElement("h3", null, this.props.ratingTitle))));
     };

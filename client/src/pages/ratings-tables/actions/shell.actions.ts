@@ -10,4 +10,12 @@ export namespace ActionCreators{
         });
         d(Actions.RatingEntryActions.ActionCreators.loadRatingEntries())
     }
+
+    export const changeStartDate = (startDate?: Date) => (d, gs: () => Models.StoreState) => {
+        d({
+            type: types.CHANGE_START_DATE,
+            payload: <types.CHANGE_START_DATE_PAYLOAD> startDate
+        })
+        d(Actions.RatingEntryActions.ActionCreators.loadRatingEntries())
+    }
 }

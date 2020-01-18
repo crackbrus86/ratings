@@ -55,7 +55,7 @@ export namespace ActionCreators{
 
     export const loadMinistryRatingByGender = (gender: string) => (d, gs: () => Models.StoreState) => {
         Services.RatingEntryService.getMinistryRatingsByGender({
-            year: new Date().getFullYear(),
+            year: gs().shell.startDate.getFullYear(),
             gender: gender
         }).then(response => {
             if(response.status){
@@ -69,7 +69,7 @@ export namespace ActionCreators{
 
     export const loadUPFRatingsByGender = (gender: string) => (d, gs: () => Models.StoreState) => {
         Services.RatingEntryService.getUPFRatingsByGender({
-            year: new Date().getFullYear(),
+            year: gs().shell.startDate.getFullYear(),
             gender
         }).then(response => {
             if(response.status){
@@ -81,9 +81,9 @@ export namespace ActionCreators{
         })
     }
 
-    export const loadCoachMinistryRatings = () => (d) => {
+    export const loadCoachMinistryRatings = () => (d, gs: () => Models.StoreState) => {
         Services.RatingEntryService.getCoachMinistryRatings({
-            year: new Date().getFullYear()
+            year: gs().shell.startDate.getFullYear()
         }).then(response => {
             if(response.status){
                 d({
@@ -94,9 +94,9 @@ export namespace ActionCreators{
         })
     }
 
-    export const loadCoachUPFRatings = () => (d) => {
+    export const loadCoachUPFRatings = () => (d, gs: () => Models.StoreState) => {
         Services.RatingEntryService.getCoachUPFRatings({
-            year: new Date().getFullYear()
+            year: gs().shell.startDate.getFullYear()
         }).then(response => {
             if(response.status){
                 d({
@@ -107,9 +107,9 @@ export namespace ActionCreators{
         })
     }
 
-    export const loadRegionsRatings = () => (d) => {
+    export const loadRegionsRatings = () => (d, gs: () => Models.StoreState) => {
         Services.RatingEntryService.getRegionsRatings({
-            year: new Date().getFullYear()
+            year: gs().shell.startDate.getFullYear()
         }).then(response => {
             if(response.status){
                 d({
@@ -120,9 +120,9 @@ export namespace ActionCreators{
         })
     }
 
-    export const loadFstRatings = () => (d) => {
+    export const loadFstRatings = () => (d, gs: () => Models.StoreState) => {
         Services.RatingEntryService.getFstRatings({
-            year: new Date().getFullYear()
+            year: gs().shell.startDate.getFullYear()
         }).then(response => {
             if(response.status){
                 d({
@@ -133,9 +133,9 @@ export namespace ActionCreators{
         })
     }
 
-    export const loadSchoolRatings = () => (d) => {
+    export const loadSchoolRatings = () => (d, gs: () => Models.StoreState) => {
         Services.RatingEntryService.getSchoolRatings({
-            year: new Date().getFullYear()
+            year: gs().shell.startDate.getFullYear()
         }).then(response => {
             if(response.status){
                 d({
@@ -146,9 +146,9 @@ export namespace ActionCreators{
         })
     }
 
-    export const loadRefereeRatings = () => (d) => {
+    export const loadRefereeRatings = () => (d, gs: () => Models.StoreState) => {
         Services.RatingEntryService.getRefereeRatings({
-            year: new Date().getFullYear()
+            year: gs().shell.startDate.getFullYear()
         }).then(response => {
             if(response.status){
                 d({

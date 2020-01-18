@@ -3,6 +3,9 @@ import * as Models from "../models/index.models";
 export const CHANGE_RATING = "SHELL::CHANGE_RATING";
 export type CHANGE_RATING_PAYLOAD = string;
 
+export const CHANGE_START_DATE = "SHELL::CHANGE_START_DATE"
+export type CHANGE_START_DATE_PAYLOAD = Date
+
 export const LOAD_RATINGS = "LOOKUP::LOAD_RATINGS";
 export type LOAD_RATINGS_PAYLOAD = Models.Rating[];
 

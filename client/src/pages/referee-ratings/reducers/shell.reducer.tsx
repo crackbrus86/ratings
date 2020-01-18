@@ -13,6 +13,12 @@ export type ReducerState = typeof defaultState;
 
 export const reducer = (state = defaultState, action): ReducerState => {
     switch(action.type){
+        case ActionTypes.CHANGE_START_DATE:{
+            return {
+                ...state,
+                startDate: action.payload
+            }
+        }
         default:
             return state
     }

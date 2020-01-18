@@ -21,6 +21,8 @@ function ratingsTableApp()
     wp_enqueue_script('ratings-react_dom_register');
     wp_register_script("ratings_table_script", plugins_url("/client/dist/tables-bundle.js?v=" . UPFRatings::$appVersion, __FILE__));
     wp_enqueue_script("ratings_table_script");
+    wp_register_style('react-datetime', plugins_url('/client/dist/css/react-datetime.css?v=' . UPFRatings::$appVersion, __FILE__));
+    wp_enqueue_style('react-datetime');
     $content = <<<_END
     <div id="app-rat-tables"></div>
 _END;
