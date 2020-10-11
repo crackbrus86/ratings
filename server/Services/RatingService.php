@@ -42,7 +42,7 @@ class RatingService
                                         GROUP_CONCAT(CONCAT(' ', Event, ' ', CompType, ' (', Place, ' місце - ', PointValue, ' балів)') separator ', ') AS Details,
                                         MAX(Wilks) AS Wilks
                                         FROM $this->entryTable
-                                        WHERE YEAR(EventDate) = %s
+                                        WHERE YEAR(EventDate) = %s AND PointValue IS NOT NULL
                                     GROUP BY Fullname, Gender
                                     ORDER BY Rating DESC, Wilks DESC", $year);
 
@@ -85,7 +85,7 @@ class RatingService
                                         GROUP_CONCAT(CONCAT(' ', Event, ' ', CompType, ' (', Place, ' місце - ', PointValue, ' балів)') separator ', ') AS Details,
                                         MAX(Wilks) AS Wilks
                                         FROM $this->entryTable
-                                        WHERE YEAR(EventDate) = %s AND Gender = %s
+                                        WHERE YEAR(EventDate) = %s AND Gender = %s AND PointValue IS NOT NULL
                                     GROUP BY Fullname, Gender
                                     ORDER BY Rating DESC, Wilks DESC", $year, $gender);
 
@@ -200,7 +200,7 @@ class RatingService
         $sql = $this->db->prepare("SELECT Coach, SUM(PointValue) AS Rating,
                                         GROUP_CONCAT(CONCAT(' ', Event, ' ', CompType, ' (', Place, ' місце - ', PointValue, ' балів) ', Fullname) separator ', ') AS Details
                                         FROM $this->entryTable
-                                        WHERE YEAR(EventDate) = %s AND Coach != '' AND Coach IS NOT NULL
+                                        WHERE YEAR(EventDate) = %s AND Coach != '' AND Coach IS NOT NULL AND PointValue IS NOT NULL
                                     GROUP BY Coach
                                     ORDER BY Rating DESC", $year);
 
@@ -276,7 +276,7 @@ class RatingService
         $sql = $this->db->prepare("SELECT Region, SUM(PointValue) AS Rating,
                                         GROUP_CONCAT(CONCAT(' ', Event, ' ', CompType, ' (', Place, ' місце - ', PointValue, ' балів) ', Fullname) separator ', ') AS Details
                                         FROM $this->entryTable
-                                        WHERE YEAR(EventDate) = %s AND Region != '' AND Region IS NOT NULL
+                                        WHERE YEAR(EventDate) = %s AND Region != '' AND Region IS NOT NULL AND PointValue IS NOT NULL
                                     GROUP BY Region
                                     ORDER BY Rating DESC", $year);
 
@@ -310,7 +310,7 @@ class RatingService
         $sql = $this->db->prepare("SELECT Fst, SUM(PointValue) AS Rating,
                                         GROUP_CONCAT(CONCAT(' ', Event, ' ', CompType, ' (', Place, ' місце - ', PointValue, ' балів) ', Fullname) separator ', ') AS Details
                                         FROM $this->entryTable
-                                        WHERE YEAR(EventDate) = %s AND Fst != '' AND Fst IS NOT NULL
+                                        WHERE YEAR(EventDate) = %s AND Fst != '' AND Fst IS NOT NULL AND PointValue IS NOT NULL
                                     GROUP BY Fst
                                     ORDER BY Rating DESC", $year);
 
@@ -344,7 +344,7 @@ class RatingService
         $sql = $this->db->prepare("SELECT School, SUM(PointValue) AS Rating,
                                         GROUP_CONCAT(CONCAT(' ', Event, ' ', CompType, ' (', Place, ' місце - ', PointValue, ' балів) ', Fullname) separator ', ') AS Details
                                         FROM $this->entryTable
-                                        WHERE YEAR(EventDate) = %s AND School != '' AND Fst IS NOT NULL
+                                        WHERE YEAR(EventDate) = %s AND School != '' AND Fst IS NOT NULL AND PointValue IS NOT NULL
                                     GROUP BY School
                                     ORDER BY Rating DESC", $year);
 
