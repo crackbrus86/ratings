@@ -31,6 +31,8 @@ $sql = "CREATE TABLE IF NOT EXISTS {$entryTableName} (
     Coach VARCHAR(300) NULL,
     Fst VARCHAR(300) NULL,
     School VARCHAR(300) NULL,
+    PointValue INT NULL,
+    RangeValue INT NULL,
     PRIMARY KEY (RatingEntryId)
 ) {$charset_collate}";
 dbDelta($sql);

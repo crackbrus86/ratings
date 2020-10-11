@@ -19,6 +19,10 @@ class EntryService
 
         $this->tableName = $this->db->get_blog_prefix() . "rat_entry";
 
+        $this->pointTableName = $this->db->get_blog_prefix() . "rat_point";
+
+        $this->rangeTableName = $this->db->get_blog_prefix() . "rat_range";
+
         $this->entries = array();
     }
 
@@ -43,11 +47,18 @@ class EntryService
 
             return $response;
         }else{
+            $sql = $this->db->prepare("SELECT Value FROM {$this->pointTableName} WHERE Target = %s AND Place = %d", $entry->event, $entry->place);
+            $point = $this->db->get_row($sql);
+
+            $sql = $this->db->prepare("SELECT `Range` FROM {$this->rangeTableName} WHERE Competition = %s AND Place = %d AND CompType = %s", 
+            $entry->event, $entry->place, $entry->compType);
+            $range = $this->db->get_row($sql);
+
             $sql = $this->db->prepare("INSERT INTO {$this->tableName} (Fullname, Type, Event, Place, EventDate, Gender, Division, CompType, Wilks, Region,
-                Coach, Fst, School) 
-                VALUES (%s, %s, %s, %d, %s, %s, %s, %s, %s, %s, %s, %s, %s)", 
+                Coach, Fst, School, PointValue, RangeValue) 
+                VALUES (%s, %s, %s, %d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %d, %d)", 
                 $entry->fullname, $entry->type, $entry->event, $entry->place, $entry->eventDate, $entry->gender, $entry->division, $entry->compType, 
-                (float)$entry->wilks, $entry->region, $entry->coach, $entry->fst, $entry->school);
+                (float)$entry->wilks, $entry->region, $entry->coach, $entry->fst, $entry->school, $point->Value, $range->Range);
 
             $this->db->query($sql);
         }
@@ -78,14 +89,20 @@ class EntryService
 
             return $response;
         }else{
+            $sql = $this->db->prepare("SELECT Value FROM {$this->pointTableName} WHERE Target = %s AND Place = %d", $entry->event, $entry->place);
+            $point = $this->db->get_row($sql);
+
+            $sql = $this->db->prepare("SELECT `Range` FROM {$this->rangeTableName} WHERE Competition = %s AND Place = %d AND CompType = %s", 
+                        $entry->event, $entry->place, $entry->compType);
+            $range = $this->db->get_row($sql);
 
             $sql = $this->db->prepare("UPDATE {$this->tableName} 
                                         SET Fullname = %s, Type = %s, Event = %s, Place = %d, EventDate = %s, Gender = %s, Division = %s, CompType = %s, 
-                                        Wilks = %s, Region = %s, Coach = %s, Fst = %s, School = %s
+                                        Wilks = %s, Region = %s, Coach = %s, Fst = %s, School = %s, PointValue = %d, RangeValue = %d
                                         WHERE RatingEntryId = %d", 
                                         $entry->fullname, $entry->type, $entry->event, $entry->place, $entry->eventDate, 
                                         $entry->gender, $entry->division, $entry->compType, $entry->wilks, $entry->region,
-                                        $entry->coach, $entry->fst, $entry->school, $entry->ratingEntryId);
+                                        $entry->coach, $entry->fst, $entry->school, $point->Value, $range->Range, $entry->ratingEntryId);
 
             $this->db->query($sql);
         }

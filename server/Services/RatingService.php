@@ -38,13 +38,12 @@ class RatingService
     {
         $year = $_GET["year"];
         $this->db->query("SET SESSION group_concat_max_len = 100000");
-        $sql = $this->db->prepare("SELECT a.Fullname, SUM(b.Value) AS Rating, a.Gender,
-                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів)') separator ', ') AS Details,
-                                        MAX(a.Wilks) AS Wilks
-                                        FROM $this->entryTable a
-                                        JOIN $this->pointTable b ON b.Target = a.Event AND b.Place = a.Place
-                                        WHERE YEAR(a.EventDate) = %s
-                                    GROUP BY a.Fullname, a.Gender
+        $sql = $this->db->prepare("SELECT Fullname, SUM(PointValue) AS Rating, Gender,
+                                        GROUP_CONCAT(CONCAT(' ', Event, ' ', CompType, ' (', Place, ' місце - ', PointValue, ' балів)') separator ', ') AS Details,
+                                        MAX(Wilks) AS Wilks
+                                        FROM $this->entryTable
+                                        WHERE YEAR(EventDate) = %s
+                                    GROUP BY Fullname, Gender
                                     ORDER BY Rating DESC, Wilks DESC", $year);
 
         $results = $this->db->get_results($sql);
@@ -82,13 +81,12 @@ class RatingService
         } 
 
         $this->db->query("SET SESSION group_concat_max_len = 100000");
-        $sql = $this->db->prepare("SELECT a.Fullname, SUM(b.Value) AS Rating, a.Gender,
-                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів)') separator ', ') AS Details,
-                                        MAX(a.Wilks) AS Wilks
-                                        FROM $this->entryTable a
-                                        JOIN $this->pointTable b ON b.Target = a.Event AND b.Place = a.Place
-                                        WHERE YEAR(a.EventDate) = %s AND a.Gender = %s
-                                    GROUP BY a.Fullname, a.Gender
+        $sql = $this->db->prepare("SELECT Fullname, SUM(PointValue) AS Rating, Gender,
+                                        GROUP_CONCAT(CONCAT(' ', Event, ' ', CompType, ' (', Place, ' місце - ', PointValue, ' балів)') separator ', ') AS Details,
+                                        MAX(Wilks) AS Wilks
+                                        FROM $this->entryTable
+                                        WHERE YEAR(EventDate) = %s AND Gender = %s
+                                    GROUP BY Fullname, Gender
                                     ORDER BY Rating DESC, Wilks DESC", $year, $gender);
 
         $results = $this->db->get_results($sql);
@@ -110,15 +108,14 @@ class RatingService
     {
         $year = $_GET["year"];
         $this->db->query("SET SESSION group_concat_max_len = 100000");
-        $sql = $this->db->prepare("SELECT a.Fullname, a.Gender, MIN(b.Range) AS Rating,
-                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Range, ' ранг)') separator ', ') AS Details,
-                                        COUNT(a.Event) AS EventCount,
-                                        GROUP_CONCAT(CONCAT(' ', b.Range) separator ', ') AS AllRanks,
-                                        MAX(a.Wilks) AS Wilks
-                                        FROM $this->entryTable a 
-                                        JOIN $this->rangeTale b ON b.Competition = a.Event AND b.Place = a.Place AND b.CompType = a.CompType
-                                    WHERE YEAR(a.EventDate) = %s
-                                    GROUP BY a.Fullname, a.Gender
+        $sql = $this->db->prepare("SELECT Fullname, Gender, MIN(RangeValue) AS Rating,
+                                        GROUP_CONCAT(CONCAT(' ', Event, ' ', CompType, ' (', Place, ' місце - ', RangeValue, ' ранг)') separator ', ') AS Details,
+                                        COUNT(Event) AS EventCount,
+                                        GROUP_CONCAT(CONCAT(' ', RangeValue) separator ', ') AS AllRanks,
+                                        MAX(Wilks) AS Wilks
+                                        FROM $this->entryTable
+                                    WHERE YEAR(EventDate) = %s AND RangeValue <> 0
+                                    GROUP BY Fullname, Gender
                                     ORDER BY Rating ASC, EventCount DESC, Wilks DESC", $year);
 
         $results = $this->db->get_results($sql);
@@ -158,15 +155,14 @@ class RatingService
             return $response;
         }
         $this->db->query("SET SESSION group_concat_max_len = 100000");
-        $sql = $this->db->prepare("SELECT a.Fullname, a.Gender, MIN(b.Range) AS Rating,
-                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Range, ' ранг)') separator ', ') AS Details,
-                                        COUNT(a.Event) AS EventCount,
-                                        GROUP_CONCAT(CONCAT(' ', b.Range) separator ', ') AS AllRanks,
-                                        MAX(a.Wilks) AS Wilks
-                                        FROM $this->entryTable a 
-                                        JOIN $this->rangeTale b ON b.Competition = a.Event AND b.Place = a.Place AND b.CompType = a.CompType
-                                    WHERE YEAR(a.EventDate) = %s AND a.Gender = %s
-                                    GROUP BY a.Fullname, a.Gender
+        $sql = $this->db->prepare("SELECT Fullname, Gender, MIN(RangeValue) AS Rating,
+                                        GROUP_CONCAT(CONCAT(' ', Event, ' ', CompType, ' (', Place, ' місце - ', RangeValue, ' ранг)') separator ', ') AS Details,
+                                        COUNT(Event) AS EventCount,
+                                        GROUP_CONCAT(CONCAT(' ', RangeValue) separator ', ') AS AllRanks,
+                                        MAX(Wilks) AS Wilks
+                                        FROM $this->entryTable
+                                    WHERE YEAR(EventDate) = %s AND Gender = %s AND RangeValue <> 0
+                                    GROUP BY Fullname, Gender
                                     ORDER BY Rating ASC, EventCount DESC, Wilks DESC", $year, $gender);
 
         $results = $this->db->get_results($sql);
@@ -201,12 +197,11 @@ class RatingService
             return $response;
         }
         $this->db->query("SET SESSION group_concat_max_len = 100000");
-        $sql = $this->db->prepare("SELECT a.Coach, SUM(b.Value) AS Rating,
-                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів) ', a.Fullname) separator ', ') AS Details
-                                        FROM $this->entryTable a
-                                        JOIN $this->pointTable b ON b.Target = a.Event AND b.Place = a.Place
-                                        WHERE YEAR(a.EventDate) = %s AND a.Coach != '' AND a.Coach IS NOT NULL
-                                    GROUP BY a.Coach
+        $sql = $this->db->prepare("SELECT Coach, SUM(PointValue) AS Rating,
+                                        GROUP_CONCAT(CONCAT(' ', Event, ' ', CompType, ' (', Place, ' місце - ', PointValue, ' балів) ', Fullname) separator ', ') AS Details
+                                        FROM $this->entryTable
+                                        WHERE YEAR(EventDate) = %s AND Coach != '' AND Coach IS NOT NULL
+                                    GROUP BY Coach
                                     ORDER BY Rating DESC", $year);
 
         $results = $this->db->get_results($sql);
@@ -236,15 +231,14 @@ class RatingService
             return $response;
         }
         $this->db->query("SET SESSION group_concat_max_len = 100000");
-        $sql = $this->db->prepare("SELECT a.Coach, MIN(b.Range) AS Rating,
-                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Range, ' ранг) ', a.Fullname) separator ', ') AS Details,
-                                        COUNT(a.Event) AS EventCount,
-                                        GROUP_CONCAT(CONCAT(' ', b.Range) separator ', ') AS AllRanks,
-                                        MAX(a.Wilks) AS Wilks
-                                        FROM $this->entryTable a 
-                                        JOIN $this->rangeTale b ON b.Competition = a.Event AND b.Place = a.Place AND b.CompType = a.CompType
-                                    WHERE YEAR(a.EventDate) = %s AND a.Coach != '' AND a.Coach IS NOT NULL
-                                    GROUP BY a.Coach
+        $sql = $this->db->prepare("SELECT Coach, MIN(RangeValue) AS Rating,
+                                        GROUP_CONCAT(CONCAT(' ', Event, ' ', CompType, ' (', Place, ' місце - ', RangeValue, ' ранг) ', Fullname) separator ', ') AS Details,
+                                        COUNT(Event) AS EventCount,
+                                        GROUP_CONCAT(CONCAT(' ', RangeValue) separator ', ') AS AllRanks,
+                                        MAX(Wilks) AS Wilks
+                                        FROM $this->entryTable
+                                    WHERE YEAR(EventDate) = %s AND Coach != '' AND Coach IS NOT NULL AND RangeValue <> 0
+                                    GROUP BY Coach
                                     ORDER BY Rating ASC, EventCount DESC, Wilks DESC", $year);
 
         $results = $this->db->get_results($sql);
@@ -279,12 +273,11 @@ class RatingService
             return $response;
         }
         $this->db->query("SET SESSION group_concat_max_len = 100000");
-        $sql = $this->db->prepare("SELECT a.Region, SUM(b.Value) AS Rating,
-                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів) ', a.Fullname) separator ', ') AS Details
-                                        FROM $this->entryTable a
-                                        JOIN $this->pointTable b ON b.Target = a.Event AND b.Place = a.Place
-                                        WHERE YEAR(a.EventDate) = %s AND a.Region != '' AND a.Region IS NOT NULL
-                                    GROUP BY a.Region
+        $sql = $this->db->prepare("SELECT Region, SUM(PointValue) AS Rating,
+                                        GROUP_CONCAT(CONCAT(' ', Event, ' ', CompType, ' (', Place, ' місце - ', PointValue, ' балів) ', Fullname) separator ', ') AS Details
+                                        FROM $this->entryTable
+                                        WHERE YEAR(EventDate) = %s AND Region != '' AND Region IS NOT NULL
+                                    GROUP BY Region
                                     ORDER BY Rating DESC", $year);
 
         $results = $this->db->get_results($sql);
@@ -314,12 +307,11 @@ class RatingService
             return $response;
         }
         $this->db->query("SET SESSION group_concat_max_len = 100000");
-        $sql = $this->db->prepare("SELECT a.Fst, SUM(b.Value) AS Rating,
-                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів) ', a.Fullname) separator ', ') AS Details
-                                        FROM $this->entryTable a
-                                        JOIN $this->pointTable b ON b.Target = a.Event AND b.Place = a.Place
-                                        WHERE YEAR(a.EventDate) = %s AND a.Fst != '' AND a.Fst IS NOT NULL
-                                    GROUP BY a.Fst
+        $sql = $this->db->prepare("SELECT Fst, SUM(PointValue) AS Rating,
+                                        GROUP_CONCAT(CONCAT(' ', Event, ' ', CompType, ' (', Place, ' місце - ', PointValue, ' балів) ', Fullname) separator ', ') AS Details
+                                        FROM $this->entryTable
+                                        WHERE YEAR(EventDate) = %s AND Fst != '' AND Fst IS NOT NULL
+                                    GROUP BY Fst
                                     ORDER BY Rating DESC", $year);
 
         $results = $this->db->get_results($sql);
@@ -349,12 +341,11 @@ class RatingService
             return $response;
         }
         $this->db->query("SET SESSION group_concat_max_len = 100000");
-        $sql = $this->db->prepare("SELECT a.School, SUM(b.Value) AS Rating,
-                                        GROUP_CONCAT(CONCAT(' ', a.Event, ' ', a.CompType, ' (', a.Place, ' місце - ', b.Value, ' балів) ', a.Fullname) separator ', ') AS Details
-                                        FROM $this->entryTable a
-                                        JOIN $this->pointTable b ON b.Target = a.Event AND b.Place = a.Place
-                                        WHERE YEAR(a.EventDate) = %s AND a.School != '' AND a.Fst IS NOT NULL
-                                    GROUP BY a.School
+        $sql = $this->db->prepare("SELECT School, SUM(PointValue) AS Rating,
+                                        GROUP_CONCAT(CONCAT(' ', Event, ' ', CompType, ' (', Place, ' місце - ', PointValue, ' балів) ', Fullname) separator ', ') AS Details
+                                        FROM $this->entryTable
+                                        WHERE YEAR(EventDate) = %s AND School != '' AND Fst IS NOT NULL
+                                    GROUP BY School
                                     ORDER BY Rating DESC", $year);
 
         $results = $this->db->get_results($sql);
