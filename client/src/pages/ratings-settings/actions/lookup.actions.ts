@@ -58,6 +58,18 @@ export namespace ActionCreators{
             case 8:
             value = point.eighthPlaceValue;
             break;
+            case 9:
+            value = point.ninethPlaceValue;
+            break;
+            case 10:
+            value = point.tenthPlaceValue;
+            break;
+            case 11:
+            value = point.eleventhPlaceValue;
+            break;
+            case 12:
+            value = point.twelvethPlaceValue;
+            break;            
             default:
             value = 0;
         }

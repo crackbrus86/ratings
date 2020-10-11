@@ -29,13 +29,13 @@ export default connect<StateProps, DispatchProps>(
                 {
                     title: "№",
                     field: "sortOrder",
-                    width: "100px",
+                    width: "50px",                    
                     sortable: true
                 },
                 {
                     title: "Вид змагань",
                     field: "name",
-                    width: "300px"
+                    width: "250px"
                 },
                 {
                     title: "1-е місце",
@@ -100,7 +100,39 @@ export default connect<StateProps, DispatchProps>(
                     sortable: true,
                     width: "80px",
                     onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 8)
-                },                                                                
+                },
+                {
+                    title: "9-е місце",
+                    field: "ninethPlaceValue",
+                    type: ColumnTypes.Input,
+                    sortable: true,
+                    width: "80px",
+                    onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 9)
+                },
+                {
+                    title: "10-е місце",
+                    field: "tenthPlaceValue",
+                    type: ColumnTypes.Input,
+                    sortable: true,
+                    width: "90px",
+                    onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 10)
+                },
+                {
+                    title: "11-е місце",
+                    field: "eleventhPlaceValue",
+                    type: ColumnTypes.Input,
+                    sortable: true,
+                    width: "90px",
+                    onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 11)
+                },
+                {
+                    title: "12-е місце",
+                    field: "twelvethPlaceValue",
+                    type: ColumnTypes.Input,
+                    sortable: true,
+                    width: "90px",
+                    onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 12)
+                },                                                        
                 {
                     title: "",
                     width: "*"

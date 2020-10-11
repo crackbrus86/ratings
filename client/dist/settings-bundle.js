@@ -1279,6 +1279,8 @@ var Table = /** @class */ (function (_super) {
         _this.sortingMethod = function (itemA, itemB) {
             var field = _this.state.sortField;
             var collator = new Intl.Collator();
+            if (!isNaN(parseInt(itemA[field])) && !isNaN(parseInt(itemB[field])))
+                return _this.state.sortAsc ? parseInt(itemA[field]) - parseInt(itemB[field]) : parseInt(itemB[field]) - parseInt(itemA[field]);
             if (!(itemA[field] instanceof String && itemA[field].indexOf('-') > -1) && !(Date.parse(itemA[field]) && Date.parse(itemB[field])) && !(itemB[field] instanceof String && itemA[field].indexOf('-') > -1) && !isNaN(parseFloat(itemA[field])) && !isNaN(parseFloat(itemB[field])))
                 return _this.state.sortAsc ? itemA[field] - itemB[field] : itemB[field] - itemA[field];
             else
@@ -1494,6 +1496,18 @@ var ActionCreators;
                 break;
             case 8:
                 value = point.eighthPlaceValue;
+                break;
+            case 9:
+                value = point.ninethPlaceValue;
+                break;
+            case 10:
+                value = point.tenthPlaceValue;
+                break;
+            case 11:
+                value = point.eleventhPlaceValue;
+                break;
+            case 12:
+                value = point.twelvethPlaceValue;
                 break;
             default:
                 value = 0;
@@ -1842,7 +1856,7 @@ exports.getCompetitionsTablePoints = reselect_1.createSelector(competitions, poi
         return [];
     return competitions.map(function (competition) {
         var compPoints = points.filter(function (point) { return point.target == competition.dbName; });
-        return __assign({}, competition, { firstPlaceValue: compPoints.filter(function (point) { return point.place == 1; }).length ? compPoints.filter(function (point) { return point.place == 1; })[0].value : 0, secondPlaceValue: compPoints.filter(function (point) { return point.place == 2; }).length ? compPoints.filter(function (point) { return point.place == 2; })[0].value : 0, thirdPlaceValue: compPoints.filter(function (point) { return point.place == 3; }).length ? compPoints.filter(function (point) { return point.place == 3; })[0].value : 0, fourthPlaceValue: compPoints.filter(function (point) { return point.place == 4; }).length ? compPoints.filter(function (point) { return point.place == 4; })[0].value : 0, fivethPlaceValue: compPoints.filter(function (point) { return point.place == 5; }).length ? compPoints.filter(function (point) { return point.place == 5; })[0].value : 0, sixthPlaceValue: compPoints.filter(function (point) { return point.place == 6; }).length ? compPoints.filter(function (point) { return point.place == 6; })[0].value : 0, seventhPlaceValue: compPoints.filter(function (point) { return point.place == 7; }).length ? compPoints.filter(function (point) { return point.place == 7; })[0].value : 0, eighthPlaceValue: compPoints.filter(function (point) { return point.place == 8; }).length ? compPoints.filter(function (point) { return point.place == 8; })[0].value : 0 });
+        return __assign({}, competition, { firstPlaceValue: compPoints.filter(function (point) { return point.place == 1; }).length ? compPoints.filter(function (point) { return point.place == 1; })[0].value : 0, secondPlaceValue: compPoints.filter(function (point) { return point.place == 2; }).length ? compPoints.filter(function (point) { return point.place == 2; })[0].value : 0, thirdPlaceValue: compPoints.filter(function (point) { return point.place == 3; }).length ? compPoints.filter(function (point) { return point.place == 3; })[0].value : 0, fourthPlaceValue: compPoints.filter(function (point) { return point.place == 4; }).length ? compPoints.filter(function (point) { return point.place == 4; })[0].value : 0, fivethPlaceValue: compPoints.filter(function (point) { return point.place == 5; }).length ? compPoints.filter(function (point) { return point.place == 5; })[0].value : 0, sixthPlaceValue: compPoints.filter(function (point) { return point.place == 6; }).length ? compPoints.filter(function (point) { return point.place == 6; })[0].value : 0, seventhPlaceValue: compPoints.filter(function (point) { return point.place == 7; }).length ? compPoints.filter(function (point) { return point.place == 7; })[0].value : 0, eighthPlaceValue: compPoints.filter(function (point) { return point.place == 8; }).length ? compPoints.filter(function (point) { return point.place == 8; })[0].value : 0, ninethPlaceValue: compPoints.filter(function (point) { return point.place == 9; }).length ? compPoints.filter(function (point) { return point.place == 9; })[0].value : 0, tenthPlaceValue: compPoints.filter(function (point) { return point.place == 10; }).length ? compPoints.filter(function (point) { return point.place == 10; })[0].value : 0, eleventhPlaceValue: compPoints.filter(function (point) { return point.place == 11; }).length ? compPoints.filter(function (point) { return point.place == 11; })[0].value : 0, twelvethPlaceValue: compPoints.filter(function (point) { return point.place == 12; }).length ? compPoints.filter(function (point) { return point.place == 12; })[0].value : 0 });
     });
 });
 exports.getRecordsTablepoints = reselect_1.createSelector(records, points, function (records, points) {
@@ -2141,13 +2155,13 @@ exports.default = react_redux_1.connect(function (state) { return ({}); }, funct
                     {
                         title: "№",
                         field: "sortOrder",
-                        width: "100px",
+                        width: "50px",
                         sortable: true
                     },
                     {
                         title: "Вид змагань",
                         field: "name",
-                        width: "300px"
+                        width: "250px"
                     },
                     {
                         title: "1-е місце",
@@ -2212,6 +2226,38 @@ exports.default = react_redux_1.connect(function (state) { return ({}); }, funct
                         sortable: true,
                         width: "80px",
                         onChange: function (item) { return _this.props.actions.savePoint(item, 8); }
+                    },
+                    {
+                        title: "9-е місце",
+                        field: "ninethPlaceValue",
+                        type: column_1.ColumnTypes.Input,
+                        sortable: true,
+                        width: "80px",
+                        onChange: function (item) { return _this.props.actions.savePoint(item, 9); }
+                    },
+                    {
+                        title: "10-е місце",
+                        field: "tenthPlaceValue",
+                        type: column_1.ColumnTypes.Input,
+                        sortable: true,
+                        width: "90px",
+                        onChange: function (item) { return _this.props.actions.savePoint(item, 10); }
+                    },
+                    {
+                        title: "11-е місце",
+                        field: "eleventhPlaceValue",
+                        type: column_1.ColumnTypes.Input,
+                        sortable: true,
+                        width: "90px",
+                        onChange: function (item) { return _this.props.actions.savePoint(item, 11); }
+                    },
+                    {
+                        title: "12-е місце",
+                        field: "twelvethPlaceValue",
+                        type: column_1.ColumnTypes.Input,
+                        sortable: true,
+                        width: "90px",
+                        onChange: function (item) { return _this.props.actions.savePoint(item, 12); }
                     },
                     {
                         title: "",

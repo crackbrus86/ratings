@@ -21,6 +21,10 @@ export const getCompetitionsTablePoints = createSelector(competitions, points, (
         sixthPlaceValue: compPoints.filter(point => point.place == 6).length ? compPoints.filter(point => point.place == 6)[0].value : 0,
         seventhPlaceValue: compPoints.filter(point => point.place == 7).length ? compPoints.filter(point => point.place == 7)[0].value : 0,
         eighthPlaceValue: compPoints.filter(point => point.place == 8).length ? compPoints.filter(point => point.place == 8)[0].value : 0,
+        ninethPlaceValue: compPoints.filter(point => point.place == 9).length ? compPoints.filter(point => point.place == 9)[0].value : 0,
+        tenthPlaceValue: compPoints.filter(point => point.place == 10).length ? compPoints.filter(point => point.place == 10)[0].value : 0,
+        eleventhPlaceValue: compPoints.filter(point => point.place == 11).length ? compPoints.filter(point => point.place == 11)[0].value : 0,
+        twelvethPlaceValue: compPoints.filter(point => point.place == 12).length ? compPoints.filter(point => point.place == 12)[0].value : 0
     } as Models.LookupModels.TablePoint});
 });
 

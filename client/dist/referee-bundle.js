@@ -1279,6 +1279,8 @@ var Table = /** @class */ (function (_super) {
         _this.sortingMethod = function (itemA, itemB) {
             var field = _this.state.sortField;
             var collator = new Intl.Collator();
+            if (!isNaN(parseInt(itemA[field])) && !isNaN(parseInt(itemB[field])))
+                return _this.state.sortAsc ? parseInt(itemA[field]) - parseInt(itemB[field]) : parseInt(itemB[field]) - parseInt(itemA[field]);
             if (!(itemA[field] instanceof String && itemA[field].indexOf('-') > -1) && !(Date.parse(itemA[field]) && Date.parse(itemB[field])) && !(itemB[field] instanceof String && itemA[field].indexOf('-') > -1) && !isNaN(parseFloat(itemA[field])) && !isNaN(parseFloat(itemB[field])))
                 return _this.state.sortAsc ? itemA[field] - itemB[field] : itemB[field] - itemA[field];
             else
