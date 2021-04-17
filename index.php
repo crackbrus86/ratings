@@ -34,7 +34,7 @@ add_shortcode("Ratings", "ratingsTableApp");
 
 class UPFRatings
 {
-    public static $appVersion = "2.0.1.10112020";
+    public static $appVersion = "2.1.1.04172021";
 
     public function initRating()
     {
