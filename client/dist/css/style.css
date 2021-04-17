@@ -17,6 +17,15 @@
   padding: 4px;
   font-size: 1em; }
 
+.export-button {
+  display: inline-block;
+  padding: 0.6em 4px;
+  width: 32px;
+  height: 32px;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer; }
+
 .form-checkbox {
   display: flex; }
   .form-checkbox label {
@@ -50,14 +59,21 @@
   .autocomplete ul li {
     cursor: pointer; }
 
-.export-button {
-  display: inline-block;
-  padding: 0.6em 4px;
-  width: 32px;
-  height: 32px;
-  box-sizing: border-box;
-  text-align: center;
-  cursor: pointer; }
+.grid-row {
+  display: flex;
+  flex-direction: row;
+  width: 100%; }
+  .grid-row .grid-column {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    margin: 0 5px; }
+
+.content-wrap {
+  overflow-x: auto;
+  margin-right: 20px;
+  min-height: 400px;
+  min-width: 1080px; }
 
 .modal-black-out {
   position: fixed;
@@ -248,21 +264,6 @@
     outline: none;
     box-shadow: none;
     background-color: #e8e8e8; }
-
-.grid-row {
-  display: flex;
-  flex-direction: row;
-  width: 100%; }
-  .grid-row .grid-column {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    margin: 0 5px; }
-
-.content-wrap {
-  overflow-x: auto;
-  margin-right: 20px;
-  min-height: 400px; }
 
 #app-rat-tables .upf-ratings-filter {
   width: 450px; }

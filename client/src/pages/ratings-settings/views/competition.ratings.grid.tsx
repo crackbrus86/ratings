@@ -132,7 +132,39 @@ export default connect<StateProps, DispatchProps>(
                     sortable: true,
                     width: "90px",
                     onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 12)
-                },                                                        
+                },
+                {
+                    title: "13-е місце",
+                    field: "thirteenPlaceValue",
+                    type: ColumnTypes.Input,
+                    sortable: true,
+                    width: "90px",
+                    onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 13)
+                },
+                {
+                    title: "14-е місце",
+                    field: "fourteenPlaceValue",
+                    type: ColumnTypes.Input,
+                    sortable: true,
+                    width: "90px",
+                    onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 14)
+                },    
+                {
+                    title: "15-е місце",
+                    field: "fifteenPlaceValue",
+                    type: ColumnTypes.Input,
+                    sortable: true,
+                    width: "90px",
+                    onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 15)
+                },
+                {
+                    title: "16-е місце",
+                    field: "sixteenPlaceValue",
+                    type: ColumnTypes.Input,
+                    sortable: true,
+                    width: "90px",
+                    onChange: (item: Models.LookupModels.TablePoint) => this.props.actions.savePoint(item, 16)
+                },                                         
                 {
                     title: "",
                     width: "*"

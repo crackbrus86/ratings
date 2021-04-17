@@ -1452,8 +1452,8 @@ var ActionCreators;
                 return d({
                     type: ActionTypes.LOAD_COMPETITIONS,
                     payload: {
-                        competitions: response.data
-                    }
+                        competitions: response.data,
+                    },
                 });
             }
         });
@@ -1464,8 +1464,8 @@ var ActionCreators;
                 return d({
                     type: ActionTypes.LOAD_POINTS,
                     payload: {
-                        points: response.data
-                    }
+                        points: response.data,
+                    },
                 });
             }
         });
@@ -1509,6 +1509,18 @@ var ActionCreators;
             case 12:
                 value = point.twelvethPlaceValue;
                 break;
+            case 13:
+                value = point.thirteenPlaceValue;
+                break;
+            case 14:
+                value = point.fourteenPlaceValue;
+                break;
+            case 15:
+                value = point.fifteenPlaceValue;
+                break;
+            case 16:
+                value = point.sixteenPlaceValue;
+                break;
             default:
                 value = 0;
         }
@@ -1517,7 +1529,7 @@ var ActionCreators;
             pointId: currentPoint ? currentPoint.pointId : null,
             place: place,
             target: point.dbName,
-            value: value
+            value: value,
         }).then(function (response) {
             if (response.status) {
                 toastr.success(response.message);
@@ -1531,8 +1543,8 @@ var ActionCreators;
                 return d({
                     type: ActionTypes.LOAD_RECORDS,
                     payload: {
-                        records: response.data
-                    }
+                        records: response.data,
+                    },
                 });
             }
         });
@@ -1542,7 +1554,7 @@ var ActionCreators;
             if (response.status) {
                 return d({
                     type: ActionTypes.LOAD_COMP_TYPES,
-                    payload: response.data
+                    payload: response.data,
                 });
             }
         });
@@ -1856,7 +1868,7 @@ exports.getCompetitionsTablePoints = reselect_1.createSelector(competitions, poi
         return [];
     return competitions.map(function (competition) {
         var compPoints = points.filter(function (point) { return point.target == competition.dbName; });
-        return __assign({}, competition, { firstPlaceValue: compPoints.filter(function (point) { return point.place == 1; }).length ? compPoints.filter(function (point) { return point.place == 1; })[0].value : 0, secondPlaceValue: compPoints.filter(function (point) { return point.place == 2; }).length ? compPoints.filter(function (point) { return point.place == 2; })[0].value : 0, thirdPlaceValue: compPoints.filter(function (point) { return point.place == 3; }).length ? compPoints.filter(function (point) { return point.place == 3; })[0].value : 0, fourthPlaceValue: compPoints.filter(function (point) { return point.place == 4; }).length ? compPoints.filter(function (point) { return point.place == 4; })[0].value : 0, fivethPlaceValue: compPoints.filter(function (point) { return point.place == 5; }).length ? compPoints.filter(function (point) { return point.place == 5; })[0].value : 0, sixthPlaceValue: compPoints.filter(function (point) { return point.place == 6; }).length ? compPoints.filter(function (point) { return point.place == 6; })[0].value : 0, seventhPlaceValue: compPoints.filter(function (point) { return point.place == 7; }).length ? compPoints.filter(function (point) { return point.place == 7; })[0].value : 0, eighthPlaceValue: compPoints.filter(function (point) { return point.place == 8; }).length ? compPoints.filter(function (point) { return point.place == 8; })[0].value : 0, ninethPlaceValue: compPoints.filter(function (point) { return point.place == 9; }).length ? compPoints.filter(function (point) { return point.place == 9; })[0].value : 0, tenthPlaceValue: compPoints.filter(function (point) { return point.place == 10; }).length ? compPoints.filter(function (point) { return point.place == 10; })[0].value : 0, eleventhPlaceValue: compPoints.filter(function (point) { return point.place == 11; }).length ? compPoints.filter(function (point) { return point.place == 11; })[0].value : 0, twelvethPlaceValue: compPoints.filter(function (point) { return point.place == 12; }).length ? compPoints.filter(function (point) { return point.place == 12; })[0].value : 0 });
+        return __assign({}, competition, { firstPlaceValue: compPoints.filter(function (point) { return point.place == 1; }).length ? compPoints.filter(function (point) { return point.place == 1; })[0].value : 0, secondPlaceValue: compPoints.filter(function (point) { return point.place == 2; }).length ? compPoints.filter(function (point) { return point.place == 2; })[0].value : 0, thirdPlaceValue: compPoints.filter(function (point) { return point.place == 3; }).length ? compPoints.filter(function (point) { return point.place == 3; })[0].value : 0, fourthPlaceValue: compPoints.filter(function (point) { return point.place == 4; }).length ? compPoints.filter(function (point) { return point.place == 4; })[0].value : 0, fivethPlaceValue: compPoints.filter(function (point) { return point.place == 5; }).length ? compPoints.filter(function (point) { return point.place == 5; })[0].value : 0, sixthPlaceValue: compPoints.filter(function (point) { return point.place == 6; }).length ? compPoints.filter(function (point) { return point.place == 6; })[0].value : 0, seventhPlaceValue: compPoints.filter(function (point) { return point.place == 7; }).length ? compPoints.filter(function (point) { return point.place == 7; })[0].value : 0, eighthPlaceValue: compPoints.filter(function (point) { return point.place == 8; }).length ? compPoints.filter(function (point) { return point.place == 8; })[0].value : 0, ninethPlaceValue: compPoints.filter(function (point) { return point.place == 9; }).length ? compPoints.filter(function (point) { return point.place == 9; })[0].value : 0, tenthPlaceValue: compPoints.filter(function (point) { return point.place == 10; }).length ? compPoints.filter(function (point) { return point.place == 10; })[0].value : 0, eleventhPlaceValue: compPoints.filter(function (point) { return point.place == 11; }).length ? compPoints.filter(function (point) { return point.place == 11; })[0].value : 0, twelvethPlaceValue: compPoints.filter(function (point) { return point.place == 12; }).length ? compPoints.filter(function (point) { return point.place == 12; })[0].value : 0, thirteenPlaceValue: compPoints.filter(function (point) { return point.place == 13; }).length ? compPoints.filter(function (point) { return point.place == 13; })[0].value : 0, fourteenPlaceValue: compPoints.filter(function (point) { return point.place == 14; }).length ? compPoints.filter(function (point) { return point.place == 14; })[0].value : 0, fifteenPlaceValue: compPoints.filter(function (point) { return point.place == 15; }).length ? compPoints.filter(function (point) { return point.place == 15; })[0].value : 0, sixteenPlaceValue: compPoints.filter(function (point) { return point.place == 16; }).length ? compPoints.filter(function (point) { return point.place == 16; })[0].value : 0 });
     });
 });
 exports.getRecordsTablepoints = reselect_1.createSelector(records, points, function (records, points) {
@@ -2258,6 +2270,38 @@ exports.default = react_redux_1.connect(function (state) { return ({}); }, funct
                         sortable: true,
                         width: "90px",
                         onChange: function (item) { return _this.props.actions.savePoint(item, 12); }
+                    },
+                    {
+                        title: "13-е місце",
+                        field: "thirteenPlaceValue",
+                        type: column_1.ColumnTypes.Input,
+                        sortable: true,
+                        width: "90px",
+                        onChange: function (item) { return _this.props.actions.savePoint(item, 13); }
+                    },
+                    {
+                        title: "14-е місце",
+                        field: "fourteenPlaceValue",
+                        type: column_1.ColumnTypes.Input,
+                        sortable: true,
+                        width: "90px",
+                        onChange: function (item) { return _this.props.actions.savePoint(item, 14); }
+                    },
+                    {
+                        title: "15-е місце",
+                        field: "fifteenPlaceValue",
+                        type: column_1.ColumnTypes.Input,
+                        sortable: true,
+                        width: "90px",
+                        onChange: function (item) { return _this.props.actions.savePoint(item, 15); }
+                    },
+                    {
+                        title: "16-е місце",
+                        field: "sixteenPlaceValue",
+                        type: column_1.ColumnTypes.Input,
+                        sortable: true,
+                        width: "90px",
+                        onChange: function (item) { return _this.props.actions.savePoint(item, 16); }
                     },
                     {
                         title: "",

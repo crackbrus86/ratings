@@ -2000,7 +2000,7 @@ exports.default = react_redux_1.connect(function (state) { return ({
         var _this = _super.call(this, props) || this;
         _this.getPlaces = function () {
             var placeOptions = [];
-            for (var i = 0; i < 13; i++) {
+            for (var i = 0; i < 17; i++) {
                 placeOptions.push({ text: !i ? '' : i.toString(), value: !i ? null : i });
             }
             return placeOptions;

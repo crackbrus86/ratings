@@ -49,7 +49,7 @@ export default connect<StateProps, DispatchProps>(
 
     getPlaces = () => {
         let placeOptions = [];
-        for(let i = 0; i < 13; i++){
+        for(let i = 0; i < 17; i++){
             placeOptions.push({text: !i ? '' : i.toString(), value: !i ? null : i} as SelectOption)
         }
         return placeOptions;

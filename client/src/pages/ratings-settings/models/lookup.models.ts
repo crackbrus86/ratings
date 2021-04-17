@@ -42,4 +42,8 @@ export interface TablePoint extends Competition{
     tenthPlaceValue?: number;
     eleventhPlaceValue?: number;
     twelvethPlaceValue?: number;
+    thirteenPlaceValue?: number;
+    fourteenPlaceValue?: number;
+    fifteenPlaceValue?: number;
+    sixteenPlaceValue?: number;
 }
