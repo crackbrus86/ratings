@@ -56,7 +56,7 @@ class EntryService
 
             $sql = $this->db->prepare("INSERT INTO {$this->tableName} (Fullname, Type, Event, Place, EventDate, Gender, Division, CompType, Wilks, Region,
                 Coach, Fst, School, PointValue, RangeValue) 
-                VALUES (%s, %s, %s, %d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %d, %d)", 
+                VALUES (%s, %s, %s, %d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %f, %d)", 
                 $entry->fullname, $entry->type, $entry->event, $entry->place, $entry->eventDate, $entry->gender, $entry->division, $entry->compType, 
                 (float)$entry->wilks, $entry->region, $entry->coach, $entry->fst, $entry->school, $point->Value, $range->Range);
 
@@ -98,7 +98,7 @@ class EntryService
 
             $sql = $this->db->prepare("UPDATE {$this->tableName} 
                                         SET Fullname = %s, Type = %s, Event = %s, Place = %d, EventDate = %s, Gender = %s, Division = %s, CompType = %s, 
-                                        Wilks = %s, Region = %s, Coach = %s, Fst = %s, School = %s, PointValue = %d, RangeValue = %d
+                                        Wilks = %s, Region = %s, Coach = %s, Fst = %s, School = %s, PointValue = %f, RangeValue = %d
                                         WHERE RatingEntryId = %d", 
                                         $entry->fullname, $entry->type, $entry->event, $entry->place, $entry->eventDate, 
                                         $entry->gender, $entry->division, $entry->compType, $entry->wilks, $entry->region,

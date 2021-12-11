@@ -9,7 +9,7 @@ $pointTableName = $prefix . "point";
 $sql = "CREATE TABLE IF NOT EXISTS {$pointTableName} (
     PointId INT NOT NULL AUTO_INCREMENT,
     Target VARCHAR(50) NOT NULL,
-    Value INT,
+    Value FLOAT(18,2),
     Place INT,
     PRIMARY KEY(PointId)
 ) {$charset_collate}";
@@ -31,7 +31,7 @@ $sql = "CREATE TABLE IF NOT EXISTS {$entryTableName} (
     Coach VARCHAR(300) NULL,
     Fst VARCHAR(300) NULL,
     School VARCHAR(300) NULL,
-    PointValue INT NULL,
+    PointValue FLOAT(18,2) NULL,
     RangeValue INT NULL,
     PRIMARY KEY (RatingEntryId)
 ) {$charset_collate}";

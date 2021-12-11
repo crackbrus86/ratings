@@ -47,10 +47,10 @@ class PointService
         if(!$exists)
         {
             $sql = $this->db->prepare("INSERT INTO $this->pointTableName (Target, Value, Place) 
-            VALUES (%s, %d, %d)", $point->target, $point->value, $point->place);
+            VALUES (%s, %f, %d)", $point->target, $point->value, $point->place);
             $this->db->query($sql);
         }else{
-            $sql = $this->db->prepare("UPDATE $this->pointTableName SET Value = %d WHERE PointId = %d", $point->value, $point->pointId);
+            $sql = $this->db->prepare("UPDATE $this->pointTableName SET Value = %f WHERE PointId = %d", $point->value, $point->pointId);
             $this->db->query($sql);
         }
         $response->setResponseModel((object)array('status' => TRUE, 'message' => "Значення збережено!"));
