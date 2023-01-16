@@ -29,6 +29,11 @@ function convertToDateYear($dateString)
     return date('Y', strtotime(dispatchDate($dateString)));
 }
 
+function convertStringToArray($arrayString)
+{
+    return $arrayString !== "" ? explode(";", $arrayString) : array();
+}
+
 class ResponseModel
 {
 

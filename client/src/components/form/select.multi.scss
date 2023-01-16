@@ -1,0 +1,45 @@
+.multi-select {
+    &__selector {
+        width: 50%;
+        margin: 0 2px 0 0!important;
+    }
+
+    &__values {
+        flex-wrap: wrap;
+        max-height: 100px;
+        overflow: auto;
+        margin-bottom: 12px;
+        max-width: 230px;
+
+        span {
+            box-shadow: 0 0 0 1px #ccc;
+            margin: 2px;
+            padding: 4px;
+            border-radius: 10px;
+            background-color: #c9ffe6;
+            cursor: pointer;
+
+            span.fa {
+                box-shadow: none;
+                color: #b03232;
+            }
+        }
+    }
+
+    &__options {
+        overflow-y: auto;
+        max-height: 100px;
+        box-shadow: 0 0 0 1px #7e8993;
+        width: 100%;
+        padding-left: 20px;
+        margin-bottom: 12px;
+    }
+}
+
+.validation-error {
+    .multi-select {
+        &__options {
+            box-shadow: 0 0 0 1px red;
+        }
+    }
+}
