@@ -1532,6 +1532,7 @@ var ActionCreators;
                 coach: '',
                 fst: '',
                 school: '',
+                region: null,
                 regions: []
             }
         });
@@ -2086,7 +2087,6 @@ exports.default = react_redux_1.connect(function (state) { return ({
                                 React.createElement(form_1.default.TextInput, { label: "\u041F\u0440\u0456\u0437\u0432\u0438\u0449\u0435, \u0406\u043C'\u044F \u0441\u043F\u043E\u0440\u0442\u0441\u043C\u0435\u043D\u0430", value: this.props.entry.fullname, validation: this.props.validation.isFullNameValid, autocomplete: true, autocompleteItems: this.props.names, onChange: function (value) { return _this.props.actions.updateEntry("fullname", value); } }),
                                 React.createElement(form_1.default.Select, { label: "\u0421\u0442\u0430\u0442\u044C", options: [{ text: "", value: null }, { text: "Чоловіки", value: "M" }, { text: "Жінки", value: "F" }], value: this.props.entry.gender, validation: this.props.validation.isGenderValid, onChange: function (value) { return _this.props.actions.updateEntry("gender", value); } }),
                                 React.createElement(form_1.default.Select, { label: "\u0414\u0438\u0432\u0456\u0437\u0456\u043E\u043D", options: this.props.divisions, value: this.props.entry.division, validation: this.props.validation.isDivisionValid, onChange: function (value) { return _this.props.actions.updateEntry("division", value); } }),
-                                React.createElement(form_1.default.Select, { label: "\u041E\u0431\u043B\u0430\u0441\u0442\u044C", options: this.props.regions, value: this.props.entry.region, validation: this.props.validation.isRegionValid, onChange: function (value) { return _this.props.actions.updateEntry('region', value); } }),
                                 React.createElement(form_1.default.SelectMulti, { label: "\u041E\u0431\u043B\u0430\u0441\u0442\u0456", options: this.props.regions, value: this.props.entry.regions, validation: this.props.validation.isRegionsValid, onChange: function (value) { return _this.props.actions.updateEntry('regions', value); } }),
                                 React.createElement(form_1.default.TextInput, { label: "\u0422\u0440\u0435\u043D\u0435\u0440", value: this.props.entry.coach, autocomplete: true, autocompleteItems: this.props.coaches, onChange: function (value) { return _this.props.actions.updateEntry("coach", value); } }),
                                 React.createElement(form_1.default.TextInput, { label: "\u0424\u0421\u0422", value: this.props.entry.fst, autocomplete: true, autocompleteItems: this.props.fstList, onChange: function (value) { return _this.props.actions.updateEntry("fst", value); } }),
@@ -2552,7 +2552,6 @@ exports.validation = reselect_1.createSelector(currentEntry, function (entry) {
         isEventDateValid: { isValid: true, message: null },
         isGenderValid: { isValid: true, message: null },
         isComTypeValid: { isValid: true, message: null },
-        isRegionValid: { isValid: true, message: null },
         isRegionsValid: { isValid: true, message: null }
     };
     if (entry && !entry.fullname.length) {
@@ -2575,9 +2574,6 @@ exports.validation = reselect_1.createSelector(currentEntry, function (entry) {
     }
     if (entry && !entry.compType) {
         result.isComTypeValid = { isValid: false, message: "Не вказано дисципліну!" };
-    }
-    if (entry && !entry.region) {
-        result.isRegionValid = { isValid: false, message: "Не вказано область!" };
     }
     if (entry && !entry.regions.length) {
         result.isRegionsValid = { isValid: false, message: "Не обрано область(і)!" };
@@ -2738,23 +2734,36 @@ exports.modifiedMinistrySchoolRatings = reselect_1.createSelector(ministrySchool
 
 "use strict";
 
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteEntry = exports.getEntries = exports.updateEntry = exports.createEntry = void 0;
 var CallApi = __webpack_require__(/*! ../../../infrastructure/call.api */ "./client/src/infrastructure/call.api.ts");
-var entryApiPath = "../wp-content/plugins/ratings/server/EntryController/";
+var entryApiPath = '../wp-content/plugins/ratings/server/EntryController/';
 var apiTypes = CallApi.RequestTypes;
 exports.createEntry = function (entry) {
+    var saveEntryContract = __assign(__assign({}, entry), { regions: entry.regions.join(';') });
     return CallApi.callApi({
         url: entryApiPath + 'CreateEntry.php',
         type: apiTypes.POST,
-        data: entry
+        data: saveEntryContract
     });
 };
 exports.updateEntry = function (entry) {
+    var saveEntryContract = __assign(__assign({}, entry), { regions: entry.regions.join(';') });
     return CallApi.callApi({
         url: entryApiPath + 'UpdateEntry.php',
         type: apiTypes.POST,
-        data: entry
+        data: saveEntryContract
     });
 };
 exports.getEntries = function (contract) {

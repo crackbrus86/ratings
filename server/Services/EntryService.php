@@ -58,7 +58,7 @@ class EntryService
 
             $sql = $this->db->prepare("INSERT INTO {$this->tableName} (Fullname, Type, Event, Place, EventDate, Gender, Division, CompType, Wilks, Coach, 
                 Fst, School, PointValue, RangeValue) 
-                VALUES (%s, %s, %s, %d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %f, %d)", 
+                VALUES (%s, %s, %s, %d, %s, %s, %s, %s, %s, %s, %s, %s, %f, %d)", 
                 $entry->fullname, $entry->type, $entry->event, $entry->place, $entry->eventDate, $entry->gender, $entry->division, $entry->compType, 
                 (float)$entry->wilks, $entry->coach, $entry->fst, $entry->school, $point->Value, $range->Range);
 

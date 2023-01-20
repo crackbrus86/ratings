@@ -21,6 +21,7 @@ export namespace ActionCreators{
                 coach: '',
                 fst: '',
                 school: '',
+                region: null,
                 regions: []
             }
         })

@@ -52,7 +52,6 @@ export interface EntryValidationResult{
     isEventDateValid: Models.ValidationResult,
     isGenderValid: Models.ValidationResult,
     isComTypeValid: Models.ValidationResult,
-    isRegionValid: Models.ValidationResult,
     isRegionsValid: Models.ValidationResult
 }
 
@@ -66,7 +65,6 @@ export const validation = createSelector(currentEntry, (entry) => {
         isEventDateValid: {isValid: true, message: null},
         isGenderValid: {isValid: true, message: null},
         isComTypeValid: {isValid: true, message: null},
-        isRegionValid: {isValid: true, message: null},
         isRegionsValid: { isValid: true, message: null }
     }
 
@@ -90,9 +88,6 @@ export const validation = createSelector(currentEntry, (entry) => {
     }
     if(entry && !entry.compType){
         result.isComTypeValid = {isValid: false, message: "Не вказано дисципліну!"}
-    }
-    if(entry && !entry.region){
-        result.isRegionValid = {isValid: false, message: "Не вказано область!"}
     }
     if(entry && !entry.regions.length) {
         result.isRegionsValid = { isValid: false, message: "Не обрано область(і)!" }

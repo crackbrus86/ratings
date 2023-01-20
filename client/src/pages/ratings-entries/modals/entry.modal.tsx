@@ -94,13 +94,6 @@ export default connect<StateProps, DispatchProps>(
                                     validation={this.props.validation.isDivisionValid}
                                     onChange={(value) => this.props.actions.updateEntry("division", value)}
                                 />
-                                <Form.Select 
-                                    label="Область"
-                                    options={this.props.regions}
-                                    value={this.props.entry.region}
-                                    validation={this.props.validation.isRegionValid}
-                                    onChange={(value) => this.props.actions.updateEntry('region', value)}
-                                />
                                 <Form.SelectMulti
                                     label="Області"
                                     options={this.props.regions}

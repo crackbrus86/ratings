@@ -109,15 +109,6 @@ class Entry
             return $validation;
         }
 
-        if(!$this->region)
-        {
-            $validation->isValid = FALSE;
-
-            $validation->message = "Region is required!";
-
-            return $validation;
-        }
-
         if(count($this->regions) === 0)
         {
             $validation->isValid = FALSE;
