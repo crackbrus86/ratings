@@ -79,3 +79,12 @@ $sql = "CREATE TABLE IF NOT EXISTS {$ratingTypeTableName} (
     PRIMARY KEY (Id)
 ) {$charset_collate}";
 dbDelta($sql);
+
+$entryRegionLinkTableName = $prefix . "entry_region_link";
+$sql = "CREATE TABLE IF NOT EXISTS {$entryRegionLinkTableName} (
+    EntryRegionLinkId INT NOT NULL AUTO_INCREMENT,
+    RatingEntryId INT NOT NULL,
+    Region VARCHAR(50) NULL,
+    PRIMARY KEY (EntryRegionLinkId)
+)";
+dbDelta($sql);

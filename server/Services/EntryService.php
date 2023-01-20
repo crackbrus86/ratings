@@ -23,6 +23,8 @@ class EntryService
 
         $this->rangeTableName = $this->db->get_blog_prefix() . "rat_range";
 
+        $this->entryRegionLinkTableName = $this->db->get_blog_prefix() . "rat_entry_region_link";
+
         $this->entries = array();
     }
 
@@ -54,13 +56,23 @@ class EntryService
             $entry->event, $entry->place, $entry->compType);
             $range = $this->db->get_row($sql);
 
-            $sql = $this->db->prepare("INSERT INTO {$this->tableName} (Fullname, Type, Event, Place, EventDate, Gender, Division, CompType, Wilks, Region,
-                Coach, Fst, School, PointValue, RangeValue) 
-                VALUES (%s, %s, %s, %d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %f, %d)", 
+            $sql = $this->db->prepare("INSERT INTO {$this->tableName} (Fullname, Type, Event, Place, EventDate, Gender, Division, CompType, Wilks, Coach, 
+                Fst, School, PointValue, RangeValue) 
+                VALUES (%s, %s, %s, %d, %s, %s, %s, %s, %s, %s, %s, %s, %f, %d)", 
                 $entry->fullname, $entry->type, $entry->event, $entry->place, $entry->eventDate, $entry->gender, $entry->division, $entry->compType, 
-                (float)$entry->wilks, $entry->region, $entry->coach, $entry->fst, $entry->school, $point->Value, $range->Range);
+                (float)$entry->wilks, $entry->coach, $entry->fst, $entry->school, $point->Value, $range->Range);
 
             $this->db->query($sql);
+
+            $ratingEntryId = $this->db->insert_id;
+
+            foreach($entry->regions as $region)
+            {
+                $sql = $this->db->prepare("INSERT INTO {$this->entryRegionLinkTableName} (RatingEntryId, Region)
+                    VALUES (%d, %s)", $ratingEntryId, $region);
+                
+                $this->db->query($sql);
+            }
         }
 
         $response->setResponseModel((object)array('status' => TRUE, 'message' => "Успішно створено запис!"));
@@ -98,13 +110,25 @@ class EntryService
 
             $sql = $this->db->prepare("UPDATE {$this->tableName} 
                                         SET Fullname = %s, Type = %s, Event = %s, Place = %d, EventDate = %s, Gender = %s, Division = %s, CompType = %s, 
-                                        Wilks = %s, Region = %s, Coach = %s, Fst = %s, School = %s, PointValue = %f, RangeValue = %d
+                                        Wilks = %s, Coach = %s, Fst = %s, School = %s, PointValue = %f, RangeValue = %d
                                         WHERE RatingEntryId = %d", 
                                         $entry->fullname, $entry->type, $entry->event, $entry->place, $entry->eventDate, 
-                                        $entry->gender, $entry->division, $entry->compType, $entry->wilks, $entry->region,
-                                        $entry->coach, $entry->fst, $entry->school, $point->Value, $range->Range, $entry->ratingEntryId);
+                                        $entry->gender, $entry->division, $entry->compType, $entry->wilks, $entry->coach, 
+                                        $entry->fst, $entry->school, $point->Value, $range->Range, $entry->ratingEntryId);
 
             $this->db->query($sql);
+
+            $sql = $this->db->prepare("DELETE FROM {$this->entryRegionLinkTableName} WHERE RatingEntryId = %d", $entry->ratingEntryId);
+
+            $this->db->query($sql);
+
+            foreach($entry->regions as $region)
+            {
+                $sql = $this->db->prepare("INSERT INTO {$this->entryRegionLinkTableName} (RatingEntryId, Region)
+                    VALUES (%d, %s)", $entry->ratingEntryId, $region);
+                
+                $this->db->query($sql);
+            }
         }
 
         $response->setResponseModel((object)array('status' => TRUE, 'message' => "Успішно оновлено запис!"));
@@ -134,6 +158,20 @@ class EntryService
             foreach ($results as $item) 
             {
                 $entry = $this->mapEntryMySQLResult($item);
+
+                $sql = $this->db->prepare("SELECT Region FROM {$this->entryRegionLinkTableName} WHERE RatingEntryId = %d", $entry->ratingEntryId);
+
+                $regionsResult = $this->db->get_results($sql);
+
+                if(count($regionsResult))
+                {
+                    foreach($regionsResult as $region)
+                    {
+                        array_push($entry->regions, $region->Region);
+                    }
+                } else {
+                    $entry->regions = array($entry->region);
+                }
 
                 array_push($this->entries, $entry);
             }
@@ -166,6 +204,10 @@ class EntryService
             return $response;
         }
 
+        $sql = $this->db->prepare("DELETE FROM {$this->entryRegionLinkTableName} WHERE RatingEntryId = %d", $targetEntry->ratingEntryId);
+
+        $this->db->query($sql);
+
         $sql = $this->db->prepare("DELETE FROM {$this->tableName} WHERE RatingEntryId = %d", $targetEntry->ratingEntryId);
 
         $this->db->query($sql);
@@ -188,6 +230,8 @@ class EntryService
         $entry->eventDate = convertToDate($entry->eventDate);
 
         $entry->wilks = floatval($entry->wilks);
+        
+        $entry->regions = convertStringToArray($entry->regions);
 
         return $entry;
     }
@@ -201,5 +245,11 @@ class EntryService
         $entry->eventDate = reverseDate($entry->eventDate);
 
         return $entry;
+    }
+
+    private function mapRegion($region)
+    {
+        print_r($region->Region);
+        return $region->Region;
     }
 }

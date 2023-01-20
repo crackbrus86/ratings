@@ -20,7 +20,9 @@ export namespace ActionCreators{
                 wilks: null,
                 coach: '',
                 fst: '',
-                school: ''
+                school: '',
+                region: null,
+                regions: []
             }
         })
     }

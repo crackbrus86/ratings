@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "watch": "webpack --watch"
+    "watch": "webpack --watch",
+    "build-styles": "node_modules\\.bin\\gulp.cmd css::build"
   },
   "author": "",
   "license": "ISC",
@@ -48,9 +49,9 @@
     "gulp-concat": "^2.6.1",
     "gulp-sass": "^4.0.2",
     "moment": "^2.24.0",
-    "node-sass": "^4.11.0",
     "react-datetime": "^2.16.3",
     "react-toastr": "^3.0.0",
+    "sass": "^1.57.1",
     "source-map-loader": "^0.2.4",
     "typescript": "^3.3.3",
     "webpack": "^4.29.5",

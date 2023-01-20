@@ -12,7 +12,8 @@ export interface RatingEntry{
     region: string,
     coach?: string,
     fst?: string,
-    school?: string
+    school?: string,
+    regions?: string[]
 }
 
 export interface GetEntries_Contract{

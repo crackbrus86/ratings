@@ -7,7 +7,7 @@ var sass = require("gulp-sass");
 var concat = require('gulp-concat');
 var all = require("gulp-all");
 
-sass.compiler = require("node-sass");
+sass.compiler = require('sass');
 
 gulp.task("build::referee", () => {
   return gulp.src("./client/src/pages/referee-ratings/index.tsx")

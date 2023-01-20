@@ -15,6 +15,7 @@ class Entry
     public $coach;
     public $fst;
     public $school;
+    public $regions;
 
     public function __construct()
     {
@@ -32,6 +33,7 @@ class Entry
         $this->coach = "";
         $this->fst = "";
         $this->school = "";
+        $this->regions = array();
     }
 
     public function validate($isEdit = FALSE)
@@ -107,7 +109,7 @@ class Entry
             return $validation;
         }
 
-        if(!$this->region)
+        if(count($this->regions) === 0)
         {
             $validation->isValid = FALSE;
 
