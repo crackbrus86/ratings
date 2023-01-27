@@ -275,12 +275,13 @@ class RatingService
 
         $this->db->query("SET SESSION group_concat_max_len = 100000");
         $sql = $this->db->prepare("SELECT 
-                                        IFNULL(a.Region, b.Region) AS Region, 
+                                        CASE WHEN a.Region IS NOT NULL AND b.Region IS NULL THEN a.Region ELSE b.Region END AS Region,
                                         SUM(PointValue) AS Rating,
-                                        GROUP_CONCAT(DISTINCT CONCAT(' ', Event, ' ', CompType, ' (', Place, ' місце - ', PointValue, ' балів) ', Fullname) separator ', ') AS Details
+                                        GROUP_CONCAT(CONCAT(' ', Event, ' ', CompType, ' (', Place, ' місце - ', PointValue, ' балів) ', Fullname) separator ', ') AS Details
                                     FROM wp_rat_entry a
                                     LEFT JOIN wp_rat_entry_region_link b ON b.RatingEntryId = a.RatingEntryId
                                     WHERE YEAR(a.EventDate) = %s AND a.PointValue IS NOT NULL
+                                        AND ((a.Region IS NOT NULL AND b.Region IS NULL) OR b.Region IS NOT NULL)
                                     GROUP BY Region
                                     ORDER BY Rating DESC", $year);
 
