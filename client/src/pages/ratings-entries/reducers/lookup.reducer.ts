@@ -3,6 +3,7 @@ import * as Models from "../models/index.models";
 
 export interface LookupState{
     competitions: Models.Competition[],
+    allCompetitions: Models.Competition[],
     records: Models.Record[],
     names: string[],
     divisions: Models.Division[],
@@ -16,6 +17,7 @@ export interface LookupState{
 
 const defaultState = {
     competitions: [],
+    allCompetitions: [],
     records: [],
     names: [],
     divisions: [{name: "Open", displayName: "Відкритий"}, {name: "Junior", displayName: "Юніори"}, {name: "SubJunior", displayName: "Юнаки"}],
@@ -36,6 +38,13 @@ export const lookupReducer = (state = defaultState, action): ReducerState => {
             return {
                 ...state,
                 competitions: payload.competitions
+            }
+        }
+        case ActionTypes.LOAD_ALL_COMPETITIONS: {
+            let payload = action.payload as ActionTypes.LOAD_ALL_COMPETITIONS_PAYLOAD;
+            return {
+                ...state,
+                allCompetitions: payload.allCompetitions
             }
         }
         case ActionTypes.LOAD_RECORDS: {

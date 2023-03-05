@@ -86,6 +86,26 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./client/src/components/button/button.tsx":
+/*!*************************************************!*\
+  !*** ./client/src/components/button/button.tsx ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+var Button = function (props) {
+    return (React.createElement("button", { className: classnames("rat-button", props.className), onClick: props.onClick }, props.label));
+};
+exports.default = Button;
+
+
+/***/ }),
+
 /***/ "./client/src/components/confirm/confirm.tsx":
 /*!***************************************************!*\
   !*** ./client/src/components/confirm/confirm.tsx ***!
@@ -556,7 +576,7 @@ var TextInput = /** @class */ (function (_super) {
         return React.createElement(React.Fragment, null,
             React.createElement("div", { className: classnames('form-control', 'text-input', { 'validation-error': this.props.validation && !this.props.validation.isValid }) },
                 this.props.label && React.createElement("label", null, this.props.label),
-                React.createElement("input", { type: "text", value: this.props.value, ref: function (c) { return _this.inputObject = c; }, onKeyUp: function (e) { return _this.setAsFocused(e); }, readOnly: this.props.readonly, onChange: function (e) { return _this.props.onChange(e.target.value); } }),
+                React.createElement("input", { type: "text", value: this.props.value, className: classnames({ "disabled": this.props.disabled }), ref: function (c) { return _this.inputObject = c; }, onKeyUp: function (e) { return _this.setAsFocused(e); }, readOnly: this.props.readonly, maxLength: this.props.maxLength, onChange: function (e) { return _this.props.onChange(e.target.value); } }),
                 !!autocompleteItems.length &&
                     this.state.isFocused && React.createElement(autocomplete_1.default, { items: autocompleteItems, top: offset.top, left: offset.left, chooseItem: this.props.onChange })),
             this.props.validation && !this.props.validation.isValid &&
@@ -579,7 +599,7 @@ exports.default = TextInput;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ExportToWord = exports.Form = exports.Modal = exports.PrintButton = exports.Confirm = exports.ColumnTypes = exports.Table = exports.Search = exports.Layout = exports.Tab = exports.TabView = void 0;
+exports.Button = exports.ExportToWord = exports.Form = exports.Modal = exports.PrintButton = exports.Confirm = exports.ColumnTypes = exports.Table = exports.Search = exports.Layout = exports.Tab = exports.TabView = void 0;
 var tab_view_1 = __webpack_require__(/*! ./tab view/tab.view */ "./client/src/components/tab view/tab.view.tsx");
 exports.TabView = tab_view_1.default;
 var tab_1 = __webpack_require__(/*! ./tab view/tab */ "./client/src/components/tab view/tab.tsx");
@@ -602,6 +622,8 @@ var form_1 = __webpack_require__(/*! ./form/form */ "./client/src/components/for
 exports.Form = form_1.default;
 var export_to_word_1 = __webpack_require__(/*! ./export to word/export.to.word */ "./client/src/components/export to word/export.to.word.tsx");
 exports.ExportToWord = export_to_word_1.default;
+var button_1 = __webpack_require__(/*! ./button/button */ "./client/src/components/button/button.tsx");
+exports.Button = button_1.default;
 
 
 /***/ }),
@@ -992,6 +1014,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
@@ -1002,18 +1031,20 @@ var TabView = /** @class */ (function (_super) {
         _this.onClickTabItem = function (label) {
             _this.setState({ activeTab: label });
         };
+        var children = [].concat(props.children);
         _this.state = {
-            activeTab: _this.props.children[0].props.label
+            activeTab: children[0].props.label,
+            children: __spreadArrays(children)
         };
         return _this;
     }
     TabView.prototype.render = function () {
         var _this = this;
         return React.createElement("div", { className: "tabs" },
-            React.createElement("ul", { className: "tab-list" }, this.props.children.map(function (child, index) {
+            React.createElement("ul", { className: "tab-list" }, this.state.children.map(function (child, index) {
                 return React.createElement("li", { key: index, className: classnames({ 'tab-list-item': true, 'tab-list-active': child.props.label == _this.state.activeTab }), onClick: function () { return _this.onClickTabItem(child.props.label); } }, child.props.title);
             })),
-            React.createElement("div", { className: "tab-content" }, this.props.children.map(function (child) {
+            React.createElement("div", { className: "tab-content" }, this.state.children.map(function (child) {
                 if (child.props.label == _this.state.activeTab)
                     return child;
             })));
@@ -1052,6 +1083,7 @@ var React = __webpack_require__(/*! react */ "react");
 var column_1 = __webpack_require__(/*! ./column */ "./client/src/components/table/column.tsx");
 var editable_cell_1 = __webpack_require__(/*! ./editable.cell */ "./client/src/components/table/editable.cell.tsx");
 var table_button_1 = __webpack_require__(/*! ./table.button */ "./client/src/components/table/table.button.tsx");
+var check_cell_1 = __webpack_require__(/*! ./check.cell */ "./client/src/components/table/check.cell.tsx");
 var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 var Cell = /** @class */ (function (_super) {
     __extends(Cell, _super);
@@ -1065,9 +1097,10 @@ var Cell = /** @class */ (function (_super) {
             return { __html: value };
         };
         _this.renderItem = function () {
+            var _a, _b;
             switch (_this.props.column.type) {
                 case column_1.ColumnTypes.Button:
-                    return React.createElement(table_button_1.default, { icon: _this.props.column.icon, onClick: function () { return _this.props.column.onClick(_this.props.item); } });
+                    return (React.createElement(table_button_1.default, { icon: _this.props.column.icon, disabled: (_b = (_a = _this.props.column).disabled) === null || _b === void 0 ? void 0 : _b.call(_a, _this.props.item), title: _this.props.column.hint, onClick: function () { return _this.props.column.onClick(_this.props.item); } }));
                 case column_1.ColumnTypes.Input:
                     return React.createElement(editable_cell_1.default, { value: _this.props.item[_this.props.column.field], onChange: function (v) { return _this.onItemChange(v, _this.props.item, _this.props.column.field); } });
                 case column_1.ColumnTypes.Date:
@@ -1076,6 +1109,8 @@ var Cell = /** @class */ (function (_super) {
                     return React.createElement("div", { dangerouslySetInnerHTML: _this.createMarkup(_this.props.item[_this.props.column.field]) });
                 case column_1.ColumnTypes.No:
                     return React.createElement(React.Fragment, null, _this.props.index + 1);
+                case column_1.ColumnTypes.Check:
+                    return React.createElement(check_cell_1.default, { value: _this.props.item[_this.props.column.field] });
                 default:
                     return _this.props.item[_this.props.column.field];
             }
@@ -1090,6 +1125,26 @@ var Cell = /** @class */ (function (_super) {
     return Cell;
 }(React.PureComponent));
 exports.default = Cell;
+
+
+/***/ }),
+
+/***/ "./client/src/components/table/check.cell.tsx":
+/*!****************************************************!*\
+  !*** ./client/src/components/table/check.cell.tsx ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var FontAwesome = __webpack_require__(/*! react-fontawesome */ "./node_modules/react-fontawesome/lib/index.js");
+var CheckCell = function (props) {
+    return (React.createElement("span", { className: "check-cell" }, props.value && React.createElement(FontAwesome, { name: "check" })));
+};
+exports.default = CheckCell;
 
 
 /***/ }),
@@ -1127,6 +1182,7 @@ var ColumnTypes;
     ColumnTypes["Date"] = "date";
     ColumnTypes["Html"] = "html";
     ColumnTypes["No"] = "No";
+    ColumnTypes["Check"] = "check";
 })(ColumnTypes = exports.ColumnTypes || (exports.ColumnTypes = {}));
 var Column = /** @class */ (function (_super) {
     __extends(Column, _super);
@@ -1285,7 +1341,7 @@ var FontAwesome = __webpack_require__(/*! react-fontawesome */ "./node_modules/r
 var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
 var TableButton = function (props) {
     return React.createElement(React.Fragment, null,
-        React.createElement("span", { className: classnames('table-button', { 'disabled': props.disabled }), onClick: function () { return !props.disabled && props.onClick(); } },
+        React.createElement("span", { title: props.title, className: classnames('table-button', { 'disabled': props.disabled }), onClick: function () { return !props.disabled && props.onClick(); } },
             React.createElement(FontAwesome, { name: props.icon })));
 };
 exports.default = TableButton;
@@ -1324,9 +1380,10 @@ var Table = /** @class */ (function (_super) {
     function Table(props) {
         var _this = _super.call(this, props) || this;
         _this.setFirstSorting = function () {
+            var _a;
             var sortableColumns = _this.props.columns.filter(function (column) { return column.sortable; });
             if (sortableColumns.length) {
-                _this.setState({ sortField: sortableColumns[0].field });
+                _this.setState({ sortField: ((_a = sortableColumns.find(function (x) { return x.isDefaultSortOrder; })) === null || _a === void 0 ? void 0 : _a.field) || sortableColumns[0].field });
             }
         };
         _this.sortingMethod = function (itemA, itemB) {
@@ -1458,7 +1515,7 @@ function deleteBlackOut() {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LOAD_RECORDS = exports.LOAD_COMPETITION_TYPES = exports.LOAD_COMPETITIONS = exports.CLOSE_ENTRY_DETAILS = exports.OPEN_ENTRY_DETAILS = exports.EMPTY_RATING_ENTRIES = exports.LOAD_RATING_ENTRIES = exports.LOAD_RATINGS = exports.CHANGE_START_DATE = exports.CHANGE_RATING = void 0;
+exports.LOAD_RECORDS = exports.LOAD_COMPETITION_TYPES = exports.LOAD_ALL_COMPETITIONS = exports.LOAD_COMPETITIONS = exports.CLOSE_ENTRY_DETAILS = exports.OPEN_ENTRY_DETAILS = exports.EMPTY_RATING_ENTRIES = exports.LOAD_RATING_ENTRIES = exports.LOAD_RATINGS = exports.CHANGE_START_DATE = exports.CHANGE_RATING = void 0;
 exports.CHANGE_RATING = "SHELL::CHANGE_RATING";
 exports.CHANGE_START_DATE = "SHELL::CHANGE_START_DATE";
 exports.LOAD_RATINGS = "LOOKUP::LOAD_RATINGS";
@@ -1467,6 +1524,7 @@ exports.EMPTY_RATING_ENTRIES = "RATINGS::EMPTY_RATING_ENTRIES";
 exports.OPEN_ENTRY_DETAILS = "RATINGS::OPEN_ENTRY_DETAILS";
 exports.CLOSE_ENTRY_DETAILS = "RATINGS::CLOSE_ENTRY_DETAILS";
 exports.LOAD_COMPETITIONS = "LOOKUP::LOAD_COMPETITIONS";
+exports.LOAD_ALL_COMPETITIONS = "LOOKUP::LOAD_ALL_COMPETITIONS";
 exports.LOAD_COMPETITION_TYPES = "LOOKUP::LOAD_COMPETITION_TYPES";
 exports.LOAD_RECORDS = "LOOKUP::LOAD_RECORDS";
 
@@ -1521,6 +1579,12 @@ var ActionCreators;
                 d({ type: types.LOAD_COMPETITIONS, payload: response.data });
         });
     }; };
+    ActionCreators.loadAllCompetitions = function () { return function (d) {
+        Services.LookupService.getAllCompetitions().then(function (response) {
+            if (response.status)
+                d({ type: types.LOAD_ALL_COMPETITIONS, payload: response.data });
+        });
+    }; };
     ActionCreators.loadCompetitionTypes = function () { return function (d) {
         Services.LookupService.getCompetitionTypes().then(function (response) {
             if (response.status)
@@ -1536,6 +1600,7 @@ var ActionCreators;
     ActionCreators.loadLookups = function () { return function (d) {
         d(ActionCreators.loadRatings());
         d(ActionCreators.loadCompetitions());
+        d(ActionCreators.loadAllCompetitions());
         d(ActionCreators.loadCompetitionTypes());
         d(ActionCreators.loadRecords());
     }; };
@@ -1910,6 +1975,7 @@ var ActionTypes = __webpack_require__(/*! ../actions/action.types */ "./client/s
 var defaultState = {
     ratings: [],
     competitions: [],
+    allCompetitions: [],
     competitionTypes: [],
     records: []
 };
@@ -1923,6 +1989,10 @@ exports.lookupReducer = function (state, action) {
         case ActionTypes.LOAD_COMPETITIONS: {
             var payload = action.payload;
             return __assign(__assign({}, state), { competitions: payload });
+        }
+        case ActionTypes.LOAD_ALL_COMPETITIONS: {
+            var payload = action.payload;
+            return __assign(__assign({}, state), { allCompetitions: payload });
         }
         case ActionTypes.LOAD_COMPETITION_TYPES: {
             var payload = action.payload;
@@ -2106,7 +2176,7 @@ var ratings = function (state) { return state.entries.entries; };
 var rating = function (state) { return state.shell.rating; };
 var ratingTypes = function (state) { return state.lookups.ratings; };
 var entryDetails = function (state) { return state.entries.entryDetails; };
-var competitions = function (state) { return state.lookups.competitions; };
+var allCompetitions = function (state) { return state.lookups.allCompetitions; };
 var competitionTypes = function (state) { return state.lookups.competitionTypes; };
 var records = function (state) { return state.lookups.records; };
 exports.getCurrentRating = reselect_1.createSelector(rating, ratingTypes, function (rating, types) {
@@ -2118,7 +2188,7 @@ exports.getCurrentRatingOrganization = reselect_1.createSelector(exports.getCurr
 exports.getRatings = reselect_1.createSelector(exports.getCurrentRatingOrganization, ratings, function (organization, ratings) {
     return organization == "upf" ? ratings.sort(utils_1.sortUPFRating) : ratings;
 });
-exports.getEntryDetails = reselect_1.createSelector(entryDetails, competitions, competitionTypes, records, exports.getCurrentRating, function (entryDetails, competitions, competitionTypes, records, rating) {
+exports.getEntryDetails = reselect_1.createSelector(entryDetails, allCompetitions, competitionTypes, records, exports.getCurrentRating, function (entryDetails, competitions, competitionTypes, records, rating) {
     return !!entryDetails ? __assign(__assign({}, entryDetails), { details: utils_1.getDetails(entryDetails.details, competitionTypes, competitions, records, rating.type == "referee", true) }) : entryDetails;
 });
 
@@ -2175,7 +2245,7 @@ exports.RatingEntryService = __webpack_require__(/*! ./rating.entry.services */ 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getRecords = exports.getCompetitionTypes = exports.getCompetitions = exports.getRatings = void 0;
+exports.getRecords = exports.getCompetitionTypes = exports.getAllCompetitions = exports.getCompetitions = exports.getRatings = void 0;
 var ApiService = __webpack_require__(/*! ../../../infrastructure/call.api */ "./client/src/infrastructure/call.api.ts");
 var lookupPath = "../wp-content/plugins/ratings/server/LookupController/";
 var apiTypes = ApiService.RequestTypes;
@@ -2188,6 +2258,12 @@ exports.getRatings = function () {
 exports.getCompetitions = function () {
     return ApiService.callApi({
         url: lookupPath + "GetCompetitionsLookup.php",
+        type: apiTypes.GET
+    });
+};
+exports.getAllCompetitions = function () {
+    return ApiService.callApi({
+        url: lookupPath + "GetAllCompetitions.php",
         type: apiTypes.GET
     });
 };
@@ -2563,7 +2639,7 @@ exports.default = RatingsLayout;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sortUPFRating = exports.getDetails = void 0;
+exports.isMatchingSearchString = exports.sortUPFRating = exports.getDetails = void 0;
 function getDetails(originalDetails, types, competitions, records, isReferee, showFullName) {
     if (isReferee === void 0) { isReferee = false; }
     if (showFullName === void 0) { showFullName = false; }
@@ -2608,6 +2684,12 @@ function sortUPFRating(ratingA, ratingB) {
     return 1;
 }
 exports.sortUPFRating = sortUPFRating;
+function isMatchingSearchString(search, field) {
+    if (!field)
+        field = '';
+    return field.toString().toLowerCase().indexOf(search.toLowerCase()) != -1;
+}
+exports.isMatchingSearchString = isMatchingSearchString;
 
 
 /***/ }),

@@ -7,6 +7,7 @@ toastr.options.timeOut = 5000
 export const loadLookups = () => (d) => {
     d(loadActivities())
     d(loadEvents())
+    d(loadAllEvents())
     d(loadNames())
     d(loadRatingTypes())
 }
@@ -28,6 +29,16 @@ const loadEvents = () => (d) => {
     Services.Lookup.getCompetitions().then(response => {
         if(response.status){
             d({type: ActionTypes.LOAD_EVENTS, payload: response.data as ActionTypes.LOAD_EVENTS_PAYLOAD})
+        }else{
+            toastr.error(response.message)
+        }
+    })
+}
+
+const loadAllEvents = () => (d) => {
+    Services.Lookup.getAllCompetitions().then(response => {
+        if(response.status){
+            d({type: ActionTypes.LOAD_ALL_EVENTS, payload: response.data as ActionTypes.LOAD_ALL_EVENTS_PAYLOAD})
         }else{
             toastr.error(response.message)
         }

@@ -6,7 +6,8 @@ export enum ColumnTypes{
     Input = "input",
     Date = "date",
     Html = "html",
-    No = "No"
+    No = "No",
+    Check = "check"
 }
 
 export interface ColumnModel{
@@ -18,8 +19,11 @@ export interface ColumnModel{
     sortable?: boolean,
     icon?: string,
     onClick?: (item: any) => void
-    hide?: boolean
-    cellStyle?: React.CSSProperties
+    hide?: boolean,
+    hint?: string,
+    disabled?: (item: any) => boolean,
+    cellStyle?: React.CSSProperties,
+    isDefaultSortOrder?: boolean
 }
 
 export interface ColumnProps{

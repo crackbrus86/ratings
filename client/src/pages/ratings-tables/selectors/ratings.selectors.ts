@@ -6,7 +6,7 @@ const ratings = (state: Models.StoreState) => state.entries.entries
 const rating = (state: Models.StoreState) => state.shell.rating
 const ratingTypes = (state: Models.StoreState) => state.lookups.ratings
 const entryDetails = (state: Models.StoreState) => state.entries.entryDetails
-const competitions = (state: Models.StoreState) => state.lookups.competitions
+const allCompetitions = (state: Models.StoreState) => state.lookups.allCompetitions
 const competitionTypes = (state: Models.StoreState) => state.lookups.competitionTypes
 const records = (state: Models.StoreState) => state.lookups.records
 
@@ -22,6 +22,6 @@ export const getRatings = createSelector(getCurrentRatingOrganization, ratings, 
     return organization == "upf" ? ratings.sort(sortUPFRating) : ratings
 })
 
-export const getEntryDetails = createSelector(entryDetails, competitions, competitionTypes, records, getCurrentRating, (entryDetails, competitions, competitionTypes, records, rating) => {
+export const getEntryDetails = createSelector(entryDetails, allCompetitions, competitionTypes, records, getCurrentRating, (entryDetails, competitions, competitionTypes, records, rating) => {
     return !!entryDetails ? { ...entryDetails, details: getDetails(entryDetails.details, competitionTypes, competitions, records, rating.type == "referee", true)} : entryDetails
 })

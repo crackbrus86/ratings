@@ -18,6 +18,13 @@ export const getCompetitions = () => {
     });
 }
 
+export const getAllCompetitions = () => {
+    return CallApi.callApi({
+        url: path + 'GetAllCompetitions.php', 
+        type: apiTypes.GET 
+    });
+}
+
 export const getNames = () => {
     return CallApi.callApi({
         url: path + 'GetAllRefereeNames.php',

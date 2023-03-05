@@ -3,7 +3,7 @@ import * as Models from "../models/index.models";
 import {getDetails, sortUPFRating} from "../../../utils/utils";
 
 const ratings = (state: Models.StoreState) => state.ratings.ministryRatings;
-const competitions = (state: Models.StoreState) => state.lookup.competitions;
+const allCompetitions = (state: Models.StoreState) => state.lookup.allCompetitions;
 const records = (state: Models.StoreState) => state.lookup.records;
 const compTypes = (state: Models.StoreState) => state.lookup.compTypes;
 const upfRatings = (state: Models.StoreState) => state.ratings.upfRatings;
@@ -13,7 +13,7 @@ const ministryRegionRatings = (state: Models.StoreState) => state.ratings.minist
 const ministryFstRatings = (state: Models.StoreState) => state.ratings.ministryFstRatings;
 const ministrySchoolRatings = (state: Models.StoreState) => state.ratings.ministrySchoolRatings;
 
-export const modifiedRatings = createSelector(ratings, competitions, compTypes, records, (ratings, competitions, types, records) => {
+export const modifiedRatings = createSelector(ratings, allCompetitions, compTypes, records, (ratings, competitions, types, records) => {
     return ratings.map(r => ({ ...r, details: getDetails(r.details, types, competitions, records) }));
 });
 
@@ -25,7 +25,7 @@ export const ministryRatingsFemale = createSelector(modifiedRatings, (ratings) =
     return ratings.filter(r => r.gender == "F");
 });
 
-export const modifiedRatingsUPF = createSelector(upfRatings, competitions, compTypes, records, (ratings, competitions, types, records) => {
+export const modifiedRatingsUPF = createSelector(upfRatings, allCompetitions, compTypes, records, (ratings, competitions, types, records) => {
     return ratings.map(r => ({ ...r, details: getDetails(r.details, types, competitions, records) }));
 });
 
@@ -37,22 +37,22 @@ export const upfRatingsFemale = createSelector(modifiedRatingsUPF, (ratings) => 
     return ratings.filter(r => r.gender == "F").sort(sortUPFRating);
 });
 
-export const modifiedMinistryCoachRatings = createSelector(ministryCoachRatings, competitions, compTypes, records, (ratings, competitions, types, records) => {
+export const modifiedMinistryCoachRatings = createSelector(ministryCoachRatings, allCompetitions, compTypes, records, (ratings, competitions, types, records) => {
     return ratings.map(r => ({...r, details: getDetails(r.details, types, competitions, records)}));
 });
 
-export const modifiedUPFCoachRatings = createSelector(upfCoachRatings, competitions, compTypes, records, (ratings, competitions, types, records) => {
+export const modifiedUPFCoachRatings = createSelector(upfCoachRatings, allCompetitions, compTypes, records, (ratings, competitions, types, records) => {
     return ratings.map(r => ({...r, details: getDetails(r.details, types, competitions, records)})).sort(sortUPFRating);
 });
 
-export const modifiedMinistryRegionRatings = createSelector(ministryRegionRatings, competitions, compTypes, records, (ratings, competitions, types, records) => {
+export const modifiedMinistryRegionRatings = createSelector(ministryRegionRatings, allCompetitions, compTypes, records, (ratings, competitions, types, records) => {
     return ratings.map(r => ({...r, details: getDetails(r.details, types, competitions, records)}));
 });
 
-export const modifiedMinistryFstRatings = createSelector(ministryFstRatings, competitions, compTypes, records, (ratings, competitions, types, records) => {
+export const modifiedMinistryFstRatings = createSelector(ministryFstRatings, allCompetitions, compTypes, records, (ratings, competitions, types, records) => {
     return ratings.map(r => ({...r, details: getDetails(r.details, types, competitions, records)}));
 });
 
-export const modifiedMinistrySchoolRatings = createSelector(ministrySchoolRatings, competitions, compTypes, records, (ratings, competitions, types, records) => {
+export const modifiedMinistrySchoolRatings = createSelector(ministrySchoolRatings, allCompetitions, compTypes, records, (ratings, competitions, types, records) => {
     return ratings.map(r => ({...r, details: getDetails(r.details, types, competitions, records)}));
 });

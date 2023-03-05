@@ -17,6 +17,11 @@
                 height: 32px;
             }
         }
+
+        .disabled {
+            opacity: 0.9;
+            pointer-events: none;
+        }
     }
 }
 .autocomplete{

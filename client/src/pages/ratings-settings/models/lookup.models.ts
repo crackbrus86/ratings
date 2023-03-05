@@ -4,7 +4,8 @@ export interface Competition {
     dbName: string,
     sortOrder: number,
     ratingUPF: boolean,
-    shortName: string
+    shortName: string,
+    isActive: boolean
 }
 
 export interface Record {

@@ -5,11 +5,12 @@ import * as classnames from "classnames";
 export interface TableButtonProps {
     icon: string,
     disabled?: boolean,
+    title?: string,
     onClick: () => void
 }
 
 const TableButton = (props: TableButtonProps) => {
-    return <><span className={classnames('table-button', { 'disabled': props.disabled })} onClick={() => !props.disabled && props.onClick()}>
+    return <><span title={props.title} className={classnames('table-button', { 'disabled': props.disabled })} onClick={() => !props.disabled && props.onClick()}>
         <FontAwesome name={props.icon} />
     </span></>
 }

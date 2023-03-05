@@ -28,7 +28,7 @@ class Table extends React.PureComponent<TableProps, TableState>{
     setFirstSorting = () => {
         let sortableColumns = this.props.columns.filter(column => column.sortable);
         if(sortableColumns.length){
-            this.setState({sortField: sortableColumns[0].field});
+            this.setState({sortField: sortableColumns.find(x => x.isDefaultSortOrder)?.field || sortableColumns[0].field});
         }
     }
 

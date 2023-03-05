@@ -13,6 +13,21 @@
   font-style: italic;
 }
 
+.rat-button {
+  margin: 8px !important;
+  border: none !important;
+  background-color: #07bc69 !important;
+  padding: 16px !important;
+  color: #fff !important;
+  font-size: 1.2em !important;
+  text-transform: uppercase !important;
+  cursor: pointer !important;
+  box-shadow: 0 0px 1px 0px #000;
+}
+.rat-button:hover {
+  background-color: #19d37e !important;
+}
+
 .confirm-body-text {
   color: #d51515;
   font-weight: 600;
@@ -55,6 +70,10 @@
 }
 .form .form-control.radio-button .radio-button-input {
   height: 32px;
+}
+.form .form-control .disabled {
+  opacity: 0.9;
+  pointer-events: none;
 }
 
 .autocomplete {
@@ -105,6 +124,58 @@
 
 .validation-error .multi-select__options {
   box-shadow: 0 0 0 1px red;
+}
+
+.grid-row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+.grid-row .grid-column {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  margin: 0 5px;
+}
+
+.content-wrap {
+  overflow-x: auto;
+  margin-right: 20px;
+  min-height: 400px;
+  min-width: 1080px;
+}
+
+.search-box {
+  padding: 4px;
+  overflow: hidden;
+  display: inline-block;
+}
+.search-box input {
+  border-radius: 4px;
+}
+.search-box .fa {
+  font-size: 1.2em;
+  margin: 2px 4px;
+}
+.search-box .fa.search-icon {
+  color: #07bd69;
+}
+.search-box .fa.close-icon {
+  color: #b40413;
+  cursor: pointer;
+}
+.search-box .fa.close-icon:hover {
+  color: #eb0e21;
+}
+
+.print-button {
+  display: inline-block;
+  padding: 0.6em 4px;
+  width: 32px;
+  height: 32px;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: pointer;
 }
 
 .modal-black-out {
@@ -196,58 +267,6 @@
   margin: 0 4px;
 }
 
-.grid-row {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-}
-.grid-row .grid-column {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  margin: 0 5px;
-}
-
-.content-wrap {
-  overflow-x: auto;
-  margin-right: 20px;
-  min-height: 400px;
-  min-width: 1080px;
-}
-
-.search-box {
-  padding: 4px;
-  overflow: hidden;
-  display: inline-block;
-}
-.search-box input {
-  border-radius: 4px;
-}
-.search-box .fa {
-  font-size: 1.2em;
-  margin: 2px 4px;
-}
-.search-box .fa.search-icon {
-  color: #07bd69;
-}
-.search-box .fa.close-icon {
-  color: #b40413;
-  cursor: pointer;
-}
-.search-box .fa.close-icon:hover {
-  color: #eb0e21;
-}
-
-.print-button {
-  display: inline-block;
-  padding: 0.6em 4px;
-  width: 32px;
-  height: 32px;
-  box-sizing: border-box;
-  text-align: center;
-  cursor: pointer;
-}
-
 .tabs {
   display: flex;
   flex-direction: column;
@@ -334,6 +353,10 @@
 .rat-table .table-button span {
   display: block;
 }
+.rat-table .table-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 .rat-table .editable-cell .editable-cell-icon {
   float: right;
   opacity: 0.6;
@@ -363,6 +386,27 @@
 
 #app-rat-tables .upf-ratings-filter {
   width: 450px;
+}
+
+.rat-options {
+  width: 100%;
+  padding-top: 10px;
+}
+
+.competition-view button {
+  display: inline;
+  border: none;
+  background-color: transparent;
+  font-size: 1.5em;
+  margin: 0 4px 4px;
+  color: #0073aa;
+  cursor: pointer;
+}
+.competition-view button:hover {
+  color: #4ab8ec;
+}
+.competition-view button.is-selected {
+  text-decoration: underline;
 }
 
 .rating-details-modal.modal-content .modal-header h4 {

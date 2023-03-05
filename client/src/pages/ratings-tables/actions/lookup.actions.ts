@@ -20,6 +20,12 @@ export namespace ActionCreators{
         })
     }
 
+    export const loadAllCompetitions = () => (d) => {
+        Services.LookupService.getAllCompetitions().then(response => {
+            if(response.status) d({type: types.LOAD_ALL_COMPETITIONS, payload: response.data as types.LOAD_ALL_COMPETITIONS_PAYLOAD})
+        })
+    }
+
     export const loadCompetitionTypes = () => (d) => {
         Services.LookupService.getCompetitionTypes().then(response => {
             if(response.status) d({type: types.LOAD_COMPETITION_TYPES, payload: response.data as types.LOAD_COMPETITION_TYPES_PAYLOAD})
@@ -35,6 +41,7 @@ export namespace ActionCreators{
     export const loadLookups = () => (d) => {
         d(loadRatings())
         d(loadCompetitions())
+        d(loadAllCompetitions())
         d(loadCompetitionTypes())
         d(loadRecords())
     }

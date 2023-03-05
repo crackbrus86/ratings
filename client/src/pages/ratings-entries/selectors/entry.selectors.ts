@@ -1,8 +1,10 @@
 import { createSelector} from "reselect";
 import * as Models from "../models/index.models";
-import {SelectOption} from "../../../components/form/select"
+import {SelectOption} from "../../../components/form/select";
+import { isMatchingSearchString } from '../../../utils/utils';
 
 const competitions = (state: Models.StoreState) => state.lookup.competitions;
+const allCompetitions = (state: Models.StoreState) => state.lookup.allCompetitions;
 const records = (state: Models.StoreState) => state.lookup.records;
 const currentEntry = (state: Models.StoreState) => state.entries.currentEntry;
 const divisions = (state: Models.StoreState) => state.lookup.divisions;
@@ -106,10 +108,10 @@ function validate(result: EntryValidationResult){
     return result;
 }
 
-export const entriesList = createSelector(entries, searchValue, competitions, records, compTypes, (entries, searchValue, comp, records, types) => {
+export const entriesList = createSelector(entries, searchValue, allCompetitions, records, compTypes, (entries, searchValue, comp, records, types) => {
     let events = comp.concat(records);
     entries = entries.map(entry => {
-        let eventName = events.find(event => event.dbName == entry.event).name;
+        let eventName = events.find(event => event.dbName == entry.event)?.name;
         var compType = types.find(type => type.name == entry.compType);
         var compTypeName = !!compType ? ` - ${compType.displayName}` : '';
         return {
@@ -125,8 +127,3 @@ export const entriesList = createSelector(entries, searchValue, competitions, re
                                     || isMatchingSearchString(searchValue, entry.wilks)
                                     || isMatchingSearchString(searchValue, entry.coach))
 })
-
-function isMatchingSearchString(search: string, field: any){
-    if(!field) field = '';
-    return field.toString().toLowerCase().indexOf(search.toLowerCase()) != -1;
-}

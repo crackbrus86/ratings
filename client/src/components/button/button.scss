@@ -1,0 +1,14 @@
+.rat-button {
+    margin: 8px!important;
+    border: none!important;
+    background-color: #07bc69!important;
+    padding: 16px!important;
+    color: #fff!important;
+    font-size: 1.2em!important;
+    text-transform: uppercase!important;
+    cursor: pointer!important;
+    box-shadow: 0 0px 1px 0px #000;
+    &:hover{
+        background-color: #19d37e!important;
+    }
+}

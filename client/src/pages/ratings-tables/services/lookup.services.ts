@@ -17,6 +17,13 @@ export const getCompetitions = () => {
     })
 }
 
+export const getAllCompetitions = () => {
+    return ApiService.callApi({
+        url: lookupPath + "GetAllCompetitions.php",
+        type: apiTypes.GET
+    })
+}
+
 export const getCompetitionTypes = () => {
     return ApiService.callApi({
         url: lookupPath + "GetCompetitionTypesLookup.php",

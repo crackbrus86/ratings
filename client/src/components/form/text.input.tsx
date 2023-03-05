@@ -13,7 +13,9 @@ export interface TextInputProps{
     onChange?: (value: any) => void,
     autocomplete?: boolean,
     autocompleteItems?: string[],
-    readonly?: boolean
+    readonly?: boolean,
+    maxLength?: number,
+    disabled?: boolean
 }
 
 interface TextInputState{
@@ -71,9 +73,11 @@ class TextInput extends React.Component<TextInputProps, TextInputState>{
             <div className={classnames('form-control', 'text-input', {'validation-error': this.props.validation && !this.props.validation.isValid})}>
                 {this.props.label && <label>{this.props.label}</label>}
                 <input type="text" value={this.props.value} 
+                className={classnames({ "disabled": this.props.disabled })}
                 ref={(c) => this.inputObject = c}
                 onKeyUp={(e) =>this.setAsFocused(e)}
                 readOnly={this.props.readonly}
+                maxLength={this.props.maxLength}
                 onChange={(e) => this.props.onChange(e.target.value)} />
                 {
                     !!autocompleteItems.length &&

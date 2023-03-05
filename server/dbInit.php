@@ -88,3 +88,16 @@ $sql = "CREATE TABLE IF NOT EXISTS {$entryRegionLinkTableName} (
     PRIMARY KEY (EntryRegionLinkId)
 )";
 dbDelta($sql);
+
+$competitionTableName = $prefix . "competition";
+$sql = "CREATE TABLE IF NOT EXISTS {$competitionTableName} (
+    Id INT NOT NULL,
+    Name VARCHAR(50) NOT NULL,
+    DbName VARCHAR(50) NOT NULL,
+    SortOrder INT NOT NULL,
+    RatingUPF TINYINT NOT NULL,
+    ShortName VARCHAR(10) NOT NULL,
+    IsActive TINYINT NOT NULL,
+    PRIMARY KEY(Id)
+)";
+dbDelta($sql);

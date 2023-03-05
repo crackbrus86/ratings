@@ -9,5 +9,6 @@ import PrintButton from "./print button/print.button";
 import Modal from "./modal/modal";
 import Form from "./form/form";
 import ExportToWord from "./export to word/export.to.word";
+import Button from "./button/button";
 
-export { ColumnModel, TabView, Tab, Layout, Search, Table, ColumnTypes, Confirm, PrintButton, Modal, Form, ExportToWord }
+export { ColumnModel, TabView, Tab, Layout, Search, Table, ColumnTypes, Confirm, PrintButton, Modal, Form, ExportToWord, Button }

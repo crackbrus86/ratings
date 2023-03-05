@@ -4,7 +4,8 @@ export interface Competition {
     dbName: string,
     sortOrder: number,
     ratingUPF: boolean,
-    shortName: string
+    shortName: string,
+    isActive: boolean
 }
 
 export interface Record {
@@ -13,7 +14,8 @@ export interface Record {
     dbName: string,
     sortOrder: number,
     ratingUPF: boolean,
-    shortName: string
+    shortName: string,
+    isActive: boolean
 }
 
 export interface Division {

@@ -7,6 +7,7 @@ toastr.options.timeOut = 5000;
 export namespace ActionCreators{
     export const initLookups = () => (d, gs: () => Models.StoreState) => {
         d(loadCompetitions());
+        d(loadAllCompetitions());
         d(loadRecords());
         d(loadCompTypes());
         d(loadRegions());
@@ -23,6 +24,19 @@ export namespace ActionCreators{
                     type: ActionTypes.LOAD_COMPETITIONS,
                     payload: <ActionTypes.LOAD_COMPETITIONS_PAYLOAD>{
                         competitions: response.data
+                    }
+                })
+            }
+        })
+    }
+
+    export const loadAllCompetitions = () => (d, gs: () => Models.StoreState) => {
+        Services.LookupServices.getAllCompetitions().then((response) => {
+            if (response.status) {
+                d({
+                    type: ActionTypes.LOAD_ALL_COMPETITIONS,
+                    payload: <ActionTypes.LOAD_ALL_COMPETITIONS_PAYLOAD>{
+                        allCompetitions: response.data
                     }
                 })
             }

@@ -2,6 +2,7 @@ import * as React from "react";
 import { ColumnModel, ColumnTypes } from "./column";
 import EditableCell from "./editable.cell";
 import TableButton from "./table.button";
+import CheckCell from "./check.cell";
 import * as moment from "moment";
 
 export interface CellProps{
@@ -25,7 +26,14 @@ class Cell extends React.PureComponent<CellProps>{
     renderItem = () => {
         switch(this.props.column.type){
             case ColumnTypes.Button:
-                return <TableButton icon={this.props.column.icon} onClick={() => this.props.column.onClick(this.props.item)} />
+                return (
+                  <TableButton
+                    icon={this.props.column.icon}
+                    disabled={this.props.column.disabled?.(this.props.item)}
+                    title={this.props.column.hint}
+                    onClick={() => this.props.column.onClick(this.props.item)}
+                  />
+                );
             case ColumnTypes.Input:
                 return <EditableCell value={this.props.item[this.props.column.field]} onChange={(v) => this.onItemChange(v, this.props.item, this.props.column.field)} />
             case ColumnTypes.Date:
@@ -34,6 +42,8 @@ class Cell extends React.PureComponent<CellProps>{
                 return <div dangerouslySetInnerHTML={this.createMarkup(this.props.item[this.props.column.field])}></div>
             case ColumnTypes.No:
                 return <>{this.props.index + 1}</>
+            case ColumnTypes.Check:
+                return <CheckCell value={this.props.item[this.props.column.field]} />
             default:
                 return this.props.item[this.props.column.field];
         }

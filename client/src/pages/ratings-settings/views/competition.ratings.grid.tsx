@@ -1,31 +1,30 @@
 import * as React from "react";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
+import * as Selectors from '../selectors/selector';
 import Table from "../../../components/table/table";
 import { ColumnModel, ColumnTypes } from "../../../components/table/column";
 import * as Models from "../models/index.models";
 import * as Actions from "../actions/index.actions";
 
 interface StateProps {
+    competitionPoints: Models.LookupModels.TablePoint[]
 }
-interface OwnProps {
-    points: Models.LookupModels.TablePoint[]
-}
-
 interface DispatchProps {
     actions: typeof Actions.LookupActions.ActionCreators
 }
 
 export default connect<StateProps, DispatchProps>(
     (state: Models.StoreState): StateProps => ({
+        competitionPoints: Selectors.getCompetitionsTablePoints(state)
     }),
     (dispatch): DispatchProps => ({
         actions: bindActionCreators(Actions.LookupActions.ActionCreators, dispatch)
     })
-)(class CompetitionRatingsGrid extends React.Component<StateProps & OwnProps & DispatchProps>{
+)(class CompetitionRatingsGrid extends React.Component<StateProps & DispatchProps>{
     render() {
         return <>
-            <Table items={this.props.points} columns={[
+            <Table items={this.props.competitionPoints} columns={[
                 {
                     title: "№",
                     field: "sortOrder",

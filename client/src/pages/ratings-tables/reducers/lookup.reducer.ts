@@ -4,6 +4,7 @@ import * as Models from "../models/index.models";
 export interface LookupState{
     ratings: Models.Rating[],
     competitions?: Models.Competition[],
+    allCompetitions?: Models.Competition[],
     competitionTypes?: Models.CompetitionType[],
     records?: Models.Record[]
 }
@@ -11,6 +12,7 @@ export interface LookupState{
 const defaultState = {
     ratings: [],
     competitions: [],
+    allCompetitions: [],
     competitionTypes: [],
     records: []
 } as LookupState
@@ -31,6 +33,13 @@ export const lookupReducer = (state = defaultState, action): ReducerState => {
             return {
                 ...state,
                 competitions: payload
+            }
+        }
+        case ActionTypes.LOAD_ALL_COMPETITIONS: {
+            let payload = action.payload as ActionTypes.LOAD_ALL_COMPETITIONS_PAYLOAD
+            return {
+                ...state,
+                allCompetitions: payload
             }
         }
         case ActionTypes.LOAD_COMPETITION_TYPES: {

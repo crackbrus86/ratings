@@ -1,0 +1,19 @@
+.competition-view{
+    button {
+        display: inline;
+        border: none;
+        background-color: transparent;
+        font-size: 1.5em;
+        margin: 0 4px 4px;
+        color: #0073aa;
+        cursor: pointer;
+
+        &:hover {
+            color: #4ab8ec;
+        }
+
+        &.is-selected {
+            text-decoration: underline;
+        }
+    }
+}

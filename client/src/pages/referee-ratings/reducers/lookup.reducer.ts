@@ -4,6 +4,7 @@ import * as ActionTypes from "../actions/types/action.types"
 interface State{
     activities: Models.Activity[],
     events: Models.Event[],
+    allEvents: Models.Event[],
     names?: string[],
     ratingTypes?: Models.RatingType[]
 }
@@ -11,6 +12,7 @@ interface State{
 const defaultState: State = {
     activities: [],
     events: [],
+    allEvents: [],
     names: [],
     ratingTypes: []
 }
@@ -31,6 +33,13 @@ export const reducer = (state = defaultState, action): ReducerState => {
             return {
                 ...state,
                 events: payload
+            }
+        }
+        case ActionTypes.LOAD_ALL_EVENTS: {
+            let payload = action.payload as ActionTypes.LOAD_ALL_EVENTS_PAYLOAD
+            return {
+                ...state,
+                allEvents: payload
             }
         }
         case ActionTypes.LOAD_NAMES:{

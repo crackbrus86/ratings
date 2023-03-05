@@ -11,8 +11,6 @@ import UPFRangeGrid from "./upf.range.grid";
 import RefereeSettingsGrid from "./referee.settings.grid"
 
 interface StateProps{
-    competitionPoints: Models.LookupModels.TablePoint[]
-    recordPoints: Models.LookupModels.TablePoint[]
 }
 
 interface DispatchProps{
@@ -23,8 +21,6 @@ interface DispatchProps{
 
 export default connect<StateProps, DispatchProps>(
     (state: Models.StoreState): StateProps => ({
-        competitionPoints: Selectors.getCompetitionsTablePoints(state),
-        recordPoints: Selectors.getRecordsTablepoints(state)
     }),
     (dispatch): DispatchProps => ({
         lookupActions: bindActionCreators(Actions.LookupActions.ActionCreators, dispatch),
@@ -45,10 +41,10 @@ export default connect<StateProps, DispatchProps>(
             <Components.Layout.ContentWrap>
                 <Components.TabView>
                     <Components.Tab title="Таблиця нарахування очок рейтингу за місцями" label="byPlace">
-                        <CompetitionRatingsGrid points={this.props.competitionPoints} />
+                        <CompetitionRatingsGrid />
                     </Components.Tab>
                     <Components.Tab title="Таблиця нарахування очок рейтингу за встановленими рекордами" label="byRecord">
-                        <RecordsRatingsGrid points={this.props.recordPoints} />
+                        <RecordsRatingsGrid />
                     </Components.Tab>
                     <Components.Tab title="Таблиця ранжування очок рейтингу ФПУ" label="byRange">
                         <UPFRangeGrid />

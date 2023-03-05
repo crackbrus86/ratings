@@ -8,6 +8,11 @@ export interface LOAD_COMPETITIONS_PAYLOAD {
     competitions: Models.Competition[]
 }
 
+export const LOAD_ALL_COMPETITIONS = "LOOKUP::LOAD_ALL_COMPETITIONS";
+export interface LOAD_ALL_COMPETITIONS_PAYLOAD {
+    allCompetitions: Models.Competition[]
+}
+
 export const LOAD_RECORDS = "LOOKUP::LOAD_RECORDS";
 export interface LOAD_RECORDS_PAYLOAD {
     records: Models.Record[]

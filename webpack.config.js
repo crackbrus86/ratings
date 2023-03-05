@@ -5,7 +5,8 @@ module.exports = {
         settings: "./client/src/pages/ratings-settings/index.tsx",
         entries: "./client/src/pages/ratings-entries/index.tsx",
         tables: "./client/src/pages/ratings-tables/index.tsx",
-        referee: "./client/src/pages/referee-ratings/index.tsx"
+        referee: "./client/src/pages/referee-ratings/index.tsx",
+        options: "./client/src/pages/ratings-options/index.tsx"
     },
     mode: "development",
     output: {

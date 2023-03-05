@@ -79,3 +79,8 @@ export function sortUPFRating(ratingA: Rating, ratingB: Rating){
     }
     return 1;
 }
+
+export function isMatchingSearchString(search: string, field: any) {
+    if (!field) field = '';
+    return field.toString().toLowerCase().indexOf(search.toLowerCase()) != -1;
+}

@@ -86,6 +86,26 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./client/src/components/button/button.tsx":
+/*!*************************************************!*\
+  !*** ./client/src/components/button/button.tsx ***!
+  \*************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
+var Button = function (props) {
+    return (React.createElement("button", { className: classnames("rat-button", props.className), onClick: props.onClick }, props.label));
+};
+exports.default = Button;
+
+
+/***/ }),
+
 /***/ "./client/src/components/confirm/confirm.tsx":
 /*!***************************************************!*\
   !*** ./client/src/components/confirm/confirm.tsx ***!
@@ -556,7 +576,7 @@ var TextInput = /** @class */ (function (_super) {
         return React.createElement(React.Fragment, null,
             React.createElement("div", { className: classnames('form-control', 'text-input', { 'validation-error': this.props.validation && !this.props.validation.isValid }) },
                 this.props.label && React.createElement("label", null, this.props.label),
-                React.createElement("input", { type: "text", value: this.props.value, ref: function (c) { return _this.inputObject = c; }, onKeyUp: function (e) { return _this.setAsFocused(e); }, readOnly: this.props.readonly, onChange: function (e) { return _this.props.onChange(e.target.value); } }),
+                React.createElement("input", { type: "text", value: this.props.value, className: classnames({ "disabled": this.props.disabled }), ref: function (c) { return _this.inputObject = c; }, onKeyUp: function (e) { return _this.setAsFocused(e); }, readOnly: this.props.readonly, maxLength: this.props.maxLength, onChange: function (e) { return _this.props.onChange(e.target.value); } }),
                 !!autocompleteItems.length &&
                     this.state.isFocused && React.createElement(autocomplete_1.default, { items: autocompleteItems, top: offset.top, left: offset.left, chooseItem: this.props.onChange })),
             this.props.validation && !this.props.validation.isValid &&
@@ -579,7 +599,7 @@ exports.default = TextInput;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.ExportToWord = exports.Form = exports.Modal = exports.PrintButton = exports.Confirm = exports.ColumnTypes = exports.Table = exports.Search = exports.Layout = exports.Tab = exports.TabView = void 0;
+exports.Button = exports.ExportToWord = exports.Form = exports.Modal = exports.PrintButton = exports.Confirm = exports.ColumnTypes = exports.Table = exports.Search = exports.Layout = exports.Tab = exports.TabView = void 0;
 var tab_view_1 = __webpack_require__(/*! ./tab view/tab.view */ "./client/src/components/tab view/tab.view.tsx");
 exports.TabView = tab_view_1.default;
 var tab_1 = __webpack_require__(/*! ./tab view/tab */ "./client/src/components/tab view/tab.tsx");
@@ -602,6 +622,8 @@ var form_1 = __webpack_require__(/*! ./form/form */ "./client/src/components/for
 exports.Form = form_1.default;
 var export_to_word_1 = __webpack_require__(/*! ./export to word/export.to.word */ "./client/src/components/export to word/export.to.word.tsx");
 exports.ExportToWord = export_to_word_1.default;
+var button_1 = __webpack_require__(/*! ./button/button */ "./client/src/components/button/button.tsx");
+exports.Button = button_1.default;
 
 
 /***/ }),
@@ -992,6 +1014,13 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __spreadArrays = (this && this.__spreadArrays) || function () {
+    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
+    for (var r = Array(s), k = 0, i = 0; i < il; i++)
+        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
+            r[k] = a[j];
+    return r;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var React = __webpack_require__(/*! react */ "react");
 var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
@@ -1002,18 +1031,20 @@ var TabView = /** @class */ (function (_super) {
         _this.onClickTabItem = function (label) {
             _this.setState({ activeTab: label });
         };
+        var children = [].concat(props.children);
         _this.state = {
-            activeTab: _this.props.children[0].props.label
+            activeTab: children[0].props.label,
+            children: __spreadArrays(children)
         };
         return _this;
     }
     TabView.prototype.render = function () {
         var _this = this;
         return React.createElement("div", { className: "tabs" },
-            React.createElement("ul", { className: "tab-list" }, this.props.children.map(function (child, index) {
+            React.createElement("ul", { className: "tab-list" }, this.state.children.map(function (child, index) {
                 return React.createElement("li", { key: index, className: classnames({ 'tab-list-item': true, 'tab-list-active': child.props.label == _this.state.activeTab }), onClick: function () { return _this.onClickTabItem(child.props.label); } }, child.props.title);
             })),
-            React.createElement("div", { className: "tab-content" }, this.props.children.map(function (child) {
+            React.createElement("div", { className: "tab-content" }, this.state.children.map(function (child) {
                 if (child.props.label == _this.state.activeTab)
                     return child;
             })));
@@ -1052,6 +1083,7 @@ var React = __webpack_require__(/*! react */ "react");
 var column_1 = __webpack_require__(/*! ./column */ "./client/src/components/table/column.tsx");
 var editable_cell_1 = __webpack_require__(/*! ./editable.cell */ "./client/src/components/table/editable.cell.tsx");
 var table_button_1 = __webpack_require__(/*! ./table.button */ "./client/src/components/table/table.button.tsx");
+var check_cell_1 = __webpack_require__(/*! ./check.cell */ "./client/src/components/table/check.cell.tsx");
 var moment = __webpack_require__(/*! moment */ "./node_modules/moment/moment.js");
 var Cell = /** @class */ (function (_super) {
     __extends(Cell, _super);
@@ -1065,9 +1097,10 @@ var Cell = /** @class */ (function (_super) {
             return { __html: value };
         };
         _this.renderItem = function () {
+            var _a, _b;
             switch (_this.props.column.type) {
                 case column_1.ColumnTypes.Button:
-                    return React.createElement(table_button_1.default, { icon: _this.props.column.icon, onClick: function () { return _this.props.column.onClick(_this.props.item); } });
+                    return (React.createElement(table_button_1.default, { icon: _this.props.column.icon, disabled: (_b = (_a = _this.props.column).disabled) === null || _b === void 0 ? void 0 : _b.call(_a, _this.props.item), title: _this.props.column.hint, onClick: function () { return _this.props.column.onClick(_this.props.item); } }));
                 case column_1.ColumnTypes.Input:
                     return React.createElement(editable_cell_1.default, { value: _this.props.item[_this.props.column.field], onChange: function (v) { return _this.onItemChange(v, _this.props.item, _this.props.column.field); } });
                 case column_1.ColumnTypes.Date:
@@ -1076,6 +1109,8 @@ var Cell = /** @class */ (function (_super) {
                     return React.createElement("div", { dangerouslySetInnerHTML: _this.createMarkup(_this.props.item[_this.props.column.field]) });
                 case column_1.ColumnTypes.No:
                     return React.createElement(React.Fragment, null, _this.props.index + 1);
+                case column_1.ColumnTypes.Check:
+                    return React.createElement(check_cell_1.default, { value: _this.props.item[_this.props.column.field] });
                 default:
                     return _this.props.item[_this.props.column.field];
             }
@@ -1090,6 +1125,26 @@ var Cell = /** @class */ (function (_super) {
     return Cell;
 }(React.PureComponent));
 exports.default = Cell;
+
+
+/***/ }),
+
+/***/ "./client/src/components/table/check.cell.tsx":
+/*!****************************************************!*\
+  !*** ./client/src/components/table/check.cell.tsx ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var React = __webpack_require__(/*! react */ "react");
+var FontAwesome = __webpack_require__(/*! react-fontawesome */ "./node_modules/react-fontawesome/lib/index.js");
+var CheckCell = function (props) {
+    return (React.createElement("span", { className: "check-cell" }, props.value && React.createElement(FontAwesome, { name: "check" })));
+};
+exports.default = CheckCell;
 
 
 /***/ }),
@@ -1127,6 +1182,7 @@ var ColumnTypes;
     ColumnTypes["Date"] = "date";
     ColumnTypes["Html"] = "html";
     ColumnTypes["No"] = "No";
+    ColumnTypes["Check"] = "check";
 })(ColumnTypes = exports.ColumnTypes || (exports.ColumnTypes = {}));
 var Column = /** @class */ (function (_super) {
     __extends(Column, _super);
@@ -1285,7 +1341,7 @@ var FontAwesome = __webpack_require__(/*! react-fontawesome */ "./node_modules/r
 var classnames = __webpack_require__(/*! classnames */ "./node_modules/classnames/index.js");
 var TableButton = function (props) {
     return React.createElement(React.Fragment, null,
-        React.createElement("span", { className: classnames('table-button', { 'disabled': props.disabled }), onClick: function () { return !props.disabled && props.onClick(); } },
+        React.createElement("span", { title: props.title, className: classnames('table-button', { 'disabled': props.disabled }), onClick: function () { return !props.disabled && props.onClick(); } },
             React.createElement(FontAwesome, { name: props.icon })));
 };
 exports.default = TableButton;
@@ -1324,9 +1380,10 @@ var Table = /** @class */ (function (_super) {
     function Table(props) {
         var _this = _super.call(this, props) || this;
         _this.setFirstSorting = function () {
+            var _a;
             var sortableColumns = _this.props.columns.filter(function (column) { return column.sortable; });
             if (sortableColumns.length) {
-                _this.setState({ sortField: sortableColumns[0].field });
+                _this.setState({ sortField: ((_a = sortableColumns.find(function (x) { return x.isDefaultSortOrder; })) === null || _a === void 0 ? void 0 : _a.field) || sortableColumns[0].field });
             }
         };
         _this.sortingMethod = function (itemA, itemB) {
@@ -1458,9 +1515,10 @@ function deleteBlackOut() {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.LOAD_MINISTRY_SCHOOL_RATINGS = exports.LOAD_MINISTRY_FST_RATINGS = exports.LOAD_MINISTRY_REGION_RATINGS = exports.LOAD_UPF_COACH_RATINGS = exports.LOAD_MINISTRY_COACH_RATINGS = exports.LOAD_RATING_TYPES = exports.LOAD_SCHOOLS = exports.LOAD_FST = exports.LOAD_COACHES = exports.LOAD_REGIONS = exports.CHANGE_SEARCH_VALUE = exports.LOAD_UPF_RATINGS = exports.LOAD_COMP_TYPES = exports.LOAD_MINISTRY_RATINGS = exports.LOAD_NAMES = exports.CANCEL_REMOVE = exports.SELECT_TO_REMOVE = exports.LOAD_ENTRIES = exports.UPDATE_ENTRY = exports.CLOSE_ENTRY = exports.OPEN_ENTRY = exports.LOAD_RECORDS = exports.LOAD_COMPETITIONS = exports.CHANGE_START_TIME = void 0;
+exports.LOAD_MINISTRY_SCHOOL_RATINGS = exports.LOAD_MINISTRY_FST_RATINGS = exports.LOAD_MINISTRY_REGION_RATINGS = exports.LOAD_UPF_COACH_RATINGS = exports.LOAD_MINISTRY_COACH_RATINGS = exports.LOAD_RATING_TYPES = exports.LOAD_SCHOOLS = exports.LOAD_FST = exports.LOAD_COACHES = exports.LOAD_REGIONS = exports.CHANGE_SEARCH_VALUE = exports.LOAD_UPF_RATINGS = exports.LOAD_COMP_TYPES = exports.LOAD_MINISTRY_RATINGS = exports.LOAD_NAMES = exports.CANCEL_REMOVE = exports.SELECT_TO_REMOVE = exports.LOAD_ENTRIES = exports.UPDATE_ENTRY = exports.CLOSE_ENTRY = exports.OPEN_ENTRY = exports.LOAD_RECORDS = exports.LOAD_ALL_COMPETITIONS = exports.LOAD_COMPETITIONS = exports.CHANGE_START_TIME = void 0;
 exports.CHANGE_START_TIME = "SHELL::CHANGE_START_TIME";
 exports.LOAD_COMPETITIONS = "LOOKUP::LOAD_COMPETITIONS";
+exports.LOAD_ALL_COMPETITIONS = "LOOKUP::LOAD_ALL_COMPETITIONS";
 exports.LOAD_RECORDS = "LOOKUP::LOAD_RECORDS";
 exports.OPEN_ENTRY = "ENTRIES::OPEN_ENTRY";
 exports.CLOSE_ENTRY = "ENTRIES::CLOSE_ENTRY";
@@ -1716,6 +1774,7 @@ var ActionCreators;
 (function (ActionCreators) {
     ActionCreators.initLookups = function () { return function (d, gs) {
         d(ActionCreators.loadCompetitions());
+        d(ActionCreators.loadAllCompetitions());
         d(ActionCreators.loadRecords());
         d(ActionCreators.loadCompTypes());
         d(ActionCreators.loadRegions());
@@ -1731,6 +1790,18 @@ var ActionCreators;
                     type: ActionTypes.LOAD_COMPETITIONS,
                     payload: {
                         competitions: response.data
+                    }
+                });
+            }
+        });
+    }; };
+    ActionCreators.loadAllCompetitions = function () { return function (d, gs) {
+        Services.LookupServices.getAllCompetitions().then(function (response) {
+            if (response.status) {
+                d({
+                    type: ActionTypes.LOAD_ALL_COMPETITIONS,
+                    payload: {
+                        allCompetitions: response.data
                     }
                 });
             }
@@ -2307,6 +2378,7 @@ exports.lookupReducer = void 0;
 var ActionTypes = __webpack_require__(/*! ../actions/action.types */ "./client/src/pages/ratings-entries/actions/action.types.ts");
 var defaultState = {
     competitions: [],
+    allCompetitions: [],
     records: [],
     names: [],
     divisions: [{ name: "Open", displayName: "Відкритий" }, { name: "Junior", displayName: "Юніори" }, { name: "SubJunior", displayName: "Юнаки" }],
@@ -2323,6 +2395,10 @@ exports.lookupReducer = function (state, action) {
         case ActionTypes.LOAD_COMPETITIONS: {
             var payload = action.payload;
             return __assign(__assign({}, state), { competitions: payload.competitions });
+        }
+        case ActionTypes.LOAD_ALL_COMPETITIONS: {
+            var payload = action.payload;
+            return __assign(__assign({}, state), { allCompetitions: payload.allCompetitions });
         }
         case ActionTypes.LOAD_RECORDS: {
             var payload = action.payload;
@@ -2505,7 +2581,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.entriesList = exports.validation = exports.compTypesList = exports.divisionList = exports.eventList = void 0;
 var reselect_1 = __webpack_require__(/*! reselect */ "./node_modules/reselect/es/index.js");
 var Models = __webpack_require__(/*! ../models/index.models */ "./client/src/pages/ratings-entries/models/index.models.ts");
+var utils_1 = __webpack_require__(/*! ../../../utils/utils */ "./client/src/utils/utils.ts");
 var competitions = function (state) { return state.lookup.competitions; };
+var allCompetitions = function (state) { return state.lookup.allCompetitions; };
 var records = function (state) { return state.lookup.records; };
 var currentEntry = function (state) { return state.entries.currentEntry; };
 var divisions = function (state) { return state.lookup.divisions; };
@@ -2590,27 +2668,23 @@ function validate(result) {
     }
     return result;
 }
-exports.entriesList = reselect_1.createSelector(entries, searchValue, competitions, records, compTypes, function (entries, searchValue, comp, records, types) {
+exports.entriesList = reselect_1.createSelector(entries, searchValue, allCompetitions, records, compTypes, function (entries, searchValue, comp, records, types) {
     var events = comp.concat(records);
     entries = entries.map(function (entry) {
-        var eventName = events.find(function (event) { return event.dbName == entry.event; }).name;
+        var _a;
+        var eventName = (_a = events.find(function (event) { return event.dbName == entry.event; })) === null || _a === void 0 ? void 0 : _a.name;
         var compType = types.find(function (type) { return type.name == entry.compType; });
         var compTypeName = !!compType ? " - " + compType.displayName : '';
         return __assign(__assign({}, entry), { event: "" + eventName + compTypeName });
     });
     return entries.filter(function (entry) { return !searchValue
-        || isMatchingSearchString(searchValue, entry.fullname)
-        || isMatchingSearchString(searchValue, entry.event)
-        || isMatchingSearchString(searchValue, entry.eventDate)
-        || isMatchingSearchString(searchValue, entry.place)
-        || isMatchingSearchString(searchValue, entry.wilks)
-        || isMatchingSearchString(searchValue, entry.coach); });
+        || utils_1.isMatchingSearchString(searchValue, entry.fullname)
+        || utils_1.isMatchingSearchString(searchValue, entry.event)
+        || utils_1.isMatchingSearchString(searchValue, entry.eventDate)
+        || utils_1.isMatchingSearchString(searchValue, entry.place)
+        || utils_1.isMatchingSearchString(searchValue, entry.wilks)
+        || utils_1.isMatchingSearchString(searchValue, entry.coach); });
 });
-function isMatchingSearchString(search, field) {
-    if (!field)
-        field = '';
-    return field.toString().toLowerCase().indexOf(search.toLowerCase()) != -1;
-}
 
 
 /***/ }),
@@ -2679,7 +2753,7 @@ exports.modifiedMinistrySchoolRatings = exports.modifiedMinistryFstRatings = exp
 var reselect_1 = __webpack_require__(/*! reselect */ "./node_modules/reselect/es/index.js");
 var utils_1 = __webpack_require__(/*! ../../../utils/utils */ "./client/src/utils/utils.ts");
 var ratings = function (state) { return state.ratings.ministryRatings; };
-var competitions = function (state) { return state.lookup.competitions; };
+var allCompetitions = function (state) { return state.lookup.allCompetitions; };
 var records = function (state) { return state.lookup.records; };
 var compTypes = function (state) { return state.lookup.compTypes; };
 var upfRatings = function (state) { return state.ratings.upfRatings; };
@@ -2688,7 +2762,7 @@ var upfCoachRatings = function (state) { return state.ratings.upfCoachRatings; }
 var ministryRegionRatings = function (state) { return state.ratings.ministryRegionRatings; };
 var ministryFstRatings = function (state) { return state.ratings.ministryFstRatings; };
 var ministrySchoolRatings = function (state) { return state.ratings.ministrySchoolRatings; };
-exports.modifiedRatings = reselect_1.createSelector(ratings, competitions, compTypes, records, function (ratings, competitions, types, records) {
+exports.modifiedRatings = reselect_1.createSelector(ratings, allCompetitions, compTypes, records, function (ratings, competitions, types, records) {
     return ratings.map(function (r) { return (__assign(__assign({}, r), { details: utils_1.getDetails(r.details, types, competitions, records) })); });
 });
 exports.ministryRatingsMale = reselect_1.createSelector(exports.modifiedRatings, function (ratings) {
@@ -2697,7 +2771,7 @@ exports.ministryRatingsMale = reselect_1.createSelector(exports.modifiedRatings,
 exports.ministryRatingsFemale = reselect_1.createSelector(exports.modifiedRatings, function (ratings) {
     return ratings.filter(function (r) { return r.gender == "F"; });
 });
-exports.modifiedRatingsUPF = reselect_1.createSelector(upfRatings, competitions, compTypes, records, function (ratings, competitions, types, records) {
+exports.modifiedRatingsUPF = reselect_1.createSelector(upfRatings, allCompetitions, compTypes, records, function (ratings, competitions, types, records) {
     return ratings.map(function (r) { return (__assign(__assign({}, r), { details: utils_1.getDetails(r.details, types, competitions, records) })); });
 });
 exports.upfRatingsMale = reselect_1.createSelector(exports.modifiedRatingsUPF, function (ratings) {
@@ -2706,19 +2780,19 @@ exports.upfRatingsMale = reselect_1.createSelector(exports.modifiedRatingsUPF, f
 exports.upfRatingsFemale = reselect_1.createSelector(exports.modifiedRatingsUPF, function (ratings) {
     return ratings.filter(function (r) { return r.gender == "F"; }).sort(utils_1.sortUPFRating);
 });
-exports.modifiedMinistryCoachRatings = reselect_1.createSelector(ministryCoachRatings, competitions, compTypes, records, function (ratings, competitions, types, records) {
+exports.modifiedMinistryCoachRatings = reselect_1.createSelector(ministryCoachRatings, allCompetitions, compTypes, records, function (ratings, competitions, types, records) {
     return ratings.map(function (r) { return (__assign(__assign({}, r), { details: utils_1.getDetails(r.details, types, competitions, records) })); });
 });
-exports.modifiedUPFCoachRatings = reselect_1.createSelector(upfCoachRatings, competitions, compTypes, records, function (ratings, competitions, types, records) {
+exports.modifiedUPFCoachRatings = reselect_1.createSelector(upfCoachRatings, allCompetitions, compTypes, records, function (ratings, competitions, types, records) {
     return ratings.map(function (r) { return (__assign(__assign({}, r), { details: utils_1.getDetails(r.details, types, competitions, records) })); }).sort(utils_1.sortUPFRating);
 });
-exports.modifiedMinistryRegionRatings = reselect_1.createSelector(ministryRegionRatings, competitions, compTypes, records, function (ratings, competitions, types, records) {
+exports.modifiedMinistryRegionRatings = reselect_1.createSelector(ministryRegionRatings, allCompetitions, compTypes, records, function (ratings, competitions, types, records) {
     return ratings.map(function (r) { return (__assign(__assign({}, r), { details: utils_1.getDetails(r.details, types, competitions, records) })); });
 });
-exports.modifiedMinistryFstRatings = reselect_1.createSelector(ministryFstRatings, competitions, compTypes, records, function (ratings, competitions, types, records) {
+exports.modifiedMinistryFstRatings = reselect_1.createSelector(ministryFstRatings, allCompetitions, compTypes, records, function (ratings, competitions, types, records) {
     return ratings.map(function (r) { return (__assign(__assign({}, r), { details: utils_1.getDetails(r.details, types, competitions, records) })); });
 });
-exports.modifiedMinistrySchoolRatings = reselect_1.createSelector(ministrySchoolRatings, competitions, compTypes, records, function (ratings, competitions, types, records) {
+exports.modifiedMinistrySchoolRatings = reselect_1.createSelector(ministrySchoolRatings, allCompetitions, compTypes, records, function (ratings, competitions, types, records) {
     return ratings.map(function (r) { return (__assign(__assign({}, r), { details: utils_1.getDetails(r.details, types, competitions, records) })); });
 });
 
@@ -2811,13 +2885,19 @@ exports.RatingsServices = __webpack_require__(/*! ./ratings.services */ "./clien
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getRatingTypes = exports.getSchools = exports.getFst = exports.getCoaches = exports.getRegions = exports.getCompTypes = exports.getNames = exports.getRecords = exports.getCompetitions = void 0;
+exports.getRatingTypes = exports.getSchools = exports.getFst = exports.getCoaches = exports.getRegions = exports.getCompTypes = exports.getNames = exports.getRecords = exports.getAllCompetitions = exports.getCompetitions = void 0;
 var CallApi = __webpack_require__(/*! ../../../infrastructure/call.api */ "./client/src/infrastructure/call.api.ts");
 var lookupApiPath = "../wp-content/plugins/ratings/server/LookupController/";
 var apiTypes = CallApi.RequestTypes;
 exports.getCompetitions = function () {
     return CallApi.callApi({
         url: lookupApiPath + 'GetCompetitionsLookup.php',
+        type: apiTypes.GET
+    });
+};
+exports.getAllCompetitions = function () {
+    return CallApi.callApi({
+        url: lookupApiPath + 'GetAllCompetitions.php',
         type: apiTypes.GET
     });
 };
@@ -3978,7 +4058,7 @@ exports.default = react_redux_1.connect(function (state) { return ({}); }, funct
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sortUPFRating = exports.getDetails = void 0;
+exports.isMatchingSearchString = exports.sortUPFRating = exports.getDetails = void 0;
 function getDetails(originalDetails, types, competitions, records, isReferee, showFullName) {
     if (isReferee === void 0) { isReferee = false; }
     if (showFullName === void 0) { showFullName = false; }
@@ -4023,6 +4103,12 @@ function sortUPFRating(ratingA, ratingB) {
     return 1;
 }
 exports.sortUPFRating = sortUPFRating;
+function isMatchingSearchString(search, field) {
+    if (!field)
+        field = '';
+    return field.toString().toLowerCase().indexOf(search.toLowerCase()) != -1;
+}
+exports.isMatchingSearchString = isMatchingSearchString;
 
 
 /***/ }),

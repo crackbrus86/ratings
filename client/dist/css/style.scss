@@ -13,6 +13,20 @@
     color: red;
     font-style: italic;
 }
+.rat-button {
+    margin: 8px!important;
+    border: none!important;
+    background-color: #07bc69!important;
+    padding: 16px!important;
+    color: #fff!important;
+    font-size: 1.2em!important;
+    text-transform: uppercase!important;
+    cursor: pointer!important;
+    box-shadow: 0 0px 1px 0px #000;
+    &:hover{
+        background-color: #19d37e!important;
+    }
+}
 .confirm-body-text{
     color: #d51515;
     font-weight: 600;
@@ -56,6 +70,11 @@
             .radio-button-input{
                 height: 32px;
             }
+        }
+
+        .disabled {
+            opacity: 0.9;
+            pointer-events: none;
         }
     }
 }
@@ -119,6 +138,61 @@
             box-shadow: 0 0 0 1px red;
         }
     }
+}
+.grid-row{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+
+    .grid-column{
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        margin: 0 5px;
+    }
+}
+
+.content-wrap{
+    overflow-x: auto;
+    margin-right: 20px;
+    min-height: 400px;
+    min-width: 1080px;
+}
+.search-box{
+    padding: 4px;
+    overflow: hidden;
+    display: inline-block;
+
+    input{
+        border-radius: 4px;
+    }
+
+    .fa{
+        font-size: 1.2em;
+        margin: 2px 4px;
+
+        &.search-icon{
+            color: #07bd69;
+        }
+        &.close-icon{
+            color: #b40413;
+            cursor: pointer;
+
+            &:hover{
+                color: #eb0e21;
+            }
+        }
+    }
+
+}
+.print-button{
+    display: inline-block;
+    padding: 0.6em 4px;
+    width: 32px;
+    height: 32px;
+    box-sizing: border-box;
+    text-align: center;
+    cursor: pointer;
 }
 .modal-black-out{
     position: fixed; 
@@ -214,61 +288,6 @@
         }
     }
 }
-.grid-row{
-    display: flex;
-    flex-direction: row;
-    width: 100%;
-
-    .grid-column{
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-        margin: 0 5px;
-    }
-}
-
-.content-wrap{
-    overflow-x: auto;
-    margin-right: 20px;
-    min-height: 400px;
-    min-width: 1080px;
-}
-.search-box{
-    padding: 4px;
-    overflow: hidden;
-    display: inline-block;
-
-    input{
-        border-radius: 4px;
-    }
-
-    .fa{
-        font-size: 1.2em;
-        margin: 2px 4px;
-
-        &.search-icon{
-            color: #07bd69;
-        }
-        &.close-icon{
-            color: #b40413;
-            cursor: pointer;
-
-            &:hover{
-                color: #eb0e21;
-            }
-        }
-    }
-
-}
-.print-button{
-    display: inline-block;
-    padding: 0.6em 4px;
-    width: 32px;
-    height: 32px;
-    box-sizing: border-box;
-    text-align: center;
-    cursor: pointer;
-}
 .tabs{
     display: flex;
     flex-direction: column;
@@ -348,6 +367,11 @@
             color: #07bc69;
         }
         span{display: block;}
+
+        &.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
     }
     .editable-cell{
         .editable-cell-icon{
@@ -381,6 +405,29 @@
 #app-rat-tables{
     .upf-ratings-filter{
         width: 450px;
+    }
+}
+.rat-options {
+    width: 100%;
+    padding-top: 10px;
+}
+.competition-view{
+    button {
+        display: inline;
+        border: none;
+        background-color: transparent;
+        font-size: 1.5em;
+        margin: 0 4px 4px;
+        color: #0073aa;
+        cursor: pointer;
+
+        &:hover {
+            color: #4ab8ec;
+        }
+
+        &.is-selected {
+            text-decoration: underline;
+        }
     }
 }
 .rating-details-modal.modal-content{

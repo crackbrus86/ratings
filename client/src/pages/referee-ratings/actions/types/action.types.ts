@@ -17,6 +17,9 @@ export type LOAD_ACTIVITIES_PAYLOAD = Models.Activity[]
 export const LOAD_EVENTS = "LOOKUP::LOAD_EVENTS"
 export type LOAD_EVENTS_PAYLOAD = Models.Event[]
 
+export const LOAD_ALL_EVENTS = "LOOKUP::LOAD_ALL_EVENTS"
+export type LOAD_ALL_EVENTS_PAYLOAD = Models.Event[]
+
 export const SELECT_TO_REMOVE = "REFEREE_ENTRIES::SELECT_TO_REMOVE"
 export type SELECT_TO_REMOVE_PAYLOAD = number
 

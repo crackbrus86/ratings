@@ -11,6 +11,13 @@ export const getCompetitions = () => {
     });
 }
 
+export const getAllCompetitions = () => {
+    return CallApi.callApi({
+        url: lookupApiPath + 'GetAllCompetitions.php', 
+        type: apiTypes.GET 
+    });
+}
+
 export const getRecords = () => {
     return CallApi.callApi({
         url: lookupApiPath + 'GetRecordsLookup.php',

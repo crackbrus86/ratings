@@ -41,6 +41,7 @@ class UPFRatings
         add_menu_page("UPF Ratings", "Рейтинги ФПУ", "manage_options", "ratings", array("UPFRatings", "ratingsManager"));
         add_submenu_page("ratings", "Рейтинги ФПУ (Установки)", "Установки", "manage_options", "ratings-settings", array("UPFRatings", "ratingsSettings"));
         add_submenu_page("ratings", "Рейтинги суддів ФПУ", "Судді ФПУ", "manage_options", "ratings-referee", array("UPFRatings", "refereeRatings"));
+        add_submenu_page("ratings", "Налаштування", "Налаштування", "manage_options", "ratings-options", array("UPFRatings", "show_options_page"));
         wp_register_style('style', plugins_url('/client/dist/css/style.css?v=' . UPFRatings::$appVersion, __FILE__));
         wp_enqueue_style('style');
         wp_register_style('fontawesome', plugins_url('/client/dist/css/fontawesome-free-5.7.2-web/css/all.min.css?v=' . UPFRatings::$appVersion, __FILE__));
@@ -121,6 +122,23 @@ _END;
         $content = <<<_END
         <div id="app-rat-tables"></div>
 _END;
+    }
+
+    public function load_options_script()
+    {
+        wp_register_script("ratings_options_script", plugins_url("/client/dist/options-bundle.js?v=" . UPFRatings::$appVersion, __FILE__));
+        wp_enqueue_script("ratings_options_script");
+    }
+
+    public function show_options_page()
+    {
+        UPFRatings::load_options_script();
+        $content = <<<_END
+        <div class="container-fluid">
+            <div id="app-rat-options"></div>
+        </div>
+_END;
+        echo $content;        
     }
 
     public function initDb()
