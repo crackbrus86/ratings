@@ -40,7 +40,6 @@ const CompetitionModal: React.FC = () => {
               value={editableCompetition.dbName}
               validation={validation.dbNameValidation}
               maxLength={50}
-              disabled={!editableCompetition.isNew}
               onChange={(v) => changeEditableCompetition({ dbName: v })}
             />
             <Form.TextInput
@@ -48,7 +47,6 @@ const CompetitionModal: React.FC = () => {
               value={editableCompetition.shortName}
               validation={validation.shortNameValidation}
               maxLength={10}
-              disabled={!editableCompetition.isNew}
               onChange={(v) => changeEditableCompetition({ shortName: v })}
             />
             <Form.CheckBox

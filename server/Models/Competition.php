@@ -40,14 +40,14 @@ class Competition
             return $validation;
         }
 
-        if(!$isEdit && !$this->dbName)
+        if(!$this->dbName)
         {
             $validation->isValid = FALSE;
             $validation->message = "DbName is required field";
             return $validation;
         }
 
-        if(!$isEdit && !$this->shortName)
+        if(!$this->shortName)
         {
             $validation->isValid = FALSE;
             $validation->message = "ShortName is required field";

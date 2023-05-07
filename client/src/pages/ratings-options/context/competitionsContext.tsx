@@ -125,7 +125,9 @@ export const CompetitionProvider: React.FC<React.ReactNode> = ({
     Services.updateCompetition({
       id: editableCompetition.id,
       name: editableCompetition.name,
-      ratingUPF: editableCompetition.ratingUPF
+      ratingUPF: editableCompetition.ratingUPF,
+      dbName: editableCompetition.dbName,
+      shortName: editableCompetition.shortName
     }).then(response => {
       if(response.status)
       {

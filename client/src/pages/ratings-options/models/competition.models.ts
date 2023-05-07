@@ -18,6 +18,8 @@ export interface UpdateCompetitionRequest {
     id: number;
     name: string;
     ratingUPF: boolean;
+    dbName: string;
+    shortName: string;
 }
 
 export interface DeleteCompetitionRequest {

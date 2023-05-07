@@ -185,10 +185,35 @@ class CompetitionService
             $response->setResponseModel((object)array("status" => FALSE, "message" => $validationResult->message));
             return $response;
         } else {
-            $sql = $this->db->prepare("UPDATE {$this->table_name} SET Name = %s, RatingUPF = %d
-            WHERE Id = %d", $competition->name, $competition->ratingUPF, $competition->id);
+            $sql = $this->db->prepare("SELECT DbName FROM {$this->table_name} WHERE Id = %d", $competition->id);
+            $result = $this->db->get_row($sql);
+
+            $oldDbName = $result->DbName;
+            $newDbName = $competition->dbName;
+
+            $sql = $this->db->prepare("UPDATE {$this->table_name} 
+            SET Name = %s, 
+                RatingUPF = %d,
+                DbName = %s,
+                ShortName = %s
+            WHERE Id = %d", $competition->name, $competition->ratingUPF, $competition->dbName, $competition->shortName, $competition->id);
 
             $this->db->query($sql);
+            if($oldDbName != $newDbName)
+            {
+                // Fix entries with DbName
+                $sql = $this->db->prepare("UPDATE wp_rat_entry SET Event = %s WHERE Event = %s", $newDbName, $oldDbName);
+                $this->db->query($sql);
+                //Fix points with DbName
+                $sql = $this->db->prepare("UPDATE wp_rat_point SET Target = %s WHERE Target = %s", $newDbName, $oldDbName);
+                $this->db->query($sql);
+                //Fix ranges with DbName
+                $sql = $this->db->prepare("UPDATE wp_rat_range SET Competition = %s WHERE Competition = %s", $newDbName, $oldDbName);
+                $this->db->query($sql);
+                //Fix referee entries with DbName
+                $sql = $this->db->prepare("UPDATE wp_rat_referee_entry SET Event = %s WHERE Event = %s", $newDbName, $oldDbName);
+                $this->db->query($sql);
+            }
         }
 
         $response->setResponseModel((object)array("status" => TRUE, "message" => "Успішно оновлено змагання!"));
