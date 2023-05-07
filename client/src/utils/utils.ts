@@ -50,8 +50,8 @@ export function getDetails(originalDetails: string, types: CompetitionType[], co
 
     detailsAsArray = details.split(",");
 
-    detailsAsArray = !isReferee ? detailsAsArray.map(d => ({text: d, range: d.split(' - ')[2].split(' ')[0]})) 
-                                : detailsAsArray.map(d => ({text: d, range: d.split(' - ')[1].split(' ')[0]}));
+    detailsAsArray = !isReferee ? detailsAsArray.map(d => ({text: d, range: d.split(' - ')[1].split(' ')[0]})) 
+                                : detailsAsArray.map(d => ({text: d, range: d.split(' - ')[0].split(' ')[0]}));
 
     detailsAsArray = detailsAsArray.sort((a,b) => a.range - b.range);
 

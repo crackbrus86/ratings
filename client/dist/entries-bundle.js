@@ -4074,8 +4074,8 @@ function getDetails(originalDetails, types, competitions, records, isReferee, sh
         details = details.replace(new RegExp(" " + types[i].name, 'g'), " - " + types[i].displayName);
     }
     detailsAsArray = details.split(",");
-    detailsAsArray = !isReferee ? detailsAsArray.map(function (d) { return ({ text: d, range: d.split(' - ')[2].split(' ')[0] }); })
-        : detailsAsArray.map(function (d) { return ({ text: d, range: d.split(' - ')[1].split(' ')[0] }); });
+    detailsAsArray = !isReferee ? detailsAsArray.map(function (d) { return ({ text: d, range: d.split(' - ')[1].split(' ')[0] }); })
+        : detailsAsArray.map(function (d) { return ({ text: d, range: d.split(' - ')[0].split(' ')[0] }); });
     detailsAsArray = detailsAsArray.sort(function (a, b) { return a.range - b.range; });
     detailsAsArray = detailsAsArray.map(function (d) { return "<li>" + d.text + "</li>"; });
     return "<ul>" + detailsAsArray.join('') + "</ul>";
