@@ -106,13 +106,6 @@ class CompetitionService
     {
         $response = new ResponseModel();
 
-        if(!current_user_can("edit_others_pages"))
-        {
-            $response->setResponseModel((object)array('status' => FALSE, 'message' => "У Вас недостатньо прав для отримання змагань!"));
-
-            return $response;
-        }
-
         $sql = $this->db->prepare("SELECT Id, Name, DbName, SortOrder, RatingUPF, ShortName, IsActive 
             FROM {$this->table_name}");
         $results = $this->db->get_results($sql);
